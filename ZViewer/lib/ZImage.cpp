@@ -27,6 +27,7 @@ bool ZImage::IsValidImageFileExt(const char * szFilename)
 		strExt == "psd" ||
 		strExt == "tif" ||
 		strExt == "tga" ||
+		strExt == "dds" ||
 		strExt == "png" 
 
 		)
