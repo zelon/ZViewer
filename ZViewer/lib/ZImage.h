@@ -2,6 +2,7 @@
 #pragma once
 
 #include "FreeImagePlus.h"
+#include "CommonFunc.h"
 
 class IImage
 {
@@ -35,7 +36,26 @@ public:
 	bool IsValid() { return (m_image.isValid() == TRUE); }
 	bool LoadFromFile(const std::string & strFilename)
 	{
-		return ( m_image.load(strFilename.c_str()) == TRUE);
+		DebugPrintf("LoadFromFile : %s", strFilename.c_str());
+
+		try
+		{
+			if ( m_image.load(strFilename.c_str()) == TRUE )
+			{
+				return true;
+			}
+		}
+		catch ( ... )
+		{
+#pragma message("TODO : 이 부분에 exception 이 발생하는 이유를 찾아야함...")
+			return false;
+		}
+		return false;
+	}
+
+	bool SaveToFile(const std::string & strFilename, int iFlag)
+	{
+		return ( TRUE == m_image.save(strFilename.c_str(), iFlag));
 	}
 
 	inline void Rotate(double dAngle) { m_image.rotate(dAngle);	}
