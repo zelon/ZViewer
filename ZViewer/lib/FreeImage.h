@@ -47,8 +47,8 @@
 // Version information ------------------------------------------------------
 
 #define FREEIMAGE_MAJOR_VERSION   3
-#define FREEIMAGE_MINOR_VERSION   5
-#define FREEIMAGE_RELEASE_SERIAL  2
+#define FREEIMAGE_MINOR_VERSION   6
+#define FREEIMAGE_RELEASE_SERIAL  1
 
 // Compiler options ---------------------------------------------------------
 
@@ -409,7 +409,7 @@ FI_ENUM(FREE_IMAGE_MDMODEL) {
 	FIMD_EXIF_INTEROP	= 5,	// Exif interoperability metadata
 	FIMD_IPTC			= 6,	// IPTC/NAA metadata
 	FIMD_XMP			= 7,	// Abobe XMP metadata
-	FIMD_GEOTIFF		= 8,	// GeoTIFF metadata (to be implemented)
+	FIMD_GEOTIFF		= 8,	// GeoTIFF metadata
 	FIMD_CUSTOM			= 9		// Used to attach other metadata types to a dib
 };
 
@@ -419,17 +419,9 @@ FI_ENUM(FREE_IMAGE_MDMODEL) {
 FI_STRUCT (FIMETADATA) { void *data; };
 
 /**
-  Metadata attribute
+  Handle to a FreeImage tag
 */
-FI_STRUCT (FITAG) { 
-	char *key;			// tag field name
-	char *description;	// tag description
-	WORD id;			// tag ID
-	WORD type;			// tag data type (see FREE_IMAGE_MDTYPE)
-	DWORD count;		// number of components (in 'tag data types' units)
-	DWORD length;		// value length in bytes
-	void *value;		// tag value
-};
+FI_STRUCT (FITAG) { void *data; };
 
 // File IO routines ---------------------------------------------------------
 
@@ -530,6 +522,7 @@ typedef void (DLL_CALLCONV *FI_InitProc)(Plugin *plugin, int format_id);
 #define JPEG_QUALITYNORMAL  0x200
 #define JPEG_QUALITYAVERAGE 0x400
 #define JPEG_QUALITYBAD     0x800
+#define JPEG_CMYK			0x1000	// load separated CMYK "as is" (use | to combine with other flags)
 #define KOALA_DEFAULT       0
 #define LBM_DEFAULT         0
 #define MNG_DEFAULT         0
@@ -556,6 +549,7 @@ typedef void (DLL_CALLCONV *FI_InitProc)(Plugin *plugin, int format_id);
 #define TIFF_CCITTFAX3		0x1000  // save using CCITT Group 3 fax encoding
 #define TIFF_CCITTFAX4		0x2000  // save using CCITT Group 4 fax encoding
 #define TIFF_LZW			0x4000	// save using LZW compression
+#define TIFF_JPEG			0x8000	// save using JPEG compression
 #define WBMP_DEFAULT        0
 #define XBM_DEFAULT			0
 #define XPM_DEFAULT			0
@@ -677,8 +671,12 @@ DLL_API unsigned DLL_CALLCONV FreeImage_GetLine(FIBITMAP *dib);
 DLL_API unsigned DLL_CALLCONV FreeImage_GetPitch(FIBITMAP *dib);
 DLL_API unsigned DLL_CALLCONV FreeImage_GetDIBSize(FIBITMAP *dib);
 DLL_API RGBQUAD *DLL_CALLCONV FreeImage_GetPalette(FIBITMAP *dib);
+
 DLL_API unsigned DLL_CALLCONV FreeImage_GetDotsPerMeterX(FIBITMAP *dib);
 DLL_API unsigned DLL_CALLCONV FreeImage_GetDotsPerMeterY(FIBITMAP *dib);
+DLL_API void DLL_CALLCONV FreeImage_SetDotsPerMeterX(FIBITMAP *dib, unsigned res);
+DLL_API void DLL_CALLCONV FreeImage_SetDotsPerMeterY(FIBITMAP *dib, unsigned res);
+
 DLL_API BITMAPINFOHEADER *DLL_CALLCONV FreeImage_GetInfoHeader(FIBITMAP *dib);
 DLL_API BITMAPINFO *DLL_CALLCONV FreeImage_GetInfo(FIBITMAP *dib);
 DLL_API FREE_IMAGE_COLOR_TYPE DLL_CALLCONV FreeImage_GetColorType(FIBITMAP *dib);
@@ -766,17 +764,41 @@ DLL_API FIBITMAP *DLL_CALLCONV FreeImage_ConvertToType(FIBITMAP *src, FREE_IMAGE
 
 DLL_API DWORD DLL_CALLCONV FreeImage_ZLibCompress(BYTE *target, DWORD target_size, BYTE *source, DWORD source_size);
 DLL_API DWORD DLL_CALLCONV FreeImage_ZLibUncompress(BYTE *target, DWORD target_size, BYTE *source, DWORD source_size);
+DLL_API DWORD DLL_CALLCONV FreeImage_ZLibGZip(BYTE *target, DWORD target_size, BYTE *source, DWORD source_size);
+DLL_API DWORD DLL_CALLCONV FreeImage_ZLibCRC32(DWORD crc, BYTE *source, DWORD source_size);
 
 // --------------------------------------------------------------------------
 // Metadata routines --------------------------------------------------------
 // --------------------------------------------------------------------------
+
+// tag creation / destruction
+DLL_API FITAG *DLL_CALLCONV FreeImage_CreateTag();
+DLL_API void DLL_CALLCONV FreeImage_DeleteTag(FITAG *tag);
+DLL_API FITAG *DLL_CALLCONV FreeImage_CloneTag(FITAG *tag);
+
+// tag getters and setters
+DLL_API const char *DLL_CALLCONV FreeImage_GetTagKey(FITAG *tag);
+DLL_API const char *DLL_CALLCONV FreeImage_GetTagDescription(FITAG *tag);
+DLL_API WORD DLL_CALLCONV FreeImage_GetTagID(FITAG *tag);
+DLL_API FREE_IMAGE_MDTYPE DLL_CALLCONV FreeImage_GetTagType(FITAG *tag);
+DLL_API DWORD DLL_CALLCONV FreeImage_GetTagCount(FITAG *tag);
+DLL_API DWORD DLL_CALLCONV FreeImage_GetTagLength(FITAG *tag);
+DLL_API const void *DLL_CALLCONV FreeImage_GetTagValue(FITAG *tag);
+
+DLL_API BOOL DLL_CALLCONV FreeImage_SetTagKey(FITAG *tag, const char *key);
+DLL_API BOOL DLL_CALLCONV FreeImage_SetTagDescription(FITAG *tag, const char *description);
+DLL_API BOOL DLL_CALLCONV FreeImage_SetTagID(FITAG *tag, WORD id);
+DLL_API BOOL DLL_CALLCONV FreeImage_SetTagType(FITAG *tag, FREE_IMAGE_MDTYPE type);
+DLL_API BOOL DLL_CALLCONV FreeImage_SetTagCount(FITAG *tag, DWORD count);
+DLL_API BOOL DLL_CALLCONV FreeImage_SetTagLength(FITAG *tag, DWORD length);
+DLL_API BOOL DLL_CALLCONV FreeImage_SetTagValue(FITAG *tag, const void *value);
 
 // iterator
 DLL_API FIMETADATA *DLL_CALLCONV FreeImage_FindFirstMetadata(FREE_IMAGE_MDMODEL model, FIBITMAP *dib, FITAG **tag);
 DLL_API BOOL DLL_CALLCONV FreeImage_FindNextMetadata(FIMETADATA *mdhandle, FITAG **tag);
 DLL_API void DLL_CALLCONV FreeImage_FindCloseMetadata(FIMETADATA *mdhandle);
 
-// setter and getter
+// metadata setter and getter
 DLL_API BOOL DLL_CALLCONV FreeImage_SetMetadata(FREE_IMAGE_MDMODEL model, FIBITMAP *dib, const char *key, FITAG *tag);
 DLL_API BOOL DLL_CALLCONV FreeImage_GetMetadata(FREE_IMAGE_MDMODEL model, FIBITMAP *dib, const char *key, FITAG **tag);
 
