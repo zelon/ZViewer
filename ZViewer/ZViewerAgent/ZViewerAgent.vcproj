@@ -42,6 +42,7 @@
 				LinkIncremental="2"
 				ModuleDefinitionFile=".\ZViewerAgent.def"
 				GenerateDebugInformation="TRUE"
+				ProgramDatabaseFile="$(OutDir)/$(ProjectName)D.pdb"
 				SubSystem="2"
 				ImportLibrary="$(OutDir)/ZViewerAgent.lib"
 				TargetMachine="1"/>
