@@ -613,7 +613,7 @@ void ZMain::PrevFolder()
 
 		_ASSERTE(iFoundIndex != -1);
 
-		if ( (iFoundIndex-1 <= 0 ) )
+		if ( (iFoundIndex-1 < 0 ) )
 		{
 			// 마지막 폴더이다.
 			MessageBox(m_hMainDlg, "Here is the first folder.", "ZViewer", MB_OK);
