@@ -3,60 +3,13 @@
 #include "src/ZFileExtDlg.h"
 #include "src/ZCacheImage.h"
 #include "src/ZResourceManager.h"
-#include "src/DesktopWallPaper.h"
+#include "../lib/DesktopWallPaper.h"
 
 #include <ShlObj.h>
 
 #include "resource.h"
 
 using namespace std;
-
-// 최대 크기를 넘지 않는 적당한 리사이즈 크기를 돌려준다.
-RECT GetResizedRect(const RECT & MaximumSize, const RECT & originalSize)
-{
-	if ( originalSize.right <= MaximumSize.right && originalSize.bottom <= MaximumSize.bottom )
-	{
-		RECT ret = originalSize;
-		return ret;
-	}
-
-	// 가로 세로 크기 중 큰 값을 찾는다.
-	bool bSetWidth = true;		// 가로 크기를 기준으로 맞출 것인가?
-
-	double dWidthRate = (double)MaximumSize.right / (double)originalSize.right;
-	double dHeightRate = (double)MaximumSize.bottom / (double)originalSize.bottom;
-
-	if ( dHeightRate >=  dWidthRate)
-	{
-		bSetWidth = true;
-	}
-	else
-	{
-		bSetWidth = false;
-	}
-
-	// 큰 값이 MaximumSize 가 되게 하는 비례를 찾는다.
-	RECT ret;
-
-	double dRate = 1;
-	if ( bSetWidth == true )
-	{
-		// 가로 크기가 기준이다.
-		SetRect(&ret, 0, 0, (int)(originalSize.right*dWidthRate), (int)(originalSize.bottom*dWidthRate));
-	}
-	else
-	{
-		// 세로 크기가 기준이다.
-		SetRect(&ret, 0, 0, (int)(originalSize.right*dHeightRate), (int)(originalSize.bottom*dHeightRate));
-	}
-
-
-	_ASSERTE(ret.right <= MaximumSize.right);
-	_ASSERTE(ret.bottom <= MaximumSize.bottom);
-
-	return ret;
-}
-
 
 ZMain & ZMain::GetInstance()
 {
@@ -1313,6 +1266,5 @@ void ZMain::SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyle style)
 
 void ZMain::ClearDesktopWallPaper()
 {
-	CDesktopWallPaper wallPaper("");
-	wallPaper.SetDesktopWallPaper();
+	CDesktopWallPaper::ClearDesktopWallPaper();
 }
