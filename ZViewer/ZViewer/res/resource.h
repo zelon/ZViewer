@@ -10,6 +10,7 @@
 #define IDC_MOVE_HAND_CAPTURE_CURSOR    111
 #define IDD_DIALOGHELP                  112
 #define IDD_FILE_EXT_DIALOG             113
+#define IDD_MOVE_DIALOG                 114
 #define IDC_CHECK_BMP                   1002
 #define IDC_CHECK_JPG                   1003
 #define IDC_CHECK_GIF                   1004
@@ -20,6 +21,9 @@
 #define IDC_STATIC_CACHE_MEMORY         1009
 #define IDC_STATIC_PROGRAM_PATH         1010
 #define IDC_STATIC_LIBRARY_VERSION      1011
+#define IDC_EDIT1                       1012
+#define IDC_EDIT_MOVE_TO_FOLDER         1012
+#define IDC_BUTTON_SELECT_FOLDER        1013
 #define ID_MAINMENU_FILE_EXIT           40002
 #define ID_FILE_OPEN40016               40016
 #define ID_MAINMENU_FILE_OPEN           40017
@@ -57,14 +61,15 @@
 #define ID_SETDESKTOPWALLPAPER_CLEAR    40066
 #define ID_MOVE_NEXT_JUMP               40067
 #define ID_MOVE_PREV_JUMP               40068
+#define ID_FILE_MOVETO                  40072
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        114
-#define _APS_NEXT_COMMAND_VALUE         40072
-#define _APS_NEXT_CONTROL_VALUE         1012
+#define _APS_NEXT_RESOURCE_VALUE        115
+#define _APS_NEXT_COMMAND_VALUE         40075
+#define _APS_NEXT_CONTROL_VALUE         1014
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

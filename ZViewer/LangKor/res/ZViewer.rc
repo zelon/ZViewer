@@ -58,6 +58,8 @@ BEGIN
     BEGIN
         MENUITEM "파일 열기(&O)\tCtrl+O",       ID_MAINMENU_FILE_OPEN
         MENUITEM SEPARATOR
+        MENUITEM "파일 이동...\tAlt+M",         ID_FILE_MOVETO
+        MENUITEM SEPARATOR
         MENUITEM "종료(&X)\tAlt+X",             ID_MAINMENU_FILE_EXIT
     END
     POPUP "보기(&V)"
@@ -69,16 +71,15 @@ BEGIN
         MENUITEM "작은 그림 화면에 맞게 확대",  ID_VIEW_SMALLTOSCREENSTRETCH
         MENUITEM SEPARATOR
         MENUITEM "시계 방향으로 90도 회전\t]",  ID_VIEW_ROTATECLOCKWISE
-        MENUITEM "반시계 방향으로 90도 회전\t[", ID_VIEW_ROTATECOUNTERCLOCKWISE
+        MENUITEM "반시계 방향으로 90도 회전\t[", 
+                                                ID_VIEW_ROTATECOUNTERCLOCKWISE
 
-    END
-    POPUP "이동(&M)"
-    BEGIN
+        MENUITEM SEPARATOR
         MENUITEM "다음 이미지(&N)\tPageDown",   ID_MOVE_NEXTIMAGE
         MENUITEM "이전 이미지(&P)\tPageUp",     ID_MOVE_PREVIMAGE
         MENUITEM SEPARATOR
-        MENUITEM "다음 10 장\tCtrl+Right",   ID_MOVE_NEXT_JUMP
-        MENUITEM "이전 10 장\tCtrl+Left",    ID_MOVE_PREV_JUMP
+        MENUITEM "다음 10 장\tCtrl+Right",      ID_MOVE_NEXT_JUMP
+        MENUITEM "이전 10 장\tCtrl+Left",       ID_MOVE_PREV_JUMP
         MENUITEM SEPARATOR
         MENUITEM "처음 이미지(&F)\tHome",       ID_MOVE_FIRSTIMAGE
         MENUITEM "마지막 이미지(&L)\tEnd",      ID_MOVE_LASTIMAGE
@@ -160,9 +161,11 @@ BEGIN
     "O",            ID_MAINMENU_FILE_OPEN,  VIRTKEY, CONTROL, NOINVERT
     VK_HOME,        ID_MOVE_FIRSTIMAGE,     VIRTKEY, NOINVERT
     VK_END,         ID_MOVE_LASTIMAGE,      VIRTKEY, NOINVERT
+    VK_RIGHT,       ID_MOVE_NEXT_JUMP,      VIRTKEY, CONTROL, NOINVERT
     VK_NEXT,        ID_MOVE_NEXTFOLDER,     VIRTKEY, CONTROL, NOINVERT
     VK_NEXT,        ID_MOVE_NEXTIMAGE,      VIRTKEY, NOINVERT
     VK_SPACE,       ID_MOVE_NEXTIMAGE,      VIRTKEY, NOINVERT
+    VK_LEFT,        ID_MOVE_PREV_JUMP,      VIRTKEY, CONTROL, NOINVERT
     VK_PRIOR,       ID_MOVE_PREVFOLDER,     VIRTKEY, CONTROL, NOINVERT
     VK_PRIOR,       ID_MOVE_PREVIMAGE,      VIRTKEY, NOINVERT
     VK_BACK,        ID_MOVE_REDOIMAGEPOSITION, VIRTKEY, SHIFT, NOINVERT
@@ -170,8 +173,7 @@ BEGIN
     VK_RETURN,      ID_VIEW_FULLSCREEN,     VIRTKEY, ALT, NOINVERT
     "]",            ID_VIEW_ROTATECLOCKWISE, ASCII, NOINVERT
     "[",            ID_VIEW_ROTATECOUNTERCLOCKWISE, ASCII, NOINVERT
-    VK_RIGHT,       ID_MOVE_NEXT_JUMP,      VIRTKEY, CONTROL, NOINVERT
-    VK_LEFT,        ID_MOVE_PREV_JUMP,      VIRTKEY, CONTROL, NOINVERT
+    "M",            ID_FILE_MOVETO,         VIRTKEY, ALT, NOINVERT
 END
 
 
@@ -188,7 +190,7 @@ IDC_MOVE_HAND_CAPTURE_CURSOR CURSOR                  "MoveHandHold.cur"
 // Dialog
 //
 
-IDD_DIALOGHELP DIALOGEX 0, 0, 249, 129
+IDD_DIALOGHELP DIALOGEX 0, 0, 264, 129
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | 
     WS_CAPTION | WS_SYSMENU
 CAPTION "ZViewer About"
@@ -228,6 +230,18 @@ BEGIN
                     IDC_STATIC,7,41,107,24
 END
 
+IDD_MOVE_DIALOG DIALOGEX 0, 0, 228, 50
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | 
+    WS_CAPTION | WS_SYSMENU
+CAPTION "파일 이동"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "확인",IDOK,115,29,50,14
+    PUSHBUTTON      "취소",IDCANCEL,171,29,50,14
+    EDITTEXT        IDC_EDIT_MOVE_TO_FOLDER,7,7,157,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "폴더 선택...",IDC_BUTTON_SELECT_FOLDER,171,7,50,14
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -240,7 +254,7 @@ BEGIN
     IDD_DIALOGHELP, DIALOG
     BEGIN
         LEFTMARGIN, 7
-        RIGHTMARGIN, 242
+        RIGHTMARGIN, 257
         TOPMARGIN, 7
         BOTTOMMARGIN, 122
     END
@@ -251,6 +265,14 @@ BEGIN
         RIGHTMARGIN, 114
         TOPMARGIN, 7
         BOTTOMMARGIN, 88
+    END
+
+    IDD_MOVE_DIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 221
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 43
     END
 END
 #endif    // APSTUDIO_INVOKED
@@ -297,7 +319,8 @@ END
 
 
 /////////////////////////////////////////////////////////////////////////////
-//// String Table
+//
+// String Table
 //
 
 STRINGTABLE 
