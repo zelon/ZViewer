@@ -425,6 +425,10 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 				ZMain::GetInstance().OpenFileDialog();
 				break;
 
+			case ID_FILE_MOVETO:
+				ZMain::GetInstance().MoveThisFile();
+				break;
+
 			case ID_MOVE_NEXTFOLDER:
 				ZMain::GetInstance().NextFolder();
 				break;

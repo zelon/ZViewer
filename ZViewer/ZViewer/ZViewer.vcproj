@@ -273,6 +273,12 @@
 			Name="src"
 			Filter="">
 			<File
+				RelativePath=".\src\MoveToDlg.cpp">
+			</File>
+			<File
+				RelativePath=".\src\MoveToDlg.h">
+			</File>
+			<File
 				RelativePath=".\src\OptionFile.cpp">
 			</File>
 			<File

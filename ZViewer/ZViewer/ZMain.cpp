@@ -4,6 +4,7 @@
 #include "src/ZCacheImage.h"
 #include "src/ZResourceManager.h"
 #include "../lib/DesktopWallPaper.h"
+#include "src/MoveToDlg.h"
 
 #include <ShlObj.h>
 #include <cstdio>
@@ -110,18 +111,6 @@ void ZMain::OnInit()
 		// 시작 인자가 있으면 그 파일을 보여준다.
 		OpenFile(m_strInitArg);
 	}
-}
-
-std::string ZMain::GetFolderNameFromFullFileName(const std::string & strFullFilename)
-{
-	char szDrive[_MAX_DRIVE] = { 0 };
-	char szDir[_MAX_DIR] = { 0 };
-	_splitpath(strFullFilename.c_str(), szDrive, szDir, 0, 0);
-
-	std::string strFolder = szDrive;
-	strFolder += szDir;
-
-	return strFolder;
 }
 
 void ZMain::Draw(bool bEraseBg)
@@ -960,6 +949,93 @@ void ZMain::ShellTrayHide()
 	}
 }
 
+
+void ZMain::_ProcAfterRemoveThisFile()
+{
+	// 현재 파일이 마지막 파일인가?
+	if ( m_vFile.size() <= 1 )
+	{
+		m_iCurretFileIndex = 0;
+		m_strCurrentFilename = "";
+
+		m_vFile.clear();
+
+		SetTitle();
+		SetStatusBarText();
+		Draw(true);
+
+
+	}
+	else
+	{
+		if ( ((int)m_vFile.size() - 1) > m_iCurretFileIndex )	// 다음 그림이 있다.
+		{
+			// for 문을 돌면서 지울 것을 찾아놓는다.
+			vector<std::string>::iterator it, endit = m_vFile.end();
+			int i = 0;
+			bool bFound = false;
+			for ( it = m_vFile.begin(); it != endit; ++it)
+			{
+				if ( i == m_iCurretFileIndex)
+				{
+					bFound = true;
+					break;
+				}
+				++i;
+			}
+			if ( !bFound )
+			{
+				_ASSERTE(!"Can't find the file");
+				return;
+			}
+			NextImage();
+
+			m_vFile.erase(it);
+
+			// 지웠으므로 현재 인덱스를 1줄인다.
+			m_iCurretFileIndex -= 1;
+
+			SetTitle();
+			SetStatusBarText();
+
+			Draw(true);
+		}
+		else
+		{
+			// 사이즈가 1이 아니고, 다음것이 없었으므로 이전 것은 있다.
+			// for 문을 돌면서 지울 것을 찾아놓는다.
+			vector<std::string>::iterator it, endit = m_vFile.end();
+			int i = 0;
+
+			bool bFound = false;
+			for ( it = m_vFile.begin(); it != endit; ++it)
+			{
+				if ( i == m_iCurretFileIndex)
+				{
+					bFound = true;
+					break;
+				}
+				++i;
+			}
+
+			if ( !bFound )
+			{
+				_ASSERTE(!"Can't find the file");
+				return;
+			}
+			PrevImage();
+
+			m_vFile.erase(it);
+			SetTitle();
+			SetStatusBarText();
+			Draw(true);
+		}
+
+
+	}
+}
+
+
 void ZMain::OnFocusLose()
 {
 	DebugPrintf("OnFocusLose()");
@@ -1074,93 +1150,53 @@ void ZMain::DeleteThisFile()
 	{
 		if ( 0 == unlink(m_strCurrentFilename.c_str()) )
 		{
-			// 현재 파일이 마지막 파일인가?
-			if ( m_vFile.size() <= 1 )
-			{
-				m_iCurretFileIndex = 0;
-				m_strCurrentFilename = "";
-				
-				m_vFile.clear();
-
-				SetTitle();
-				SetStatusBarText();
-				Draw(true);
-
-
-			}
-			else
-			{
-				if ( ((int)m_vFile.size() - 1) > m_iCurretFileIndex )	// 다음 그림이 있다.
-				{
-					// for 문을 돌면서 지울 것을 찾아놓는다.
-					vector<std::string>::iterator it, endit = m_vFile.end();
-					int i = 0;
-					bool bFound = false;
-					for ( it = m_vFile.begin(); it != endit; ++it)
-					{
-						if ( i == m_iCurretFileIndex)
-						{
-							bFound = true;
-							break;
-						}
-						++i;
-					}
-					if ( !bFound )
-					{
-						_ASSERTE(!"Can't find the file");
-						return;
-					}
-					NextImage();
-
-					m_vFile.erase(it);
-
-					// 지웠으므로 현재 인덱스를 1줄인다.
-					m_iCurretFileIndex -= 1;
-
-					SetTitle();
-					SetStatusBarText();
-
-					Draw(true);
-				}
-				else
-				{
-					// 사이즈가 1이 아니고, 다음것이 없었으므로 이전 것은 있다.
-					// for 문을 돌면서 지울 것을 찾아놓는다.
-					vector<std::string>::iterator it, endit = m_vFile.end();
-					int i = 0;
-
-					bool bFound = false;
-					for ( it = m_vFile.begin(); it != endit; ++it)
-					{
-						if ( i == m_iCurretFileIndex)
-						{
-							bFound = true;
-							break;
-						}
-						++i;
-					}
-
-					if ( !bFound )
-					{
-						_ASSERTE(!"Can't find the file");
-						return;
-					}
-					PrevImage();
-
-					m_vFile.erase(it);
-					SetTitle();
-					SetStatusBarText();
-					Draw(true);
-				}
-
-				
-			}
+			_ProcAfterRemoveThisFile();
 		}
 		else
 		{
 			MessageBox(m_hMainDlg, "Can't delete this file!", "ZViewer", MB_OK);
 		}
 	}
+}
+
+
+void ZMain::MoveThisFile()
+{
+
+	CMoveToDlg aDlg;
+	
+	if ( !aDlg.DoModal() )
+	{
+		return;
+	}
+
+	std::string strFolder = aDlg.GetMoveToFolder();
+
+	std::string filename = GetFileNameFromFullFileName(m_strCurrentFilename);
+	std::string strToFileName = aDlg.GetMoveToFolder();
+	strToFileName += "\\";
+	strToFileName += filename;
+
+	// 옮겨갈 폴더에 같은 파일이 있는지 확인한다.
+	if ( 0 != _access(aDlg.GetMoveToFolder().c_str(), 00) )
+	{
+		MessageBox(m_hMainDlg, "Wrong folder name", "ZViewer", MB_OK);
+		return;
+	}
+
+	// 같은 파일이 존재하는지 확인한다.
+	if ( 0 == _access(strToFileName.c_str(), 00) )
+	{
+		// 이미 존재하면
+		if ( IDNO == MessageBox(m_hMainDlg, "There is a file same name. Overwrite?", "ZViewer", MB_YESNO) )
+		{
+			return;
+		}
+
+	}
+	
+	MoveFileEx(m_strCurrentFilename.c_str(), strToFileName.c_str(), MOVEFILE_REPLACE_EXISTING);
+	_ProcAfterRemoveThisFile();
 }
 
 /*

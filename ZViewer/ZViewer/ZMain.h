@@ -68,6 +68,7 @@ public:
 	int GetLogCacheHitRate();
 
 	void DeleteThisFile();
+	void MoveThisFile();
 
 	const std::string & GetProgramFolder() const	// 프로그램 실행 파일이 있는 폴더를 가져온다.
 	{
@@ -119,6 +120,9 @@ private:
 
 	void ShellTrayHide();
 
+	// 현재 파일이 지워졌을 때 후의 처리. 파일 삭제, 이동 후에 불리는 함수이다.
+	void _ProcAfterRemoveThisFile();
+
 	void FormShow();
 	void FormHide();
 
@@ -153,7 +157,6 @@ private:
 
 	void ZFindFile(const char *path, std::vector<std::string> & foundStorage, bool bFindRecursive = false);
 	void ZFindFolders(const char *path, std::vector<std::string> & foundStorage, bool bFindRecursive = false);
-	std::string GetFolderNameFromFullFileName(const std::string & strFullFilename);
 
 	// For Open File Dialog
 	OPENFILENAME ofn;       // common dialog box structure
