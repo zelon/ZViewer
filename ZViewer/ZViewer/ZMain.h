@@ -142,7 +142,6 @@ private:
 	void ZFindFile(const char *path, std::vector<std::string> & foundStorage, bool bFindRecursive = false);
 	void ZFindFolders(const char *path, std::vector<std::string> & foundStorage, bool bFindRecursive = false);
 	std::string GetFolderNameFromFullFileName(const std::string & strFullFilename);
-	bool ZMain::IsValidImageFileExt(const char * szFilename);
 
 	// For Open File Dialog
 	OPENFILENAME ofn;       // common dialog box structure

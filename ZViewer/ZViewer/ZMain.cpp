@@ -381,33 +381,6 @@ bool FilenameCompare(const std::string & a, const std::string & b)
 	return (strcmp(RemoveExt(b).c_str(), RemoveExt(a).c_str()) > 0);
 }
 
-bool ZMain::IsValidImageFileExt(const char * szFilename)
-{
-	char szExt[MAX_PATH] = { 0 };
-
-	_splitpath(szFile, 0, 0, 0, szExt);
-
-//	string k = "sf";
-//	k.lo
-
-	if ( PathMatchSpec ( szFilename, ("*.bmp") ) ||
-		PathMatchSpec ( szFilename, ("*.jpg") ) ||
-		PathMatchSpec ( szFilename, ("*.jpeg") ) ||
-		PathMatchSpec ( szFilename, ("*.gif") ) ||
-		PathMatchSpec ( szFilename, ("*.ico") ) ||
-		PathMatchSpec ( szFilename, ("*.pcx") ) ||
-		PathMatchSpec ( szFilename, ("*.psd") ) ||
-		PathMatchSpec ( szFilename, ("*.tif") ) ||
-		PathMatchSpec ( szFilename, ("*.tga") ) ||
-		PathMatchSpec ( szFilename, ("*.png") ) ||
-		PathMatchSpec ( szFilename, ("*.jpg") )
-		)
-	{
-		return true;
-	}
-	return false;
-}
-
 void ZMain::ZFindFile(const char *path, std::vector<std::string> & foundStorage, bool bFindRecursive)
 {
 	HANDLE hSrch;
@@ -435,7 +408,7 @@ void ZMain::ZFindFile(const char *path, std::vector<std::string> & foundStorage,
 		{
 			wsprintf(fname,"%s%s%s",drive,dir,wfd.cFileName);
 
-			if ( IsValidImageFileExt(wfd.cFileName) )
+			if ( ZImage::IsValidImageFileExt(wfd.cFileName) )
 			{
 				foundStorage.push_back(fname);
 			}
@@ -474,16 +447,6 @@ void ZMain::ZFindFolders(const char *path, std::vector<std::string> & foundStora
 					ZFindFolders(newpath, foundStorage, bFindRecursive);
 				}
 			}
-		}
-		else
-		{
-			/*
-
-			if ( IsValidImageFileExt(wfd.cFileName) )
-			{
-				foundStorage.push_back(fname);
-			}
-			*/
 		}
 		bResult=FindNextFile(hSrch,&wfd);
 	}

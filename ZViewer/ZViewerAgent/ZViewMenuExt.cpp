@@ -64,25 +64,6 @@ RECT CZViewMenuExt::GetResizedRect(const RECT & MaximumSize, const RECT & origin
 }
 
 
-bool CZViewMenuExt::IsAvailableFileExt(TCHAR * szFilename)
-{
-	if ( PathMatchSpec ( m_szFile, _T("*.bmp") ) ||
-		PathMatchSpec ( m_szFile, _T("*.jpg") ) ||
-		PathMatchSpec ( m_szFile, _T("*.jpeg") ) ||
-		PathMatchSpec ( m_szFile, _T("*.gif") ) ||
-		PathMatchSpec ( m_szFile, _T("*.ico") ) ||
-		PathMatchSpec ( m_szFile, _T("*.pcx") ) ||
-		PathMatchSpec ( m_szFile, _T("*.psd") ) ||
-		PathMatchSpec ( m_szFile, _T("*.tif") ) ||
-		PathMatchSpec ( m_szFile, _T("*.tga") ) ||
-		PathMatchSpec ( m_szFile, _T("*.png") ) ||
-		PathMatchSpec ( m_szFile, _T("*.jpg") )
-		)
-	{
-		return true;
-	}
-	return false;
-}
 
 STDMETHODIMP CZViewMenuExt::Initialize (LPCITEMIDLIST pidlFolder, LPDATAOBJECT  pDO, HKEY hkeyProgID )
 {
@@ -111,7 +92,7 @@ STDMETHODIMP CZViewMenuExt::Initialize (LPCITEMIDLIST pidlFolder, LPDATAOBJECT  
 	if ( DragQueryFile ( hdrop, 0, m_szFile, MAX_PATH ))
 	{
 		// Is its extension .BMP?
-		if ( IsAvailableFileExt(m_szFile) )
+		if ( ZImage::IsValidImageFileExt(m_szFile) )
 		{
 			if ( m_originalImage.LoadFromFile(m_szFile) )
 			{

@@ -51,6 +51,9 @@ public:
 	{
 		return m_image.getImageSize();
 	}
+
+	static bool IsValidImageFileExt(const char * szFilename);
+
 private:
 	fipImage m_image;
 

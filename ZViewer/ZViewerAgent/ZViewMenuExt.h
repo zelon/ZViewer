@@ -60,7 +60,6 @@ public:
 protected:
 
 	void MsgBox(const std::string & strMsg);		// for debugging messagebox
-	bool IsAvailableFileExt(TCHAR * szFilename);	// 어떤 확장자를 지원할 것인지
 	RECT GetResizedRect(const RECT & MaximumSize, const RECT & originalSize);// 최대 크기를 넘지 않는 적당한 리사이즈 크기를 돌려준다.
     TCHAR   m_szFile[MAX_PATH];
 	CBitmap m_bmp;
