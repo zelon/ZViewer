@@ -47,9 +47,12 @@ ZCacheImage::~ZCacheImage()
 
 void ZCacheImage::SetImageVector(std::vector < std::string > & v)
 {
+	ZCacheLock lock;
+
 	m_imageVector = v;
 	m_imageMap.clear();
 	m_imageMapRev.clear();
+	
 	m_cacheData.clear();
 	m_lCacheSize = 0;
 
@@ -68,6 +71,7 @@ void ZCacheImage::StartThread()
 	DWORD dwThreadID;
 	m_hThread = CreateThread(0, 0, ThreadFuncProxy, this, 0, &dwThreadID);
 
+	// Cache 를 진행하는 쓰레드는 
 	if ( SetThreadPriority(m_hThread, THREAD_PRIORITY_BELOW_NORMAL) == FALSE )
 	{
 		_ASSERTE(!"Can't SetThreadPriority!");
@@ -313,25 +317,23 @@ void ZCacheImage::AddCacheData(const std::string & strFilename, ZImage & image)
 
 	DebugPrintf("%s added to cache", strFilename.c_str());
 
+#ifdef _DEBUG
 	m_cacheData[strFilename] = image;
 	m_lCacheSize += m_cacheData[strFilename].GetImageSize();
+#else
+	try
+	{
+		m_cacheData[strFilename] = image;
+	}
+	catch ( ... )
+	{
+		return;
+	}
+	m_lCacheSize += m_cacheData[strFilename].GetImageSize();
+#endif
 }
 
-long ZCacheImage::GetCachedKByte()
+long ZCacheImage::GetCachedKByte() const
 {
-	/*
-	ZCacheLock lock;
-	CacheMapIterator it, endit = m_cacheData.end();
-
-	unsigned long total = 0;
-
-	for ( it = m_cacheData.begin(); it != endit; ++it)
-	{
-		ZImage & image = it->second;
-
-		total += image.GetImageSize();
-	}
-	*/
-
 	return (m_lCacheSize/1024);
 }
