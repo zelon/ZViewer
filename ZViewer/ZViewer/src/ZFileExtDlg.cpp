@@ -3,6 +3,7 @@
 #include "resource.h"
 #include "ZFileExtDlg.h"
 #include "../ZMain.h"
+#include "ZResourceManager.h"
 #include <ShlObj.h>
 
 #include "../lib/ZFileExtReg.h"
@@ -25,7 +26,7 @@ ZFileExtDlg & ZFileExtDlg::GetInstance()
 
 void ZFileExtDlg::ShowDlg()
 {
-	INT_PTR iRet = DialogBox(ZMain::GetInstance().GetHInstance(), MAKEINTRESOURCE(IDD_FILE_EXT_DIALOG), ZMain::GetInstance().GetHWND(), FileExtDlgProc);
+	INT_PTR iRet = DialogBox(ZResourceManager::GetInstance().GetHInstance(), MAKEINTRESOURCE(IDD_FILE_EXT_DIALOG), ZMain::GetInstance().GetHWND(), FileExtDlgProc);
 
 	if ( iRet == IDOK )
 	{
