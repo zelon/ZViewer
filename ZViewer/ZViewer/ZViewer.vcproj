@@ -302,6 +302,12 @@
 			<File
 				RelativePath=".\src\ZOption.h">
 			</File>
+			<File
+				RelativePath=".\src\ZResourceManager.cpp">
+			</File>
+			<File
+				RelativePath=".\src\ZResourceManager.h">
+			</File>
 		</Filter>
 		<Filter
 			Name="lib"
