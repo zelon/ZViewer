@@ -175,6 +175,38 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 
 	switch(iMessage)
 	{
+	case WM_CHAR:
+		{
+			switch ( wParam )
+			{
+			case 'A':
+			case 'a':
+			case '7':
+				ZMain::GetInstance().OnDrag(-5000, -5000);
+				break;
+
+			case 'S':
+			case 's':
+			case '9':
+				ZMain::GetInstance().OnDrag(5000, -5000);
+				break;
+
+			case 'Z':
+			case 'z':
+			case '1':
+				ZMain::GetInstance().OnDrag(-5000, 5000);
+				break;
+
+			case 'X':
+			case 'x':
+			case '3':
+				ZMain::GetInstance().OnDrag(5000, 5000);
+				break;
+
+			}
+		}
+		break;
+
 	case WM_DROPFILES:
 		{
 			HDROP hDrop = (HDROP)wParam;
