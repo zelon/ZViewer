@@ -99,10 +99,10 @@ IDR_POPUP_MENU MENU
 BEGIN
     POPUP "PopupMenu"
     BEGIN
-        MENUITEM "First",                       ID_MOVE_FIRSTIMAGE
-        MENUITEM "Last",                        ID_MOVE_LASTIMAGE
+        MENUITEM "First\tHome",                 ID_MOVE_FIRSTIMAGE
+        MENUITEM "Last\tEnd",                   ID_MOVE_LASTIMAGE
         MENUITEM SEPARATOR
-        MENUITEM "FullScreen",                  ID_VIEW_FULLSCREEN
+        MENUITEM "FullScreen\tAlt+Enter",       ID_VIEW_FULLSCREEN
         MENUITEM "RightTop First Draw",         ID_VIEW_RIGHTTOPFIRSTDRAW
         MENUITEM SEPARATOR
         MENUITEM "BigToScreenStretch",          ID_POPUPMENU_BIGTOSCREENSTRETCH
@@ -117,6 +117,11 @@ BEGIN
             MENUITEM "Center",                      ID_SETDESKTOPWALLPAPER_CENTER
 
             MENUITEM "Stretch",                     ID_SETDESKTOPWALLPAPER_STRETCH
+
+            MENUITEM "Tile",                        ID_SETDESKTOPWALLPAPER_TILE
+
+            MENUITEM SEPARATOR
+            MENUITEM "Clear",                       ID_SETDESKTOPWALLPAPER_CLEAR
 
         END
         MENUITEM "E&xit",                       ID_MAINMENU_FILE_EXIT
@@ -178,19 +183,20 @@ IDC_MOVE_HAND_CAPTURE_CURSOR CURSOR                  "MoveHandHold.cur"
 // Dialog
 //
 
-IDD_DIALOGHELP DIALOGEX 0, 0, 264, 97
+IDD_DIALOGHELP DIALOGEX 0, 0, 264, 114
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | 
     WS_CAPTION | WS_SYSMENU
 CAPTION "ZViewer About"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
-    DEFPUSHBUTTON   "Close",IDOK,207,76,50,14
+    DEFPUSHBUTTON   "Close",IDOK,207,93,50,14
     LTEXT           "Homepage : http://www.wimy.com",IDC_STATIC,144,33,113,8
     LTEXT           "Written by Kim Jinwook - zelon",IDC_STATIC,53,20,98,8
     LTEXT           "ZViewer version : ",IDC_STATIC,7,7,58,8
     LTEXT           "VERSION",IDC_STATIC_VERSION,69,7,30,8
-    LTEXT           "Static",IDC_STATIC_HITRATE,7,50,112,8
-    LTEXT           "Static",IDC_STATIC_CACHE_MEMORY,7,64,250,8
+    LTEXT           "CacheHitRate",IDC_STATIC_HITRATE,7,50,112,8
+    LTEXT           "CacheMemory",IDC_STATIC_CACHE_MEMORY,7,64,250,8
+    LTEXT           "Program Path",IDC_STATIC_PROGRAM_PATH,7,81,44,8
 END
 
 IDD_FILE_EXT_DIALOG DIALOGEX 0, 0, 121, 95
@@ -229,7 +235,7 @@ BEGIN
         LEFTMARGIN, 7
         RIGHTMARGIN, 257
         TOPMARGIN, 7
-        BOTTOMMARGIN, 90
+        BOTTOMMARGIN, 107
     END
 
     IDD_FILE_EXT_DIALOG, DIALOG

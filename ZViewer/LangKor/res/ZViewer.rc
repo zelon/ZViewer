@@ -69,7 +69,8 @@ BEGIN
         MENUITEM "작은 그림 화면에 맞게 확대",  ID_VIEW_SMALLTOSCREENSTRETCH
         MENUITEM SEPARATOR
         MENUITEM "시계 방향으로 90도 회전\t]",  ID_VIEW_ROTATECLOCKWISE
-        MENUITEM "반시계 방향으로 90도 회전\t[", ID_VIEW_ROTATECOUNTERCLOCKWISE
+        MENUITEM "반시계 방향으로 90도 회전\t[", 
+                                                ID_VIEW_ROTATECOUNTERCLOCKWISE
 
     END
     POPUP "이동(&M)"
@@ -99,10 +100,10 @@ IDR_POPUP_MENU MENU
 BEGIN
     POPUP "PopupMenu"
     BEGIN
-        MENUITEM "처음 이미지",                 ID_MOVE_FIRSTIMAGE
-        MENUITEM "마지막 이미지",               ID_MOVE_LASTIMAGE
+        MENUITEM "처음 이미지\tHome",           ID_MOVE_FIRSTIMAGE
+        MENUITEM "마지막 이미지\tEnd",          ID_MOVE_LASTIMAGE
         MENUITEM SEPARATOR
-        MENUITEM "전체화면",                    ID_VIEW_FULLSCREEN
+        MENUITEM "전체화면\tAlt+Enter",         ID_VIEW_FULLSCREEN
         MENUITEM "오른쪽 위부터 그리기",        ID_VIEW_RIGHTTOPFIRSTDRAW
         MENUITEM SEPARATOR
         MENUITEM "큰 그림 화면에 맞게 축소",    ID_POPUPMENU_BIGTOSCREENSTRETCH
@@ -112,6 +113,18 @@ BEGIN
         MENUITEM SEPARATOR
         MENUITEM "현재 파일 지우기\tDelete",    ID_DELETETHISFILE
         MENUITEM SEPARATOR
+        POPUP "바탕화면 배경으로 지정"
+        BEGIN
+            MENUITEM "가운데",                      ID_SETDESKTOPWALLPAPER_CENTER
+
+            MENUITEM "늘이기",                      ID_SETDESKTOPWALLPAPER_STRETCH
+
+            MENUITEM "바둑판식",                    ID_SETDESKTOPWALLPAPER_TILE
+
+            MENUITEM SEPARATOR
+            MENUITEM "지우기",                      ID_SETDESKTOPWALLPAPER_CLEAR
+
+        END
         MENUITEM "종료(&X)",                    ID_MAINMENU_FILE_EXIT
     END
 END
@@ -171,19 +184,20 @@ IDC_MOVE_HAND_CAPTURE_CURSOR CURSOR                  "MoveHandHold.cur"
 // Dialog
 //
 
-IDD_DIALOGHELP DIALOGEX 0, 0, 249, 97
+IDD_DIALOGHELP DIALOGEX 0, 0, 249, 113
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | 
     WS_CAPTION | WS_SYSMENU
 CAPTION "ZViewer About"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
-    DEFPUSHBUTTON   "Close",IDOK,192,76,50,14
+    DEFPUSHBUTTON   "Close",IDOK,192,92,50,14
     LTEXT           "Homepage : http://www.wimy.com",IDC_STATIC,129,33,113,8
     LTEXT           "김진욱(zelon) 이 만듦",IDC_STATIC,68,20,75,8
     LTEXT           "ZViewer version : ",IDC_STATIC,7,7,58,8
     LTEXT           "VERSION",IDC_STATIC_VERSION,69,7,30,8
     LTEXT           "캐시 적중률 : ",IDC_STATIC_HITRATE,7,50,112,8
     LTEXT           "캐시 메모리량 :",IDC_STATIC_CACHE_MEMORY,7,63,235,8
+    LTEXT           "프로그램 경로 :",IDC_STATIC_PROGRAM_PATH,7,79,56,8
 END
 
 IDD_FILE_EXT_DIALOG DIALOGEX 0, 0, 121, 95
@@ -222,7 +236,7 @@ BEGIN
         LEFTMARGIN, 7
         RIGHTMARGIN, 242
         TOPMARGIN, 7
-        BOTTOMMARGIN, 90
+        BOTTOMMARGIN, 106
     END
 
     IDD_FILE_EXT_DIALOG, DIALOG
