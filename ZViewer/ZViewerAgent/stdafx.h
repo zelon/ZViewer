@@ -23,7 +23,7 @@
 #endif
 
 #ifndef _WIN32_IE			// IE 4.0 이상에서만 기능을 사용할 수 있습니다.
-#define _WIN32_IE 0x0400	// 이 값을 IE 5.0 이상을 대상으로 하는 데 적합한 값으로 변경하십시오.
+#define _WIN32_IE 0x0500	// 이 값을 IE 5.0 이상을 대상으로 하는 데 적합한 값으로 변경하십시오.
 #endif
 
 #define _ATL_APARTMENT_THREADED
