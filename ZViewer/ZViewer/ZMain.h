@@ -16,11 +16,18 @@ public:
 	void OnInit();
 	void Draw(bool bEraseBg = true);
 
+	bool GetNeighborFolders(std::vector < std::string > & vFolders);
+	void NextFolder();
+	void PrevFolder();
+
 	bool NextImage();
 	bool PrevImage();
 
 	bool FirstImage();
 	bool LastImage();
+
+	void Rotate(bool bClockWise);
+
 
 	HWND GetHWND() { return m_hMainDlg; }
 	void SetHWND(HWND hWnd);
@@ -66,7 +73,11 @@ public:
 
 	inline bool IsFullScreen() const { return m_option.m_bFullScreen; }
 
+	/// 특정 파일을 연다.
 	void OpenFile(const std::string & strFilename);
+
+	/// 특정 폴더의 첫번째 파일을 연다.
+	void OpenFolder(const std::string strFolder);
 	void OpenFileDialog();
 
 	void Undo();
@@ -129,6 +140,7 @@ private:
 	int m_iShowingY;			// 그림 중 어디를 찍기 시작하나.
 
 	void ZFindFile(const char *path, std::vector<std::string> & foundStorage, bool bFindRecursive = false);
+	void ZFindFolders(const char *path, std::vector<std::string> & foundStorage, bool bFindRecursive = false);
 	std::string GetFolderNameFromFullFileName(const std::string & strFullFilename);
 	bool ZMain::IsValidImageFileExt(const char * szFilename);
 

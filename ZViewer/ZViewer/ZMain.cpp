@@ -426,6 +426,52 @@ void ZMain::ZFindFile(const char *path, std::vector<std::string> & foundStorage,
 	FindClose(hSrch);
 }
 
+void ZMain::ZFindFolders(const char *path, std::vector<std::string> & foundStorage, bool bFindRecursive)
+{
+	HANDLE hSrch;
+	WIN32_FIND_DATA wfd;
+	//memset(&wfd, 0, sizeof(wfd));
+	char fname[MAX_PATH] = { 0 };
+	BOOL bResult=TRUE;
+	char drive[_MAX_DRIVE] = { 0 };
+	char dir[MAX_PATH] = { 0 };
+	char newpath[MAX_PATH] = { 0 };
+
+	hSrch=FindFirstFile(path,&wfd);
+	while (bResult)
+	{
+		_splitpath(path,drive,dir,NULL,NULL);
+		if (wfd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
+		{
+			if (wfd.cFileName[0]!='.' )
+			{
+				wsprintf(fname,"%s%s%s",drive,dir,wfd.cFileName);
+
+				foundStorage.push_back(fname);
+
+				if ( bFindRecursive == true )
+				{
+					wsprintf(newpath,"%s%s%s\\*.*",drive,dir,wfd.cFileName);
+					ZFindFolders(newpath, foundStorage, bFindRecursive);
+				}
+			}
+		}
+		else
+		{
+			/*
+
+			if ( IsValidImageFileExt(wfd.cFileName) )
+			{
+				foundStorage.push_back(fname);
+			}
+			*/
+		}
+		bResult=FindNextFile(hSrch,&wfd);
+	}
+	FindClose(hSrch);
+}
+
+
 void ZMain::RescanFolder()
 {
 	std::string strToFindFolder = m_strCurrentFolder;
@@ -466,6 +512,145 @@ void ZMain::SetProgramFolder()
 	m_strProgramFolder = szDrive;
 	m_strProgramFolder += szDir;
 }
+
+bool ZMain::GetNeighborFolders(std::vector < std::string > & vFolders)
+{
+	std::string strParentFolder;
+
+	// 현재 폴더의 상위 폴더를 검색한다.
+	{
+		// 현재 폴더에서 오른쪽부터 2번째의 \ 를 얻는다.
+		size_t pos = m_strCurrentFolder.find_last_of("\\");
+
+		if ( pos == m_strCurrentFolder.npos )
+		{
+			MessageBox(m_hMainDlg, "Can't find parent folder.", "ZViewer", MB_OK);
+			return false;
+		}
+
+		std::string strParentFolder = m_strCurrentFolder.substr(0, pos);
+
+		pos = strParentFolder.find_last_of("\\");
+
+		if ( pos == strParentFolder.npos )
+		{
+			MessageBox(m_hMainDlg, "Can't find parent folder.", "ZViewer", MB_OK);
+			return false;
+		}
+
+		strParentFolder = strParentFolder.substr(0, pos);
+
+		strParentFolder += "\\*.*";
+		// 상위 폴더의 하위 폴더들을 얻는다.
+		ZFindFolders(strParentFolder.c_str(), vFolders, false);
+
+		if ( vFolders.size() <= 0 )
+		{
+			_ASSERTE(vFolders.size() > 0 );
+			return false;
+		}
+	}
+
+	// 상위 폴더의 하위 폴더들을 정렬한다.
+	sort(vFolders.begin(), vFolders.end(), StringCompare);
+
+	return true;
+}
+
+void ZMain::NextFolder()
+{
+	std::vector < std::string > vFolders;
+
+	if ( !GetNeighborFolders(vFolders) ) return;
+
+	// 상위 폴더의 하위 폴더 중 현재 폴더의 다음 폴더가 있으면 다음 폴더를 검색한 후, 처음 이미지를 연다.
+	{
+		int iFoundIndex = -1;
+		// 현재 폴더의 index 를 찿는다.
+		for (unsigned int i=0; i<vFolders.size(); ++i)
+		{
+			if ( vFolders[i] + "\\" == m_strCurrentFolder )
+			{
+				iFoundIndex = i;
+				break;
+			}
+		}
+
+		_ASSERTE(iFoundIndex != -1);
+
+		if ( (iFoundIndex + 1) >= vFolders.size() )
+		{
+			// 마지막 폴더이다.
+			MessageBox(m_hMainDlg, "Here is the last folder.", "ZViewer", MB_OK);
+			return;
+		}
+		else
+		{
+			OpenFolder(vFolders[iFoundIndex+1]);
+		}
+	}
+}
+
+
+void ZMain::PrevFolder()
+{
+	std::vector < std::string > vFolders;
+
+	if ( !GetNeighborFolders(vFolders) ) return;
+
+	// 상위 폴더의 하위 폴더 중 현재 폴더의 다음 폴더가 있으면 다음 폴더를 검색한 후, 처음 이미지를 연다.
+	{
+		int iFoundIndex = -1;
+		// 현재 폴더의 index 를 찿는다.
+		for (unsigned int i=0; i<vFolders.size(); ++i)
+		{
+			if ( vFolders[i] + "\\" == m_strCurrentFolder )
+			{
+				iFoundIndex = i;
+				break;
+			}
+		}
+
+		_ASSERTE(iFoundIndex != -1);
+
+		if ( (iFoundIndex-1 <= 0 ) )
+		{
+			// 마지막 폴더이다.
+			MessageBox(m_hMainDlg, "Here is the first folder.", "ZViewer", MB_OK);
+			return;
+		}
+		else
+		{
+			OpenFolder(vFolders[iFoundIndex-1]);
+		}
+	}
+}
+
+void ZMain::OpenFolder(const std::string strFolder)
+{
+	// 특정 폴더의 하위 파일들을 검색해서 정렬 후 첫번째 파일을 연다.
+
+	std::string strTemp = strFolder;
+	strTemp += "\\*.*";
+
+	vector < std::string > vFiles;
+	ZFindFile(strTemp.c_str(), vFiles, false);
+
+	sort(vFiles.begin(), vFiles.end(), StringCompare);
+
+	if ( vFiles.size() == 0 )
+	{
+		std::string strMsg = strFolder;
+		strMsg += " folder has no image file.";
+		MessageBox(m_hMainDlg, strMsg.c_str(), "ZViewer", MB_OK);
+		return;
+	}
+	else
+	{
+		OpenFile(vFiles[0]);
+	}
+}
+
 
 bool ZMain::NextImage()
 {
@@ -1094,4 +1279,20 @@ void ZMain::LoadLanguage()
 	// 메뉴를 세팅한다.
 	ModifyMenu(m_hPopupMenu, ID_DELETETHISFILE, MF_BYCOMMAND, ID_DELETETHISFILE, opt.GetValue("MenuFileOpen").c_str());
 	//SetDlgItemText(m_hPopupMenu, ID_DELETETHISFILE, opt.GetValue("MenuDeleteThisFile").c_str());
+}
+
+void ZMain::Rotate(bool bClockWise)
+{
+	if ( m_currentImage.IsValid() )
+	{
+		if ( bClockWise )
+		{
+			m_currentImage.Rotate(-90);
+		}
+		else
+		{
+			m_currentImage.Rotate(90);
+		}
+		Draw(true);
+	}
 }

@@ -1,4 +1,3 @@
-
 #include "stdafx.h"
 #include "resource.h"
 #include "ZMain.h"
@@ -380,6 +379,18 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 				}
 				break;
 
+			case ID_MOVE_NEXTFOLDER:
+				{
+					ZMain::GetInstance().NextFolder();
+				}
+				break;
+
+			case ID_MOVE_PREVFOLDER:
+				{
+					ZMain::GetInstance().PrevFolder();
+				}
+				break;
+
 			case ID_MOVE_NEXTIMAGE:
 				{
 					if ( ZMain::GetInstance().NextImage() )
@@ -492,6 +503,18 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 			case ID_POPUPMENU_BIGTOSCREENSTRETCH:
 				{
 					ZMain::GetInstance().ToggleBigToScreenStretch();
+				}
+				break;
+
+			case ID_VIEW_ROTATECLOCKWISE:
+				{
+					ZMain::GetInstance().Rotate(true);
+				}
+				break;
+
+			case ID_VIEW_ROTATECOUNTERCLOCKWISE:
+				{
+					ZMain::GetInstance().Rotate(false);
 				}
 				break;
 
