@@ -124,7 +124,7 @@ STDMETHODIMP CZViewMenuExt::QueryContextMenu (
 
 	// 이미지 파일에 대한 정보를 수집해놓는다.
 	char szImageInfo[256];
-	sprintf(szImageInfo, "%dx%d %dbpp", m_originalImage.GetWidth(), m_originalImage.GetHeight(), m_originalImage.GetBPP());
+	_snprintf(szImageInfo, sizeof(szImageInfo), "%dx%d %dbpp", m_originalImage.GetWidth(), m_originalImage.GetHeight(), m_originalImage.GetBPP());
 
 	// Store the menu item's ID so we can check against it later when
 	// WM_MEASUREITEM/WM_DRAWITEM are sent.
@@ -179,7 +179,7 @@ STDMETHODIMP CZViewMenuExt::GetCommandString (UINT uCmd, UINT uFlags, UINT* puRe
 
 #ifdef _DEBUG
 	char szTemp[256];
-	sprintf(szTemp, "ucmd(%d), uFlags(%d), pszName(%s), cchMax(%d)", uCmd, uFlags, pszName, cchMax);
+	_snprintf(szTemp, sizeof(szTemp), "ucmd(%d), uFlags(%d), pszName(%s), cchMax(%d)", uCmd, uFlags, pszName, cchMax);
 	OutputDebugString(szTemp);
 	OutputDebugString("\r\n");
 #endif
@@ -456,7 +456,7 @@ void CZViewMenuExt::ExecZViewer()
 	std::string strProgramFolder = szDrive;
 	strProgramFolder += szDir;
 
-	wsprintf(command, "%s\\ZViewer.exe %s", strProgramFolder.c_str(), m_szFile);
+	_snprintf(command, sizeof(command), "%s\\ZViewer.exe %s", strProgramFolder.c_str(), m_szFile);
 
 	STARTUPINFO si;
 	PROCESS_INFORMATION pi;
