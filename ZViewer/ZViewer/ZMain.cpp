@@ -758,7 +758,7 @@ void ZMain::LoadCurrent()
 
 		bool bLoadOK = false;
 
-		for ( int i=0; i<5; ++i)
+		for ( int i=0; i<10; ++i)
 		{
 			bLoadOK = m_currentImage.LoadFromFile(m_strCurrentFilename);
 			if ( bLoadOK || i >= 5) break;
@@ -771,13 +771,16 @@ void ZMain::LoadCurrent()
 		{
 			_ASSERTE(!"Can't load image");
 		}
-
-		if ( !ZCacheImage::GetInstance().hasCachedData(m_strCurrentFilename, m_iCurretFileIndex))
+		else
 		{
-			ZCacheImage::GetInstance().AddCacheData(m_strCurrentFilename, m_currentImage);
+			if ( !ZCacheImage::GetInstance().hasCachedData(m_strCurrentFilename, m_iCurretFileIndex))
+			{
+				ZCacheImage::GetInstance().AddCacheData(m_strCurrentFilename, m_currentImage);
+			}
+			OutputDebugString("Cache miss. Add to cache.");
+			ZCacheImage::GetInstance().LogCacheMiss();
 		}
-		OutputDebugString("Cache miss. Add to cache.");
-		ZCacheImage::GetInstance().LogCacheMiss();
+
 
 	}
 	m_dwLoadingTime = GetTickCount() - start;
