@@ -15,6 +15,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ZViewerIcons", "ZViewerIcon
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LangKor", "LangKor\LangKor.vcproj", "{4DB1B12A-2CAD-40EA-AB47-C13ED1CF0643}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(DPCodeReviewSolutionGUID) = preSolution
 		DPCodeReviewSolutionGUID = {00000000-0000-0000-0000-000000000000}
@@ -54,6 +58,14 @@ Global
 		{C61FF398-EFA2-4094-B558-58A784FAF364}.ZViewerDebug.Build.0 = Debug|Win32
 		{C61FF398-EFA2-4094-B558-58A784FAF364}.ZViewerRelease.ActiveCfg = Release|Win32
 		{C61FF398-EFA2-4094-B558-58A784FAF364}.ZViewerRelease.Build.0 = Release|Win32
+		{4DB1B12A-2CAD-40EA-AB47-C13ED1CF0643}.Debug.ActiveCfg = Debug|Win32
+		{4DB1B12A-2CAD-40EA-AB47-C13ED1CF0643}.Debug.Build.0 = Debug|Win32
+		{4DB1B12A-2CAD-40EA-AB47-C13ED1CF0643}.Release.ActiveCfg = Release|Win32
+		{4DB1B12A-2CAD-40EA-AB47-C13ED1CF0643}.Release.Build.0 = Release|Win32
+		{4DB1B12A-2CAD-40EA-AB47-C13ED1CF0643}.ZViewerDebug.ActiveCfg = Debug|Win32
+		{4DB1B12A-2CAD-40EA-AB47-C13ED1CF0643}.ZViewerDebug.Build.0 = Debug|Win32
+		{4DB1B12A-2CAD-40EA-AB47-C13ED1CF0643}.ZViewerRelease.ActiveCfg = Release|Win32
+		{4DB1B12A-2CAD-40EA-AB47-C13ED1CF0643}.ZViewerRelease.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection
