@@ -583,22 +583,6 @@ void ZMain::OpenFolder(const std::string strFolder)
 }
 
 
-bool ZMain::NextImage()
-{
-	if ( m_vFile.empty() ) return false;
-
-	unsigned int iNextIndex = m_iCurretFileIndex + 1;
-
-	if ( iNextIndex >= m_vFile.size() )	// 없는 인덱스이다.
-	{
-		return false;
-	}
-	m_iCurretFileIndex++;
-	m_strCurrentFilename = m_vFile[m_iCurretFileIndex];
-	LoadCurrent();
-	return true;
-}
-
 void ZMain::OpenFile(const string & strFilename)
 {
 	m_strCurrentFolder = GetFolderNameFromFullFileName(strFilename);
@@ -627,45 +611,35 @@ void ZMain::OpenFile(const string & strFilename)
 	}
 }
 
-bool ZMain::PrevImage()
+
+bool ZMain::MoveIndex(int iIndex)
 {
 	if ( m_vFile.empty() ) return false;
-	int iPrevIndex = m_iCurretFileIndex - 1;
 
-	if ( iPrevIndex < 0 ) return false;	// 없는 인덱스이다.
+	if ( iIndex < 0 ) iIndex = 0;
+	if ( iIndex >= (int)m_vFile.size() ) iIndex = (int)m_vFile.size() - 1;
 
-	m_iCurretFileIndex--;
+	if ( m_iCurretFileIndex == iIndex ) return false;
+
+	m_iCurretFileIndex = iIndex;
 	m_strCurrentFilename = m_vFile[m_iCurretFileIndex];
 	LoadCurrent();
+
 	return true;
 }
 
 bool ZMain::FirstImage()
 {
-	if ( m_vFile.empty() ) return false;
-	if ( m_iCurretFileIndex == 0 ) return false;
-
 	// 현재의 위치를 History 에 저장해놓는다.
 	m_history.push_lastImageIndex(m_iCurretFileIndex);
-
-	m_iCurretFileIndex = 0;
-	m_strCurrentFilename = m_vFile[0];
-	LoadCurrent();
-	return true;
+	return MoveIndex(0);
 }
 
 bool ZMain::LastImage()
 {
-	if ( m_vFile.empty() ) return false;
-	if ( m_iCurretFileIndex == ( m_vFile.size() -1 ) ) return false;	// 이미 마지막 파일이면
-
 	// 현재의 위치를 History 에 저장해놓는다.
 	m_history.push_lastImageIndex(m_iCurretFileIndex);
-
-	m_iCurretFileIndex = (int)m_vFile.size() - 1;
-	m_strCurrentFilename = m_vFile[m_iCurretFileIndex];
-	LoadCurrent();
-	return true;
+	return MoveIndex((int)m_vFile.size() - 1);
 }
 
 void ZMain::OnChangeCurrentSize(int iWidth, int iHeight)

@@ -27,8 +27,17 @@ public:
 	void NextFolder();
 	void PrevFolder();
 
-	bool NextImage();
-	bool PrevImage();
+	// 특정 위치의 이미지 파일로 건너뛴다.
+	bool MoveIndex(int iIndex);
+
+	// 현재 위치에서 파일을 이동한다.
+	bool MoveRelateIndex(int iRelateIndex)
+	{
+		return MoveIndex(m_iCurretFileIndex + iRelateIndex);
+	}
+
+	bool NextImage() { return MoveRelateIndex(+1); }
+	bool PrevImage() { return MoveRelateIndex(-1); }
 
 	bool FirstImage();
 	bool LastImage();
