@@ -16,6 +16,9 @@ public:
 	void OnInit();
 	void Draw(bool bEraseBg = true);
 
+	// 현재보고 있는 이미지를 윈도우 바탕화면의 배경으로 지정한다.
+	void SetDesktopWallPaper();
+
 	bool GetNeighborFolders(std::vector < std::string > & vFolders);
 	void NextFolder();
 	void PrevFolder();

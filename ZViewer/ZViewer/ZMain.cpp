@@ -4,6 +4,7 @@
 #include "src/ZCacheImage.h"
 #include "src/ZINIOption.h"
 #include "src/ZResourceManager.h"
+#include <ShlObj.h>
 
 #include "resource.h"
 
@@ -302,14 +303,7 @@ void ZMain::Draw(bool bEraseBg)
 				iDrawPartX, iDrawPartY,			// 그려질 이미지 원본의 시작 x,y 좌표
 				SRCCOPY);
 
-#ifdef _DEBUG
-			char szTemp[256];
-			sprintf(szTemp, "rt.bottom : %d, PartX : %d, iDrawPartY : %d\n", rt.bottom, iDrawPartX, iDrawPartY);
-			//	strstream s;
-			//	s.clear();
-			//	s << rt.bottom << "\n";
-			OutputDebugString(szTemp);
-#endif
+			DebugPrintf("rt.bottom : %d, PartX : %d, iDrawPartY : %d", rt.bottom, iDrawPartX, iDrawPartY);
 
 			DeleteObject(hbmScreen);
 			DeleteDC(memDC);
@@ -365,6 +359,7 @@ void ZMain::Draw(bool bEraseBg)
 
 bool StringCompare(const std::string & a, const std::string & b)
 {
+#pragma message("TODO : 문자열 비교를 할 때 모두 소문자로 바꿔서 비교해야함")
 	return (strcmp(b.c_str(), a.c_str()) > 0);
 }
 
@@ -895,7 +890,12 @@ void ZMain::SetTitle()
 	}
 	else
 	{
-		sprintf(szTemp, "ZViewer v%s - %s", g_strVersion.c_str(), m_strCurrentFilename.c_str());
+		char szFileName[MAX_PATH] = { 0 };
+		char szFileExt[MAX_PATH] = { 0 };
+		_splitpath(m_strCurrentFilename.c_str(), NULL, NULL, szFileName, szFileExt);
+
+		//sprintf(szTemp, "%s%s - ZViewer for rubi v%s", szFileName, szFileExt, g_strVersion.c_str() );
+		sprintf(szTemp, "%s%s - for rubi :D", szFileName, szFileExt);
 	}
 	SetWindowText(m_hMainDlg, szTemp);
 }
@@ -920,9 +920,7 @@ void ZMain::LoadCurrent()
 			ZCacheImage::GetInstance().getCachedData(m_strCurrentFilename, m_currentImage);
 		}
 
-#ifdef _DEBUG
-		OutputDebugString("Cache Hit!!!!!!!!!!!!!\r\n");
-#endif
+		DebugPrintf("Cache Hit!!!!!!!!!!!!!\r\n");
 
 		ZCacheImage::GetInstance().LogCacheHit();
 	}
@@ -937,9 +935,8 @@ void ZMain::LoadCurrent()
 			bLoadOK = m_currentImage.LoadFromFile(m_strCurrentFilename);
 			if ( bLoadOK || i >= 5) break;
 
-#ifdef _DEBUG
-			OutputDebugString("Direct Load failed. sleep");
-#endif
+			DebugPrintf("Direct Load failed. sleep");
+
 			Sleep(100);
 		}
 
@@ -961,7 +958,8 @@ void ZMain::LoadCurrent()
 			{
 				ZCacheImage::GetInstance().AddCacheData(m_strCurrentFilename, m_currentImage);
 			}
-			OutputDebugString("Cache miss. Add to cache.");
+			
+			DebugPrintf("Cache miss. Add to cache.");
 			ZCacheImage::GetInstance().LogCacheMiss();
 		}
 
@@ -1057,7 +1055,7 @@ void ZMain::ShellTrayHide()
 
 void ZMain::OnFocusLose()
 {
-	OutputDebugString("OnFocusLose()\n");
+	DebugPrintf("OnFocusLose()");
 
 	ShellTrayShow();
 	/*
@@ -1073,10 +1071,10 @@ void ZMain::OnFocusLose()
 
 void ZMain::OnFocusGet()
 {
-	OutputDebugString("OnFocusGet()\n");
+	DebugPrintf("OnFocusGet()");
 	if ( m_option.m_bFullScreen )
 	{
-		OutputDebugString("OnFocusGet() at fullscreen\n");
+		DebugPrintf("OnFocusGet() at fullscreen");
 		SetWindowPos(m_hMainDlg, HWND_TOPMOST, 0, 0, ::GetSystemMetrics(SM_CXSCREEN),::GetSystemMetrics(SM_CYSCREEN), SWP_NOMOVE|SWP_NOSIZE);
 		MoveWindow(m_hMainDlg, 0,0,::GetSystemMetrics(SM_CXSCREEN),::GetSystemMetrics(SM_CYSCREEN), TRUE);
 		SetWindowPos(m_hMainDlg, HWND_NOTOPMOST, 0, 0, ::GetSystemMetrics(SM_CXSCREEN),::GetSystemMetrics(SM_CYSCREEN), SWP_NOMOVE|SWP_NOSIZE);
@@ -1281,5 +1279,31 @@ void ZMain::Rotate(bool bClockWise)
 			m_currentImage.Rotate(90);
 		}
 		Draw(true);
+	}
+}
+
+void ZMain::SetDesktopWallPaper()
+{
+	// 현재보고 있는 파일을 윈도우 폴더에 저장한다.
+	char szSystemFolder[_MAX_PATH] = { 0 };
+
+	if ( E_FAIL == SHGetFolderPath(NULL, CSIDL_WINDOWS, NULL, SHGFP_TYPE_CURRENT, szSystemFolder) )
+	{
+		_ASSERTE(false);
+		return;
+	}
+
+	std::string strSaveFileName = szSystemFolder;
+	strSaveFileName += "\\rubi_bg.bmp";
+
+	if ( FALSE == m_currentImage.SaveToFile(strSaveFileName, BMP_DEFAULT) )
+	{
+		_ASSERTE(false);
+		return;
+	}
+
+	if ( 0 == SystemParametersInfo(SPI_SETDESKWALLPAPER, 0, (PVOID)strSaveFileName.c_str(), SPIF_SENDCHANGE) )
+	{
+		_ASSERTE(false);
 	}
 }

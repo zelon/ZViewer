@@ -278,12 +278,12 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 						SetCursor(LoadCursor(ZMain::GetInstance().GetHInstance(), MAKEINTRESOURCE(IDC_MOVE_HAND_CURSOR)));
 					}
 
-					//OutputDebugString("LoadWait\n");
+					//DebugPrintf("LoadWait");
 				}
 				else
 				{
 					SetCursor(LoadCursor(NULL, IDC_ARROW));
-					//OutputDebugString("LoadArrow\n");
+					//DebugPrintf("LoadArrow");
 				}
 				return 0;
 			}
@@ -295,11 +295,7 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 		{
 			short zDelta = GET_WHEEL_DELTA_WPARAM(wParam);
 
-#ifdef _DEBUG
-			char szTemp[256];
-			sprintf(szTemp, "Wheel Delta : %d\n", zDelta);
-			OutputDebugString(szTemp);
-#endif
+			//DebugPrintf("Wheel Delta : %d", zDelta);
 
 #pragma message("ToDo : 휠이 급격히 돌아갈 때는 여러개의 이미지를 뛰어넘게")
 
@@ -532,6 +528,13 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 					ZMain::GetInstance().DeleteThisFile();
 				}
 				break;
+
+			case ID_SETDESKTOPWALLPAPER_CENTER:
+			case ID_SETDESKTOPWALLPAPER_STRETCH:
+				{
+					ZMain::GetInstance().SetDesktopWallPaper();
+				}
+				break;
 				// End of Main Menu
 				/////////////////////////////////////////////
 
@@ -546,6 +549,8 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 		EndPaint(hWnd, &ps);
 
 		SendMessage(ZMain::GetInstance().GetStatusHandle(), WM_PAINT, wParam, lParam);
+
+		DebugPrintf("Recv WM_PAINT");
 		return 0;
 	case WM_DESTROY:
 		SendMessage(hWnd, WM_CLOSE, 0, 0);
