@@ -3,6 +3,7 @@
 #include "src/ZFileExtDlg.h"
 #include "src/ZCacheImage.h"
 #include "src/ZINIOption.h"
+#include "src/ZResourceManager.h"
 
 #include "resource.h"
 
@@ -582,7 +583,7 @@ void ZMain::FormShow()
 	style |= WS_CAPTION;
 	style |= WS_THICKFRAME;
 	ShowWindow(m_hStatus, SW_SHOW);
-	SetMenu(m_hMainDlg, (HMENU)LoadMenu(GetHInstance(), MAKEINTRESOURCE(IDR_MAIN_MENU)));
+	SetMenu(m_hMainDlg, m_hMainMenu);
 	SetWindowLong(m_hMainDlg, GWL_STYLE, style);
 }
 
@@ -979,7 +980,7 @@ void ZMain::ShowFileExtDlg()
 void ZMain::DeleteThisFile()
 {
 	/// TODO : LoadString() 을 이용해서 리소스에서 불러오도록 변경해야함.
-	int iRet = MessageBox(m_hMainDlg, "Delete this file?", "ZViewer", MB_YESNO);
+	int iRet = MessageBox(m_hMainDlg, ZResourceManager::GetInstance().GetString(IDS_DELETE_THIS_FILE).c_str(), "ZViewer", MB_YESNO);
 
 	if ( iRet == IDYES )
 	{

@@ -3,6 +3,7 @@
 #include "resource.h"
 #include "ZMain.h"
 #include "src/ZFileExtDlg.h"
+#include "src/ZResourceManager.h"
 
 int CALLBACK WndProc(HWND,UINT,WPARAM,LPARAM);
 int CALLBACK AboutWndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam);
@@ -85,9 +86,30 @@ int APIENTRY WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance ,LPSTR lpszCmdP
 	int iXPosition = (GetSystemMetrics(SM_CXSCREEN)/2) - (iWidth/2);
 	int iYPosition = (GetSystemMetrics(SM_CYSCREEN)/2) - ( iHeight/2) ;
 
-	HINSTANCE hLang = LoadLibrary("language/korean.dll");
+	// 기본적인 언어팩은 프로젝트에 있는 영어이다.
+	ZResourceManager::GetInstance().SetHandleInstance(hInstance);
 
-	HMENU hMenu = (HMENU)LoadMenu(hLang, MAKEINTRESOURCE(IDR_MAIN_MENU));
+	HINSTANCE hLang = NULL;
+	HKL hLocale = NULL;
+	if ( SystemParametersInfo(SPI_GETDEFAULTINPUTLANG, NULL, &hLocale, NULL) )
+	{
+		if ( hLocale == (void*)0xe0010412 )
+		{
+			hLang = LoadLibrary("language/korean.dll");
+
+			if ( hLang )
+			{
+				ZResourceManager::GetInstance().SetHandleInstance(hLang);
+			}
+			else
+			{
+				_ASSERTE(hLang != NULL);
+			}
+		}
+	}
+
+
+	HMENU hMenu = (HMENU)LoadMenu(ZResourceManager::GetInstance().GetHInstance(), MAKEINTRESOURCE(IDR_MAIN_MENU));
 
 	ZMain::GetInstance().SetMainMenu(hMenu);
 
@@ -115,6 +137,16 @@ int APIENTRY WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance ,LPSTR lpszCmdP
 			DispatchMessage(&Message);
 		}
 	}
+
+	//
+	if ( hLang )
+	{
+		if ( FALSE == FreeLibrary(hLang) )
+		{
+			_ASSERTE(!"Can't free language dll.");
+		}
+	}
+
 	ZImage::CleanupLibrary();
 
 	return (int)Message.wParam;
@@ -195,7 +227,7 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 			SendMessage(hStatusBar, SB_SETPARTS, 6, (LPARAM)SBPart);
 
 			// 팝업 메뉴를 불러놓는다.
-			HMENU hMenu = LoadMenu(ZMain::GetInstance().GetHInstance(), MAKEINTRESOURCE(IDR_POPUP_MENU));
+			HMENU hMenu = LoadMenu(ZResourceManager::GetInstance().GetHInstance(), MAKEINTRESOURCE(IDR_POPUP_MENU));
 			hPopupMenu = GetSubMenu(hMenu, 0);
 			ZMain::GetInstance().SetPopupMenu(hPopupMenu);
 
@@ -392,7 +424,7 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 
 			case ID_HELP_ABOUT:
 				{
-					DialogBox(ZMain::GetInstance().GetHInstance(), MAKEINTRESOURCE(IDD_DIALOGHELP), hWnd, AboutWndProc);
+					DialogBox(ZResourceManager::GetInstance().GetHInstance(), MAKEINTRESOURCE(IDD_DIALOGHELP), hWnd, AboutWndProc);
 				}
 				break;
 
