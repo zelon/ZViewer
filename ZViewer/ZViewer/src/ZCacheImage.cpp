@@ -2,6 +2,8 @@
 #include "stdafx.h"
 #include "ZCacheImage.h"
 
+using namespace std;
+
 ZCacheImage & ZCacheImage::GetInstance()
 {
 	static ZCacheImage ins;
@@ -85,6 +87,7 @@ DWORD ZCacheImage::ThreadFuncProxy(LPVOID p)
 	return 0;
 }
 
+/*
 void ZCacheImage::CheckCacheDataAndClear()
 {
 	// 현재 인덱스를 기준으로 범위를 벗어난 파일들의 캐시는 버린다.
@@ -120,6 +123,39 @@ void ZCacheImage::CheckCacheDataAndClear()
 		}
 	}
 }
+*/
+
+/// 캐시되어 있는 데이터들 중 현재 인덱스로부터 가장 멀리있는 인덱스를 얻는다.
+int ZCacheImage::_GetFarthestIndexFromCurrentIndex()
+{
+	ZCacheLock lock;
+
+	CacheMapIterator it, endIt = m_cacheData.end();
+
+	int iFarthestIndex = m_iCurrentIndex;
+	int iDistanceMax = 0;
+	int iDistance = 0;
+	int iTempIndex = 0;
+
+	std::string strFarthest;
+
+	for ( it = m_cacheData.begin(); it != endIt; ++it)
+	{
+		iTempIndex = m_imageMapRev[it->first];
+		iDistance = abs(iTempIndex - m_iCurrentIndex);
+
+		if ( iDistance > iDistanceMax )
+		{
+			iDistanceMax = iDistance;
+			iFarthestIndex = iTempIndex;
+			strFarthest = it->first;
+		}
+	}
+
+	_ASSERTE(iFarthestIndex >= 0 );
+
+	return iFarthestIndex;
+}
 
 bool ZCacheImage::CacheIndex(int iIndex)
 {
@@ -152,11 +188,73 @@ bool ZCacheImage::CacheIndex(int iIndex)
 		ZImage temp;
 		if ( temp.LoadFromFile(strFileName) )
 		{
+			/*
 			//if ( m_bNewChange) return false;	// 현재보고 있는 파일 인덱스가 바뀌었으면 빨리 다음 for 를 시작한다.
 			
 			AddCacheData(strFileName, temp);
 
 			if ( m_bNewChange) return false;	// 현재보고 있는 파일 인덱스가 바뀌었으면 빨리 다음 for 를 시작한다.
+			*/
+
+			// 읽은 이미지를 넣을 공간이 없으면
+			if ( (m_lCacheSize + temp.GetImageSize()) / 1024 / 1024 > m_iMaximumCacheMemoryMB )
+			{
+				int iTemp = 100;
+				int iFarthestIndex = -1;
+
+				do
+				{
+					// 캐시되어 있는 것들 중 가장 현재 index 에서 먼것을 찾는다.
+					iFarthestIndex = _GetFarthestIndexFromCurrentIndex();
+
+					if ( abs(iFarthestIndex - m_iCurrentIndex) <= abs(iIndex - m_iCurrentIndex ) )
+					{
+						return false;
+					}
+					else
+					{
+						//  현재 것이 더 가깝기 때문에 가장 먼 것을 클리어하고, 현재 것을 캐시해 놓는 것이 좋은 상황이다.
+
+						// 가장 먼 것을 clear 한다.
+						{
+							ZCacheLock lock;
+
+							std::string strFindFileName = m_imageMap[iFarthestIndex];
+							CacheMapIterator it = m_cacheData.find(m_imageMap[iFarthestIndex]);
+
+							if ( it != m_cacheData.end() )
+							{
+								m_lCacheSize -= it->second.GetImageSize();
+								m_cacheData.erase(it);
+
+								OutputDebugString("Farthest one clear\r\n");
+							}
+							else
+							{
+								_ASSERTE(!"Can't find the cache data.");
+								return false;
+							}
+						}
+
+						// 이제 어느 정도 용량을 확보했으니 다시 이 이미지를 넣을 수 있는 지 캐시를 체크한다.
+						if ( (m_lCacheSize + temp.GetImageSize()) / 1024 / 1024 <= m_iMaximumCacheMemoryMB )
+						{
+							AddCacheData(strFileName, temp);
+						}
+
+					}
+
+					// 만약의 무한루프를 방지하기 위해 10번만 돌린다.
+					--iTemp;
+				} while( iTemp > 0 );
+
+				_ASSERTE(iTemp > 0 );
+			}
+			else
+			{
+				AddCacheData(strFileName, temp);
+				if ( m_bNewChange) return false;	// 현재보고 있는 파일 인덱스가 바뀌었으면 빨리 다음 for 를 시작한다.
+			}
 		}
 	}
 	return true;
@@ -184,9 +282,10 @@ void ZCacheImage::ThreadFunc()
 #endif
 
 		/// 캐시 데이터를 보고 적절히 캐시를 비워준다.
-		CheckCacheDataAndClear();
+		//CheckCacheDataAndClear();
 
-		for ( i=0; i<m_iMaxCacheImageNum/2; ++i)
+		//for ( i=0; i<m_iMaxCacheImageNum/2; ++i)
+		for ( int i=0; i<100; ++i)
 		{
 			if ( m_bNewChange) break;	// 현재보고 있는 파일 인덱스가 바뀌었으면 빨리 다음 for 를 시작한다.
 			
@@ -257,6 +356,12 @@ void ZCacheImage::AddCacheData(const std::string & strFilename, ZImage & image)
 
 	/// 용량을 체크해서 이 이미지를 캐시했을 때 제한을 넘어섰으면 캐시하지 않는다.
 	if ( (m_lCacheSize + image.GetImageSize()) /1024/1024 > m_iMaximumCacheMemoryMB ) return;
+
+#ifdef _DEBUG
+	string strMsg = strFilename;
+	strMsg += " added to cache\r\n";
+	OutputDebugString(strMsg.c_str());
+#endif
 
 	m_cacheData[strFilename] = image;
 	m_lCacheSize += m_cacheData[strFilename].GetImageSize();

@@ -39,6 +39,7 @@ public:
 
 private:
 
+
 	/// 캐시된 데이터 용량
 	long m_lCacheSize;
 
@@ -83,10 +84,13 @@ private:
 
 private:
 	/// 캐시된 데이터의 유효성등을 체크해서 캐시를 비워준다.
-	void CheckCacheDataAndClear();
+	//void CheckCacheDataAndClear();
 
 	/// 지정된 번호의 파일을 캐시할 수 있으면 캐시한다.
 	bool CacheIndex(int iIndex);
+
+	/// 캐시되어 있는 데이터들 중 현재 인덱스로부터 가장 멀리있는 인덱스를 얻는다.
+	int _GetFarthestIndexFromCurrentIndex();
 
 private:
 
