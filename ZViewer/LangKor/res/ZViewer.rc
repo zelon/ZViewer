@@ -258,7 +258,46 @@ END
 
 /////////////////////////////////////////////////////////////////////////////
 //
-// String Table
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 0,3,2,1
+ PRODUCTVERSION 0,3,2,1
+ FILEFLAGSMASK 0x17L
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x0L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "041204b0"
+        BEGIN
+            VALUE "Comments", "Author by Kim Jinwook in Korea"
+            VALUE "CompanyName", "Rh Lab."
+            VALUE "FileDescription", "ZViewer"
+            VALUE "FileVersion", "0, 3, 2, 1"
+            VALUE "InternalName", "ZViewer"
+            VALUE "LegalCopyright", "Copyright (c) - 2005"
+            VALUE "OriginalFilename", "ZViewer.rc"
+            VALUE "ProductName", "ZViewer"
+            VALUE "ProductVersion", "0, 3, 2, 1"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x412, 1200
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//// String Table
 //
 
 STRINGTABLE 
