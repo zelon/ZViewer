@@ -13,6 +13,48 @@ HMENU hPopupMenu;
 
 int APIENTRY WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance ,LPSTR lpszCmdParam,int nCmdShow)
 {
+	// 기본적인 언어팩은 프로젝트에 있는 영어이다.
+	ZResourceManager::GetInstance().SetHandleInstance(hInstance);
+
+	HINSTANCE hLang = NULL;
+
+	// debug mode 에서는 항상 영어모드(언어팩 테스트를 위해서)
+#ifndef _DEBUG
+	if ( GetSystemDefaultLangID() == 0x0412 )
+	{
+		hLang = LoadLibrary("language/korean.dll");
+
+		if ( hLang )
+		{
+			ZResourceManager::GetInstance().SetHandleInstance(hLang);
+		}
+		else
+		{
+			_ASSERTE(hLang != NULL);
+		}
+	}
+#endif
+
+	/// 파일 확장자를 연결하라는 거면
+
+//	MessageBox(HWND_DESKTOP, strInitArg.c_str(), "asdf", MB_OK);
+
+	if ( strcmp(lpszCmdParam, "/fileext") == 0 )	
+	{
+		int iRet = MessageBox(HWND_DESKTOP, ZResourceManager::GetInstance().GetString(IDS_ASSOCIATE_FILE_EXTS).c_str(), "ZViewer", MB_YESNO);
+
+		if ( iRet == IDYES )
+		{
+			ZFileExtDlg::GetInstance().SaveExtEnv();
+		}
+		return 0;
+	}
+	else if ( strcmp(lpszCmdParam, "/freezvieweragent") == 0 )	// uninstall 할 때 ZViewerAgent 를 unload 한다.
+	{
+		CoFreeUnusedLibraries();
+		return 0;
+	}
+
 	std::string strCmdString;
 
 	// 쉘에서 보낼 때는 따옴표로 둘러싸서 준다. 그래서 따옴표를 제거한다.
@@ -37,45 +79,6 @@ int APIENTRY WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance ,LPSTR lpszCmdP
 	strCmdString = szTemp;
 
 	std::string strInitArg = strCmdString;
-
-	// 기본적인 언어팩은 프로젝트에 있는 영어이다.
-	ZResourceManager::GetInstance().SetHandleInstance(hInstance);
-
-	HINSTANCE hLang = NULL;
-
-	// debug mode 에서는 항상 영어모드(언어팩 테스트를 위해서)
-#ifndef _DEBUG
-	if ( GetSystemDefaultLangID() == 0x0412 )
-	{
-		hLang = LoadLibrary("language/korean.dll");
-
-		if ( hLang )
-		{
-			ZResourceManager::GetInstance().SetHandleInstance(hLang);
-		}
-		else
-		{
-			_ASSERTE(hLang != NULL);
-		}
-	}
-#endif
-
-	/// 파일 확장자를 연결하라는 거면
-	if ( strInitArg == "/fileext" )	
-	{
-		int iRet = MessageBox(HWND_DESKTOP, ZResourceManager::GetInstance().GetString(IDS_ASSOCIATE_FILE_EXTS).c_str(), "ZViewer", MB_YESNO);
-
-		if ( iRet == IDYES )
-		{
-			ZFileExtDlg::GetInstance().SaveExtEnv();
-		}
-		return 0;
-	}
-	else if ( strInitArg == "/freezvieweragent")	// uninstall 할 때 ZViewerAgent 를 unload 한다.
-	{
-		CoFreeUnusedLibraries();
-		return 0;
-	}
 
 
 	//MessageBox(HWND_DESKTOP, strInitArg.c_str(), "sf", MB_OK);
