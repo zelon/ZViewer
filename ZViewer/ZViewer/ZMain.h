@@ -2,6 +2,7 @@
 
 #include "src/ZHistory.h"
 #include "src/ZOption.h"
+#include "src/DesktopWallPaper.h"
 #include "../lib/ZImage.h"
 
 class ZMain
@@ -17,7 +18,10 @@ public:
 	void Draw(bool bEraseBg = true);
 
 	// 현재보고 있는 이미지를 윈도우 바탕화면의 배경으로 지정한다.
-	void SetDesktopWallPaper();
+	void SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyle style);
+	
+	// 바탕화면 이미지를 없앤다.
+	void ClearDesktopWallPaper();
 
 	bool GetNeighborFolders(std::vector < std::string > & vFolders);
 	void NextFolder();
@@ -32,7 +36,7 @@ public:
 	void Rotate(bool bClockWise);
 
 
-	HWND GetHWND() { return m_hMainDlg; }
+	HWND GetHWND() const { return m_hMainDlg; }
 	void SetHWND(HWND hWnd);
 	void SetMainMenu(HMENU hMenu)
 	{
@@ -46,7 +50,7 @@ public:
 	long GetCachedKByte();
 
 	void SetStatusHandle(HWND hWnd) { m_hStatus = hWnd; }
-	HWND GetStatusHandle() { return m_hStatus; }
+	HWND GetStatusHandle() const { return m_hStatus; }
 
 	void ToggleFullScreen();
 
@@ -56,13 +60,13 @@ public:
 
 	void DeleteThisFile();
 
-	const std::string & GetProgramFolder()	// 프로그램 실행 파일이 있는 폴더를 가져온다.
+	const std::string & GetProgramFolder() const	// 프로그램 실행 파일이 있는 폴더를 가져온다.
 	{
 		return m_strProgramFolder;
 	}
 
 	/// 적절한 언어 ini 를 읽어와서 화면을 세팅한다.
-	void LoadLanguage();
+	//void LoadLanguage();
 
 	void SetInstance(HINSTANCE hInstance) { m_hMainInstance = hInstance; }
 	HINSTANCE GetHInstance() const { return m_hMainInstance; }
@@ -134,10 +138,6 @@ private:
 	HMENU m_hPopupMenu;
 
 	ZOption m_option;
-	int m_iRestoreX;
-	int m_iRestoreY;
-	int m_iRestoreWidth;
-	int m_iRestoreHeight;
 
 	int m_iShowingX;			// 그림 중 어디를 찍기 시작하나.
 	int m_iShowingY;			// 그림 중 어디를 찍기 시작하나.
@@ -148,7 +148,7 @@ private:
 
 	// For Open File Dialog
 	OPENFILENAME ofn;       // common dialog box structure
-	char szFile[260];       // buffer for file name
+	char szFile[MAX_PATH];       // buffer for file name
 	//bool m_bOpeningFileDialog;	// 전체화면일 때 파일 다이얼로그를 열면 깜빡거림을 막기 위해
 
 	// For Undo/Redo

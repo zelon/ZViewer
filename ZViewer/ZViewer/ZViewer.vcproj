@@ -273,6 +273,18 @@
 			Name="src"
 			Filter="">
 			<File
+				RelativePath=".\src\DesktopWallPaper.cpp">
+			</File>
+			<File
+				RelativePath=".\src\DesktopWallPaper.h">
+			</File>
+			<File
+				RelativePath=".\src\OptionFile.cpp">
+			</File>
+			<File
+				RelativePath=".\src\OptionFile.h">
+			</File>
+			<File
 				RelativePath=".\src\ZCacheImage.cpp">
 			</File>
 			<File
@@ -289,12 +301,6 @@
 			</File>
 			<File
 				RelativePath=".\src\ZHistory.h">
-			</File>
-			<File
-				RelativePath=".\src\ZINIOption.cpp">
-			</File>
-			<File
-				RelativePath=".\src\ZINIOption.h">
 			</File>
 			<File
 				RelativePath=".\src\ZOption.cpp">

@@ -499,41 +499,40 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 				break;
 
 			case ID_OPTION_FILE_EXT:
-				{
-					ZMain::GetInstance().ShowFileExtDlg();
-				}
+				ZMain::GetInstance().ShowFileExtDlg();
 				break;
 
 			case ID_VIEW_BIGTOSCREENSTRETCH:
 			case ID_POPUPMENU_BIGTOSCREENSTRETCH:
-				{
-					ZMain::GetInstance().ToggleBigToScreenStretch();
-				}
+				ZMain::GetInstance().ToggleBigToScreenStretch();
 				break;
 
 			case ID_VIEW_ROTATECLOCKWISE:
-				{
-					ZMain::GetInstance().Rotate(true);
-				}
+				ZMain::GetInstance().Rotate(true);
 				break;
 
 			case ID_VIEW_ROTATECOUNTERCLOCKWISE:
-				{
-					ZMain::GetInstance().Rotate(false);
-				}
+				ZMain::GetInstance().Rotate(false);
 				break;
 
 			case ID_DELETETHISFILE:
-				{
-					ZMain::GetInstance().DeleteThisFile();
-				}
+				ZMain::GetInstance().DeleteThisFile();
 				break;
 
 			case ID_SETDESKTOPWALLPAPER_CENTER:
+				ZMain::GetInstance().SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyle_CENTER);
+				break;
+
+			case ID_SETDESKTOPWALLPAPER_TILE:
+				ZMain::GetInstance().SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyle_TILE);
+				break;
+
 			case ID_SETDESKTOPWALLPAPER_STRETCH:
-				{
-					ZMain::GetInstance().SetDesktopWallPaper();
-				}
+				ZMain::GetInstance().SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyle_STRETCH);
+				break;
+
+			case ID_SETDESKTOPWALLPAPER_CLEAR:
+				ZMain::GetInstance().ClearDesktopWallPaper();
 				break;
 				// End of Main Menu
 				/////////////////////////////////////////////
@@ -569,7 +568,7 @@ int CALLBACK AboutWndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 		{
 			SetDlgItemText(hWnd, IDC_STATIC_VERSION, g_strVersion.c_str());
 
-			char szTemp[256];
+			char szTemp[MAX_PATH];
 			sprintf(szTemp, "CacheHitRate : %d%%", ZMain::GetInstance().GetLogCacheHitRate());
 			SetDlgItemText(hWnd, IDC_STATIC_HITRATE, szTemp);
 
@@ -581,6 +580,9 @@ int CALLBACK AboutWndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 
 			sprintf(szTemp, "CachedMemory : %sKB, Num of Cached Image : %d", szOUT, ZCacheImage::GetInstance().GetNumOfCacheImage());
 			SetDlgItemText(hWnd, IDC_STATIC_CACHE_MEMORY, szTemp);
+
+			sprintf(szTemp, "ProgramPath : %s", ZMain::GetInstance().GetProgramFolder().c_str());
+			SetDlgItemText(hWnd, IDC_STATIC_PROGRAM_PATH, szTemp);
 		}
 		return TRUE;
 

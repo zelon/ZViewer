@@ -2,8 +2,9 @@
 #include ".\zmain.h"
 #include "src/ZFileExtDlg.h"
 #include "src/ZCacheImage.h"
-#include "src/ZINIOption.h"
 #include "src/ZResourceManager.h"
+#include "src/DesktopWallPaper.h"
+
 #include <ShlObj.h>
 
 #include "resource.h"
@@ -1256,6 +1257,7 @@ void ZMain::DeleteThisFile()
 	}
 }
 
+/*
 void ZMain::LoadLanguage()
 {
 	ZINIOption opt;
@@ -1265,6 +1267,7 @@ void ZMain::LoadLanguage()
 	ModifyMenu(m_hPopupMenu, ID_DELETETHISFILE, MF_BYCOMMAND, ID_DELETETHISFILE, opt.GetValue("MenuFileOpen").c_str());
 	//SetDlgItemText(m_hPopupMenu, ID_DELETETHISFILE, opt.GetValue("MenuDeleteThisFile").c_str());
 }
+*/
 
 void ZMain::Rotate(bool bClockWise)
 {
@@ -1282,7 +1285,7 @@ void ZMain::Rotate(bool bClockWise)
 	}
 }
 
-void ZMain::SetDesktopWallPaper()
+void ZMain::SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyle style)
 {
 	// 현재보고 있는 파일을 윈도우 폴더에 저장한다.
 	char szSystemFolder[_MAX_PATH] = { 0 };
@@ -1302,8 +1305,14 @@ void ZMain::SetDesktopWallPaper()
 		return;
 	}
 
-	if ( 0 == SystemParametersInfo(SPI_SETDESKWALLPAPER, 0, (PVOID)strSaveFileName.c_str(), SPIF_SENDCHANGE) )
-	{
-		_ASSERTE(false);
-	}
+
+	CDesktopWallPaper wallPaper(strSaveFileName);
+	wallPaper.SetWallPaperStyle(style);
+	wallPaper.SetDesktopWallPaper();
+}
+
+void ZMain::ClearDesktopWallPaper()
+{
+	CDesktopWallPaper wallPaper("");
+	wallPaper.SetDesktopWallPaper();
 }
