@@ -184,6 +184,8 @@ void ZMain::Draw(bool bEraseBg)
 	{
 		SelectObject(mainDC, GetStockObject(BLACK_BRUSH));
 		Rectangle(mainDC, 0, 0, rt.right, rt.bottom);
+
+		ReleaseDC(m_hMainDlg, mainDC);
 		return;
 	}
 
@@ -338,6 +340,7 @@ void ZMain::Draw(bool bEraseBg)
 				DIB_RGB_COLORS, SRCCOPY);
 		}
 	}
+	ReleaseDC(m_hMainDlg, mainDC);
 
 	// 마우스 커서 모양
 	if ( m_currentImage.GetWidth() > rt.right ||
