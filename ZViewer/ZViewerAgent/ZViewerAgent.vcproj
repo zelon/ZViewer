@@ -37,7 +37,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				IgnoreImportLibrary="TRUE"
-				AdditionalDependencies="../lib/FreeImage.lib ../lib/FreeImagePlus.lib"
+				AdditionalDependencies="../lib/FreeImage.lib $(SolutionDir)/lib/FreeImagePlus.lib"
 				OutputFile="$(OutDir)/ZViewerAgentD.dll"
 				LinkIncremental="2"
 				ModuleDefinitionFile=".\ZViewerAgent.def"
@@ -104,7 +104,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				IgnoreImportLibrary="TRUE"
-				AdditionalDependencies="$(SolutionDir)/lib/FreeImage.lib $(SolutionDir)/lib/FreeImagePlus.lib"
+				AdditionalDependencies="$(SolutionDir)/lib/FreeImage.lib  $(SolutionDir)/lib/FreeImagePlus.lib"
 				OutputFile="$(OutDir)/ZViewerAgent.dll"
 				LinkIncremental="1"
 				ModuleDefinitionFile=".\ZViewerAgent.def"
