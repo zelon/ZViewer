@@ -65,6 +65,7 @@ Section "MainSection" SEC01
   File "ZViewerAgent.dll"
   File "ZViewerIcons.dll"
   File "ZViewer.exe"
+  File "LoadError.png"
   File "License.txt"
   File "ReadMe.txt"
 

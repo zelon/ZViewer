@@ -771,6 +771,14 @@ void ZMain::LoadCurrent()
 		if ( bLoadOK == false )
 		{
 			_ASSERTE(!"Can't load image");
+
+			string strErrorFilename = m_strProgramFolder;
+			strErrorFilename += "LoadError.png";
+			if ( !m_currentImage.LoadFromFile(strErrorFilename) )
+			{
+				// 에러 때 표시하는 파일을 읽어들이지 못 했으면
+				MessageBox(m_hMainDlg, "Can't load Error Image file.", "ZViewer", MB_OK);
+			}
 		}
 		else
 		{
