@@ -53,6 +53,11 @@ public:
 		return false;
 	}
 
+	static const char * GetLibraryVersion()
+	{
+		return FreeImage_GetVersion();
+	}
+
 	bool SaveToFile(const std::string & strFilename, int iFlag)
 	{
 		return ( TRUE == m_image.save(strFilename.c_str(), iFlag));
