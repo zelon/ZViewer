@@ -17,8 +17,8 @@ public:
 	inline void LogCacheHit() { ++m_iLogCacheHit; }
 	inline void LogCacheMiss() { ++m_iLogCacheMiss; }
 
-	long GetCachedKByte();
-	int GetLogCacheHitRate()
+	long GetCachedKByte() const;
+	int GetLogCacheHitRate() const
 	{
 		if ( (m_iLogCacheHit + m_iLogCacheMiss ) == 0 )
 		{

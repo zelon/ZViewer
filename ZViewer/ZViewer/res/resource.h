@@ -19,6 +19,7 @@
 #define IDC_STATIC_HITRATE              1008
 #define IDC_STATIC_CACHE_MEMORY         1009
 #define IDC_STATIC_PROGRAM_PATH         1010
+#define IDC_STATIC_LIBRARY_VERSION      1011
 #define ID_MAINMENU_FILE_EXIT           40002
 #define ID_FILE_OPEN40016               40016
 #define ID_MAINMENU_FILE_OPEN           40017
@@ -61,7 +62,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        114
 #define _APS_NEXT_COMMAND_VALUE         40067
-#define _APS_NEXT_CONTROL_VALUE         1011
+#define _APS_NEXT_CONTROL_VALUE         1012
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

@@ -183,13 +183,13 @@ IDC_MOVE_HAND_CAPTURE_CURSOR CURSOR                  "MoveHandHold.cur"
 // Dialog
 //
 
-IDD_DIALOGHELP DIALOGEX 0, 0, 264, 114
+IDD_DIALOGHELP DIALOGEX 0, 0, 264, 129
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | 
     WS_CAPTION | WS_SYSMENU
 CAPTION "ZViewer About"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
-    DEFPUSHBUTTON   "Close",IDOK,207,93,50,14
+    DEFPUSHBUTTON   "Close",IDOK,207,108,50,14
     LTEXT           "Homepage : http://www.wimy.com",IDC_STATIC,144,33,113,8
     LTEXT           "Written by Kim Jinwook - zelon",IDC_STATIC,53,20,98,8
     LTEXT           "ZViewer version : ",IDC_STATIC,7,7,58,8
@@ -197,6 +197,7 @@ BEGIN
     LTEXT           "CacheHitRate",IDC_STATIC_HITRATE,7,50,112,8
     LTEXT           "CacheMemory",IDC_STATIC_CACHE_MEMORY,7,64,250,8
     LTEXT           "Program Path",IDC_STATIC_PROGRAM_PATH,7,81,250,8
+    LTEXT           "LibraryVersion :",IDC_STATIC_LIBRARY_VERSION,7,95,125,8
 END
 
 IDD_FILE_EXT_DIALOG DIALOGEX 0, 0, 121, 95
@@ -235,7 +236,7 @@ BEGIN
         LEFTMARGIN, 7
         RIGHTMARGIN, 257
         TOPMARGIN, 7
-        BOTTOMMARGIN, 107
+        BOTTOMMARGIN, 122
     END
 
     IDD_FILE_EXT_DIALOG, DIALOG
