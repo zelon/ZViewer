@@ -18,6 +18,7 @@
 #include <functional>
 #include <algorithm>
 
+#pragma deprecated(sprintf)
 
 #include "FreeImagePlus.h"
 

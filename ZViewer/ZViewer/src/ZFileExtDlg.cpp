@@ -183,7 +183,7 @@ bool ZFileExtDlg::SetExtWithProgram(const std::string & strProgramName, const st
 		strTempText += ",";
 
 		char szTemp[256];
-		sprintf(szTemp, "%d", iIconIndex);
+		_snprintf(szTemp, sizeof(szTemp), "%d", iIconIndex);
 		strTempText += szTemp;
 	}
 	fileExtReg.m_strDocumentDefaultIcon = strTempText.c_str();
