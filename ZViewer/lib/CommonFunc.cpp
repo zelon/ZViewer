@@ -17,6 +17,26 @@ void DebugPrintf( const char *fmt, ... )
 #endif
 }
 
+bool StringCompare(const std::string & a, const std::string & b)
+{
+#pragma message("TODO : 문자열 비교를 할 때 모두 소문자로 바꿔서 비교해야함")
+	return (strcmp(b.c_str(), a.c_str()) > 0);
+}
+
+const std::string GetOnlyFileName(const std::string & strFullFileName)
+{
+	char szFile[MAX_PATH] = { 0 };
+	_splitpath(strFullFileName.c_str(), 0, 0, szFile, 0);
+
+	return szFile;
+}
+
+bool FilenameCompare(const std::string & a, const std::string & b)
+{
+	return (strcmp(GetOnlyFileName(b).c_str(), GetOnlyFileName(a).c_str()) > 0);
+}
+
+
 bool SetRegistryValue(HKEY hOpenKey, const std::string & strKey,LPCTSTR szValue, const std::string & strData)
 {
 	if( !hOpenKey || strKey.empty() || !szValue)
@@ -99,9 +119,7 @@ RECT GetResizedRect(const RECT & MaximumSize, const RECT & originalSize)
 std::string toString(int i)
 {
 	char szTemp[20];
-	_ASSERTE( i < 10000000000000000000);
-
-	sprintf(szTemp, "%d", i);
+	_snprintf(szTemp, sizeof(szTemp), "%d", i);
 
 	return std::string(szTemp);
 }
