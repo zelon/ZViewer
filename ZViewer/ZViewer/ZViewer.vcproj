@@ -19,7 +19,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="$(SolutionDir)/lib;$(SolutionDir)/lib/devil/include"
+				AdditionalIncludeDirectories="$(SolutionDir)/ZViewer/res;$(SolutionDir)/lib;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
@@ -68,7 +68,7 @@
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="$(SolutionDir)/lib;$(SolutionDir)/lib/devil/include"
+				AdditionalIncludeDirectories="$(SolutionDir)/ZViewer/res;$(SolutionDir)/lib;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="3"
@@ -240,9 +240,6 @@
 				RelativePath="..\lib\FreeImagePlus.h">
 			</File>
 			<File
-				RelativePath=".\resource.h">
-			</File>
-			<File
 				RelativePath=".\stdafx.h">
 			</File>
 			<File
@@ -254,25 +251,22 @@
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx"
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}">
 			<File
-				RelativePath=".\cur00001.cur">
+				RelativePath=".\res\MoveHand.cur">
 			</File>
 			<File
-				RelativePath=".\cursor1.cur">
+				RelativePath=".\res\MoveHandHold.cur">
 			</File>
 			<File
-				RelativePath=".\HandCapture.bmp">
+				RelativePath=".\res\MoveHold.cur">
 			</File>
 			<File
-				RelativePath=".\icon1.ico">
+				RelativePath=".\res\resource.h">
 			</File>
 			<File
-				RelativePath=".\MoveHand.bmp">
+				RelativePath=".\res\ZViewer.ico">
 			</File>
 			<File
-				RelativePath=".\ZViewer.rc">
-			</File>
-			<File
-				RelativePath=".\ZViewerIcon.bmp">
+				RelativePath=".\res\ZViewer.rc">
 			</File>
 		</Filter>
 		<Filter
