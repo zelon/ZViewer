@@ -55,13 +55,15 @@
 #define ID_SETDESKTOPWALLPAPER_STRETCH  40064
 #define ID_SETDESKTOPWALLPAPER_TILE     40065
 #define ID_SETDESKTOPWALLPAPER_CLEAR    40066
+#define ID_MOVE_NEXT_JUMP               40067
+#define ID_MOVE_PREV_JUMP               40068
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        114
-#define _APS_NEXT_COMMAND_VALUE         40067
+#define _APS_NEXT_COMMAND_VALUE         40072
 #define _APS_NEXT_CONTROL_VALUE         1012
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
