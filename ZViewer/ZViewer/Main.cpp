@@ -124,7 +124,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance ,LPSTR lpszCmdP
 	hWnd=CreateWindow(
 		lpszClass,
 		lpszClass,		// Window Title
-		WS_OVERLAPPEDWINDOW,
+		WS_OVERLAPPEDWINDOW,// | WS_EX_ACCEPTFILES,
 		iXPosition,		// 기본 x 위치
 		iYPosition,		// 기본 y 위치
 		iWidth,				// width
@@ -132,6 +132,10 @@ int APIENTRY WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance ,LPSTR lpszCmdP
 		NULL,
 		hMenu,	// MainMenu
 		hInstance,NULL);
+
+	// 탐색기에서의 Drag&Drop 을 가능하게 한다.
+	DragAcceptFiles(hWnd, TRUE);
+
 	ShowWindow(hWnd,nCmdShow);
 
 	// 단축키 설정
@@ -173,6 +177,30 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 
 	switch(iMessage)
 	{
+	case WM_DROPFILES:
+		{
+			HDROP hDrop = (HDROP)wParam;
+
+			UINT iFileNum = 0;
+
+			iFileNum = DragQueryFile(hDrop, 0xffffffff, 0, 0);
+
+			if ( iFileNum <= 0 ) break;
+
+			char szFileName[MAX_PATH] = { 0 };
+			DragQueryFile(hDrop, 0, szFileName, MAX_PATH);
+
+			if ( ZImage::IsValidImageFileExt(szFileName) )
+			{
+				ZMain::GetInstance().OpenFile(szFileName);
+			}
+			else
+			{
+				MessageBox(hWnd, "Invalid image file", "ZViewer", MB_OK);
+			}
+		}
+		break;
+
 	case WM_LBUTTONDBLCLK:
 		{
 			ZMain::GetInstance().OpenFileDialog();
@@ -583,6 +611,9 @@ int CALLBACK AboutWndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 
 			sprintf(szTemp, "ProgramPath : %s", ZMain::GetInstance().GetProgramFolder().c_str());
 			SetDlgItemText(hWnd, IDC_STATIC_PROGRAM_PATH, szTemp);
+
+			sprintf(szTemp, "Library Version : %s", ZImage::GetLibraryVersion());
+			SetDlgItemText(hWnd, IDC_STATIC_LIBRARY_VERSION, szTemp);
 		}
 		return TRUE;
 
