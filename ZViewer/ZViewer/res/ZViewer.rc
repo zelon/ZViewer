@@ -56,29 +56,29 @@ IDR_MAIN_MENU MENU
 BEGIN
     POPUP "&File"
     BEGIN
-        MENUITEM "&Open",                       ID_MAINMENU_FILE_OPEN
+        MENUITEM "&Open\tCtrl+O",               ID_MAINMENU_FILE_OPEN
         MENUITEM SEPARATOR
-        MENUITEM "E&xit",                       ID_MAINMENU_FILE_EXIT
+        MENUITEM "E&xit\tAlt+X",                ID_MAINMENU_FILE_EXIT
     END
     POPUP "&View"
     BEGIN
-        MENUITEM "&FullScreen",                 ID_VIEW_FULLSCREEN
+        MENUITEM "&FullScreen\tAlt+Enter",      ID_VIEW_FULLSCREEN
         MENUITEM "RightTop First Draw",         ID_VIEW_RIGHTTOPFIRSTDRAW
         MENUITEM SEPARATOR
         MENUITEM "BigToScreenStretch",          ID_VIEW_BIGTOSCREENSTRETCH
         MENUITEM "SmallToScreenStretch",        ID_VIEW_SMALLTOSCREENSTRETCH
         MENUITEM SEPARATOR
-        MENUITEM "Rotate Clockwise",            ID_VIEW_ROTATECLOCKWISE
-        MENUITEM "Rotate CounterClockWise",     ID_VIEW_ROTATECOUNTERCLOCKWISE
+        MENUITEM "Rotate Clockwise\t]",         ID_VIEW_ROTATECLOCKWISE
+        MENUITEM "Rotate CounterClockWise\t[",  ID_VIEW_ROTATECOUNTERCLOCKWISE
 
     END
     POPUP "&Move"
     BEGIN
-        MENUITEM "&Next Image",                 ID_MOVE_NEXTIMAGE
-        MENUITEM "&Prev Image",                 ID_MOVE_PREVIMAGE
+        MENUITEM "&Next Image\tPageDown",       ID_MOVE_NEXTIMAGE
+        MENUITEM "&Prev Image\tPageUp",         ID_MOVE_PREVIMAGE
         MENUITEM SEPARATOR
-        MENUITEM "&First Image",                ID_MOVE_FIRSTIMAGE
-        MENUITEM "&Last Image",                 ID_MOVE_LASTIMAGE
+        MENUITEM "&First Image\tHome",          ID_MOVE_FIRSTIMAGE
+        MENUITEM "&Last Image\tEnd",            ID_MOVE_LASTIMAGE
         MENUITEM SEPARATOR
         MENUITEM "Next Folder\tCtrl+PageDown",  ID_MOVE_NEXTFOLDER
         MENUITEM "Prev Folder\tCtrl+PageUp",    ID_MOVE_PREVFOLDER
@@ -91,7 +91,7 @@ BEGIN
     END
     POPUP "&Help"
     BEGIN
-        MENUITEM "&About",                      ID_HELP_ABOUT
+        MENUITEM "&About\tF1",                  ID_HELP_ABOUT
     END
 END
 

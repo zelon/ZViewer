@@ -56,20 +56,21 @@ IDR_MAIN_MENU MENU
 BEGIN
     POPUP "파일(&F)"
     BEGIN
-        MENUITEM "파일 열기(&O)",               ID_MAINMENU_FILE_OPEN
+        MENUITEM "파일 열기(&O)\tCtrl+O",       ID_MAINMENU_FILE_OPEN
         MENUITEM SEPARATOR
-        MENUITEM "종료(&X)",                    ID_MAINMENU_FILE_EXIT
+        MENUITEM "종료(&X)\tAlt+X",             ID_MAINMENU_FILE_EXIT
     END
     POPUP "보기(&V)"
     BEGIN
-        MENUITEM "전체화면(&F)",                ID_VIEW_FULLSCREEN
+        MENUITEM "전체화면(&F)\tAlt+Enter",     ID_VIEW_FULLSCREEN
         MENUITEM "오른쪽 위부터 보기",          ID_VIEW_RIGHTTOPFIRSTDRAW
         MENUITEM SEPARATOR
         MENUITEM "큰 그림 화면에 맞게 축소",    ID_VIEW_BIGTOSCREENSTRETCH
         MENUITEM "작은 그림 화면에 맞게 확대",  ID_VIEW_SMALLTOSCREENSTRETCH
         MENUITEM SEPARATOR
-        MENUITEM "시계 방향으로 90도 회전",     ID_VIEW_ROTATECLOCKWISE
-        MENUITEM "반시계 방향으로 90도 회전",   ID_VIEW_ROTATECOUNTERCLOCKWISE
+        MENUITEM "시계 방향으로 90도 회전\t]",  ID_VIEW_ROTATECLOCKWISE
+        MENUITEM "반시계 방향으로 90도 회전\t[", 
+                                                ID_VIEW_ROTATECOUNTERCLOCKWISE
 
     END
     POPUP "이동(&M)"
@@ -91,7 +92,7 @@ BEGIN
     END
     POPUP "도움말(&H)"
     BEGIN
-        MENUITEM "정보(&A)",                    ID_HELP_ABOUT
+        MENUITEM "정보(&A)\tF1",                ID_HELP_ABOUT
     END
 END
 
