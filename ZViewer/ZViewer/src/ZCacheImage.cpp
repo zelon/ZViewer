@@ -152,7 +152,7 @@ bool ZCacheImage::CacheIndex(int iIndex)
 		ZImage temp;
 		if ( temp.LoadFromFile(strFileName) )
 		{
-			if ( m_bNewChange) return false;	// 현재보고 있는 파일 인덱스가 바뀌었으면 빨리 다음 for 를 시작한다.
+			//if ( m_bNewChange) return false;	// 현재보고 있는 파일 인덱스가 바뀌었으면 빨리 다음 for 를 시작한다.
 			
 			AddCacheData(strFileName, temp);
 
