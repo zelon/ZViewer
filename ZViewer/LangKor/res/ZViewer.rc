@@ -1,0 +1,254 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// 한국어 resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_KOR)
+#ifdef _WIN32
+LANGUAGE LANG_KOREAN, SUBLANG_DEFAULT
+#pragma code_page(949)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MAIN_MENU MENU 
+BEGIN
+    POPUP "파일(&F)"
+    BEGIN
+        MENUITEM "파일 열기(&O)",               ID_MAINMENU_FILE_OPEN
+        MENUITEM SEPARATOR
+        MENUITEM "종료(&X)",                    ID_MAINMENU_FILE_EXIT
+    END
+    POPUP "보기(&V)"
+    BEGIN
+        MENUITEM "전체화면(&F)",                ID_VIEW_FULLSCREEN
+        MENUITEM "오른쪽 위부터 보기",          ID_VIEW_RIGHTTOPFIRSTDRAW
+        MENUITEM "큰 그림 화면에 맞게 축소",    ID_VIEW_BIGTOSCREENSTRETCH
+        MENUITEM "작은 그림 화면에 맞게 확대",  ID_VIEW_SMALLTOSCREENSTRETCH
+    END
+    POPUP "이동(&M)"
+    BEGIN
+        MENUITEM "다음 이미지(&N)\tPageDown",   ID_MOVE_NEXTIMAGE
+        MENUITEM "이전 이미지(&P)\tPageUp",     ID_MOVE_PREVIMAGE
+        MENUITEM SEPARATOR
+        MENUITEM "처음 이미지(&F)\tHome",       ID_MOVE_FIRSTIMAGE
+        MENUITEM "마지막 이미지(&L)\tEnd",      ID_MOVE_LASTIMAGE
+        MENUITEM SEPARATOR
+        MENUITEM "이미지 위치 되돌림\tBackspace", ID_MOVE_UNDOIMAGEPOSITION
+    END
+    POPUP "옵션(&O)"
+    BEGIN
+        MENUITEM "파일 확장자...",              ID_OPTION_FILE_EXT
+    END
+    POPUP "도움말(&H)"
+    BEGIN
+        MENUITEM "정보(&A)",                    ID_HELP_ABOUT
+    END
+END
+
+IDR_POPUP_MENU MENU 
+BEGIN
+    POPUP "PopupMenu"
+    BEGIN
+        MENUITEM "처음 이미지",                 ID_MOVE_FIRSTIMAGE
+        MENUITEM "마지막 이미지",               ID_MOVE_LASTIMAGE
+        MENUITEM SEPARATOR
+        MENUITEM "전체화면",                    ID_VIEW_FULLSCREEN
+        MENUITEM "오른쪽 위부터 그리기",        ID_VIEW_RIGHTTOPFIRSTDRAW
+        MENUITEM SEPARATOR
+        MENUITEM "큰 그림 화면에 맞게 축소",    ID_POPUPMENU_BIGTOSCREENSTRETCH
+
+        MENUITEM "작은 그림 화면에 맞게 확대",  ID_POPUPMENU_SMALLTOSCREENSTRETCH
+        , GRAYED
+        MENUITEM SEPARATOR
+        MENUITEM "현재 파일 지우기\tDelete",    ID_DELETETHISFILE
+        MENUITEM SEPARATOR
+        MENUITEM "종료(&X)",                    ID_MAINMENU_FILE_EXIT
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_BIG_MAIN            ICON                    "ZViewer.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Accelerator
+//
+
+IDR_MAIN_ACCELERATOR ACCELERATORS 
+BEGIN
+    VK_ESCAPE,      ID_ACCELERATOR_CANCEL_FULLSCREEN, VIRTKEY, NOINVERT
+    VK_DOWN,        ID_ACCELERATOR_DOWN,    VIRTKEY, NOINVERT
+    VK_LEFT,        ID_ACCELERATOR_LEFT,    VIRTKEY, NOINVERT
+    VK_RIGHT,       ID_ACCELERATOR_RIGHT,   VIRTKEY, NOINVERT
+    VK_UP,          ID_ACCELERATOR_UP,      VIRTKEY, NOINVERT
+    VK_DELETE,      ID_DELETETHISFILE,      VIRTKEY, NOINVERT
+    "W",            ID_MAINMENU_FILE_EXIT,  VIRTKEY, CONTROL, NOINVERT
+    "X",            ID_MAINMENU_FILE_EXIT,  VIRTKEY, ALT, NOINVERT
+    "O",            ID_MAINMENU_FILE_OPEN,  VIRTKEY, CONTROL, NOINVERT
+    VK_HOME,        ID_MOVE_FIRSTIMAGE,     VIRTKEY, NOINVERT
+    VK_END,         ID_MOVE_LASTIMAGE,      VIRTKEY, NOINVERT
+    VK_NEXT,        ID_MOVE_NEXTIMAGE,      VIRTKEY, NOINVERT
+    VK_SPACE,       ID_MOVE_NEXTIMAGE,      VIRTKEY, NOINVERT
+    VK_PRIOR,       ID_MOVE_PREVIMAGE,      VIRTKEY, NOINVERT
+    VK_BACK,        ID_MOVE_REDOIMAGEPOSITION, VIRTKEY, SHIFT, NOINVERT
+    VK_BACK,        ID_MOVE_UNDOIMAGEPOSITION, VIRTKEY, NOINVERT
+    VK_RETURN,      ID_VIEW_FULLSCREEN,     VIRTKEY, ALT, NOINVERT
+    VK_F1,          ID_HELP_ABOUT,          VIRTKEY, NOINVERT
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Cursor
+//
+
+IDC_MOVE_HAND_CURSOR    CURSOR                  "MoveHand.cur"
+IDC_MOVE_HAND_CAPTURE_CURSOR CURSOR                  "MoveHandHold.cur"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_DIALOGHELP DIALOGEX 0, 0, 186, 79
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | 
+    WS_CAPTION | WS_SYSMENU
+CAPTION "ZViewer About"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "Close",IDOK,129,58,50,14
+    LTEXT           "Homepage : http://www.wimy.com",IDC_STATIC,66,33,113,8
+    LTEXT           "김진욱(zelon) 이 만듦",IDC_STATIC,68,20,75,8
+    LTEXT           "ZViewer version : ",IDC_STATIC,7,7,58,8
+    LTEXT           "VERSION",IDC_STATIC_VERSION,69,7,30,8
+    LTEXT           "캐시 적중률 : ",IDC_STATIC_HITRATE,7,50,112,8
+    LTEXT           "캐시 메모리량 :",IDC_STATIC_CACHE_MEMORY,7,64,111,8
+END
+
+IDD_FILE_EXT_DIALOG DIALOGEX 0, 0, 121, 95
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | 
+    WS_CAPTION | WS_SYSMENU
+CAPTION "파일 확장자 연결..."
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "확인",IDOK,7,74,50,14
+    PUSHBUTTON      "취소",IDCANCEL,64,74,50,14
+    CONTROL         "BMP",IDC_CHECK_BMP,"Button",BS_AUTOCHECKBOX | 
+                    WS_DISABLED | WS_TABSTOP,7,7,29,10
+    CONTROL         "JPG",IDC_CHECK_JPG,"Button",BS_AUTOCHECKBOX | 
+                    WS_DISABLED | WS_TABSTOP,42,7,28,10
+    CONTROL         "GIF",IDC_CHECK_GIF,"Button",BS_AUTOCHECKBOX | 
+                    WS_DISABLED | WS_TABSTOP,76,7,27,10
+    CONTROL         "PNG",IDC_CHECK_PNG,"Button",BS_AUTOCHECKBOX | 
+                    WS_DISABLED | WS_TABSTOP,7,26,29,10
+    CONTROL         "PSD",IDC_CHECK_PSD,"Button",BS_AUTOCHECKBOX | 
+                    WS_DISABLED | WS_TABSTOP,42,26,29,10
+    LTEXT           "* 현재 모든 파일을 항상 연결합니다. 원하지 않으면 취소를 눌러주세요.",
+                    IDC_STATIC,7,41,107,24
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_DIALOGHELP, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 179
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 72
+    END
+
+    IDD_FILE_EXT_DIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 114
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 88
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE 
+BEGIN
+    ID_FILE_OPEN40016       "Open Image File"
+    ID_MOVE_UNDOIMAGEPOSITION 
+                            "First 나 Last 를 했을 경우 마지막으로 봤던 이미지로 갑니다."
+    ID_MOVE_REDOIMAGEPOSITION "Undo 하기 전의 이미지로 갑니다."
+END
+
+#endif    // 한국어 resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+
