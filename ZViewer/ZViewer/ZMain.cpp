@@ -6,6 +6,7 @@
 #include "../lib/DesktopWallPaper.h"
 
 #include <ShlObj.h>
+#include <cstdio>
 
 #include "resource.h"
 
@@ -311,25 +312,6 @@ void ZMain::Draw(bool bEraseBg)
 	}
 }
 
-bool StringCompare(const std::string & a, const std::string & b)
-{
-#pragma message("TODO : 문자열 비교를 할 때 모두 소문자로 바꿔서 비교해야함")
-	return (strcmp(b.c_str(), a.c_str()) > 0);
-}
-
-const std::string RemoveExt(const std::string & strFullFileName)
-{
-	char szFile[MAX_PATH] = { 0 };
-	_splitpath(strFullFileName.c_str(), 0, 0, szFile, 0);
-
-	return szFile;
-}
-
-bool FilenameCompare(const std::string & a, const std::string & b)
-{
-	return (strcmp(RemoveExt(b).c_str(), RemoveExt(a).c_str()) > 0);
-}
-
 void ZMain::ZFindFile(const char *path, std::vector<std::string> & foundStorage, bool bFindRecursive)
 {
 	HANDLE hSrch;
@@ -349,13 +331,13 @@ void ZMain::ZFindFile(const char *path, std::vector<std::string> & foundStorage,
 		{
 			if (wfd.cFileName[0]!='.' && bFindRecursive == true)
 			{
-				wsprintf(newpath,"%s%s%s\\*.*",drive,dir,wfd.cFileName);
+				_snprintf(newpath, sizeof(newpath), "%s%s%s\\*.*",drive,dir,wfd.cFileName);
 				ZFindFile(newpath, foundStorage, bFindRecursive);
 			}
 		}
 		else
 		{
-			wsprintf(fname,"%s%s%s",drive,dir,wfd.cFileName);
+			_snprintf(fname, sizeof(fname), "%s%s%s",drive,dir,wfd.cFileName);
 
 			if ( ZImage::IsValidImageFileExt(wfd.cFileName) )
 			{
@@ -386,13 +368,13 @@ void ZMain::ZFindFolders(const char *path, std::vector<std::string> & foundStora
 		{
 			if (wfd.cFileName[0]!='.' )
 			{
-				wsprintf(fname,"%s%s%s",drive,dir,wfd.cFileName);
+				_snprintf(fname, sizeof(fname), "%s%s%s",drive,dir,wfd.cFileName);
 
 				foundStorage.push_back(fname);
 
 				if ( bFindRecursive == true )
 				{
-					wsprintf(newpath,"%s%s%s\\*.*",drive,dir,wfd.cFileName);
+					_snprintf(newpath, sizeof(newpath), "%s%s%s\\*.*",drive,dir,wfd.cFileName);
 					ZFindFolders(newpath, foundStorage, bFindRecursive);
 				}
 			}
@@ -736,37 +718,37 @@ void ZMain::SetStatusBarText()
 	if ( m_vFile.size() == 0 || m_strCurrentFilename.empty() )
 	{
 		// File Index
-		sprintf(szTemp, "No File");
+		_snprintf(szTemp, sizeof(szTemp), "No File");
 		SendMessage(m_hStatus, SB_SETTEXT, 0, (LPARAM)szTemp);
 
 		// 해상도 정보
-		sprintf(szTemp, "");
+		_snprintf(szTemp, sizeof(szTemp), "");
 		SendMessage(m_hStatus, SB_SETTEXT, 1, (LPARAM)szTemp);
 
 		// 이미지 사이즈
-		sprintf(szTemp, "");
+		_snprintf(szTemp, sizeof(szTemp), "");
 		SendMessage(m_hStatus, SB_SETTEXT, 2, (LPARAM)szTemp);
 
 		// 임시로 http://wimy.com
-		sprintf(szTemp, "http://wimy.com");
+		_snprintf(szTemp, sizeof(szTemp), "http://wimy.com");
 		SendMessage(m_hStatus, SB_SETTEXT, 3, (LPARAM)szTemp);
 
 		// 로딩시간
-		sprintf(szTemp, "");
+		_snprintf(szTemp, sizeof(szTemp), "");
 		SendMessage(m_hStatus, SB_SETTEXT, 4, (LPARAM)szTemp);
 
 		// 파일명
-		sprintf(szTemp, "No File");
+		_snprintf(szTemp, sizeof(szTemp), "No File");
 		SendMessage(m_hStatus, SB_SETTEXT, 5, (LPARAM)szTemp);
 	}
 	else
 	{
 		// File Index
-		sprintf(szTemp, "%d/%d", m_iCurretFileIndex+1, m_vFile.size());
+		_snprintf(szTemp, sizeof(szTemp), "%d/%d", m_iCurretFileIndex+1, m_vFile.size());
 		SendMessage(m_hStatus, SB_SETTEXT, 0, (LPARAM)szTemp);
 
 		// 해상도 정보
-		sprintf(szTemp, "%dx%dx%dbpp", m_currentImage.GetWidth(), m_currentImage.GetHeight(), m_currentImage.GetBPP());
+		_snprintf(szTemp, sizeof(szTemp), "%dx%dx%dbpp", m_currentImage.GetWidth(), m_currentImage.GetHeight(), m_currentImage.GetBPP());
 		SendMessage(m_hStatus, SB_SETTEXT, 1, (LPARAM)szTemp);
 
 		// image size
@@ -774,29 +756,29 @@ void ZMain::SetStatusBarText()
 
 		if ( imageSize > 1024 )
 		{
-			sprintf(szTemp, "%dKByte", m_currentImage.GetImageSize()/1024);
+			_snprintf(szTemp, sizeof(szTemp), "%dKByte", m_currentImage.GetImageSize()/1024);
 		}
 		else
 		{
-			sprintf(szTemp, "%dByte", m_currentImage.GetImageSize());
+			_snprintf(szTemp, sizeof(szTemp), "%dByte", m_currentImage.GetImageSize());
 		}
 		SendMessage(m_hStatus, SB_SETTEXT, 2, (LPARAM)szTemp);
 
 
 
 		// 임시로 http://wimy.com
-		sprintf(szTemp, "http://wimy.com");
+		_snprintf(szTemp, sizeof(szTemp), "http://wimy.com");
 		SendMessage(m_hStatus, SB_SETTEXT, 3, (LPARAM)szTemp);
 
 		// 로딩시간
-		sprintf(szTemp, "%.3fsec", (float)(m_dwLoadingTime / 1000.0));
+		_snprintf(szTemp, sizeof(szTemp), "%.3fsec", (float)(m_dwLoadingTime / 1000.0));
 		SendMessage(m_hStatus, SB_SETTEXT, 4, (LPARAM)szTemp);
 
 		// 파일명
 		char szFilename[MAX_PATH], szFileExt[MAX_PATH];
 		_splitpath(m_strCurrentFilename.c_str(), NULL, NULL, szFilename, szFileExt);
 
-		sprintf(szTemp, "%s%s", szFilename, szFileExt);
+		_snprintf(szTemp, sizeof(szTemp), "%s%s", szFilename, szFileExt);
 		SendMessage(m_hStatus, SB_SETTEXT, 5, (LPARAM)szTemp);
 
 	}
@@ -807,7 +789,7 @@ void ZMain::SetTitle()
 	char szTemp[MAX_PATH+256];
 	if ( m_strCurrentFilename.empty() )
 	{
-		sprintf(szTemp, "ZViewer v%s", g_strVersion.c_str());
+		_snprintf(szTemp, sizeof(szTemp), "ZViewer v%s", g_strVersion.c_str());
 	}
 	else
 	{
@@ -815,8 +797,8 @@ void ZMain::SetTitle()
 		char szFileExt[MAX_PATH] = { 0 };
 		_splitpath(m_strCurrentFilename.c_str(), NULL, NULL, szFileName, szFileExt);
 
-		//sprintf(szTemp, "%s%s - ZViewer for rubi v%s", szFileName, szFileExt, g_strVersion.c_str() );
-		sprintf(szTemp, "%s%s - for rubi :D", szFileName, szFileExt);
+		//_snprintf(szTemp, sizeof(szTemp), "%s%s - ZViewer for rubi v%s", szFileName, szFileExt, g_strVersion.c_str() );
+		_snprintf(szTemp, sizeof(szTemp), "%s%s - for rubi :D", szFileName, szFileExt);
 	}
 	SetWindowText(m_hMainDlg, szTemp);
 }
@@ -1220,8 +1202,13 @@ void ZMain::SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyle style)
 		return;
 	}
 
+	char szFileName[MAX_PATH] = { 0 };
+	_splitpath(m_vFile[m_iCurretFileIndex].c_str(), 0, 0, szFileName, 0);
+
 	std::string strSaveFileName = szSystemFolder;
-	strSaveFileName += "\\rubi_bg.bmp";
+	strSaveFileName += "\\RUBI_bg_";
+	strSaveFileName += szFileName;
+	strSaveFileName += ".bmp";
 
 	if ( FALSE == m_currentImage.SaveToFile(strSaveFileName, BMP_DEFAULT) )
 	{
