@@ -509,7 +509,7 @@ void ZMain::NextFolder()
 
 		_ASSERTE(iFoundIndex != -1);
 
-		if ( (iFoundIndex + 1) >= vFolders.size() )
+		if ( (iFoundIndex + 1) >= (int)vFolders.size() )
 		{
 			// 마지막 폴더이다.
 			MessageBox(m_hMainDlg, "Here is the last folder.", "ZViewer", MB_OK);
