@@ -170,9 +170,6 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 	static int lastX;
 	static int lastY;
 
-	HDC hdc;
-	PAINTSTRUCT ps;
-
 	switch(iMessage)
 	{
 	case WM_CHAR:
@@ -586,6 +583,8 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 		break;
 
 	case WM_PAINT:
+		HDC hdc;
+		PAINTSTRUCT ps;
 		hdc=BeginPaint(hWnd, &ps);
 
 		ZMain::GetInstance().Draw();
