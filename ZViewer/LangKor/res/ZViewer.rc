@@ -232,6 +232,7 @@ END
 STRINGTABLE 
 BEGIN
     ID_FILE_OPEN40016       "Open Image File"
+    IDS_DELETE_THIS_FILE    "현재 파일을 지우시겠습니까?"
     ID_MOVE_UNDOIMAGEPOSITION 
                             "First 나 Last 를 했을 경우 마지막으로 봤던 이미지로 갑니다."
     ID_MOVE_REDOIMAGEPOSITION "Undo 하기 전의 이미지로 갑니다."

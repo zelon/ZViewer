@@ -21,6 +21,7 @@
 #define ID_MAINMENU_FILE_EXIT           40002
 #define ID_FILE_OPEN40016               40016
 #define ID_MAINMENU_FILE_OPEN           40017
+#define IDS_DELETE_THIS_FILE            40017
 #define ID_MOVE_NEXTIMAGE               40018
 #define ID_MOVE_PREVIMAGE               40019
 #define ID_MOVE_FIRSTIMAGE              40020
