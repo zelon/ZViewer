@@ -1,6 +1,6 @@
 
 #include "stdafx.h"
-#include "../resource.h"
+#include "resource.h"
 #include "ZFileExtDlg.h"
 #include "../ZMain.h"
 #include <ShlObj.h>
