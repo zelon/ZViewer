@@ -136,7 +136,7 @@ private:
 	bool LoadFromFile(const std::string & strFilename)
 	{
 	char szFilename[MAX_PATH];
-	sprintf(szFilename, strFilename.c_str());
+	_snprintf(szFilename, sizeof(szFilename), strFilename.c_str());
 
 	if ( m_devilimage.Load(szFilename, IL_TYPE_UNKNOWN) == TRUE )
 	{
