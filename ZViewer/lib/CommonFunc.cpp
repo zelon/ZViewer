@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "CommonFunc.h"
+#include <shlobj.h>
+#include <io.h>
 
 void DebugPrintf( const char *fmt, ... )
 {
@@ -123,3 +125,62 @@ std::string toString(int i)
 
 	return std::string(szTemp);
 }
+
+bool SelectFolder(HWND hWnd, char * szFolder)
+{
+	LPMALLOC pMalloc;
+	LPITEMIDLIST pidl;
+	BROWSEINFO bi;
+
+	bi.hwndOwner = hWnd;
+	bi.pidlRoot = NULL;
+	bi.pszDisplayName = NULL;
+	bi.lpszTitle = "Select folder";
+	bi.ulFlags = 0;
+	bi.lpfn = 0;
+	bi.lParam = 0;
+
+	pidl = SHBrowseForFolder(&bi);
+
+	if ( pidl == NULL )
+	{
+		return false;
+	}
+
+	SHGetPathFromIDList(pidl, szFolder);
+
+	if ( SHGetMalloc(&pMalloc) != NOERROR )
+	{
+		return false;
+	}
+
+	pMalloc->Free(pidl);
+	pMalloc->Release();
+
+	return true;
+}
+
+std::string GetFolderNameFromFullFileName(const std::string & strFullFilename)
+{
+	char szDrive[_MAX_DRIVE] = { 0 };
+	char szDir[_MAX_DIR] = { 0 };
+	_splitpath(strFullFilename.c_str(), szDrive, szDir, 0, 0);
+
+	std::string strFolder = szDrive;
+	strFolder += szDir;
+
+	return strFolder;
+}
+
+std::string GetFileNameFromFullFileName(const std::string & strFullFilename)
+{
+	char szFileName[MAX_PATH] = { 0 };
+	char szFileExt[MAX_PATH] = { 0 };
+	_splitpath(strFullFilename.c_str(), 0, 0, szFileName, szFileExt);
+
+	std::string strFilename = szFileName;
+	strFilename += szFileExt;
+
+	return strFilename;
+}
+

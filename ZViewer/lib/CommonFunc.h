@@ -12,3 +12,8 @@ bool SetRegistryValue(HKEY hOpenKey, const std::string & strKey,LPCTSTR szValue,
 RECT GetResizedRect(const RECT & MaximumSize, const RECT & originalSize);
 
 std::string toString(int i);
+
+bool SelectFolder(HWND hWnd, char * szFolder);
+
+std::string GetFolderNameFromFullFileName(const std::string & strFullFilename);
+std::string GetFileNameFromFullFileName(const std::string & strFullFilename);
