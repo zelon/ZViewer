@@ -2,7 +2,7 @@
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "ZViewer"
-!define PRODUCT_VERSION "0.2.1"
+!define PRODUCT_VERSION "0.3.1"
 !define PRODUCT_PUBLISHER "RhLab"
 !define PRODUCT_WEB_SITE "http://www.wimy.com"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
@@ -27,7 +27,7 @@ SetCompressor bzip2
 !insertmacro MUI_PAGE_WELCOME
 ; License page
 !define MUI_LICENSEPAGE_CHECKBOX
-!insertmacro MUI_PAGE_LICENSE "License.txt"
+!insertmacro MUI_PAGE_LICENSE "ReadMe.txt"
 ; Directory page
 !insertmacro MUI_PAGE_DIRECTORY
 ; Instfiles page
@@ -66,6 +66,13 @@ Section "MainSection" SEC01
   File "ZViewerIcons.dll"
   File "ZViewer.exe"
   File "License.txt"
+  File "ReadMe.txt"
+
+; Language Files 
+  SetOutPath "$INSTDIR\language"
+  File "language\korean.dll"
+
+; Register DLL
   ExecWait 'regsvr32 "$INSTDIR\ZViewerAgent.dll" /s'
   ExecWait "$INSTDIR\ZViewer.exe /fileext"
 SectionEnd
