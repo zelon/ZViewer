@@ -89,23 +89,32 @@ int APIENTRY WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance ,LPSTR lpszCmdP
 	ZResourceManager::GetInstance().SetHandleInstance(hInstance);
 
 	HINSTANCE hLang = NULL;
-	HKL hLocale = NULL;
+	//HKL hLocale = NULL;
+
+	LANGID k = GetSystemDefaultLangID();
+
+	if ( (k ) == 0x0412 )
+	{
+		hLang = LoadLibrary("language/korean.dll");
+
+		if ( hLang )
+		{
+			ZResourceManager::GetInstance().SetHandleInstance(hLang);
+		}
+		else
+		{
+			_ASSERTE(hLang != NULL);
+		}
+	}
+
+	/*
 	if ( SystemParametersInfo(SPI_GETDEFAULTINPUTLANG, NULL, &hLocale, NULL) )
 	{
 		if ( hLocale == (void*)0xe0010412 )
 		{
-			hLang = LoadLibrary("language/korean.dll");
-
-			if ( hLang )
-			{
-				ZResourceManager::GetInstance().SetHandleInstance(hLang);
-			}
-			else
-			{
-				_ASSERTE(hLang != NULL);
-			}
 		}
 	}
+	*/
 
 
 	HMENU hMenu = (HMENU)LoadMenu(ZResourceManager::GetInstance().GetHInstance(), MAKEINTRESOURCE(IDR_MAIN_MENU));
