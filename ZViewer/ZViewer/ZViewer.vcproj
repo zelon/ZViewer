@@ -313,6 +313,12 @@
 			Name="lib"
 			Filter="">
 			<File
+				RelativePath="..\lib\CommonFunc.cpp">
+			</File>
+			<File
+				RelativePath="..\lib\CommonFunc.h">
+			</File>
+			<File
 				RelativePath=".\lib\ZFileExtReg.cpp">
 			</File>
 			<File
