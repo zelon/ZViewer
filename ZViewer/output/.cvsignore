@@ -3,9 +3,11 @@ ZViewerAgent.exp
 ZViewerAgent.idb
 *.ilk
 *.exp
-ZViewerAgentD.dll
+*.dll
 ZViewerAgentPSD.*
 banner.jpg
-ZViewerD.pdb
+*.pdb
 ZViewerIconsD.dll
 ZViewerAgent.lib
+*.zip
+*.lib
