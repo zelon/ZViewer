@@ -1,0 +1,11 @@
+ZViewerAgentPS.*
+ZViewerAgent.exp
+ZViewerAgent.idb
+*.ilk
+*.exp
+ZViewerAgentD.dll
+ZViewerAgentPSD.*
+banner.jpg
+ZViewerD.pdb
+ZViewerIconsD.dll
+ZViewerAgent.lib

@@ -1,0 +1,36 @@
+// ZViewerAgent.idl : ZViewerAgent의 IDL 소스입니다.
+//
+
+// 이 파일은 MIDL 도구에 의해 처리되어
+// 형식 라이브러리(ZViewerAgent.tlb) 및 마샬링 코드가 생성됩니다.
+
+import "oaidl.idl";
+import "ocidl.idl";
+
+[
+	object,
+	uuid(C9568C1B-74EE-42CF-B30F-7B7D09A9B447),
+	dual,
+	nonextensible,
+	helpstring("IZViewMenuExt 인터페이스"),
+	pointer_default(unique)
+]
+interface IZViewMenuExt : IDispatch{
+};
+[
+	uuid(E4FAFA4A-9668-4B7F-8C17-520FBF4C20AA),
+	version(1.0),
+	helpstring("ZViewerAgent 1.0 형식 라이브러리")
+]
+library ZViewerAgentLib
+{
+	importlib("stdole2.tlb");
+	[
+		uuid(B03E70D6-2EC9-4ECA-957E-8F9CD684C487),
+		helpstring("ZViewMenuExt Class")
+	]
+	coclass ZViewMenuExt
+	{
+		[default] interface IZViewMenuExt;
+	};
+};

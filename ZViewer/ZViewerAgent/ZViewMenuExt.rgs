@@ -1,0 +1,38 @@
+HKCR
+{
+	ZViewerAgent.ZViewMenuExt.1 = s 'ZViewMenuExt Class'
+	{
+		CLSID = s '{B03E70D6-2EC9-4ECA-957E-8F9CD684C487}'
+	}
+	ZViewerAgent.ZViewMenuExt = s 'ZViewMenuExt Class'
+	{
+		CLSID = s '{B03E70D6-2EC9-4ECA-957E-8F9CD684C487}'
+		CurVer = s 'ZViewerAgent.ZViewMenuExt.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {B03E70D6-2EC9-4ECA-957E-8F9CD684C487} = s 'ZViewMenuExt Class'
+		{
+			ProgID = s 'ZViewerAgent.ZViewMenuExt.1'
+			VersionIndependentProgID = s 'ZViewerAgent.ZViewMenuExt'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			val AppID = s '%APPID%'
+			'TypeLib' = s '{E4FAFA4A-9668-4B7F-8C17-520FBF4C20AA}'
+		}
+	}
+	
+    NoRemove *
+    {
+        NoRemove ShellEx
+        {
+            NoRemove ContextMenuHandlers
+            {
+                BitmapPreview = s '{B03E70D6-2EC9-4ECA-957E-8F9CD684C487}'
+            }
+        }
+    }
+}
