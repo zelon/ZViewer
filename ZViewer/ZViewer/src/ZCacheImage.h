@@ -29,7 +29,7 @@ public:
 
 	void StartThread();
 
-	int GetNumOfCacheImage() const { return m_cacheData.size(); 	}
+	size_t GetNumOfCacheImage() const { return m_cacheData.size(); 	}
 
 	static DWORD WINAPI ThreadFuncProxy(LPVOID p);
 	void ThreadFunc();
