@@ -83,44 +83,6 @@ DWORD ZCacheImage::ThreadFuncProxy(LPVOID p)
 	return 0;
 }
 
-/*
-void ZCacheImage::CheckCacheDataAndClear()
-{
-	// 현재 인덱스를 기준으로 범위를 벗어난 파일들의 캐시는 버린다.
-
-	CacheMapIterator it, endit;
-
-	ZCacheLock lock;
-	endit = m_cacheData.end();
-	for ( it = m_cacheData.begin(); it != endit; )
-	{
-		if ( m_bNewChange )
-		{
-			return;
-		}
-
-		const std::string & strFilename = it->first;
-
-		if ( m_imageMapRev[strFilename] < (m_iCurrentIndex - m_iMaxCacheImageNum) ||
-			m_imageMapRev[strFilename] > (m_iCurrentIndex + m_iMaxCacheImageNum)
-
-			)	// 캐시 범위를 벗어나면
-		{
-			m_lCacheSize -= it->second.GetImageSize();
-			m_cacheData.erase(it++);
-
-#ifdef _DEBUG
-			DebugPrintf("Clear one cached data");
-#endif
-		}
-		else
-		{
-			++it;
-		}
-	}
-}
-*/
-
 /// 캐시되어 있는 데이터들 중 현재 인덱스로부터 가장 멀리있는 인덱스를 얻는다.
 int ZCacheImage::_GetFarthestIndexFromCurrentIndex()
 {
