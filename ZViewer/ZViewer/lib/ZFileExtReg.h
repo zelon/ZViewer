@@ -23,8 +23,6 @@ public:
 	bool RegSetExtension();			/// HKEY_CLASSES_ROOT\.<Extension> 를 등록한다.
 	bool RegSetDocumentType();		/// DocumentType 을 등록한다.
 
-	bool SetRegistryValue(HKEY hOpenKey, const std::string & strKey,LPCTSTR szValue, const std::string & strData);
-
 	std::string		m_strExtension;
 	std::string		m_strContentType;
 	std::string		m_strShellOpenCommand;
