@@ -2,6 +2,7 @@
 
 #include "stdafx.h"
 #include "ZViewMenuExt.h"
+#include <shlobj.h>
 
 // CZViewMenuExt
 
@@ -10,60 +11,22 @@ const LONG CZViewMenuExt::m_l3DBorderWidth    = 1;
 const LONG CZViewMenuExt::m_lMenuItemSpacing  = 4;
 const LONG CZViewMenuExt::m_lTotalBorderSpace = 2*(m_lMenuItemSpacing+m_l3DBorderWidth);
 
-FIBITMAP* GenericLoader(const char* lpszPathName, int flag);
+enum
+{
+	eMENU_ShowZViewer = 0,
+	eMENU_SetBG_CENTER = 1,
+	eMENU_SetBG_STRETCH = 2,
+	eMENU_SetBG_TILE = 3,
+	eMENU_SetBG_CLEAR = 4,
+	eMENU_MAX
+};
+
+
 
 void CZViewMenuExt::MsgBox(const std::string & strMsg)
 {
 	MessageBox(HWND_DESKTOP, strMsg.c_str(), "ZViewerAgent", MB_OK);
 }
-
-// 최대 크기를 넘지 않는 적당한 리사이즈 크기를 돌려준다.
-RECT CZViewMenuExt::GetResizedRect(const RECT & MaximumSize, const RECT & originalSize)
-{
-	if ( originalSize.right <= MaximumSize.right && originalSize.bottom <= MaximumSize.bottom )
-	{
-		RECT ret = originalSize;
-		return ret;
-	}
-
-	// 가로 세로 크기 중 큰 값을 찾는다.
-	bool bSetWidth = true;		// 가로 크기를 기준으로 맞출 것인가?
-
-	double dWidthRate = (double)MaximumSize.right / (double)originalSize.right;
-	double dHeightRate = (double)MaximumSize.bottom / (double)originalSize.bottom;
-
-	if ( dHeightRate >=  dWidthRate)
-	{
-		bSetWidth = true;
-	}
-	else
-	{
-		bSetWidth = false;
-	}
-
-	// 큰 값이 MaximumSize 가 되게 하는 비례를 찾는다.
-	RECT ret;
-
-	double dRate = 1;
-	if ( bSetWidth == true )
-	{
-		// 가로 크기가 기준이다.
-		SetRect(&ret, 0, 0, (int)(originalSize.right*dWidthRate), (int)(originalSize.bottom*dWidthRate));
-	}
-	else
-	{
-		// 세로 크기가 기준이다.
-		SetRect(&ret, 0, 0, (int)(originalSize.right*dHeightRate), (int)(originalSize.bottom*dHeightRate));
-	}
-
-
-	_ASSERTE(ret.right <= MaximumSize.right);
-	_ASSERTE(ret.bottom <= MaximumSize.bottom);
-
-	return ret;
-}
-
-
 
 STDMETHODIMP CZViewMenuExt::Initialize (LPCITEMIDLIST pidlFolder, LPDATAOBJECT  pDO, HKEY hkeyProgID )
 {
@@ -134,6 +97,8 @@ STDMETHODIMP CZViewMenuExt::QueryContextMenu (
 	bool bUseOwnerDraw = false;
 	HINSTANCE hinstShell;
 
+	UINT uID = uidCmdFirst;
+
     hinstShell = GetModuleHandle ( _T("shell32") );
 
 	if ( NULL != hinstShell )
@@ -161,12 +126,16 @@ STDMETHODIMP CZViewMenuExt::QueryContextMenu (
 	char szImageInfo[256];
 	sprintf(szImageInfo, "%dx%d %dbpp", m_originalImage.GetWidth(), m_originalImage.GetHeight(), m_originalImage.GetBPP());
 
+	// Store the menu item's ID so we can check against it later when
+	// WM_MEASUREITEM/WM_DRAWITEM are sent.
+	m_uOurItemID = uidCmdFirst;
+
 	MENUITEMINFO mii;
 
     mii.cbSize = sizeof(MENUITEMINFO);
 	mii.fMask  = MIIM_ID | MIIM_TYPE;
 	mii.fType  = bUseOwnerDraw ? MFT_OWNERDRAW : MFT_BITMAP;
-	mii.wID    = uidCmdFirst;
+	mii.wID    = uID++;
 
 	if ( !bUseOwnerDraw )
 	{
@@ -180,33 +149,45 @@ STDMETHODIMP CZViewMenuExt::QueryContextMenu (
 	
 	HMENU hSubMenu = CreatePopupMenu();
 	{
-		InsertMenu( hSubMenu, 0, MF_BYPOSITION, uidCmdFirst, szImageInfo);
-		InsertMenu( hSubMenu, 1, MF_BYPOSITION, uidCmdFirst, szImageInfo);
+		InsertMenu( hSubMenu, 0, MF_BYPOSITION | MF_STRING, uID++, "View in ZViewer");
+		InsertMenu( hSubMenu, 1, MF_SEPARATOR, NULL, NULL);
+		InsertMenu( hSubMenu, 2, MF_BYPOSITION | MF_STRING, uID++, "DesktopWallpaper CENTER");
+		InsertMenu( hSubMenu, 3, MF_BYPOSITION | MF_STRING, uID++, "DesktopWallpaper STRETCH");
+		InsertMenu( hSubMenu, 4, MF_BYPOSITION | MF_STRING, uID++, "DesktopWallpaper TILE");
+		InsertMenu( hSubMenu, 5, MF_SEPARATOR, NULL, NULL);
+		InsertMenu( hSubMenu, 6, MF_BYPOSITION | MF_STRING, uID++, "DesktopWallpaper CLEAR");
 
 		ZeroMemory(&mii, sizeof(MENUITEMINFO));
 		mii.cbSize = sizeof(MENUITEMINFO);
 		mii.fMask  = MIIM_ID | MIIM_TYPE | MIIM_SUBMENU;
-		//		mii.fType  = MFT_BITMAP;
-		mii.wID    = uidCmdFirst;
-		mii.hSubMenu = hSubMenu;
+		mii.wID    = uID++;
 		mii.dwTypeData = _T(szImageInfo);
 	}
 
 	InsertMenu( hmenu, 0, MF_BYPOSITION | MF_POPUP, (UINT)hSubMenu, szImageInfo);
 
-    // Store the menu item's ID so we can check against it later when
-    // WM_MEASUREITEM/WM_DRAWITEM are sent.
-    m_uOurItemID = uidCmdFirst;
+
+	m_uiMaxMenuID = (uID - uidCmdFirst) - 1;
 
     // Tell the shell we added 1 top-level menu item.
-    return MAKE_HRESULT ( SEVERITY_SUCCESS, FACILITY_NULL, 1 );
+    return MAKE_HRESULT ( SEVERITY_SUCCESS, FACILITY_NULL, uID - uidCmdFirst );
 }
 
 STDMETHODIMP CZViewMenuExt::GetCommandString (UINT uCmd, UINT uFlags, UINT* puReserved, LPSTR pszName, UINT cchMax)
 {
-	// Check idCmd, it must be 0 since we have only one menu item.
-	if ( 0 != uCmd )
+	// 여기서 uCmd 는 메뉴에 넣은 순서대로 0 부터 순서대로 온다. 단, 선택할 수 없는 메뉴는 무시한 순서다.
+
+#ifdef _DEBUG
+	char szTemp[256];
+	sprintf(szTemp, "ucmd(%d), uFlags(%d), pszName(%s), cchMax(%d)", uCmd, uFlags, pszName, cchMax);
+	OutputDebugString(szTemp);
+	OutputDebugString("\r\n");
+#endif
+
+	// 메뉴에 넣은 갯수를 넘어서면 안된다.
+	if ( uCmd >= m_uiMaxMenuID )
 	{
+		_ASSERTE(false);
 		return E_INVALIDARG;
 	}
 
@@ -235,7 +216,7 @@ STDMETHODIMP CZViewMenuExt::GetCommandString (UINT uCmd, UINT uFlags, UINT* puRe
     return S_OK;
 }
 
-STDMETHODIMP CZViewMenuExt::InvokeCommand ( LPCMINVOKECOMMANDINFO pInfo )	// 그림을 클릭했을 때
+STDMETHODIMP CZViewMenuExt::InvokeCommand ( LPCMINVOKECOMMANDINFO pInfo )	// 그림 및 메뉴를 클릭했을 때
 {
     // If lpVerb really points to a string, ignore this function call and bail out.
     if ( 0 != HIWORD( pInfo->lpVerb ))
@@ -243,9 +224,10 @@ STDMETHODIMP CZViewMenuExt::InvokeCommand ( LPCMINVOKECOMMANDINFO pInfo )	// 그�
         return E_INVALIDARG;
 	}
 
-    // The command ID must be 0 since we only have one menu item.
-    if ( 0 != LOWORD( pInfo->lpVerb ))
+    // 넘어올 수 있는 command 의 값을 체크한다.
+	if ( LOWORD( pInfo->lpVerb ) >= m_uiMaxMenuID)
 	{
+		_ASSERTE(false);
         return E_INVALIDARG;
 	}
 
@@ -253,39 +235,40 @@ STDMETHODIMP CZViewMenuExt::InvokeCommand ( LPCMINVOKECOMMANDINFO pInfo )	// 그�
 	//ShellExecute ( pInfo->hwnd, _T("open"), m_szFile, NULL, NULL, SW_SHOWNORMAL );
 	//MessageBox(HWND_DESKTOP, "Clisdc1sk!!", "ok", MB_OK);
 
-	char command[FILENAME_MAX] = { 0 };
-	char szGetFileName[FILENAME_MAX] = { 0 };
-
-#ifdef _DEBUG
-	DWORD ret = GetModuleFileName(GetModuleHandle("ZViewerAgentD.dll"), szGetFileName, FILENAME_MAX);
-#else
-	DWORD ret = GetModuleFileName(GetModuleHandle("ZViewerAgent.dll"), szGetFileName, FILENAME_MAX);
-#endif
-	if ( ret == 0 )
+	switch ( LOWORD( pInfo->lpVerb ) )
 	{
-		_ASSERTE(!"Can't get module folder");
+	case 0:
+	case 1:
+		ExecZViewer();
+		break;
+
+	case 2:
+		// center
+		SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyle_CENTER);
+		break;
+
+	case 3:
+		// stretch
+		SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyle_STRETCH);
+		break;
+
+	case 4:
+		// tile
+		SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyle_TILE);
+		break;
+
+	case 5:
+		// clear
+		CDesktopWallPaper::ClearDesktopWallPaper();
+		break;
+
+	default:
+		{
+			/// 처리하지 않은 메뉴이다.
+			_ASSERTE(false);
+		}
 	}
-	char szDrive[_MAX_DRIVE] = { 0 };
-	char szDir[_MAX_DIR] = { 0 };
-	_splitpath(szGetFileName, szDrive, szDir, 0, 0);
 
-	std::string strProgramFolder = szDrive;
-	strProgramFolder += szDir;
-
-	wsprintf(command, "%s\\ZViewer.exe %s", strProgramFolder.c_str(), m_szFile);
-
-	STARTUPINFO si;
-	PROCESS_INFORMATION pi;
-	ZeroMemory( &si, sizeof(si) );
-	si.cb = sizeof(si);
-	si.dwFlags =STARTF_USESHOWWINDOW;
-	si.wShowWindow =SW_SHOW;
-	ZeroMemory( &pi, sizeof(pi) );
-
-	// ZViewer 를 실행시킨다.
-	CreateProcess(NULL, command, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi);
-
-	//MessageBox(HWND_DESKTOP, command, command, MB_OK);
     return S_OK;
 }
 
@@ -336,7 +319,6 @@ STDMETHODIMP CZViewMenuExt::MenuMessageHandler ( UINT uMsg, WPARAM wParam, LPARA
 
         case WM_DRAWITEM:
             return OnDrawItem ( (DRAWITEMSTRUCT*) lParam, pResult );
-        break;
 	}
 
     return S_OK;
@@ -345,20 +327,11 @@ STDMETHODIMP CZViewMenuExt::MenuMessageHandler ( UINT uMsg, WPARAM wParam, LPARA
 
 STDMETHODIMP CZViewMenuExt::OnMeasureItem ( MEASUREITEMSTRUCT* pmis, LRESULT* pResult )
 {
-	//MessageBox(NULL, "adsf","asdf", MB_OK);
-
-	FILE *fp = fopen("c:\\test.txt", "a+");
-	fprintf(fp, "asdf\n");
-	fclose(fp);
     // Check that we're getting called for our own menu item.
 	if ( m_uOurItemID != pmis->itemID )
 	{
 		return S_OK;
 	}
-
-	fp = fopen("c:\\test.txt", "a+");
-	fprintf(fp, "11111\n");
-	fclose(fp);
 
 	LONG   lThumbWidth;
 	LONG   lThumbHeight;
@@ -394,7 +367,9 @@ STDMETHODIMP CZViewMenuExt::OnDrawItem ( DRAWITEMSTRUCT* pdis, LRESULT* pResult 
 {
     // Check that we're getting called for our own menu item.
     if ( m_uOurItemID != pdis->itemID )
+	{
 		return S_OK;
+	}
 
 	CDC*  pdcMenu = CDC::FromHandle ( pdis->hDC );
 	CRect rcItem ( pdis->rcItem );  // RECT of our menu item
@@ -431,9 +406,6 @@ STDMETHODIMP CZViewMenuExt::OnDrawItem ( DRAWITEMSTRUCT* pdis, LRESULT* pResult 
 		rcDraw.DeflateRect ( 1, 1 );
 	}
 
-
-	//MessageBeep(0);
-
 	// Rescale 이 필요하면 해준다.
 	if ( rcDraw.Width() < m_originalImage.GetWidth()
 		|| rcDraw.Height() < m_originalImage.GetHeight() )
@@ -463,3 +435,71 @@ STDMETHODIMP CZViewMenuExt::OnDrawItem ( DRAWITEMSTRUCT* pdis, LRESULT* pResult 
     return S_OK;
 }
 
+void CZViewMenuExt::ExecZViewer()
+{
+	char command[FILENAME_MAX] = { 0 };
+	char szGetFileName[FILENAME_MAX] = { 0 };
+
+#ifdef _DEBUG
+	DWORD ret = GetModuleFileName(GetModuleHandle("ZViewerAgentD.dll"), szGetFileName, FILENAME_MAX);
+#else
+	DWORD ret = GetModuleFileName(GetModuleHandle("ZViewerAgent.dll"), szGetFileName, FILENAME_MAX);
+#endif
+	if ( ret == 0 )
+	{
+		_ASSERTE(!"Can't get module folder");
+	}
+	char szDrive[_MAX_DRIVE] = { 0 };
+	char szDir[_MAX_DIR] = { 0 };
+	_splitpath(szGetFileName, szDrive, szDir, 0, 0);
+
+	std::string strProgramFolder = szDrive;
+	strProgramFolder += szDir;
+
+	wsprintf(command, "%s\\ZViewer.exe %s", strProgramFolder.c_str(), m_szFile);
+
+	STARTUPINFO si;
+	PROCESS_INFORMATION pi;
+	ZeroMemory( &si, sizeof(si) );
+	si.cb = sizeof(si);
+	si.dwFlags =STARTF_USESHOWWINDOW;
+	si.wShowWindow =SW_SHOW;
+	ZeroMemory( &pi, sizeof(pi) );
+
+	// ZViewer 를 실행시킨다.
+	CreateProcess(NULL, command, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi);
+}
+
+void CZViewMenuExt::SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyle style)
+{
+	// 현재보고 있는 파일을 윈도우 폴더에 저장한다.
+	char szSystemFolder[_MAX_PATH] = { 0 };
+
+	if ( E_FAIL == SHGetFolderPath(NULL, CSIDL_WINDOWS, NULL, SHGFP_TYPE_CURRENT, szSystemFolder) )
+	{
+		_ASSERTE(false);
+		return;
+	}
+
+	std::string strSaveFileName = szSystemFolder;
+	strSaveFileName += "\\rubi_bg.bmp";
+
+	ZImage tempImage;
+	if ( !tempImage.LoadFromFile(m_szFile) )
+	{
+		MessageBox(HWND_DESKTOP, "Can't load the image file", "ZViewer", MB_OK);
+		return;
+	}
+
+
+	if ( FALSE == tempImage.SaveToFile(strSaveFileName, BMP_DEFAULT) )
+	{
+		_ASSERTE(false);
+		return;
+	}
+
+
+	CDesktopWallPaper wallPaper(strSaveFileName);
+	wallPaper.SetWallPaperStyle(style);
+	wallPaper.SetDesktopWallPaper();
+}

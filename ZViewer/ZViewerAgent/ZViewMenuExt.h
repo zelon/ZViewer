@@ -5,6 +5,7 @@
 
 
 #include "ZViewerAgent.h"
+#include "../lib/DesktopWallPaper.h"
 
 
 // CZViewMenuExt
@@ -59,11 +60,18 @@ public:
 
 protected:
 
+	/// ZViewer 를 실행시킨다.
+	void ExecZViewer();
+
+	/// 바탕화면 파일을 지정한다.
+	void SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyle style);
+
 	void MsgBox(const std::string & strMsg);		// for debugging messagebox
-	RECT GetResizedRect(const RECT & MaximumSize, const RECT & originalSize);// 최대 크기를 넘지 않는 적당한 리사이즈 크기를 돌려준다.
     TCHAR   m_szFile[MAX_PATH];
 	CBitmap m_bmp;
 	bool m_b8bit;
+
+	UINT m_uiMaxMenuID;
 
 	ZImage m_originalImage;
 
