@@ -62,9 +62,6 @@ private:
 	/// threadfunc 를 계속 실행시킬 것인가. 프로그램이 끝날 때 false 로 해줘야함
 	bool m_bGoOn;
 
-	/// 캐시를 좌우로 하는데, 다음 캐시할 것이 오른쪽 것인가?
-	bool m_bNextCacheIsRight;
-
 	int m_iCacheLeftIndex;
 	int m_iCacheRightIndex;
 

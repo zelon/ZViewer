@@ -11,8 +11,7 @@ ZCacheImage & ZCacheImage::GetInstance()
 }
 
 ZCacheImage::ZCacheImage()
-:	m_bNextCacheIsRight(true)	// 오른쪽으로 캐시 시작
-,	m_bGoOn(true)
+:	m_bGoOn(true)
 ,	m_iCacheLeftIndex(-1)
 ,	m_iCacheRightIndex(-1)
 ,	m_bUseCache(true)
@@ -38,7 +37,7 @@ ZCacheImage::~ZCacheImage()
 
 	WaitForSingleObject(m_hThread, INFINITE);
 
-	OutputDebugString("Cached Thread ended.\r\n");
+	DebugPrintf("Cached Thread ended.");
 
 	CloseHandle(m_hThread);
 	CloseHandle(m_hEvent);
@@ -60,11 +59,8 @@ void ZCacheImage::SetImageVector(std::vector < std::string > & v)
 		m_imageMapRev[m_imageVector[i]] = (int)i;
 	}
 
-	char szTemp[256];
-	sprintf(szTemp, "imageMapSize : %d\r\n", m_imageMap.size());
-	OutputDebugString(szTemp);
-	sprintf(szTemp, "imageVec : %d\r\n", m_imageVector.size());
-	OutputDebugString(szTemp);
+	DebugPrintf("imageMapSize : %d", m_imageMap.size());
+	DebugPrintf("imageVec : %d", m_imageVector.size());
 }
 
 void ZCacheImage::StartThread()
@@ -114,7 +110,7 @@ void ZCacheImage::CheckCacheDataAndClear()
 			m_cacheData.erase(it++);
 
 #ifdef _DEBUG
-			OutputDebugString("Clear one cached data\r\n");
+			DebugPrintf("Clear one cached data");
 #endif
 		}
 		else
@@ -227,7 +223,7 @@ bool ZCacheImage::CacheIndex(int iIndex)
 								m_lCacheSize -= it->second.GetImageSize();
 								m_cacheData.erase(it);
 
-								OutputDebugString("Farthest one clear\r\n");
+								DebugPrintf("Farthest one clear");
 							}
 							else
 							{
@@ -298,16 +294,12 @@ void ZCacheImage::ThreadFunc()
 			++iPos;
 		}
 
-#ifdef _DEBUG
-		OutputDebugString("wait event\r\n");
-#endif
+		DebugPrintf("wait event");
 
 		WaitForSingleObject(m_hEvent, INFINITE);
 		m_bNewChange = false;
 
-#ifdef _DEBUG
-		OutputDebugString("Recv event\r\n");
-#endif
+		DebugPrintf("Recv event\r\n");
 	}
 }
 
@@ -341,7 +333,7 @@ void ZCacheImage::getCachedData(const std::string & strFilename, ZImage & image)
 	}
 	else
 	{
-		OutputDebugString("Cache hit\r\n");
+		DebugPrintf("Cache hit");
 	}
 	image = it->second;
 }
@@ -357,11 +349,7 @@ void ZCacheImage::AddCacheData(const std::string & strFilename, ZImage & image)
 	/// 용량을 체크해서 이 이미지를 캐시했을 때 제한을 넘어섰으면 캐시하지 않는다.
 	if ( (m_lCacheSize + image.GetImageSize()) /1024/1024 > m_iMaximumCacheMemoryMB ) return;
 
-#ifdef _DEBUG
-	string strMsg = strFilename;
-	strMsg += " added to cache\r\n";
-	OutputDebugString(strMsg.c_str());
-#endif
+	DebugPrintf("%s added to cache", strFilename.c_str());
 
 	m_cacheData[strFilename] = image;
 	m_lCacheSize += m_cacheData[strFilename].GetImageSize();
