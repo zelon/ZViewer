@@ -368,8 +368,27 @@ bool StringCompare(const std::string & a, const std::string & b)
 	return (strcmp(b.c_str(), a.c_str()) > 0);
 }
 
+const std::string RemoveExt(const std::string & strFullFileName)
+{
+	char szFile[MAX_PATH] = { 0 };
+	_splitpath(strFullFileName.c_str(), 0, 0, szFile, 0);
+
+	return szFile;
+}
+
+bool FilenameCompare(const std::string & a, const std::string & b)
+{
+	return (strcmp(RemoveExt(b).c_str(), RemoveExt(a).c_str()) > 0);
+}
+
 bool ZMain::IsValidImageFileExt(const char * szFilename)
 {
+	char szExt[MAX_PATH] = { 0 };
+
+	_splitpath(szFile, 0, 0, 0, szExt);
+
+//	string k = "sf";
+//	k.lo
 
 	if ( PathMatchSpec ( szFilename, ("*.bmp") ) ||
 		PathMatchSpec ( szFilename, ("*.jpg") ) ||
@@ -482,7 +501,7 @@ void ZMain::RescanFolder()
 	ZFindFile(strToFindFolder.c_str(), m_vFile, false);
 
 	// 얻은 파일을 정렬한다.
-	sort(m_vFile.begin(), m_vFile.end(), StringCompare);
+	sort(m_vFile.begin(), m_vFile.end(), FilenameCompare);
 
 	// Cache Thread 에 전달한다.
 	ZCacheImage::GetInstance().SetImageVector(m_vFile);
@@ -636,7 +655,7 @@ void ZMain::OpenFolder(const std::string strFolder)
 	vector < std::string > vFiles;
 	ZFindFile(strTemp.c_str(), vFiles, false);
 
-	sort(vFiles.begin(), vFiles.end(), StringCompare);
+	sort(vFiles.begin(), vFiles.end(), FilenameCompare);
 
 	if ( vFiles.size() == 0 )
 	{
@@ -937,7 +956,10 @@ void ZMain::LoadCurrent()
 		{
 			ZCacheImage::GetInstance().getCachedData(m_strCurrentFilename, m_currentImage);
 		}
+
+#ifdef _DEBUG
 		OutputDebugString("Cache Hit!!!!!!!!!!!!!\r\n");
+#endif
 
 		ZCacheImage::GetInstance().LogCacheHit();
 	}
@@ -952,7 +974,9 @@ void ZMain::LoadCurrent()
 			bLoadOK = m_currentImage.LoadFromFile(m_strCurrentFilename);
 			if ( bLoadOK || i >= 5) break;
 
+#ifdef _DEBUG
 			OutputDebugString("Direct Load failed. sleep");
+#endif
 			Sleep(100);
 		}
 
@@ -1018,7 +1042,7 @@ void ZMain::OnDrag(int x, int y)
 	{
 		if ( m_iShowingX + x + rt.right >= m_currentImage.GetWidth())
 		{
-			x = m_currentImage.GetWidth() - rt.right - m_iShowingX - 1;
+			x = m_currentImage.GetWidth() - rt.right - m_iShowingX;// - 1;
 		}
 
 		bDraw = true;
@@ -1033,7 +1057,7 @@ void ZMain::OnDrag(int x, int y)
 	{
 		if ( m_iShowingY + y + rt.bottom >= m_currentImage.GetHeight())
 		{
-			y = m_currentImage.GetHeight() - rt.bottom - m_iShowingY - 1;
+			y = m_currentImage.GetHeight() - rt.bottom - m_iShowingY;// - 1;
 		}
 		bDraw = true;
 		m_iShowingY += y;
