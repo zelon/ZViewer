@@ -29,6 +29,12 @@ int APIENTRY WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance ,LPSTR lpszCmdP
 		}
 	}
 
+	// ~1 형식으로 긴 파일명이 온다면, 원래 긴 패스를 얻는다.
+	char szTemp[MAX_PATH] = { 0 };
+	GetLongPathName(strCmdString.c_str(), szTemp, MAX_PATH);
+
+	strCmdString = szTemp;
+
 	std::string strInitArg = strCmdString;
 
 	/// 파일 확장자를 연결하라는 거면
