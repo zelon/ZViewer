@@ -715,11 +715,8 @@ void ZMain::ToggleFullScreen()
 		//m_iRestoreX = 
 	}
 
-	
-
 	CheckMenuItem(m_hMainMenu, ID_VIEW_FULLSCREEN, m_option.m_bFullScreen ? MF_CHECKED : MF_UNCHECKED);
 	CheckMenuItem(m_hPopupMenu, ID_VIEW_FULLSCREEN, m_option.m_bFullScreen ? MF_CHECKED : MF_UNCHECKED);
-
 }
 
 void ZMain::ToggleBigToScreenStretch()
@@ -803,10 +800,6 @@ void ZMain::SetStatusBarText()
 		SendMessage(m_hStatus, SB_SETTEXT, 5, (LPARAM)szTemp);
 
 	}
-
-	if ( m_strCurrentFilename.empty() ) return;
-
-
 }
 
 void ZMain::SetTitle()
