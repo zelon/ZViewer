@@ -908,6 +908,8 @@ void ZMain::LoadCurrent()
 
 void ZMain::OnDrag(int x, int y)
 {
+	if ( !m_currentImage.IsValid()) return;
+
 	if ( m_option.m_bBigToSmallStretchImage )
 	{
 		/// 큰 그림을 화면에 맞게 스트레칭할 때는 드래그는 하지 않아도 된다.
@@ -919,15 +921,15 @@ void ZMain::OnDrag(int x, int y)
 
 	if ( m_option.m_bFullScreen == false ) rt.bottom -= STATUSBAR_HEIGHT;
 
-	bool bDraw = false;
+	int iNowShowingX = m_iShowingX;
+	int iNowShowingY = m_iShowingY;
+
 	if ( (m_iShowingX + x) >= 0 ) 
 	{
 		if ( m_iShowingX + x + rt.right >= m_currentImage.GetWidth())
 		{
 			x = m_currentImage.GetWidth() - rt.right - m_iShowingX;// - 1;
 		}
-
-		bDraw = true;
 		m_iShowingX += x;
 	}
 	else
@@ -941,7 +943,6 @@ void ZMain::OnDrag(int x, int y)
 		{
 			y = m_currentImage.GetHeight() - rt.bottom - m_iShowingY;// - 1;
 		}
-		bDraw = true;
 		m_iShowingY += y;
 	}
 	else
@@ -949,7 +950,10 @@ void ZMain::OnDrag(int x, int y)
 		m_iShowingY = 0;
 	}
 
-	if ( bDraw ) Draw(false);
+	if ( m_iShowingX != iNowShowingX || m_iShowingY != iNowShowingY )
+	{
+		Draw(false);
+	}
 }
 
 void ZMain::ShellTrayShow()
