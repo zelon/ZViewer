@@ -112,6 +112,13 @@ BEGIN
         MENUITEM SEPARATOR
         MENUITEM "DeleteThisFile",              ID_DELETETHISFILE
         MENUITEM SEPARATOR
+        POPUP "Set DesktopWallPaper"
+        BEGIN
+            MENUITEM "Center",                      ID_SETDESKTOPWALLPAPER_CENTER
+
+            MENUITEM "Stretch",                     ID_SETDESKTOPWALLPAPER_STRETCH
+
+        END
         MENUITEM "E&xit",                       ID_MAINMENU_FILE_EXIT
     END
 END
