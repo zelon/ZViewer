@@ -21,7 +21,7 @@ public:
 	int Undo();
 	int Redo();
 
-	bool CanUndo()
+	bool CanUndo() const
 	{
 		if ( m_indexVector.size() <= 0 ) return false;
 		if ( m_iCurrentIndex <= 0 ) return false;
@@ -29,7 +29,7 @@ public:
 		return true;
 	}
 
-	bool CanRedo()
+	bool CanRedo() const
 	{
 		if ( m_indexVector.size() <= 0 ) return false;
 		if ( m_iCurrentIndex >= m_indexVector.size() ) return false;
