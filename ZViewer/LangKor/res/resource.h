@@ -43,13 +43,17 @@
 #define ID_VIEW_BIGTOSCREENSTRETCH      40047
 #define ID_DELETETHISFILE               40049
 #define ID_VIEW_SMALLTOSCREENSTRETCH    40054
+#define ID_MOVE_NEXTFOLDER              40055
+#define ID_MOVE_PREVFOLDER              40056
+#define ID_VIEW_ROTATECLOCKWISE         40060
+#define ID_VIEW_ROTATECOUNTERCLOCKWISE  40061
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        114
-#define _APS_NEXT_COMMAND_VALUE         40055
+#define _APS_NEXT_COMMAND_VALUE         40062
 #define _APS_NEXT_CONTROL_VALUE         1010
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
