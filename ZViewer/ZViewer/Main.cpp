@@ -3,6 +3,7 @@
 #include "ZMain.h"
 #include "src/ZFileExtDlg.h"
 #include "src/ZResourceManager.h"
+#include "src/ZCacheImage.h"
 
 int CALLBACK WndProc(HWND,UINT,WPARAM,LPARAM);
 int CALLBACK AboutWndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam);
@@ -37,10 +38,32 @@ int APIENTRY WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance ,LPSTR lpszCmdP
 
 	std::string strInitArg = strCmdString;
 
+	// 기본적인 언어팩은 프로젝트에 있는 영어이다.
+	ZResourceManager::GetInstance().SetHandleInstance(hInstance);
+
+	HINSTANCE hLang = NULL;
+
+	// debug mode 에서는 항상 영어모드(언어팩 테스트를 위해서)
+#ifndef _DEBUG
+	if ( GetSystemDefaultLangID() == 0x0412 )
+	{
+		hLang = LoadLibrary("language/korean.dll");
+
+		if ( hLang )
+		{
+			ZResourceManager::GetInstance().SetHandleInstance(hLang);
+		}
+		else
+		{
+			_ASSERTE(hLang != NULL);
+		}
+	}
+#endif
+
 	/// 파일 확장자를 연결하라는 거면
 	if ( strInitArg == "/fileext" )	
 	{
-		int iRet = MessageBox(HWND_DESKTOP, "이미지 파일을 ZViewer 에 연결하시겠습니까?", "ZViewer", MB_YESNO);
+		int iRet = MessageBox(HWND_DESKTOP, ZResourceManager::GetInstance().GetString(IDS_ASSOCIATE_FILE_EXTS).c_str(), "ZViewer", MB_YESNO);
 
 		if ( iRet == IDYES )
 		{
@@ -90,38 +113,6 @@ int APIENTRY WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance ,LPSTR lpszCmdP
 	int iHeight = 700;
 	int iXPosition = (GetSystemMetrics(SM_CXSCREEN)/2) - (iWidth/2);
 	int iYPosition = (GetSystemMetrics(SM_CYSCREEN)/2) - ( iHeight/2) ;
-
-	// 기본적인 언어팩은 프로젝트에 있는 영어이다.
-	ZResourceManager::GetInstance().SetHandleInstance(hInstance);
-
-	HINSTANCE hLang = NULL;
-	//HKL hLocale = NULL;
-
-	LANGID k = GetSystemDefaultLangID();
-
-	if ( (k ) == 0x0412 )
-	{
-		hLang = LoadLibrary("language/korean.dll");
-
-		if ( hLang )
-		{
-			ZResourceManager::GetInstance().SetHandleInstance(hLang);
-		}
-		else
-		{
-			_ASSERTE(hLang != NULL);
-		}
-	}
-
-	/*
-	if ( SystemParametersInfo(SPI_GETDEFAULTINPUTLANG, NULL, &hLocale, NULL) )
-	{
-		if ( hLocale == (void*)0xe0010412 )
-		{
-		}
-	}
-	*/
-
 
 	HMENU hMenu = (HMENU)LoadMenu(ZResourceManager::GetInstance().GetHInstance(), MAKEINTRESOURCE(IDR_MAIN_MENU));
 
@@ -564,9 +555,6 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 
 int CALLBACK AboutWndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 {
-//	HDC hdc;
-//	PAINTSTRUCT ps;
-	
 	switch(iMessage)
 	{
 	case WM_INITDIALOG:
@@ -583,7 +571,7 @@ int CALLBACK AboutWndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 			sprintf(szTemp, "%d",ZMain::GetInstance().GetCachedKByte());
 			::GetNumberFormat(NULL, NULL, szTemp, &nFmt, szOUT, 20);
 
-			sprintf(szTemp, "CachedMemory : %sKB", szOUT);
+			sprintf(szTemp, "CachedMemory : %sKB, Num of Cached Image : %d", szOUT, ZCacheImage::GetInstance().GetNumOfCacheImage());
 			SetDlgItemText(hWnd, IDC_STATIC_CACHE_MEMORY, szTemp);
 		}
 		return TRUE;
