@@ -273,12 +273,6 @@
 			Name="src"
 			Filter="">
 			<File
-				RelativePath=".\src\DesktopWallPaper.cpp">
-			</File>
-			<File
-				RelativePath=".\src\DesktopWallPaper.h">
-			</File>
-			<File
 				RelativePath=".\src\OptionFile.cpp">
 			</File>
 			<File
@@ -323,6 +317,12 @@
 			</File>
 			<File
 				RelativePath="..\lib\CommonFunc.h">
+			</File>
+			<File
+				RelativePath="..\lib\DesktopWallPaper.cpp">
+			</File>
+			<File
+				RelativePath="..\lib\DesktopWallPaper.h">
 			</File>
 			<File
 				RelativePath=".\lib\ZFileExtReg.cpp">

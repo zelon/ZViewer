@@ -353,6 +353,12 @@
 				RelativePath="..\lib\CommonFunc.h">
 			</File>
 			<File
+				RelativePath="..\lib\DesktopWallPaper.cpp">
+			</File>
+			<File
+				RelativePath="..\lib\DesktopWallPaper.h">
+			</File>
+			<File
 				RelativePath="..\lib\FreeImage.h">
 			</File>
 			<File
