@@ -1,6 +1,7 @@
 
 #include "stdafx.h"
 #include "OptionFile.h"
+#include "CommonFunc.h"
 #include <fstream>
 
 using namespace std;
@@ -8,6 +9,12 @@ using namespace std;
 void COptionFile::LoadFromFile(const std::string & strFilename, iniMap & settings)
 {
 	ifstream fin(strFilename.c_str());
+
+	if ( !fin.is_open() )
+	{
+		DebugPrintf("Can't open the option file : %s", strFilename.c_str());
+		return;
+	}
 
 	char szData[256];
 	while ( !fin.eof())

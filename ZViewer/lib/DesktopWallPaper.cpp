@@ -1,8 +1,7 @@
 
 #include "stdafx.h"
 #include "DesktopWallPaper.h"
-#include "../lib/ZFileExtReg.h"
-#include "../lib/CommonFunc.h"
+#include "CommonFunc.h"
 
 void CDesktopWallPaper::SetDesktopWallPaper()
 {
@@ -43,4 +42,10 @@ void CDesktopWallPaper::SetDesktopWallPaper()
 		_ASSERTE(false);
 	}
 
+}
+
+void CDesktopWallPaper::ClearDesktopWallPaper()
+{
+	CDesktopWallPaper wallPaper("");
+	wallPaper.SetDesktopWallPaper();
 }

@@ -8,7 +8,7 @@ public:
 
 	ZOption()
 		:	m_bOptionChanged(false)
-		,	m_strOptionFilename("optioin.ini")
+		,	m_strOptionFilename("option.ini")
 	{
 		SetDefaultOption();
 
@@ -31,7 +31,7 @@ public:
 	/// 화면보다 작은 그림을 화면에 맞게 확대할 것인가.
 	bool m_bSmallToBigStretchImage;
 
-	//// 그림의 시작 위치. 일본 만화의 경우 우측 상당부터 시작하기 위해서...
+	//// 그림의 시작 위치. 일본 만화의 경우 우측 상단부터 시작하기 위해서...
 	bool m_bRightTopFirstDraw;
 
 private:

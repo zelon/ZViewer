@@ -2,7 +2,7 @@
 
 #include "src/ZHistory.h"
 #include "src/ZOption.h"
-#include "src/DesktopWallPaper.h"
+#include "../lib/DesktopWallPaper.h"
 #include "../lib/ZImage.h"
 
 class ZMain
