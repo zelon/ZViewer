@@ -8,7 +8,7 @@
 int CALLBACK WndProc(HWND,UINT,WPARAM,LPARAM);
 int CALLBACK AboutWndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam);
 
-HMENU hPopupMenu;
+HMENU g_hPopupMenu;
 
 
 int APIENTRY WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance ,LPSTR lpszCmdParam,int nCmdShow)
@@ -138,7 +138,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance ,LPSTR lpszCmdP
 
 	ShowWindow(hWnd,nCmdShow);
 
-	// 단축키 설정
+	// 단축키 설정. 여기서 반환된 핸들은 프로그램이 종료될 때 자동적으로 close 됨.
 	HACCEL hAccel = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDR_MAIN_ACCELERATOR));
 
 	while(GetMessage(&Message,0,0,0))
@@ -162,16 +162,14 @@ int APIENTRY WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance ,LPSTR lpszCmdP
 	ZImage::CleanupLibrary();
 
 	return (int)Message.wParam;
-//	DialogBox(hInstance, MAKEINTRESOURCE(IDD_MAIN_DIALOG), NULL, WndProc);
-	return 0;
 }
-
-bool m_bCapture = false;
-int lastX;
-int lastY;
 
 int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 {
+	static bool m_bCapture = false;
+	static int lastX;
+	static int lastY;
+
 	HDC hdc;
 	PAINTSTRUCT ps;
 
@@ -202,9 +200,7 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 		break;
 
 	case WM_LBUTTONDBLCLK:
-		{
-			ZMain::GetInstance().OpenFileDialog();
-		}
+		ZMain::GetInstance().OpenFileDialog();
 		break;
 
 	case WM_LBUTTONDOWN:
@@ -264,8 +260,8 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 
 			// 팝업 메뉴를 불러놓는다.
 			HMENU hMenu = LoadMenu(ZResourceManager::GetInstance().GetHInstance(), MAKEINTRESOURCE(IDR_POPUP_MENU));
-			hPopupMenu = GetSubMenu(hMenu, 0);
-			ZMain::GetInstance().SetPopupMenu(hPopupMenu);
+			g_hPopupMenu = GetSubMenu(hMenu, 0);
+			ZMain::GetInstance().SetPopupMenu(g_hPopupMenu);
 
 			ZMain::GetInstance().SetHWND(hWnd);
 			ZMain::GetInstance().OnInit();
@@ -355,29 +351,20 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 		break;
 
 	case WM_MBUTTONDOWN:
-		{
-			ZMain::GetInstance().ToggleFullScreen();
-		}
+		ZMain::GetInstance().ToggleFullScreen();
 		break;
 
 	case WM_SETFOCUS:
-		{
-			ZMain::GetInstance().OnFocusGet();
-		}
+		ZMain::GetInstance().OnFocusGet();
 		break;
 
 	case WM_KILLFOCUS:
-		{
-			ZMain::GetInstance().OnFocusLose();
-		}
+		ZMain::GetInstance().OnFocusLose();
 		break;
 
 	case WM_CONTEXTMENU:
-		{
-			ZMain::GetInstance().m_bHandCursor = false;
-			TrackPopupMenu(hPopupMenu, TPM_LEFTALIGN, LOWORD(lParam), HIWORD(lParam), 0, hWnd, NULL);
-
-		}
+		ZMain::GetInstance().m_bHandCursor = false;
+		TrackPopupMenu(g_hPopupMenu, TPM_LEFTALIGN, LOWORD(lParam), HIWORD(lParam), 0, hWnd, NULL);
 		break;
 
 	case WM_COMMAND:
@@ -390,7 +377,6 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 			case IDOK:
 			case ID_MAINMENU_FILE_EXIT:
 				SendMessage(hWnd, WM_CLOSE, 0, 0);
-				//PostQuitMessage(0);
 				break;
 			}
 
@@ -400,28 +386,19 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 				// Main Menu
 
 			case ID_MAINMENU_FILE_EXIT:
-				{
-					SendMessage(hWnd, WM_CLOSE, 0, 0);
-					//PostQuitMessage(0);
-				}
+				SendMessage(hWnd, WM_CLOSE, 0, 0);
 				break;
 
 			case ID_MAINMENU_FILE_OPEN:
-				{
-					ZMain::GetInstance().OpenFileDialog();
-				}
+				ZMain::GetInstance().OpenFileDialog();
 				break;
 
 			case ID_MOVE_NEXTFOLDER:
-				{
-					ZMain::GetInstance().NextFolder();
-				}
+				ZMain::GetInstance().NextFolder();
 				break;
 
 			case ID_MOVE_PREVFOLDER:
-				{
-					ZMain::GetInstance().PrevFolder();
-				}
+				ZMain::GetInstance().PrevFolder();
 				break;
 
 			case ID_MOVE_NEXTIMAGE:
@@ -442,6 +419,23 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 				}
 				break;
 
+			case ID_MOVE_NEXT_JUMP:
+				{
+					if ( ZMain::GetInstance().MoveRelateIndex(+10) )
+					{
+						ZMain::GetInstance().Draw();
+					}
+				}
+				break;
+
+			case ID_MOVE_PREV_JUMP:
+				{
+					if ( ZMain::GetInstance().MoveRelateIndex(-10) )
+					{
+						ZMain::GetInstance().Draw();
+					}
+				}
+				break;
 			case ID_MOVE_FIRSTIMAGE:
 				{
 					if ( ZMain::GetInstance().FirstImage() )
@@ -461,15 +455,11 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 				break;
 
 			case ID_VIEW_FULLSCREEN:
-				{
-					ZMain::GetInstance().ToggleFullScreen();
-				}
+				ZMain::GetInstance().ToggleFullScreen();
 				break;
 
 			case ID_HELP_ABOUT:
-				{
-					DialogBox(ZResourceManager::GetInstance().GetHInstance(), MAKEINTRESOURCE(IDD_DIALOGHELP), hWnd, AboutWndProc);
-				}
+				DialogBox(ZResourceManager::GetInstance().GetHInstance(), MAKEINTRESOURCE(IDD_DIALOGHELP), hWnd, AboutWndProc);
 				break;
 
 			case ID_ACCELERATOR_CANCEL_FULLSCREEN:
@@ -497,33 +487,23 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 				break;
 
 			case ID_ACCELERATOR_RIGHT:
-				{
-					ZMain::GetInstance().OnDrag(100, 0);
-				}
+				ZMain::GetInstance().OnDrag(100, 0);
 				break;
 
 			case ID_ACCELERATOR_LEFT:
-				{
-					ZMain::GetInstance().OnDrag(-100, 0);
-				}
+				ZMain::GetInstance().OnDrag(-100, 0);
 				break;
 
 			case ID_ACCELERATOR_UP:
-				{
-					ZMain::GetInstance().OnDrag(0, -100);
-				}
+				ZMain::GetInstance().OnDrag(0, -100);
 				break;
 
 			case ID_ACCELERATOR_DOWN:
-				{
-					ZMain::GetInstance().OnDrag(0, 100);
-				}
+				ZMain::GetInstance().OnDrag(0, 100);
 				break;
 
 			case ID_VIEW_RIGHTTOPFIRSTDRAW:
-				{
-					ZMain::GetInstance().OnRightTopFirstDraw();
-				}
+				ZMain::GetInstance().OnRightTopFirstDraw();
 				break;
 
 			case ID_OPTION_FILE_EXT:
@@ -581,7 +561,6 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 		return 0;
 	case WM_DESTROY:
 		SendMessage(hWnd, WM_CLOSE, 0, 0);
-		//PostQuitMessage(0);
 		return 0;
 	}
 	return (int)(DefWindowProc(hWnd,iMessage,wParam,lParam));
