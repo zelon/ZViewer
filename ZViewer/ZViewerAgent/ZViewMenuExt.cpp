@@ -157,6 +157,10 @@ STDMETHODIMP CZViewMenuExt::QueryContextMenu (
 		}
 	}
 
+	// 이미지 파일에 대한 정보를 수집해놓는다.
+	char szImageInfo[256];
+	sprintf(szImageInfo, "%dx%d %dbpp", m_originalImage.GetWidth(), m_originalImage.GetHeight(), m_originalImage.GetBPP());
+
 	MENUITEMINFO mii;
 
     mii.cbSize = sizeof(MENUITEMINFO);
@@ -173,9 +177,22 @@ STDMETHODIMP CZViewMenuExt::QueryContextMenu (
 	}
 
 	InsertMenuItem ( hmenu, uIndex, TRUE, &mii );
-	char szImageInfo[256];
-	sprintf(szImageInfo, "%dx%d %dbpp", m_originalImage.GetWidth(), m_originalImage.GetHeight(), m_originalImage.GetBPP());
-	InsertMenu( hmenu, uIndex, MF_BYPOSITION, uidCmdFirst, szImageInfo);
+	
+	HMENU hSubMenu = CreatePopupMenu();
+	{
+		InsertMenu( hSubMenu, 0, MF_BYPOSITION, uidCmdFirst, szImageInfo);
+		InsertMenu( hSubMenu, 1, MF_BYPOSITION, uidCmdFirst, szImageInfo);
+
+		ZeroMemory(&mii, sizeof(MENUITEMINFO));
+		mii.cbSize = sizeof(MENUITEMINFO);
+		mii.fMask  = MIIM_ID | MIIM_TYPE | MIIM_SUBMENU;
+		//		mii.fType  = MFT_BITMAP;
+		mii.wID    = uidCmdFirst;
+		mii.hSubMenu = hSubMenu;
+		mii.dwTypeData = _T(szImageInfo);
+	}
+
+	InsertMenu( hmenu, 0, MF_BYPOSITION | MF_POPUP, (UINT)hSubMenu, szImageInfo);
 
     // Store the menu item's ID so we can check against it later when
     // WM_MEASUREITEM/WM_DRAWITEM are sent.
@@ -328,10 +345,20 @@ STDMETHODIMP CZViewMenuExt::MenuMessageHandler ( UINT uMsg, WPARAM wParam, LPARA
 
 STDMETHODIMP CZViewMenuExt::OnMeasureItem ( MEASUREITEMSTRUCT* pmis, LRESULT* pResult )
 {
+	//MessageBox(NULL, "adsf","asdf", MB_OK);
+
+	FILE *fp = fopen("c:\\test.txt", "a+");
+	fprintf(fp, "asdf\n");
+	fclose(fp);
     // Check that we're getting called for our own menu item.
 	if ( m_uOurItemID != pmis->itemID )
-        return S_OK;
+	{
+		return S_OK;
+	}
 
+	fp = fopen("c:\\test.txt", "a+");
+	fprintf(fp, "11111\n");
+	fclose(fp);
 
 	LONG   lThumbWidth;
 	LONG   lThumbHeight;
@@ -367,7 +394,7 @@ STDMETHODIMP CZViewMenuExt::OnDrawItem ( DRAWITEMSTRUCT* pdis, LRESULT* pResult 
 {
     // Check that we're getting called for our own menu item.
     if ( m_uOurItemID != pdis->itemID )
-        return S_OK;
+		return S_OK;
 
 	CDC*  pdcMenu = CDC::FromHandle ( pdis->hDC );
 	CRect rcItem ( pdis->rcItem );  // RECT of our menu item
