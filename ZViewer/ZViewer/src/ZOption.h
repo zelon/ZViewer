@@ -10,9 +10,6 @@ public:
 	ZOption()
 	{
 		SetDefaultOption();
-
-		ZINIOption a;
-		a.LoadFromFile("language\\korean.ini");
 	}
 
 	/// 전체 화면 모드인가.
