@@ -38,6 +38,8 @@ public:
 		return ( m_image.load(strFilename.c_str()) == TRUE);
 	}
 
+	inline void Rotate(double dAngle) { m_image.rotate(dAngle);	}
+
 	bool Resize(WORD newWidth, WORD newHeight)
 	{
 		return ( m_image.rescale(newWidth, newHeight, FILTER_BOX) == TRUE );
