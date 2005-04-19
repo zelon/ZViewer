@@ -115,9 +115,6 @@ private:
 
 	void InitOpenFileDialog();
 
-	void StartBannerDownload();
-	static DWORD WINAPI BannerThreadFunc(LPVOID p);
-
 	void ShellTrayHide();
 
 	// 현재 파일이 지워졌을 때 후의 처리. 파일 삭제, 이동 후에 불리는 함수이다.
@@ -136,8 +133,6 @@ private:
 
 	int m_iCurrentScreenWidth;
 	int m_iCurrentScreenHeight;
-
-	fipImage m_bannerImage;
 
 	/// 현재 보여주고 있는 이미지
 	ZImage m_currentImage;

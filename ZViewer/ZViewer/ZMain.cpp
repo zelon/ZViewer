@@ -24,15 +24,6 @@ ZMain::ZMain(void)
 	
 {
 	SetProgramFolder();
-
-	if ( m_bannerImage.load((m_strProgramFolder + "\\banner.jpg").c_str()) == false )
-	{
-		_ASSERTE(!"can't load banner.");
-	}
-	
-	// 배너 다운로드를 시작한다.
-	//StartBannerDownload();
-
 }
 
 ZMain::~ZMain(void)
@@ -86,12 +77,6 @@ void ZMain::OpenFileDialog()
 	// Display the Open dialog box. 
 	if (GetOpenFileName(&ofn)==TRUE) 
 	{
-		/*
-		hf = CreateFile(ofn.lpstrFile, GENERIC_READ,
-		0, (LPSECURITY_ATTRIBUTES) NULL,
-		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL,
-		(HANDLE) NULL);
-		*/
 		OpenFile(ofn.lpstrFile);
 	}
 }
@@ -305,11 +290,11 @@ void ZMain::ZFindFile(const char *path, std::vector<std::string> & foundStorage,
 {
 	HANDLE hSrch;
 	WIN32_FIND_DATA wfd;
-	//memset(&wfd, 0, sizeof(wfd));
-	char fname[MAX_PATH] = { 0 };
+
+	char fname[_MAX_FNAME] = { 0 };
 	BOOL bResult=TRUE;
 	char drive[_MAX_DRIVE] = { 0 };
-	char dir[MAX_PATH] = { 0 };
+	char dir[_MAX_DIR] = { 0 };
 	char newpath[MAX_PATH] = { 0 };
 
 	hSrch=FindFirstFile(path,&wfd);
@@ -1063,40 +1048,6 @@ void ZMain::OnFocusGet()
 		SetWindowPos(m_hMainDlg, HWND_NOTOPMOST, 0, 0, ::GetSystemMetrics(SM_CXSCREEN),::GetSystemMetrics(SM_CYSCREEN), SWP_NOMOVE|SWP_NOSIZE);
 		ShellTrayHide();
 	}
-}
-
-void ZMain::StartBannerDownload()
-{
-	DWORD dwThreadID;
-	HANDLE hThread = CreateThread(0, 0, BannerThreadFunc, this, 0, &dwThreadID);
-
-	if ( hThread == INVALID_HANDLE_VALUE )
-	{
-		_ASSERTE(!"Can't make thread");
-	}
-	CloseHandle(hThread);
-}
-
-DWORD WINAPI ZMain::BannerThreadFunc(LPVOID p)
-{
-	/*
-	fipInternetIO i;
-	if ( i.downloadFile("http://www.wimy.com/images/zviewerbanner.jpg") )
-	{
-		fipImage k;
-		k.loadFromHandle(&i, (fi_handle)&i, 0);
-		if ( k.save((ZMain::GetInstance().m_strProgramFolder + "\\banner.jpg").c_str(), JPEG_QUALITYSUPERB) == FALSE )
-		{
-			_ASSERTE(!"Can't banner save");
-		}
-	}
-	else
-	{
-//		_ASSERTE(!"Can't download");
-	}
-	*/
-
-	return 0;
 }
 
 void ZMain::Undo()
