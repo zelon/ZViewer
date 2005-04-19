@@ -18,40 +18,20 @@ bool ZImage::IsValidImageFileExt(const char * szFilename)
 
 	std::string strExt = szLowerExt + 1;
 
-	if ( strExt == "bmp" ||
-		strExt == "jpg" ||
-		strExt == "jpeg" ||
-		strExt == "gif" ||
-		strExt == "ico" ||
-		strExt == "pcx" ||
-		strExt == "psd" ||
-		strExt == "tif" ||
-		strExt == "tga" ||
-		strExt == "dds" ||
-		strExt == "png" 
-
+	if ( strcmp(strExt.c_str(), "bmp") == 0 ||
+		0 == strcmp(strExt.c_str(), "jpg") ||
+		0 == strcmp(strExt.c_str(), "jpeg") ||
+		0 == strcmp(strExt.c_str(), "gif") ||
+		0 == strcmp(strExt.c_str(), "ico") ||
+		0 == strcmp(strExt.c_str(), "pcx") ||
+		0 == strcmp(strExt.c_str(), "psd") ||
+		0 == strcmp(strExt.c_str(), "tif") ||
+		0 == strcmp(strExt.c_str(), "tga") ||
+		0 == strcmp(strExt.c_str(), "dds") ||
+		0 == strcmp(strExt.c_str(), "png") 
 		)
 	{
 		return true;
 	}
-
-
-	/*
-	if ( PathMatchSpec ( szFilename, ("*.bmp") ) ||
-		PathMatchSpec ( szFilename, ("*.jpg") ) ||
-		PathMatchSpec ( szFilename, ("*.jpeg") ) ||
-		PathMatchSpec ( szFilename, ("*.gif") ) ||
-		PathMatchSpec ( szFilename, ("*.ico") ) ||
-		PathMatchSpec ( szFilename, ("*.pcx") ) ||
-		PathMatchSpec ( szFilename, ("*.psd") ) ||
-		PathMatchSpec ( szFilename, ("*.tif") ) ||
-		PathMatchSpec ( szFilename, ("*.tga") ) ||
-		PathMatchSpec ( szFilename, ("*.png") ) ||
-		PathMatchSpec ( szFilename, ("*.jpg") )
-		)
-	{
-		return true;
-	}
-	*/
 	return false;
 }
