@@ -761,18 +761,19 @@ void ZMain::SetStatusBarText()
 void ZMain::SetTitle()
 {
 	char szTemp[MAX_PATH+256];
-	if ( m_strCurrentFilename.empty() )
+
+	if ( m_strCurrentFilename.empty() )	// 현재보고 있는 파일명이 없으면
 	{
 		_snprintf(szTemp, sizeof(szTemp), "ZViewer v%s", g_strVersion.c_str());
 	}
-	else
+	else // 현재보고 있는 파일명이 있으면
 	{
 		char szFileName[MAX_PATH] = { 0 };
 		char szFileExt[MAX_PATH] = { 0 };
 		_splitpath(m_strCurrentFilename.c_str(), NULL, NULL, szFileName, szFileExt);
 
 		//_snprintf(szTemp, sizeof(szTemp), "%s%s - ZViewer for rubi v%s", szFileName, szFileExt, g_strVersion.c_str() );
-		_snprintf(szTemp, sizeof(szTemp), "%s%s - for rubi :D", szFileName, szFileExt);
+		_snprintf(szTemp, sizeof(szTemp), "%s%s - %s [for rubi :D]", szFileName, szFileExt, m_strCurrentFilename.c_str());
 	}
 	SetWindowText(m_hMainDlg, szTemp);
 }
