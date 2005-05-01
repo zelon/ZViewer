@@ -331,6 +331,11 @@ BEGIN
     IDS_ASSOCIATE_FILE_EXTS "Associate Image Files Exts?"
 END
 
+STRINGTABLE 
+BEGIN
+    IDS_SAME_FILE_EXIST_OVERWRITE "Same file exist. Overwrite?"
+END
+
 #endif    // ÇÑ±¹¾î resources
 /////////////////////////////////////////////////////////////////////////////
 
