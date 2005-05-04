@@ -19,6 +19,7 @@ void DebugPrintf( const char *fmt, ... )
 #endif
 }
 
+/*
 bool StringCompare(const std::string & a, const std::string & b)
 {
 	// 문자열 비교를 할 때 모두 소문자로 바꿔서 비교한다.
@@ -28,8 +29,9 @@ bool StringCompare(const std::string & a, const std::string & b)
 	strlwr(szTempA);
 	strlwr(szTempB);
 
-	return (strcmp(szTempA, szTempB) > 0);
+	return (strcmp(szTempB, szTempA) > 0);
 }
+*/
 
 const std::string GetOnlyFileName(const std::string & strFullFileName)
 {
@@ -38,19 +40,6 @@ const std::string GetOnlyFileName(const std::string & strFullFileName)
 
 	return szFile;
 }
-
-bool FilenameCompare(const std::string & a, const std::string & b)
-{
-	// 파일명 비교를 할 때 모두 소문자로 바꿔서 비교한다.
-	char szTempA[FILENAME_MAX], szTempB[FILENAME_MAX];
-	_snprintf(szTempA, sizeof(szTempA), GetOnlyFileName(a).c_str());
-	_snprintf(szTempB, sizeof(szTempB), GetOnlyFileName(b).c_str());
-	strlwr(szTempA);
-	strlwr(szTempB);
-
-	return (strcmp(szTempB, szTempA) > 0);
-}
-
 
 bool SetRegistryValue(HKEY hOpenKey, const std::string & strKey,LPCTSTR szValue, const std::string & strData)
 {

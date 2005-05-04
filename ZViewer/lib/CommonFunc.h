@@ -1,8 +1,40 @@
 #pragma once
 
-bool FilenameCompare(const std::string & a, const std::string & b);
 const std::string GetOnlyFileName(const std::string & strFullFileName);
-bool StringCompare(const std::string & a, const std::string & b);
+
+class COnlyFilenameCompare
+{
+public:
+	bool operator()(const std::string & a, const std::string & b)
+	{
+		// 파일명 비교를 할 때 모두 소문자로 바꿔서 비교한다.
+		char szTempA[FILENAME_MAX], szTempB[FILENAME_MAX];
+		_snprintf(szTempA, sizeof(szTempA), GetOnlyFileName(a).c_str());
+		_snprintf(szTempB, sizeof(szTempB), GetOnlyFileName(b).c_str());
+		strlwr(szTempA);
+		strlwr(szTempB);
+
+		return (strcmp(szTempB, szTempA) > 0);
+	}
+};
+
+
+class CStringCompareIgnoreCase
+{
+public:
+	bool operator()(const std::string & a, const std::string & b)
+	{
+		// 문자열 비교를 할 때 모두 소문자로 바꿔서 비교한다.
+		char szTempA[FILENAME_MAX], szTempB[FILENAME_MAX];
+		_snprintf(szTempA, sizeof(szTempA), a.c_str());
+		_snprintf(szTempB, sizeof(szTempB), b.c_str());
+		strlwr(szTempA);
+		strlwr(szTempB);
+
+		return (strcmp(szTempB, szTempA) > 0);
+
+	}
+};
 
 void DebugPrintf( const char *fmt, ... );
 

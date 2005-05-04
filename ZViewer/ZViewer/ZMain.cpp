@@ -369,7 +369,7 @@ void ZMain::RescanFolder()
 	ZFindFile(strToFindFolder.c_str(), m_vFile, false);
 
 	// 얻은 파일을 정렬한다.
-	sort(m_vFile.begin(), m_vFile.end(), FilenameCompare);
+	sort(m_vFile.begin(), m_vFile.end(), COnlyFilenameCompare());
 
 	// Cache Thread 에 전달한다.
 	ZCacheImage::GetInstance().SetImageVector(m_vFile);
@@ -439,7 +439,7 @@ bool ZMain::GetNeighborFolders(std::vector < std::string > & vFolders)
 	}
 
 	// 상위 폴더의 하위 폴더들을 정렬한다.
-	sort(vFolders.begin(), vFolders.end(), StringCompare);
+	sort(vFolders.begin(), vFolders.end(), CStringCompareIgnoreCase());
 
 	return true;
 }
@@ -523,7 +523,7 @@ void ZMain::OpenFolder(const std::string strFolder)
 	vector < std::string > vFiles;
 	ZFindFile(strTemp.c_str(), vFiles, false);
 
-	sort(vFiles.begin(), vFiles.end(), FilenameCompare);
+	sort(vFiles.begin(), vFiles.end(), COnlyFilenameCompare());
 
 	if ( vFiles.size() == 0 )
 	{
