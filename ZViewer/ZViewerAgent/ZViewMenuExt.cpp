@@ -1,3 +1,13 @@
+/********************************************************************
+*
+* Created by zelon(Kim, Jinwook Korea)
+* 
+*   2005. 5. 7
+*	ZViewMenuExt.cpp
+*
+*                                       http://www.wimy.com
+*********************************************************************/
+
 // ZViewMenuExt.cpp : CZViewMenuExt의 구현입니다.
 
 #include "stdafx.h"

@@ -1,3 +1,13 @@
+/********************************************************************
+*
+* Created by zelon(Kim, Jinwook Korea)
+* 
+*   2005. 5. 7
+*	ZViewMenuExt.h
+*
+*                                       http://www.wimy.com
+*********************************************************************/
+
 // ZViewMenuExt.h : CZViewMenuExt의 선언입니다.
 
 #pragma once

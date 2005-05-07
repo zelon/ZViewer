@@ -1,3 +1,12 @@
+/********************************************************************
+*
+* Created by zelon(Kim, Jinwook Korea)
+* 
+*   2005. 5. 7
+*	ZFileExtDlg.cpp
+*
+*                                       http://www.wimy.com
+*********************************************************************/
 
 #include "stdafx.h"
 #include "resource.h"

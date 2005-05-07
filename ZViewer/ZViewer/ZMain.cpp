@@ -1,3 +1,13 @@
+/********************************************************************
+*
+* Created by zelon(Kim, Jinwook Korea)
+* 
+*   2005. 5. 7
+*	ZMain.cpp
+*
+*                                       http://www.wimy.com
+*********************************************************************/
+
 #include "StdAfx.h"
 #include ".\zmain.h"
 #include "src/ZFileExtDlg.h"

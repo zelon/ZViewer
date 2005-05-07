@@ -1,9 +1,13 @@
-/*
-2004. 12. 20 Kim Jinwook
+/********************************************************************
+*
+* Created by zelon(Kim, Jinwook Korea)
+* 
+*   2005. 5. 7
+*	ZResourceManager.cpp
+*
+*                                       http://www.wimy.com
+*********************************************************************/
 
-Resource Manage for Language pack
-
-*/
 
 #include "stdafx.h"
 #include "ZResourceManager.h"

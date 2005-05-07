@@ -1,3 +1,12 @@
+/********************************************************************
+*
+* Created by zelon(Kim, Jinwook Korea)
+* 
+*   2005. 5. 7
+*	CommonFunc.cpp
+*
+*                                       http://www.wimy.com
+*********************************************************************/
 #include "stdafx.h"
 #include "CommonFunc.h"
 #include <shlobj.h>

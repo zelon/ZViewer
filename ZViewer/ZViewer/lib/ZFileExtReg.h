@@ -1,3 +1,12 @@
+/********************************************************************
+*
+* Created by zelon(Kim, Jinwook Korea)
+* 
+*   2005. 5. 7
+*	ZFileExtReg.h
+*
+*                                       http://www.wimy.com
+*********************************************************************/
 /*
  이 코드는 http://www.codeproject.com/shell/cgfiletype.asp 을 참조했습니다.
 */
