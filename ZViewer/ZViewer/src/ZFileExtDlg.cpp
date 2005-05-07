@@ -20,7 +20,6 @@
 ZFileExtDlg * pThis = NULL;
 
 ZFileExtDlg::ZFileExtDlg()
-:	m_bChanged(true)
 {
 	pThis = this;
 
@@ -45,11 +44,39 @@ void ZFileExtDlg::ShowDlg()
 
 void ZFileExtDlg::ExtMapInit()
 {
-	m_extMap[eFileExt_BMP] = "bmp";
-	m_extMap[eFileExt_GIF] = "gif";
-	m_extMap[eFileExt_JPG] = "jpg";
-	m_extMap[eFileExt_PNG] = "png";
-	m_extMap[eFileExt_PSD] = "psd";
+	ExtSetting extSet;
+
+	extSet.m_numIconIndex = 1;
+	extSet.m_strExt = "bmp";
+	m_extConnect.push_back(extSet);
+
+	extSet.m_numIconIndex = 2;
+	extSet.m_strExt = "jpg";
+	m_extConnect.push_back(extSet);
+
+	extSet.m_numIconIndex = 2;
+	extSet.m_strExt = "jpeg";
+	m_extConnect.push_back(extSet);
+
+	extSet.m_numIconIndex = 3;
+	extSet.m_strExt = "png";
+	m_extConnect.push_back(extSet);
+
+	extSet.m_numIconIndex = 4;
+	extSet.m_strExt = "psd";
+	m_extConnect.push_back(extSet);
+
+	extSet.m_numIconIndex = 5;
+	extSet.m_strExt = "gif";
+	m_extConnect.push_back(extSet);
+
+	extSet.m_numIconIndex = 0;
+	extSet.m_strExt = "dds";
+	m_extConnect.push_back(extSet);
+
+	extSet.m_numIconIndex = 0;
+	extSet.m_strExt = "tga";
+	m_extConnect.push_back(extSet);
 }
 int CALLBACK ZFileExtDlg::FileExtDlgProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 {
@@ -57,7 +84,7 @@ int CALLBACK ZFileExtDlg::FileExtDlgProc(HWND hWnd,UINT iMessage,WPARAM wParam,L
 	{
 	case WM_INITDIALOG:
 		{
-			pThis->LoadExtEnv(hWnd);
+			//pThis->LoadExtEnv(hWnd);
 		}
 		return TRUE;
 
@@ -83,6 +110,7 @@ int CALLBACK ZFileExtDlg::FileExtDlgProc(HWND hWnd,UINT iMessage,WPARAM wParam,L
 	return FALSE;
 }
 
+/*
 void ZFileExtDlg::LoadExtEnv(HWND hwnd)
 {
 	/// Registry 에서 설정되어 있는 값들을 받아온다.
@@ -96,50 +124,47 @@ void ZFileExtDlg::LoadExtEnv(HWND hwnd)
 	SendMessage(GetDlgItem(hwnd, (IDC_CHECK_JPG)), BM_SETCHECK, BST_CHECKED, 0);
 	//SendMessage(GetDlgItem(hwnd, MAKEINTRESOURCE(IDC_CHECK_BMP)), BM_SETCHECK, BST_CHECKED, 0);
 }
+*/
 
 void ZFileExtDlg::SaveExtEnv()
 {
-	if ( m_bChanged )
+	std::vector < ExtSetting >::iterator it, endit = m_extConnect.end();
+
+	std::string strProgramFolder;
+
 	{
-		extMapType::iterator it, endit = m_extMap.end();
+		char szGetFileName[FILENAME_MAX] = { 0 };
+		DWORD ret = GetModuleFileName(GetModuleHandle(NULL), szGetFileName, FILENAME_MAX);
 
-		std::string strProgramFolder;
-
+		if ( ret == 0 )
 		{
-			char szGetFileName[FILENAME_MAX] = { 0 };
-			DWORD ret = GetModuleFileName(GetModuleHandle(NULL), szGetFileName, FILENAME_MAX);
-
-			if ( ret == 0 )
-			{
-				_ASSERTE(!"Can't get module folder");
-				return;
-			}
-			char szDrive[_MAX_DRIVE] = { 0 };
-			char szDir[_MAX_DIR] = { 0 };
-			_splitpath(szGetFileName, szDrive, szDir, 0, 0);
-
-			strProgramFolder = szDrive;
-			strProgramFolder += szDir;
+			_ASSERTE(!"Can't get module folder");
+			return;
 		}
+		char szDrive[_MAX_DRIVE] = { 0 };
+		char szDir[_MAX_DIR] = { 0 };
+		_splitpath(szGetFileName, szDrive, szDir, 0, 0);
 
-		std::string strIconDll = strProgramFolder;
-		strIconDll += "ZViewerIcons.dll";
-
-		std::string strExt;
-		for ( it = m_extMap.begin(); it != endit; ++it)
-		{
-			strExt = it->second;
-
-			SetExtWithProgram("ZViewer", strExt, 
-				"",	/// 프로그램 Full Path. 비워두면 현재 프로그램이다.
-				strIconDll.c_str(),	/// 아이콘 프로그램
-				it->first	/// 아이콘 index
-			);
-		}
-
-		/// explorer 의 아이콘을 update 시킨다.
-		SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST, NULL, NULL);
+		strProgramFolder = szDrive;
+		strProgramFolder += szDir;
 	}
+
+	std::string strIconDll = strProgramFolder;
+	strIconDll += "ZViewerIcons.dll";
+
+	for ( it = m_extConnect.begin(); it != endit; ++it)
+	{
+		const ExtSetting & extset = *it;
+
+		SetExtWithProgram("ZViewer", extset.m_strExt, 
+			"",	/// 프로그램 Full Path. 비워두면 현재 프로그램이다.
+			strIconDll.c_str(),	/// 아이콘 프로그램
+			extset.m_numIconIndex	/// 아이콘 index
+		);
+	}
+
+	/// explorer 의 아이콘을 update 시킨다.
+	SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST, NULL, NULL);
 }
 
 bool ZFileExtDlg::SetExtWithProgram(const std::string & strProgramName, const std::string & strExt, std::string strFullProgramPath, const std::string & strIcon, int iIconIndex)

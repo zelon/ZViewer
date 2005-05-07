@@ -10,19 +10,10 @@
 
 #pragma once
 
-enum eFileExt
+struct ExtSetting
 {
-	eFileExt_BMP = 1,
-	eFileExt_JPG = 2,
-	eFileExt_GIF = 5,
-	eFileExt_PNG = 3,
-	eFileExt_PSD = 4,
-	eFileExt_MAX
-};
-
-enum
-{
-	eFileExt_ALL = 0
+	unsigned int m_numIconIndex;		// icon dll 에서의 index
+	std::string m_strExt;				// 파일의 확장자
 };
 
 class ZFileExtDlg
@@ -38,23 +29,24 @@ public:
 
 
 	/// 현재 시스템에 설정된 파일 확장자 연결 상태를 저장한다. true 가 연결된 것이다.
-	bool m_bFileExt[eFileExt_MAX];
+//	bool m_bFileExt[eFileExt_MAX];
 
 	/// 현재 시스템에 설정된 파일 확장자 연결 상태를 얻어온다.
-	void LoadExtEnv(HWND hwnd);
+//	void LoadExtEnv(HWND hwnd);
 
 	/// 현재 설정값대로 시스템에 쓴다.
 	void SaveExtEnv();
 
 private:
 	/// 변경된 값이 있나?
-	bool m_bChanged;
+//	bool m_bChanged;
 
 	/// 실제로 파일 연결을 세팅하는 함수
 	bool SetExtWithProgram(const std::string & strProgramName, const std::string & strExt, std::string strFullProgramPath = "", const std::string & strIcon = "", int iIconIndex = 0);
 
 	/// 확장자를 연결
 	void ExtMapInit();
-	typedef std::map< eFileExt, std::string> extMapType;
-	extMapType	m_extMap;
+	std::vector < ExtSetting > m_extConnect;
+//	typedef std::map< eFileExt, std::string> extMapType;
+//	extMapType	m_extMap;
 };
