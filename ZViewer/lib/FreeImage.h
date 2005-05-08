@@ -47,8 +47,8 @@
 // Version information ------------------------------------------------------
 
 #define FREEIMAGE_MAJOR_VERSION   3
-#define FREEIMAGE_MINOR_VERSION   6
-#define FREEIMAGE_RELEASE_SERIAL  1
+#define FREEIMAGE_MINOR_VERSION   7
+#define FREEIMAGE_RELEASE_SERIAL  0
 
 // Compiler options ---------------------------------------------------------
 
@@ -194,6 +194,63 @@ typedef struct tagBITMAPINFO {
 
 #endif // _WINDOWS_
 
+// Types used in the library (specific to FreeImage) ------------------------
+
+#if (defined(WIN32) || defined(__WIN32__))
+#pragma pack(push, 1)
+#else
+#pragma pack(1)
+#endif // WIN32
+
+/** 48-bit RGB 
+*/
+typedef struct tagFIRGB16 {
+	WORD red;
+	WORD green;
+	WORD blue;
+} FIRGB16;
+
+/** 64-bit RGBA
+*/
+typedef struct tagFIRGBA16 {
+	WORD red;
+	WORD green;
+	WORD blue;
+	WORD alpha;
+} FIRGBA16;
+
+/** 96-bit RGB Float
+*/
+typedef struct tagFIRGBF {
+	float red;
+	float green;
+	float blue;
+} FIRGBF;
+
+/** 128-bit RGBA Float
+*/
+typedef struct tagFIRGBAF {
+	float red;
+	float green;
+	float blue;
+	float alpha;
+} FIRGBAF;
+
+/** Data structure for COMPLEX type (complex number)
+*/
+typedef struct tagFICOMPLEX {
+    /// real part
+	double r;
+	/// imaginary part
+    double i;
+} FICOMPLEX;
+
+#if (defined(WIN32) || defined(__WIN32__))
+#pragma pack(pop)
+#else
+#pragma pack()
+#endif // WIN32
+
 // Indexes for byte arrays, masks and shifts for treating pixels as words ---
 // These coincide with the order of RGBQUAD and RGBTRIPLE -------------------
 
@@ -287,7 +344,8 @@ FI_ENUM(FREE_IMAGE_FORMAT) {
 	FIF_XBM		= 22,
 	FIF_XPM		= 23,
 	FIF_DDS		= 24,
-	FIF_GIF     = 25
+	FIF_GIF     = 25,
+	FIF_HDR		= 26
 };
 
 /** Image type used in FreeImage.
@@ -301,17 +359,12 @@ FI_ENUM(FREE_IMAGE_TYPE) {
 	FIT_INT32	= 5,	// array of long			: signed 32-bit
 	FIT_FLOAT	= 6,	// array of float			: 32-bit IEEE floating point
 	FIT_DOUBLE	= 7,	// array of double			: 64-bit IEEE floating point
-	FIT_COMPLEX	= 8		// array of FICOMPLEX		: 2 x 64-bit IEEE floating point
+	FIT_COMPLEX	= 8,	// array of FICOMPLEX		: 2 x 64-bit IEEE floating point
+	FIT_RGB16	= 9,	// 48-bit RGB image			: 3 x 16-bit
+	FIT_RGBA16	= 10,	// 64-bit RGBA image		: 4 x 16-bit
+	FIT_RGBF	= 11,	// 96-bit RGB float image	: 3 x 32-bit IEEE floating point
+	FIT_RGBAF	= 12	// 128-bit RGBA float image	: 4 x 32-bit IEEE floating point
 };
-
-/** Data structure for COMPLEX type (complex number)
-*/
-typedef struct tagFreeImageComplex {
-    /// real part
-	double r;
-	/// imaginary part
-    double i;
-} FICOMPLEX;
 
 /** Image color type used in FreeImage.
 */
@@ -333,7 +386,7 @@ FI_ENUM(FREE_IMAGE_QUANTIZE) {
 };
 
 /** Dithering algorithms.
-Constants used FreeImage_Dither.
+Constants used in FreeImage_Dither.
 */
 FI_ENUM(FREE_IMAGE_DITHER) {
     FID_FS			= 0,	// Floyd & Steinberg error diffusion
@@ -342,6 +395,28 @@ FI_ENUM(FREE_IMAGE_DITHER) {
 	FID_CLUSTER6x6	= 3,	// Ordered clustered dot dithering (order 3 - 6x6 matrix)
 	FID_CLUSTER8x8	= 4,	// Ordered clustered dot dithering (order 4 - 8x8 matrix)
 	FID_CLUSTER16x16= 5		// Ordered clustered dot dithering (order 8 - 16x16 matrix)
+};
+
+/** Lossless JPEG transformations
+Constants used in FreeImage_JPEGTransform
+*/
+FI_ENUM(FREE_IMAGE_JPEG_OPERATION) {
+	FIJPEG_OP_NONE			= 0,	// no transformation
+	FIJPEG_OP_FLIP_H		= 1,	// horizontal flip
+	FIJPEG_OP_FLIP_V		= 2,	// vertical flip
+	FIJPEG_OP_TRANSPOSE		= 3,	// transpose across UL-to-LR axis
+	FIJPEG_OP_TRANSVERSE	= 4,	// transpose across UR-to-LL axis
+	FIJPEG_OP_ROTATE_90		= 5,	// 90-degree clockwise rotation
+	FIJPEG_OP_ROTATE_180	= 6,	// 180-degree rotation
+	FIJPEG_OP_ROTATE_270	= 7		// 270-degree clockwise (or 90 ccw)
+};
+
+/** Tone mapping operators.
+Constants used in FreeImage_ToneMapping.
+*/
+FI_ENUM(FREE_IMAGE_TMO) {
+    FITMO_DRAGO03	 = 0,	// Adaptive logarithmic mapping (F. Drago, 2003)
+	FITMO_REINHARD05 = 1,	// Dynamic range reduction inspired by photoreceptor physiology (E. Reinhard, 2005)
 };
 
 /** Upsampling / downsampling filters. 
@@ -393,7 +468,8 @@ FI_ENUM(FREE_IMAGE_MDTYPE) {
 	FIDT_SRATIONAL	= 10,	// 64-bit signed fraction 
 	FIDT_FLOAT		= 11,	// 32-bit IEEE floating point 
 	FIDT_DOUBLE		= 12,	// 64-bit IEEE floating point 
-	FIDT_IFD		= 13	// 32-bit unsigned integer (offset) 
+	FIDT_IFD		= 13,	// 32-bit unsigned integer (offset) 
+	FIDT_PALETTE	= 14	// 32-bit RGBQUAD 
 };
 
 /**
@@ -410,7 +486,8 @@ FI_ENUM(FREE_IMAGE_MDMODEL) {
 	FIMD_IPTC			= 6,	// IPTC/NAA metadata
 	FIMD_XMP			= 7,	// Abobe XMP metadata
 	FIMD_GEOTIFF		= 8,	// GeoTIFF metadata
-	FIMD_CUSTOM			= 9		// Used to attach other metadata types to a dib
+	FIMD_ANIMATION		= 9,	// Animation metadata
+	FIMD_CUSTOM			= 10	// Used to attach other metadata types to a dib
 };
 
 /**
@@ -511,6 +588,9 @@ typedef void (DLL_CALLCONV *FI_InitProc)(Plugin *plugin, int format_id);
 #define CUT_DEFAULT         0
 #define DDS_DEFAULT			0
 #define GIF_DEFAULT			0
+#define GIF_LOAD256			1		// Load the image as a 256 color image with ununsed palette entries, if it's 16 or 2 color
+#define GIF_PLAYBACK		2		// 'Play' the GIF to generate each frame (as 32bpp) instead of returning raw frame data when loading
+#define HDR_DEFAULT			0
 #define ICO_DEFAULT         0
 #define ICO_MAKEALPHA		1		// convert to 32bpp and create an alpha channel from the AND-mask when loading
 #define IFF_DEFAULT         0
@@ -623,7 +703,7 @@ DLL_API BOOL DLL_CALLCONV FreeImage_FIFSupportsICCProfiles(FREE_IMAGE_FORMAT fif
 
 // Multipaging interface ----------------------------------------------------
 
-DLL_API FIMULTIBITMAP * DLL_CALLCONV FreeImage_OpenMultiBitmap(FREE_IMAGE_FORMAT fif, const char *filename, BOOL create_new, BOOL read_only, BOOL keep_cache_in_memory FI_DEFAULT(FALSE));
+DLL_API FIMULTIBITMAP * DLL_CALLCONV FreeImage_OpenMultiBitmap(FREE_IMAGE_FORMAT fif, const char *filename, BOOL create_new, BOOL read_only, BOOL keep_cache_in_memory FI_DEFAULT(FALSE), int flags FI_DEFAULT(0));
 DLL_API BOOL DLL_CALLCONV FreeImage_CloseMultiBitmap(FIMULTIBITMAP *bitmap, int flags FI_DEFAULT(0));
 DLL_API int DLL_CALLCONV FreeImage_GetPageCount(FIMULTIBITMAP *bitmap);
 DLL_API void DLL_CALLCONV FreeImage_AppendPage(FIMULTIBITMAP *bitmap, FIBITMAP *data);
@@ -705,7 +785,7 @@ DLL_API void DLL_CALLCONV FreeImage_DestroyICCProfile(FIBITMAP *dib);
 // Line conversion routines -------------------------------------------------
 
 DLL_API void DLL_CALLCONV FreeImage_ConvertLine1To4(BYTE *target, BYTE *source, int width_in_pixels);
-DLL_API void DLL_CALLCONV FreeImage_ConvertLine8To4(BYTE *target, BYTE *source, int width_in_pixels, RGBQUAD palette);
+DLL_API void DLL_CALLCONV FreeImage_ConvertLine8To4(BYTE *target, BYTE *source, int width_in_pixels, RGBQUAD *palette);
 DLL_API void DLL_CALLCONV FreeImage_ConvertLine16To4_555(BYTE *target, BYTE *source, int width_in_pixels);
 DLL_API void DLL_CALLCONV FreeImage_ConvertLine16To4_565(BYTE *target, BYTE *source, int width_in_pixels);
 DLL_API void DLL_CALLCONV FreeImage_ConvertLine24To4(BYTE *target, BYTE *source, int width_in_pixels);
@@ -750,21 +830,29 @@ DLL_API FIBITMAP *DLL_CALLCONV FreeImage_ConvertTo16Bits565(FIBITMAP *dib);
 DLL_API FIBITMAP *DLL_CALLCONV FreeImage_ConvertTo24Bits(FIBITMAP *dib);
 DLL_API FIBITMAP *DLL_CALLCONV FreeImage_ConvertTo32Bits(FIBITMAP *dib);
 DLL_API FIBITMAP *DLL_CALLCONV FreeImage_ColorQuantize(FIBITMAP *dib, FREE_IMAGE_QUANTIZE quantize);
+DLL_API FIBITMAP *DLL_CALLCONV FreeImage_ColorQuantizeEx(FIBITMAP *dib, FREE_IMAGE_QUANTIZE quantize FI_DEFAULT(FIQ_WUQUANT), int PaletteSize FI_DEFAULT(256), int ReserveSize FI_DEFAULT(0), RGBQUAD *ReservePalette FI_DEFAULT(NULL));
 DLL_API FIBITMAP *DLL_CALLCONV FreeImage_Threshold(FIBITMAP *dib, BYTE T);
 DLL_API FIBITMAP *DLL_CALLCONV FreeImage_Dither(FIBITMAP *dib, FREE_IMAGE_DITHER algorithm);
 
 DLL_API FIBITMAP *DLL_CALLCONV FreeImage_ConvertFromRawBits(BYTE *bits, int width, int height, int pitch, unsigned bpp, unsigned red_mask, unsigned green_mask, unsigned blue_mask, BOOL topdown FI_DEFAULT(FALSE));
 DLL_API void DLL_CALLCONV FreeImage_ConvertToRawBits(BYTE *bits, FIBITMAP *dib, int pitch, unsigned bpp, unsigned red_mask, unsigned green_mask, unsigned blue_mask, BOOL topdown FI_DEFAULT(FALSE));
 
+DLL_API FIBITMAP *DLL_CALLCONV FreeImage_ConvertToRGBF(FIBITMAP *dib);
+
 DLL_API FIBITMAP *DLL_CALLCONV FreeImage_ConvertToStandardType(FIBITMAP *src, BOOL scale_linear FI_DEFAULT(TRUE));
 DLL_API FIBITMAP *DLL_CALLCONV FreeImage_ConvertToType(FIBITMAP *src, FREE_IMAGE_TYPE dst_type, BOOL scale_linear FI_DEFAULT(TRUE));
 
+// tone mapping operators
+DLL_API FIBITMAP *DLL_CALLCONV FreeImage_ToneMapping(FIBITMAP *dib, FREE_IMAGE_TMO tmo, double first_param FI_DEFAULT(0), double second_param FI_DEFAULT(0));
+DLL_API FIBITMAP* DLL_CALLCONV FreeImage_TmoDrago03(FIBITMAP *src, double gamma FI_DEFAULT(2.2), double exposure FI_DEFAULT(0));
+DLL_API FIBITMAP* DLL_CALLCONV FreeImage_TmoReinhard05(FIBITMAP *src, double intensity FI_DEFAULT(0), double contrast FI_DEFAULT(0));
 
 // ZLib interface -----------------------------------------------------------
 
 DLL_API DWORD DLL_CALLCONV FreeImage_ZLibCompress(BYTE *target, DWORD target_size, BYTE *source, DWORD source_size);
 DLL_API DWORD DLL_CALLCONV FreeImage_ZLibUncompress(BYTE *target, DWORD target_size, BYTE *source, DWORD source_size);
 DLL_API DWORD DLL_CALLCONV FreeImage_ZLibGZip(BYTE *target, DWORD target_size, BYTE *source, DWORD source_size);
+DLL_API DWORD DLL_CALLCONV FreeImage_ZLibGUnzip(BYTE *target, DWORD target_size, BYTE *source, DWORD source_size);
 DLL_API DWORD DLL_CALLCONV FreeImage_ZLibCRC32(DWORD crc, BYTE *source, DWORD source_size);
 
 // --------------------------------------------------------------------------
@@ -817,6 +905,7 @@ DLL_API FIBITMAP *DLL_CALLCONV FreeImage_RotateClassic(FIBITMAP *dib, double ang
 DLL_API FIBITMAP *DLL_CALLCONV FreeImage_RotateEx(FIBITMAP *dib, double angle, double x_shift, double y_shift, double x_origin, double y_origin, BOOL use_mask);
 DLL_API BOOL DLL_CALLCONV FreeImage_FlipHorizontal(FIBITMAP *dib);
 DLL_API BOOL DLL_CALLCONV FreeImage_FlipVertical(FIBITMAP *dib);
+DLL_API BOOL DLL_CALLCONV FreeImage_JPEGTransform(const char *src_file, const char *dst_file, FREE_IMAGE_JPEG_OPERATION operation, BOOL perfect FI_DEFAULT(FALSE));
 
 // upsampling / downsampling
 DLL_API FIBITMAP *DLL_CALLCONV FreeImage_Rescale(FIBITMAP *dib, int dst_width, int dst_height, FREE_IMAGE_FILTER filter);
