@@ -2,7 +2,7 @@
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "ZViewer"
-!define PRODUCT_VERSION "0.3.3rc3"
+!define PRODUCT_VERSION "0.3.3"
 !define PRODUCT_PUBLISHER "RhLab"
 !define PRODUCT_WEB_SITE "http://www.wimy.com"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
@@ -60,9 +60,22 @@ FunctionEnd
 Section "MainSection" SEC01
   SetOutPath "$INSTDIR"
   SetOverwrite on
+
+; Preview Extension DLLs
+  IfFileExists "$INSTDIR\ZViewerAgent.dll" ZViewerDllCheck ZViewerCopyDll
+ZViewerDllCheck:
+  Delete "$INSTDIR\ZViewerAgent.dll"
+  IfErrors ZViewerNeedUninstallAndReboot ZViewerCopyDll
+
+ZViewerNeedUninstallAndReboot:
+  MessageBox MB_OK "Uninstall Previous Version. And REBOOT or LOG OFF. And then re-install please."
+  Quit
+
+ZViewerCopyDll:
   File "FreeImage.dll"
   File "FreeImagePlus.dll"
   File "ZViewerAgent.dll"
+
   File "ZViewerIcons.dll"
   File "ZViewer.exe"
   File "_ZViewer.png"
@@ -75,7 +88,8 @@ Section "MainSection" SEC01
   File "language\korean.dll"
 
 ; Register DLL
-  ExecWait 'regsvr32 "$INSTDIR\ZViewerAgent.dll" /s'
+; old : ExecWait 'regsvr32 "$INSTDIR\ZViewerAgent.dll" /s'
+  RegDll "$INSTDIR\ZViewerAgent.dll"
   ExecWait "$INSTDIR\ZViewer.exe /fileext"
 SectionEnd
 
@@ -109,14 +123,15 @@ Function un.onInit
 FunctionEnd
 
 Section Uninstall
-  ExecWait 'regsvr32 "$INSTDIR\ZViewerAgent.dll" /u /s'
+;old : ExecWait 'regsvr32 "$INSTDIR\ZViewerAgent.dll" /u /s'
+  UnRegDll "$INSTDIR\ZViewerAgent.dll"
 
   Delete "$SMPROGRAMS\${PRODUCT_NAME}\Uninstall.lnk"
   Delete "$SMPROGRAMS\${PRODUCT_NAME}\ZViewer.lnk"
   Delete "$SMPROGRAMS\${PRODUCT_NAME}\ZViewerAgent.lnk"
 
   RMDir "$SMPROGRAMS\${PRODUCT_NAME}"
-  RMDir /r "$INSTDIR"
+  RMDir /rebootok /r "$INSTDIR"
 
   DeleteRegKey ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}"
   SetAutoClose true
