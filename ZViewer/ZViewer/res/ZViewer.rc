@@ -163,6 +163,7 @@ BEGIN
     VK_UP,          ID_ACCELERATOR_UP,      VIRTKEY, NOINVERT
     VK_DELETE,      ID_DELETETHISFILE,      VIRTKEY, NOINVERT
     "M",            ID_FILE_MOVETO,         VIRTKEY, ALT, NOINVERT
+    VK_F5,          ID_FILE_RESCAN_FOLDER,  VIRTKEY, NOINVERT
     VK_F1,          ID_HELP_ABOUT,          VIRTKEY, NOINVERT
     "W",            ID_MAINMENU_FILE_EXIT,  VIRTKEY, CONTROL, NOINVERT
     "X",            ID_MAINMENU_FILE_EXIT,  VIRTKEY, ALT, NOINVERT
@@ -181,7 +182,7 @@ BEGIN
     VK_RETURN,      ID_VIEW_FULLSCREEN,     VIRTKEY, ALT, NOINVERT
     "]",            ID_VIEW_ROTATECLOCKWISE, ASCII, NOINVERT
     "[",            ID_VIEW_ROTATECOUNTERCLOCKWISE, ASCII, NOINVERT
-    VK_F5,          ID_FILE_RESCAN_FOLDER,  VIRTKEY, NOINVERT
+    VK_F9,          ID_SHOW_CACHED_FILENAME, VIRTKEY, NOINVERT
 END
 
 
@@ -336,7 +337,7 @@ BEGIN
     IDS_DELETE_THIS_FILE    "Delete this file?"
     ID_MOVE_UNDOIMAGEPOSITION 
                             "Go to the last image when you select first image or last image."
-    ID_MOVE_REDOIMAGEPOSITION "Undo 하기 전의 이미지로 갑니다."
+    ID_MOVE_REDOIMAGEPOSITION "Go to the before Undo"
     IDS_ASSOCIATE_FILE_EXTS "Associate Image Files Exts?"
     IDS_SAME_FILE_EXIST_OVERWRITE "Same file exist. Overwrite?"
 END
