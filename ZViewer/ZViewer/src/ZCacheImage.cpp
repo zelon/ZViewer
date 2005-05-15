@@ -21,17 +21,17 @@ ZCacheImage & ZCacheImage::GetInstance()
 
 ZCacheImage::ZCacheImage()
 :	m_bGoOn(true)
-,	m_iCacheLeftIndex(-1)
-,	m_iCacheRightIndex(-1)
 ,	m_bUseCache(true)
 ,	m_iLogCacheHit(0)
 ,	m_iLogCacheMiss(0)
 ,	m_lCacheSize(0)
-,	m_iMaxCacheImageNum(10)
+,	m_iMaxCacheImageNum(50)
 ,	m_iMaximumCacheMemoryMB(50)
+,	m_numImageVectorSize(0)
 {
 	m_hEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
 
+	m_hThread = INVALID_HANDLE_VALUE;
 	m_imageMap.clear();
 	m_imageMapRev.clear();
 	m_cacheData.clear();
@@ -44,46 +44,55 @@ ZCacheImage::~ZCacheImage()
 	m_bGoOn = false;
 	SetEvent(m_hEvent);
 
-	WaitForSingleObject(m_hThread, INFINITE);
+	if ( m_hThread != INVALID_HANDLE_VALUE )
+	{
+		WaitForSingleObject(m_hThread, INFINITE);
+		CloseHandle(m_hThread);
+
+		m_hThread = INVALID_HANDLE_VALUE;
+	}
 
 	DebugPrintf("Cached Thread ended.");
 
-	CloseHandle(m_hThread);
 	CloseHandle(m_hEvent);
 
 	DeleteCriticalSection(&m_lock);
 }
 
-void ZCacheImage::SetImageVector(std::vector < std::string > & v)
+void ZCacheImage::SetImageVector(const std::vector < FileData > & v)
 {
 	ZCacheLock lock;
 
-	m_imageVector = v;
+	m_numImageVectorSize = v.size();
+
 	m_imageMap.clear();
 	m_imageMapRev.clear();
 	
 	m_cacheData.clear();
 	m_lCacheSize = 0;
 
-	for ( size_t i = 0; i < m_imageVector.size(); ++i)
+	for ( size_t i = 0; i < m_numImageVectorSize; ++i)
 	{
-		m_imageMap[(int)i] = m_imageVector[i];
-		m_imageMapRev[m_imageVector[i]] = (int)i;
+		m_imageMap[(int)i] = v[i].m_strFileName;
+		m_imageMapRev[v[i].m_strFileName] = (int)i;
 	}
 
 	DebugPrintf("imageMapSize : %d", m_imageMap.size());
-	DebugPrintf("imageVec : %d", m_imageVector.size());
+	DebugPrintf("imageVecSize : %d", m_numImageVectorSize);
 }
 
 void ZCacheImage::StartThread()
 {
-	DWORD dwThreadID;
-	m_hThread = CreateThread(0, 0, ThreadFuncProxy, this, 0, &dwThreadID);
-
-	// Cache 를 진행하는 쓰레드는 
-	if ( SetThreadPriority(m_hThread, THREAD_PRIORITY_BELOW_NORMAL) == FALSE )
+	if ( m_bUseCache )
 	{
-		_ASSERTE(!"Can't SetThreadPriority!");
+		DWORD dwThreadID;
+		m_hThread = CreateThread(0, 0, ThreadFuncProxy, this, 0, &dwThreadID);
+
+		// Cache 를 진행하는 쓰레드는 
+		if ( SetThreadPriority(m_hThread, THREAD_PRIORITY_BELOW_NORMAL) == FALSE )
+		{
+			_ASSERTE(!"Can't SetThreadPriority!");
+		}
 	}
 }
 
@@ -137,7 +146,7 @@ bool ZCacheImage::CacheIndex(int iIndex)
 	}
 
 	if ( iIndex < 0 ) iIndex = 0;
-	if ( iIndex >= (int)m_imageVector.size() ) iIndex = (int)m_imageVector.size() - 1;
+	if ( iIndex >= (int)m_numImageVectorSize ) iIndex = (int)m_numImageVectorSize - 1;
 	if ( iIndex == m_iCurrentIndex ) return true;
 
 	// 이미 캐시되어 있는지 찾는다.
@@ -215,11 +224,11 @@ bool ZCacheImage::CacheIndex(int iIndex)
 
 					}
 
-					// 만약의 무한루프를 방지하기 위해 10번만 돌린다.
+					// 만약의 무한루프를 방지하기 위해 100번만 돌린다.
 					--iTemp;
 				} while( iTemp > 0 );
 
-				_ASSERTE(iTemp > 0 );
+				_ASSERTE(iTemp >= 0 );
 			}
 			else
 			{
@@ -238,12 +247,12 @@ void ZCacheImage::ThreadFunc()
 	int iPos = 0;
 	int i = 0;
 
-	while ( m_bGoOn )
+	while ( m_bGoOn ) // thread loop
 	{
 		iPos = 1;
-		_ASSERTE((int)m_imageVector.size() == (int)m_imageMap.size());
+		_ASSERTE((int)m_numImageVectorSize == (int)m_imageMap.size());
 		_ASSERTE(m_iCurrentIndex <= (int)m_imageMap.size());
-		_ASSERTE(m_iCurrentIndex <= (int)m_imageVector.size());
+		_ASSERTE(m_iCurrentIndex <= (int)m_numImageVectorSize);
 
 #ifdef _DEBUG
 		if ( m_cacheData.empty() )
@@ -252,19 +261,15 @@ void ZCacheImage::ThreadFunc()
 		}
 #endif
 
-		/// 캐시 데이터를 보고 적절히 캐시를 비워준다.
-		//CheckCacheDataAndClear();
-
-		//for ( i=0; i<m_iMaxCacheImageNum/2; ++i)
-		for ( int i=0; i<100; ++i)
+		for ( int i=0; i<m_iMaxCacheImageNum/2; ++i)
 		{
 			if ( m_bNewChange) break;	// 현재보고 있는 파일 인덱스가 바뀌었으면 빨리 다음 for 를 시작한다.
 			
-			// left side
-			if ( !CacheIndex(m_iCurrentIndex - iPos) ) break;
-
 			// right side
 			if ( !CacheIndex(m_iCurrentIndex + iPos) ) break;
+
+			// left side
+			if ( !CacheIndex(m_iCurrentIndex - iPos) ) break;
 
 			++iPos;
 		}
