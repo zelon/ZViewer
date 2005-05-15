@@ -501,6 +501,22 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 				ZMain::GetInstance().ToggleFullScreen();
 				break;
 
+			case ID_SORT_FILENAME:
+				ZMain::GetInstance().ChangeFilrSort(eFileSortOrder_FILENAME);
+				break;
+
+			case ID_SORT_FILESIZE:
+				ZMain::GetInstance().ChangeFilrSort(eFileSortOrder_FILESIZE);
+				break;
+
+			case ID_SORT_FILEDATE:
+				ZMain::GetInstance().ChangeFilrSort(eFileSortOrder_LAST_MODIFY_TIME);
+				break;
+
+			case ID_FILE_RESCAN_FOLDER:
+				ZMain::GetInstance().ReLoadFileList();
+				break;
+
 			case ID_HELP_ABOUT:
 				DialogBox(ZResourceManager::GetInstance().GetHInstance(), MAKEINTRESOURCE(IDD_DIALOGHELP), hWnd, AboutWndProc);
 				break;

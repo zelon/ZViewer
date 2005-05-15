@@ -31,7 +31,7 @@ ZMain & ZMain::GetInstance()
 
 ZMain::ZMain(void)
 :	m_hMainDlg(NULL)
-	
+,	m_sortOrder(eFileSortOrder_FILENAME)	
 {
 	SetProgramFolder();
 }
@@ -296,7 +296,7 @@ void ZMain::Draw(bool bEraseBg)
 	}
 }
 
-void ZMain::ZFindFile(const char *path, std::vector<std::string> & foundStorage, bool bFindRecursive)
+void ZMain::ZFindFile(const char *path, std::vector< FileData > & foundStorage, bool bFindRecursive)
 {
 	HANDLE hSrch;
 	WIN32_FIND_DATA wfd;
@@ -325,7 +325,11 @@ void ZMain::ZFindFile(const char *path, std::vector<std::string> & foundStorage,
 
 			if ( ZImage::IsValidImageFileExt(wfd.cFileName) )
 			{
-				foundStorage.push_back(fname);
+				FileData aData;
+				aData.m_timeModified = wfd.ftLastWriteTime;
+				aData.m_strFileName = fname;
+				aData.m_nFileSize = wfd.nFileSizeLow;
+				foundStorage.push_back(aData);
 			}
 		}
 		bResult=FindNextFile(hSrch,&wfd);
@@ -379,14 +383,32 @@ void ZMain::RescanFolder()
 	ZFindFile(strToFindFolder.c_str(), m_vFile, false);
 
 	// 얻은 파일을 정렬한다.
-	sort(m_vFile.begin(), m_vFile.end(), COnlyFilenameCompare());
+	switch ( m_sortOrder )
+	{
+	case eFileSortOrder_FILENAME:
+		sort(m_vFile.begin(), m_vFile.end(), CFileDataSort_OnlyFilenameCompare());
+		break;
+
+	case eFileSortOrder_FILESIZE:
+		sort(m_vFile.begin(), m_vFile.end(), CFileDataSort_FileSize());
+		break;
+
+	case eFileSortOrder_LAST_MODIFY_TIME:
+		sort(m_vFile.begin(), m_vFile.end(), CFileDataSort_LastModifiedTime());
+		break;
+
+	default:
+		_ASSERTE(false);
+
+	}
+
 
 	// Cache Thread 에 전달한다.
 	ZCacheImage::GetInstance().SetImageVector(m_vFile);
 
 	if ( m_strCurrentFilename.empty() && !m_vFile.empty())
 	{
-		m_strCurrentFilename = m_vFile[0];
+		m_strCurrentFilename = m_vFile[0].m_strFileName;
 		m_iCurretFileIndex = 0;
 
 		LoadCurrent();
@@ -530,10 +552,10 @@ void ZMain::OpenFolder(const std::string strFolder)
 	std::string strTemp = strFolder;
 	strTemp += "\\*.*";
 
-	vector < std::string > vFiles;
+	vector < FileData > vFiles;
 	ZFindFile(strTemp.c_str(), vFiles, false);
 
-	sort(vFiles.begin(), vFiles.end(), COnlyFilenameCompare());
+	sort(vFiles.begin(), vFiles.end(), CFileDataSort_OnlyFilenameCompare());
 
 	if ( vFiles.size() == 0 )
 	{
@@ -544,7 +566,7 @@ void ZMain::OpenFolder(const std::string strFolder)
 	}
 	else
 	{
-		OpenFile(vFiles[0]);
+		OpenFile(vFiles[0].m_strFileName);
 	}
 }
 
@@ -555,7 +577,16 @@ void ZMain::OpenFile(const string & strFilename)
 	RescanFolder();
 
 	// 스캔한 파일 중 현재 파일을 찾는다.
-	std::vector<std::string>::iterator it = find(m_vFile.begin(), m_vFile.end(), strFilename);
+	std::vector< FileData >::iterator it, endit = m_vFile.end();
+	//= find(m_vFile.begin(), m_vFile.end(), strFilename);
+
+	for ( it = m_vFile.begin(); it != endit; ++it)
+	{
+		if ( it->m_strFileName == strFilename )
+		{
+			break;
+		}
+	}
 
 	if ( m_vFile.size() <= 0 )
 	{
@@ -588,7 +619,7 @@ bool ZMain::MoveIndex(int iIndex)
 	if ( m_iCurretFileIndex == iIndex ) return false;
 
 	m_iCurretFileIndex = iIndex;
-	m_strCurrentFilename = m_vFile[m_iCurretFileIndex];
+	m_strCurrentFilename = m_vFile[m_iCurretFileIndex].m_strFileName;
 	LoadCurrent();
 
 	return true;
@@ -699,7 +730,7 @@ void ZMain::SetStatusBarText()
 {
 	char szTemp[256];
 
-	if ( m_vFile.size() == 0 || m_strCurrentFilename.empty() )
+	if ( m_vFile.size() == 0 || m_strCurrentFilename.empty() ) // 보고 있는 파일이 없으면
 	{
 		// File Index
 		_snprintf(szTemp, sizeof(szTemp), "No File");
@@ -736,15 +767,22 @@ void ZMain::SetStatusBarText()
 		SendMessage(m_hStatus, SB_SETTEXT, 1, (LPARAM)szTemp);
 
 		// image size
-		long imageSize = m_currentImage.GetImageSize();
+		long imageSize = m_vFile[m_iCurretFileIndex].m_nFileSize;
 
 		if ( imageSize > 1024 )
 		{
-			_snprintf(szTemp, sizeof(szTemp), "%dKByte", m_currentImage.GetImageSize()/1024);
+			if ( imageSize/1024 > 1024 )
+			{
+				_snprintf(szTemp, sizeof(szTemp), "%.2fMByte", imageSize/1024/1024.0f);
+			}
+			else
+			{
+				_snprintf(szTemp, sizeof(szTemp), "%dKByte", imageSize/1024);
+			}
 		}
 		else
 		{
-			_snprintf(szTemp, sizeof(szTemp), "%dByte", m_currentImage.GetImageSize());
+			_snprintf(szTemp, sizeof(szTemp), "%dByte", imageSize);
 		}
 		SendMessage(m_hStatus, SB_SETTEXT, 2, (LPARAM)szTemp);
 
@@ -934,6 +972,21 @@ void ZMain::ShellTrayShow()
 	}
 }
 
+
+void ZMain::ChangeFilrSort(eFileSortOrder sortOrder)
+{
+	m_sortOrder = sortOrder;
+	ReLoadFileList();
+}
+
+void ZMain::ReLoadFileList()
+{
+	std::string strFileName = m_strCurrentFilename;
+	RescanFolder();
+
+	OpenFile(strFileName);
+}
+
 void ZMain::ShellTrayHide()
 {
 	// 작업 표시줄을 보이게 해준다.
@@ -967,7 +1020,7 @@ void ZMain::_ProcAfterRemoveThisFile()
 		if ( ((int)m_vFile.size() - 1) > m_iCurretFileIndex )	// 다음 그림이 있다.
 		{
 			// for 문을 돌면서 지울 것을 찾아놓는다.
-			vector<std::string>::iterator it, endit = m_vFile.end();
+			vector< FileData >::iterator it, endit = m_vFile.end();
 			int i = 0;
 			bool bFound = false;
 			for ( it = m_vFile.begin(); it != endit; ++it)
@@ -1000,7 +1053,7 @@ void ZMain::_ProcAfterRemoveThisFile()
 		{
 			// 사이즈가 1이 아니고, 다음것이 없었으므로 이전 것은 있다.
 			// for 문을 돌면서 지울 것을 찾아놓는다.
-			vector<std::string>::iterator it, endit = m_vFile.end();
+			vector< FileData >::iterator it, endit = m_vFile.end();
 			int i = 0;
 
 			bool bFound = false;
@@ -1077,7 +1130,7 @@ void ZMain::Undo()
 		if ( m_vFile.empty() ) return;
 
 		m_iCurretFileIndex = iLast;
-		m_strCurrentFilename = m_vFile[m_iCurretFileIndex];
+		m_strCurrentFilename = m_vFile[m_iCurretFileIndex].m_strFileName;
 		LoadCurrent();
 	}
 }
@@ -1201,7 +1254,7 @@ void ZMain::SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyle style)
 	}
 
 	char szFileName[MAX_PATH] = { 0 };
-	_splitpath(m_vFile[m_iCurretFileIndex].c_str(), 0, 0, szFileName, 0);
+	_splitpath(m_vFile[m_iCurretFileIndex].m_strFileName.c_str(), 0, 0, szFileName, 0);
 
 	std::string strSaveFileName = szSystemFolder;
 	strSaveFileName += "\\RUBI_bg_";

@@ -14,6 +14,14 @@
 #include "../lib/DesktopWallPaper.h"
 #include "../lib/ZImage.h"
 
+enum eFileSortOrder
+{
+	eFileSortOrder_FILENAME,
+	eFileSortOrder_LAST_MODIFY_TIME,
+	eFileSortOrder_FILESIZE,
+};
+
+
 class ZMain
 {
 public:
@@ -115,10 +123,14 @@ public:
 
 	void ShellTrayShow();
 
+	void ChangeFilrSort(eFileSortOrder sortOrder);
+	void ReLoadFileList();
+
+	void LoadCurrent();
+
 private:
 	ZMain(void);
 
-	void LoadCurrent();
 	void SetStatusBarText();
 	void SetTitle();
 
@@ -137,7 +149,11 @@ private:
 
 	std::string m_strCurrentFolder;	// 현재 폴더
 	std::string m_strCurrentFilename;	// 현재 보여주고 있는 파일이름
-	std::vector<std::string> m_vFile;
+	
+	//std::vector<std::string> m_vFile;
+	std::vector< FileData > m_vFile;
+	eFileSortOrder m_sortOrder;
+
 	int m_iCurretFileIndex;
 
 	int m_iCurrentScreenWidth;
@@ -159,7 +175,7 @@ private:
 	int m_iShowingX;			// 그림 중 어디를 찍기 시작하나.
 	int m_iShowingY;			// 그림 중 어디를 찍기 시작하나.
 
-	void ZFindFile(const char *path, std::vector<std::string> & foundStorage, bool bFindRecursive = false);
+	void ZFindFile(const char *path, std::vector< FileData > & foundStorage, bool bFindRecursive);
 	void ZFindFolders(const char *path, std::vector<std::string> & foundStorage, bool bFindRecursive = false);
 
 	// For Open File Dialog
