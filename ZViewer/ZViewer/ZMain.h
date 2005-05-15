@@ -13,6 +13,8 @@
 #include "src/ZOption.h"
 #include "../lib/DesktopWallPaper.h"
 #include "../lib/ZImage.h"
+#include "src/ZCacheImage.h"
+
 
 enum eFileSortOrder
 {
@@ -53,8 +55,17 @@ public:
 		return MoveIndex(m_iCurretFileIndex + iRelateIndex);
 	}
 
-	bool NextImage() { return MoveRelateIndex(+1); }
-	bool PrevImage() { return MoveRelateIndex(-1); }
+	bool NextImage()
+	{
+		ZCacheImage::GetInstance().SetLastActionDirection(eLastActionDirection_FORWARD);
+		return MoveRelateIndex(+1);
+	}
+
+	bool PrevImage()
+	{
+		ZCacheImage::GetInstance().SetLastActionDirection(eLastActionDirection_BACKWARD);
+		return MoveRelateIndex(-1);
+	}
 
 	bool FirstImage();
 	bool LastImage();
