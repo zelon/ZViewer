@@ -11,7 +11,6 @@
 #include "StdAfx.h"
 #include ".\zmain.h"
 #include "src/ZFileExtDlg.h"
-#include "src/ZCacheImage.h"
 #include "src/ZResourceManager.h"
 #include "../lib/DesktopWallPaper.h"
 #include "src/MoveToDlg.h"
