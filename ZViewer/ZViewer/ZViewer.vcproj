@@ -68,7 +68,7 @@
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="$(SolutionDir)/ZViewer/res;$(SolutionDir)/lib;"
+				AdditionalIncludeDirectories="$(SolutionDir)/ZViewer;$(SolutionDir)/ZViewer/res;$(SolutionDir)/lib;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="3"
