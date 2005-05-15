@@ -424,6 +424,10 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 				/////////////////////////////////////////////
 				// Main Menu
 
+			case ID_SHOW_CACHED_FILENAME:
+				ZCacheImage::GetInstance().ShowCachedImageToOutputWindow();
+				break;
+
 			case ID_MAINMENU_FILE_EXIT:
 				SendMessage(hWnd, WM_CLOSE, 0, 0);
 				break;
