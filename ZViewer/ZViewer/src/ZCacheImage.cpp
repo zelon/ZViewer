@@ -28,6 +28,7 @@ ZCacheImage::ZCacheImage()
 ,	m_iMaxCacheImageNum(50)
 ,	m_iMaximumCacheMemoryMB(50)
 ,	m_numImageVectorSize(0)
+,	m_lastActionDirection(eLastActionDirection_FORWARD)
 {
 	m_hEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
 
@@ -96,6 +97,23 @@ void ZCacheImage::StartThread()
 	}
 }
 
+// 현재 캐시되어 있는 파일들을 output 윈도우로 뿌려준다.
+void ZCacheImage::ShowCachedImageToOutputWindow()
+{
+#ifndef _DEBUG
+	return; // 릴리즈 모드에서는 그냥 리턴
+#endif
+
+	ZCacheLock lock;
+	
+	CacheMapIterator it, endIt = m_cacheData.end();
+
+	for ( it = m_cacheData.begin(); it != endIt; ++it)
+	{
+		DebugPrintf("Cacaed Filename : %s", it->first.c_str());
+	}
+}
+
 DWORD ZCacheImage::ThreadFuncProxy(LPVOID p)
 {
 	ZCacheImage * pThis = (ZCacheImage*)p;
@@ -137,7 +155,7 @@ int ZCacheImage::_GetFarthestIndexFromCurrentIndex()
 	return iFarthestIndex;
 }
 
-bool ZCacheImage::CacheIndex(int iIndex)
+bool ZCacheImage::_CacheIndex(int iIndex)
 {
 	// 최대 캐시 크기를 넘었으면 더 이상 캐시하지 않는다.
 	if ( (m_lCacheSize / 1024 / 1024) > m_iMaximumCacheMemoryMB )
@@ -186,42 +204,67 @@ bool ZCacheImage::CacheIndex(int iIndex)
 				{
 					// 캐시되어 있는 것들 중 가장 현재 index 에서 먼것을 찾는다.
 					iFarthestIndex = _GetFarthestIndexFromCurrentIndex();
+					_ASSERTE(iFarthestIndex >= 0 );
 
-					if ( abs(iFarthestIndex - m_iCurrentIndex) <= abs(iIndex - m_iCurrentIndex ) )
+					size_t nCachedFarthestDiff = abs(iFarthestIndex - m_iCurrentIndex);
+					size_t nToCacheDiff = abs(iIndex - m_iCurrentIndex );
+
+					if ( nCachedFarthestDiff < nToCacheDiff )
 					{
+						// 캐시 했는 것 중 가장 멀리있는 것이 이번거보다 가까운데 있으면 더이상 캐시하지 않는다
 						return false;
 					}
-					else
+					else if ( nCachedFarthestDiff == nToCacheDiff )
 					{
-						//  현재 것이 더 가깝기 때문에 가장 먼 것을 클리어하고, 현재 것을 캐시해 놓는 것이 좋은 상황이다.
+						// 캐시했는 거랑 이번에 캐시할 것이 동등한 위치에 있으면
 
-						// 가장 먼 것을 clear 한다.
+						if ( m_lastActionDirection == eLastActionDirection_FORWARD )
 						{
-							ZCacheLock lock;
-
-							std::string strFindFileName = m_imageMap[iFarthestIndex];
-							CacheMapIterator it = m_cacheData.find(m_imageMap[iFarthestIndex]);
-
-							if ( it != m_cacheData.end() )
+							// 앞으로 진행 중이면 가장 멀리있는 것이 prev 이면 지운다(앞으로 가고 있을 때는 next image 가 우선순위가 높다)
+							if ( iFarthestIndex >= iIndex )
 							{
-								m_lCacheSize -= it->second.GetImageSize();
-								m_cacheData.erase(it);
-
-								DebugPrintf("Farthest one clear");
-							}
-							else
-							{
-								_ASSERTE(!"Can't find the cache data.");
+								// 캐시되어 있는 것을 비우지 않는다.
 								return false;
 							}
 						}
-
-						// 이제 어느 정도 용량을 확보했으니 다시 이 이미지를 넣을 수 있는 지 캐시를 체크한다.
-						if ( (m_lCacheSize + temp.GetImageSize()) / 1024 / 1024 <= m_iMaximumCacheMemoryMB )
+						else
 						{
-							AddCacheData(strFileName, temp);
+							// 뒤로 진행 중이면 가장 멀리있는 것이 next 이면 지운다.
+							if ( iFarthestIndex <= iIndex )
+							{
+								return false;
+							}
 						}
+					}
 
+					//  현재 것이 더 가깝기 때문에 가장 먼 것을 클리어하고, 현재 것을 캐시해 놓는 것이 좋은 상황이다.
+
+					// 가장 먼 것을 clear 한다.
+					{
+						ZCacheLock lock;
+
+						std::string strFindFileName = m_imageMap[iFarthestIndex];
+						CacheMapIterator it = m_cacheData.find(m_imageMap[iFarthestIndex]);
+
+						if ( it != m_cacheData.end() )
+						{
+							m_lCacheSize -= it->second.GetImageSize();
+							m_cacheData.erase(it);
+
+							DebugPrintf("Farthest one clear");
+						}
+						else
+						{
+							_ASSERTE(!"Can't find the cache data.");
+							return false;
+						}
+					}
+
+					// 이제 어느 정도 용량을 확보했으니 다시 이 이미지를 넣을 수 있는 지 캐시를 체크한다.
+					if ( (m_lCacheSize + temp.GetImageSize()) / 1024 / 1024 <= m_iMaximumCacheMemoryMB )
+					{
+						AddCacheData(strFileName, temp);
+						return true;
 					}
 
 					// 만약의 무한루프를 방지하기 위해 100번만 돌린다.
@@ -265,11 +308,26 @@ void ZCacheImage::ThreadFunc()
 		{
 			if ( m_bNewChange) break;	// 현재보고 있는 파일 인덱스가 바뀌었으면 빨리 다음 for 를 시작한다.
 			
-			// right side
-			if ( !CacheIndex(m_iCurrentIndex + iPos) ) break;
+			if ( m_lastActionDirection == eLastActionDirection_FORWARD )
+			{
+				// right side
+				if ( !_CacheIndex(m_iCurrentIndex + iPos) ) break;
 
-			// left side
-			if ( !CacheIndex(m_iCurrentIndex - iPos) ) break;
+				// left side
+				if ( !_CacheIndex(m_iCurrentIndex - iPos) ) break;
+			}
+			else if ( m_lastActionDirection == eLastActionDirection_BACKWARD )
+			{
+				// left side
+				if ( !_CacheIndex(m_iCurrentIndex - iPos) ) break;
+
+				// right side
+				if ( !_CacheIndex(m_iCurrentIndex + iPos) ) break;
+			}
+			else
+			{
+				_ASSERTE(false);
+			}
 
 			++iPos;
 		}

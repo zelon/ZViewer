@@ -12,6 +12,13 @@
 
 #include "../../lib/ZImage.h"
 
+// 캐시를 어느 방향부터 먼저할 것인지, 우선시할 것인지를 위해...
+enum eLastActionDirection
+{
+	eLastActionDirection_FORWARD,	// PageDown 등으로 다음 파일을 보았다
+	eLastActionDirection_BACKWARD,	// PageUp 등으로 이전 파일을 보았다.
+};
+
 class ZCacheImage
 {
 private:
@@ -39,6 +46,9 @@ public:
 
 	void StartThread();
 
+	// 현재 캐시되어 있는 파일들을 output 윈도우로 뿌려준다.
+	void ShowCachedImageToOutputWindow();
+
 	size_t GetNumOfCacheImage() const { return m_cacheData.size(); 	}
 
 	static DWORD WINAPI ThreadFuncProxy(LPVOID p);
@@ -49,7 +59,14 @@ public:
 	void getCachedData(const std::string & strFilename, ZImage & image);
 	void AddCacheData(const std::string & strFilename, ZImage & image);
 
+	void SetLastActionDirection(eLastActionDirection last)
+	{
+		m_lastActionDirection = last;
+	}
+
 private:
+
+	eLastActionDirection m_lastActionDirection;
 
 	/// 캐시된 데이터 용량
 	long m_lCacheSize;
@@ -88,7 +105,7 @@ private:
 	HANDLE m_hEvent;		// 캐시 이벤트
 
 	/// 지정된 번호의 파일을 캐시할 수 있으면 캐시한다.
-	bool CacheIndex(int iIndex);
+	bool _CacheIndex(int iIndex);
 
 	/// 캐시되어 있는 데이터들 중 현재 인덱스로부터 가장 멀리있는 인덱스를 얻는다.
 	int _GetFarthestIndexFromCurrentIndex();
