@@ -174,7 +174,7 @@ STDMETHODIMP CZViewMenuExt::QueryContextMenu (
 		mii.dwTypeData = _T(szImageInfo);
 	}
 
-	InsertMenu( hmenu, 0, MF_BYPOSITION | MF_POPUP, (UINT)hSubMenu, szImageInfo);
+	InsertMenu( hmenu, 0, MF_BYPOSITION | MF_POPUP, (UINT_PTR)hSubMenu, szImageInfo);
 
 
 	m_uiMaxMenuID = (uID - uidCmdFirst) - 1;
