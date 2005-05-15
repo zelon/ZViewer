@@ -62,13 +62,18 @@
 #define ID_MOVE_NEXT_JUMP               40067
 #define ID_MOVE_PREV_JUMP               40068
 #define ID_FILE_MOVETO                  40072
+#define ID_VIEW_SORT                    40075
+#define ID_SORT_FILENAME                40076
+#define ID_SORT_FILESIZE                40077
+#define ID_SORT_FILEDATE                40078
+#define ID_FILE_RESCAN_FOLDER           40080
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        115
-#define _APS_NEXT_COMMAND_VALUE         40075
+#define _APS_NEXT_COMMAND_VALUE         40081
 #define _APS_NEXT_CONTROL_VALUE         1014
 #define _APS_NEXT_SYMED_VALUE           101
 #endif

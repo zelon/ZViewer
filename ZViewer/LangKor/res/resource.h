@@ -21,7 +21,6 @@
 #define IDC_STATIC_CACHE_MEMORY         1009
 #define IDC_STATIC_PROGRAM_PATH         1010
 #define IDC_STATIC_LIBRARY_VERSION      1011
-#define IDC_EDIT1                       1012
 #define IDC_EDIT_MOVE_TO_FOLDER         1012
 #define IDC_BUTTON_SELECT_FOLDER        1013
 #define ID_MAINMENU_FILE_EXIT           40002
@@ -38,6 +37,7 @@
 #define ID_MOVE_UNDOIMAGEPOSITION       40029
 #define ID_MOVE_REDOIMAGEPOSITION       40030
 #define IDS_ASSOCIATE_FILE_EXTS         40031
+#define IDS_SAME_FILE_EXIST_OVERWRITE   40032
 #define ID_ACCELERATOR_RIGHT            40033
 #define ID_ACCELERATOR_LEFT             40034
 #define ID_ACCELERATOR_UP               40035
@@ -62,13 +62,18 @@
 #define ID_MOVE_NEXT_JUMP               40067
 #define ID_MOVE_PREV_JUMP               40068
 #define ID_FILE_MOVETO                  40072
+#define ID_VIEW_SORT                    40075
+#define ID_SORT_FILENAME                40076
+#define ID_SORT_FILESIZE                40077
+#define ID_SORT_FILEDATE                40078
+#define ID_FILE_RESCAN_FOLDER           40080
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        115
-#define _APS_NEXT_COMMAND_VALUE         40075
+#define _APS_NEXT_COMMAND_VALUE         40081
 #define _APS_NEXT_CONTROL_VALUE         1014
 #define _APS_NEXT_SYMED_VALUE           101
 #endif

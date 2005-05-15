@@ -57,6 +57,7 @@ BEGIN
     POPUP "&File"
     BEGIN
         MENUITEM "&Open\tCtrl+O",               ID_MAINMENU_FILE_OPEN
+        MENUITEM "Rescan FileList Current Folder\tF5", ID_FILE_RESCAN_FOLDER
         MENUITEM SEPARATOR
         MENUITEM "Move to...\tAlt+M",           ID_FILE_MOVETO
         MENUITEM SEPARATOR
@@ -87,6 +88,13 @@ BEGIN
         MENUITEM "Prev Folder\tCtrl+PageUp",    ID_MOVE_PREVFOLDER
         MENUITEM SEPARATOR
         MENUITEM "Undo Image Position\tBackSpace", ID_MOVE_UNDOIMAGEPOSITION
+        MENUITEM SEPARATOR
+        POPUP "Sort"
+        BEGIN
+            MENUITEM "FileName - A is first",       ID_SORT_FILENAME
+            MENUITEM "FileSize - Big is first",     ID_SORT_FILESIZE
+            MENUITEM "FileDate - New is first",     ID_SORT_FILEDATE
+        END
     END
     POPUP "Option"
     BEGIN
@@ -154,6 +162,7 @@ BEGIN
     VK_RIGHT,       ID_ACCELERATOR_RIGHT,   VIRTKEY, NOINVERT
     VK_UP,          ID_ACCELERATOR_UP,      VIRTKEY, NOINVERT
     VK_DELETE,      ID_DELETETHISFILE,      VIRTKEY, NOINVERT
+    "M",            ID_FILE_MOVETO,         VIRTKEY, ALT, NOINVERT
     VK_F1,          ID_HELP_ABOUT,          VIRTKEY, NOINVERT
     "W",            ID_MAINMENU_FILE_EXIT,  VIRTKEY, CONTROL, NOINVERT
     "X",            ID_MAINMENU_FILE_EXIT,  VIRTKEY, ALT, NOINVERT
@@ -172,7 +181,7 @@ BEGIN
     VK_RETURN,      ID_VIEW_FULLSCREEN,     VIRTKEY, ALT, NOINVERT
     "]",            ID_VIEW_ROTATECLOCKWISE, ASCII, NOINVERT
     "[",            ID_VIEW_ROTATECOUNTERCLOCKWISE, ASCII, NOINVERT
-    "M",            ID_FILE_MOVETO,         VIRTKEY, ALT, NOINVERT
+    VK_F5,          ID_FILE_RESCAN_FOLDER,  VIRTKEY, NOINVERT
 END
 
 
@@ -329,10 +338,6 @@ BEGIN
                             "Go to the last image when you select first image or last image."
     ID_MOVE_REDOIMAGEPOSITION "Undo 하기 전의 이미지로 갑니다."
     IDS_ASSOCIATE_FILE_EXTS "Associate Image Files Exts?"
-END
-
-STRINGTABLE 
-BEGIN
     IDS_SAME_FILE_EXIST_OVERWRITE "Same file exist. Overwrite?"
 END
 

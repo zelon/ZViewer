@@ -57,6 +57,7 @@ BEGIN
     POPUP "파일(&F)"
     BEGIN
         MENUITEM "파일 열기(&O)\tCtrl+O",       ID_MAINMENU_FILE_OPEN
+        MENUITEM "현재 폴더 파일목록 다시 읽기\tF5", ID_FILE_RESCAN_FOLDER
         MENUITEM SEPARATOR
         MENUITEM "파일 이동...\tAlt+M",         ID_FILE_MOVETO
         MENUITEM SEPARATOR
@@ -71,8 +72,7 @@ BEGIN
         MENUITEM "작은 그림 화면에 맞게 확대",  ID_VIEW_SMALLTOSCREENSTRETCH
         MENUITEM SEPARATOR
         MENUITEM "시계 방향으로 90도 회전\t]",  ID_VIEW_ROTATECLOCKWISE
-        MENUITEM "반시계 방향으로 90도 회전\t[", 
-                                                ID_VIEW_ROTATECOUNTERCLOCKWISE
+        MENUITEM "반시계 방향으로 90도 회전\t[", ID_VIEW_ROTATECOUNTERCLOCKWISE
 
         MENUITEM SEPARATOR
         MENUITEM "다음 이미지(&N)\tPageDown",   ID_MOVE_NEXTIMAGE
@@ -88,6 +88,13 @@ BEGIN
         MENUITEM "이전 폴더\tCtrl+PageUp",      ID_MOVE_PREVFOLDER
         MENUITEM SEPARATOR
         MENUITEM "이미지 위치 되돌림\tBackspace", ID_MOVE_UNDOIMAGEPOSITION
+        MENUITEM SEPARATOR
+        POPUP "파일순서 정렬"
+        BEGIN
+            MENUITEM "파일이름 - A 가 먼저",       ID_SORT_FILENAME
+            MENUITEM "파일크기 - 큰파일이 먼저",     ID_SORT_FILESIZE
+            MENUITEM "파일날짜 - 최근파일이 먼저",     ID_SORT_FILEDATE
+        END
     END
     POPUP "옵션(&O)"
     BEGIN
@@ -155,6 +162,7 @@ BEGIN
     VK_RIGHT,       ID_ACCELERATOR_RIGHT,   VIRTKEY, NOINVERT
     VK_UP,          ID_ACCELERATOR_UP,      VIRTKEY, NOINVERT
     VK_DELETE,      ID_DELETETHISFILE,      VIRTKEY, NOINVERT
+    "M",            ID_FILE_MOVETO,         VIRTKEY, ALT, NOINVERT
     VK_F1,          ID_HELP_ABOUT,          VIRTKEY, NOINVERT
     "W",            ID_MAINMENU_FILE_EXIT,  VIRTKEY, CONTROL, NOINVERT
     "X",            ID_MAINMENU_FILE_EXIT,  VIRTKEY, ALT, NOINVERT
@@ -173,7 +181,7 @@ BEGIN
     VK_RETURN,      ID_VIEW_FULLSCREEN,     VIRTKEY, ALT, NOINVERT
     "]",            ID_VIEW_ROTATECLOCKWISE, ASCII, NOINVERT
     "[",            ID_VIEW_ROTATECOUNTERCLOCKWISE, ASCII, NOINVERT
-    "M",            ID_FILE_MOVETO,         VIRTKEY, ALT, NOINVERT
+    VK_F5,          ID_FILE_RESCAN_FOLDER,  VIRTKEY, NOINVERT
 END
 
 
@@ -204,8 +212,7 @@ BEGIN
     LTEXT           "캐시 적중률 : ",IDC_STATIC_HITRATE,7,50,112,8
     LTEXT           "캐시 메모리량 :",IDC_STATIC_CACHE_MEMORY,7,63,235,8
     LTEXT           "프로그램 경로 :",IDC_STATIC_PROGRAM_PATH,7,79,235,8
-    LTEXT           "라이브러리 버젼 :",IDC_STATIC_LIBRARY_VERSION,7,93,164,
-                    8
+    LTEXT           "라이브러리 버젼 :",IDC_STATIC_LIBRARY_VERSION,7,93,164,8
 END
 
 IDD_FILE_EXT_DIALOG DIALOGEX 0, 0, 121, 95
@@ -331,6 +338,7 @@ BEGIN
                             "First 나 Last 를 했을 경우 마지막으로 봤던 이미지로 갑니다."
     ID_MOVE_REDOIMAGEPOSITION "Undo 하기 전의 이미지로 갑니다."
     IDS_ASSOCIATE_FILE_EXTS "그림 파일을 연결하시겠습니까?"
+    IDS_SAME_FILE_EXIST_OVERWRITE "같은 파일이 있습니다. 덮어쓰시겠습니까?"
 END
 
 #endif    // 한국어 resources
