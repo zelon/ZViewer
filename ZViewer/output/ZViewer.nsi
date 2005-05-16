@@ -26,7 +26,7 @@ SetCompressor bzip2
 ; Welcome page
 !insertmacro MUI_PAGE_WELCOME
 ; License page
-!define MUI_LICENSEPAGE_CHECKBOX
+;!define MUI_LICENSEPAGE_CHECKBOX
 !insertmacro MUI_PAGE_LICENSE "ReadMe.txt"
 ; Directory page
 !insertmacro MUI_PAGE_DIRECTORY
