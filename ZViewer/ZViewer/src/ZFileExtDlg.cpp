@@ -77,6 +77,18 @@ void ZFileExtDlg::ExtMapInit()
 	extSet.m_numIconIndex = 0;
 	extSet.m_strExt = "tga";
 	m_extConnect.push_back(extSet);
+
+	extSet.m_numIconIndex = 0;
+	extSet.m_strExt = "pcx";
+	m_extConnect.push_back(extSet);
+
+	extSet.m_numIconIndex = 0;
+	extSet.m_strExt = "xpm";
+	m_extConnect.push_back(extSet);
+
+	extSet.m_numIconIndex = 0;
+	extSet.m_strExt = "xbm";
+	m_extConnect.push_back(extSet);
 }
 int CALLBACK ZFileExtDlg::FileExtDlgProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 {

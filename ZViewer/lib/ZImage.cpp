@@ -37,6 +37,8 @@ bool ZImage::IsValidImageFileExt(const char * szFilename)
 		0 == strcmp(strExt.c_str(), "tif") ||
 		0 == strcmp(strExt.c_str(), "tga") ||
 		0 == strcmp(strExt.c_str(), "dds") ||
+		0 == strcmp(strExt.c_str(), "xbm") ||
+		0 == strcmp(strExt.c_str(), "xpm") ||
 		0 == strcmp(strExt.c_str(), "png") 
 		)
 	{
