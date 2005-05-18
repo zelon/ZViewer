@@ -63,18 +63,19 @@ Section "MainSection" SEC01
 
 ; Preview Extension DLLs
   IfFileExists "$INSTDIR\ZViewerAgent.dll" ZViewerDllCheck ZViewerCopyDll
+
 ZViewerDllCheck:
   Delete "$INSTDIR\ZViewerAgent.dll"
   IfErrors ZViewerNeedUninstallAndReboot ZViewerCopyDll
 
 ZViewerNeedUninstallAndReboot:
-  MessageBox MB_OK "Uninstall Previous Version. And REBOOT or LOG OFF. And then re-install please."
-  Quit
+  MessageBox MB_OK "To install new dll, the installer will kill explorer."
+  KillProcDLL::KillProc "explorer.exe"
+
+; explorer 가 바로 죽어도 dll 을 복사하는 속도가 더 빠를 수 있으므로 잠시 대기
+  Sleep 1000
 
 ZViewerCopyDll:
-  File "FreeImage.dll"
-  File "FreeImagePlus.dll"
-  File "ZViewerAgent.dll"
 
   File "ZViewerIcons.dll"
   File "ZViewer.exe"
@@ -83,14 +84,27 @@ ZViewerCopyDll:
   File "License.txt"
   File "ReadMe.txt"
 
+  File "FreeImage.dll"
+  File "FreeImagePlus.dll"
+  File "ZViewerAgent.dll"
+
 ; Language Files 
   SetOutPath "$INSTDIR\language"
   File "language\korean.dll"
 
 ; Register DLL
-; old : ExecWait 'regsvr32 "$INSTDIR\ZViewerAgent.dll" /s'
+  SetOutPath "$INSTDIR" ; RegDll 을 하기 위해서는 그 폴더로 가야한다.
   RegDll "$INSTDIR\ZViewerAgent.dll"
   ExecWait "$INSTDIR\ZViewer.exe /fileext"
+
+; explorer.exe 가 없으면 새로 실행 시켜준다.
+  FindProcDLL::FindProc "explorer.exe"
+  StrCmp $R0 1 ZViewerEnd ZViewerExecExplorer
+
+ZViewerExecExplorer:
+  Exec "explorer.exe"
+ZViewerEnd:
+
 SectionEnd
 
 Section -AdditionalIcons
