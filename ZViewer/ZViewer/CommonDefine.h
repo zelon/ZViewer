@@ -30,6 +30,7 @@ class CFileDataSort_OnlyFilenameCompare
 public:
 	bool operator()(const FileData & a, const FileData & b)
 	{
+		/*
 		// 파일명 비교를 할 때 모두 소문자로 바꿔서 비교한다.
 		char szTempA[FILENAME_MAX], szTempB[FILENAME_MAX];
 		_snprintf(szTempA, sizeof(szTempA), GetOnlyFileName(a.m_strFileName).c_str());
@@ -38,6 +39,28 @@ public:
 		strlwr(szTempB);
 
 		return (strcmp(szTempB, szTempA) > 0);
+		*/
+		return (strcmpi(b.m_strFileName.c_str(), a.m_strFileName.c_str()) > 0);
+	}
+};
+
+class CFileDataSort_OnlyFilenameCompare_XP
+{
+public:
+	bool operator()(const FileData & a, const FileData & b)
+	{
+		/*
+		// 파일명 비교를 할 때 모두 소문자로 바꿔서 비교한다.
+		char szTempA[FILENAME_MAX], szTempB[FILENAME_MAX];
+		_snprintf(szTempA, sizeof(szTempA), GetOnlyFileName(a.m_strFileName).c_str());
+		_snprintf(szTempB, sizeof(szTempB), GetOnlyFileName(b.m_strFileName).c_str());
+		strlwr(szTempA);
+		strlwr(szTempB);
+
+		return (StrCmp(szTempB, szTempA) > 0);
+		*/
+
+		return ( strcmpi(b.m_strFileName.c_str(), a.m_strFileName.c_str()) > 0);
 	}
 };
 

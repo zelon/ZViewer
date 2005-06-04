@@ -16,6 +16,7 @@ class CStringCompareIgnoreCase
 public:
 	bool operator()(const std::string & a, const std::string & b)
 	{
+		/*
 		// 문자열 비교를 할 때 모두 소문자로 바꿔서 비교한다.
 		char szTempA[FILENAME_MAX], szTempB[FILENAME_MAX];
 		_snprintf(szTempA, sizeof(szTempA), a.c_str());
@@ -24,6 +25,38 @@ public:
 		strlwr(szTempB);
 
 		return (strcmp(szTempB, szTempA) > 0);
+		*/
+		return (strcmp(b.c_str(), a.c_str()) > 0);
+	}
+};
+
+class CStringCompareIgnoreCase_LengthFirst
+{
+public:
+	bool operator()(const std::string & a, const std::string & b)
+	{
+		// 길이를 우선.
+		if ( a.size() < b.size() )
+		{
+			return true;
+		}
+
+		if ( a.size() > b.size() )
+		{
+			return false;
+		}
+
+		/*
+		// 문자열 비교를 할 때 모두 소문자로 바꿔서 비교한다.
+		char szTempA[FILENAME_MAX], szTempB[FILENAME_MAX];
+		_snprintf(szTempA, sizeof(szTempA), a.c_str());
+		_snprintf(szTempB, sizeof(szTempB), b.c_str());
+		strlwr(szTempA);
+		strlwr(szTempB);
+
+		return (strcmp(szTempB, szTempA) > 0);
+		*/
+		return (strcmpi(b.c_str(), a.c_str()) > 0);
 
 	}
 };
