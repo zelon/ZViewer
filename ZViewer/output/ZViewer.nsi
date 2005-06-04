@@ -137,7 +137,6 @@ Function un.onInit
 FunctionEnd
 
 Section Uninstall
-;old : ExecWait 'regsvr32 "$INSTDIR\ZViewerAgent.dll" /u /s'
   UnRegDll "$INSTDIR\ZViewerAgent.dll"
 
   Delete "$SMPROGRAMS\${PRODUCT_NAME}\Uninstall.lnk"
