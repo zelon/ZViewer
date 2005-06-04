@@ -28,11 +28,207 @@ ZMain & ZMain::GetInstance()
 	return aInstance;
 }
 
+BOOL ZMain::_SetOSVersion()
+{
+	const int BUFSIZE = 1024;
+
+	OSVERSIONINFOEX osvi;
+	BOOL bOsVersionInfoEx;
+
+	// Try calling GetVersionEx using the OSVERSIONINFOEX structure.
+	// If that fails, try using the OSVERSIONINFO structure.
+
+	ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
+	osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
+
+	if( !(bOsVersionInfoEx = GetVersionEx ((OSVERSIONINFO *) &osvi)) )
+	{
+		osvi.dwOSVersionInfoSize = sizeof (OSVERSIONINFO);
+		if (! GetVersionEx ( (OSVERSIONINFO *) &osvi) ) 
+			return FALSE;
+	}
+
+	switch (osvi.dwPlatformId)
+	{
+		// Test for the Windows NT product family.
+	case VER_PLATFORM_WIN32_NT:
+
+		// Test for the specific product family.
+		if ( osvi.dwMajorVersion == 5 && osvi.dwMinorVersion == 2 )
+		{
+			m_osKind = eOSKind_XP;
+			printf ("Microsoft Windows Server&nbsp;2003 family, ");
+		}
+
+		if ( osvi.dwMajorVersion == 5 && osvi.dwMinorVersion == 1 )
+		{
+			m_osKind = eOSKind_XP;
+			printf ("Microsoft Windows XP ");
+		}
+
+		if ( osvi.dwMajorVersion == 5 && osvi.dwMinorVersion == 0 )
+		{
+			m_osKind = eOSKind_2000;
+			printf ("Microsoft Windows 2000 ");
+		}
+
+		if ( osvi.dwMajorVersion <= 4 )
+			printf("Microsoft Windows NT ");
+
+		// Test for specific product on Windows NT 4.0 SP6 and later.
+		if( bOsVersionInfoEx )
+		{
+			// Test for the workstation type.
+			if ( osvi.wProductType == VER_NT_WORKSTATION )
+			{
+				if( osvi.dwMajorVersion == 4 )
+					printf ( "Workstation 4.0 " );
+				else if( osvi.wSuiteMask & VER_SUITE_PERSONAL )
+					printf ( "Home Edition " );
+				else
+					printf ( "Professional " );
+			}
+
+			// Test for the server type.
+			else if ( osvi.wProductType == VER_NT_SERVER )
+			{
+				if( osvi.dwMajorVersion == 5 && osvi.dwMinorVersion == 2 )
+				{
+					if( osvi.wSuiteMask & VER_SUITE_DATACENTER )
+						printf ( "Datacenter Edition " );
+					else if( osvi.wSuiteMask & VER_SUITE_ENTERPRISE )
+						printf ( "Enterprise Edition " );
+					else if ( osvi.wSuiteMask == VER_SUITE_BLADE )
+						printf ( "Web Edition " );
+					else
+						printf ( "Standard Edition " );
+				}
+
+				else if( osvi.dwMajorVersion == 5 && osvi.dwMinorVersion == 0 )
+				{
+					if( osvi.wSuiteMask & VER_SUITE_DATACENTER )
+						printf ( "Datacenter Server " );
+					else if( osvi.wSuiteMask & VER_SUITE_ENTERPRISE )
+						printf ( "Advanced Server " );
+					else
+						printf ( "Server " );
+				}
+
+				else  // Windows NT 4.0 
+				{
+					if( osvi.wSuiteMask & VER_SUITE_ENTERPRISE )
+						printf ("Server 4.0, Enterprise Edition " );
+					else
+						printf ( "Server 4.0 " );
+				}
+			}
+		}
+		else  // Test for specific product on Windows NT 4.0 SP5 and earlier
+		{
+			HKEY hKey;
+			char szProductType[BUFSIZE];
+			DWORD dwBufLen=BUFSIZE;
+			LONG lRet;
+
+			lRet = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
+				"SYSTEM\\CurrentControlSet\\Control\\ProductOptions",
+				0, KEY_QUERY_VALUE, &hKey );
+			if( lRet != ERROR_SUCCESS )
+				return FALSE;
+
+			lRet = RegQueryValueEx( hKey, "ProductType", NULL, NULL,
+				(LPBYTE) szProductType, &dwBufLen);
+			if( (lRet != ERROR_SUCCESS) || (dwBufLen > BUFSIZE) )
+				return FALSE;
+
+			RegCloseKey( hKey );
+
+			if ( lstrcmpi( "WINNT", szProductType) == 0 )
+				printf( "Workstation " );
+			if ( lstrcmpi( "LANMANNT", szProductType) == 0 )
+				printf( "Server " );
+			if ( lstrcmpi( "SERVERNT", szProductType) == 0 )
+				printf( "Advanced Server " );
+
+			printf( "%d.%d ", osvi.dwMajorVersion, osvi.dwMinorVersion );
+		}
+
+		// Display service pack (if any) and build number.
+
+		if( osvi.dwMajorVersion == 4 && 
+			lstrcmpi( osvi.szCSDVersion, "Service Pack 6" ) == 0 )
+		{
+			HKEY hKey;
+			LONG lRet;
+
+			// Test for SP6 versus SP6a.
+			lRet = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
+				"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Hotfix\\Q246009",
+				0, KEY_QUERY_VALUE, &hKey );
+			if( lRet == ERROR_SUCCESS )
+				printf( "Service Pack 6a (Build %d)\n", osvi.dwBuildNumber & 0xFFFF );         
+			else // Windows NT 4.0 prior to SP6a
+			{
+				printf( "%s (Build %d)\n",
+					osvi.szCSDVersion,
+					osvi.dwBuildNumber & 0xFFFF);
+			}
+
+			RegCloseKey( hKey );
+		}
+		else // Windows NT 3.51 and earlier or Windows 2000 and later
+		{
+			printf( "%s (Build %d)\n",
+				osvi.szCSDVersion,
+				osvi.dwBuildNumber & 0xFFFF);
+		}
+
+
+		break;
+
+		// Test for the Windows 95 product family.
+	case VER_PLATFORM_WIN32_WINDOWS:
+
+		if (osvi.dwMajorVersion == 4 && osvi.dwMinorVersion == 0)
+		{
+			printf ("Microsoft Windows 95 ");
+			if ( osvi.szCSDVersion[1] == 'C' || osvi.szCSDVersion[1] == 'B' )
+				printf("OSR2 " );
+		} 
+
+		if (osvi.dwMajorVersion == 4 && osvi.dwMinorVersion == 10)
+		{
+			m_osKind = eOSKind_98;
+			printf ("Microsoft Windows 98 ");
+			if ( osvi.szCSDVersion[1] == 'A' )
+				printf("SE " );
+		} 
+
+		if (osvi.dwMajorVersion == 4 && osvi.dwMinorVersion == 90)
+		{
+			printf ("Microsoft Windows Millennium Edition\n");
+		} 
+		break;
+
+	case VER_PLATFORM_WIN32s:
+
+		printf ("Microsoft Win32s\n");
+		break;
+	}
+	return TRUE; 
+}
+
+
 ZMain::ZMain(void)
 :	m_hMainDlg(NULL)
-,	m_sortOrder(eFileSortOrder_FILENAME)	
+,	m_sortOrder(eFileSortOrder_FILENAME)
+,	m_osKind(eOSKind_UNKNOWN)
 {
 	SetProgramFolder();
+
+	_SetOSVersion();
+
+	_ASSERTE(m_osKind != eOSKind_UNKNOWN);
 }
 
 ZMain::~ZMain(void)
@@ -378,29 +574,7 @@ void ZMain::RescanFolder()
 
 	strToFindFolder += "*.*";
 
-	m_vFile.clear();
-	ZFindFile(strToFindFolder.c_str(), m_vFile, false);
-
-	// 얻은 파일을 정렬한다.
-	switch ( m_sortOrder )
-	{
-	case eFileSortOrder_FILENAME:
-		sort(m_vFile.begin(), m_vFile.end(), CFileDataSort_OnlyFilenameCompare());
-		break;
-
-	case eFileSortOrder_FILESIZE:
-		sort(m_vFile.begin(), m_vFile.end(), CFileDataSort_FileSize());
-		break;
-
-	case eFileSortOrder_LAST_MODIFY_TIME:
-		sort(m_vFile.begin(), m_vFile.end(), CFileDataSort_LastModifiedTime());
-		break;
-
-	default:
-		_ASSERTE(false);
-
-	}
-
+	_GetFileListAndSort(strToFindFolder, m_vFile);
 
 	// Cache Thread 에 전달한다.
 	ZCacheImage::GetInstance().SetImageVector(m_vFile);
@@ -470,7 +644,14 @@ bool ZMain::GetNeighborFolders(std::vector < std::string > & vFolders)
 	}
 
 	// 상위 폴더의 하위 폴더들을 정렬한다.
-	sort(vFolders.begin(), vFolders.end(), CStringCompareIgnoreCase());
+	if ( m_osKind == eOSKind_XP )
+	{
+		sort(vFolders.begin(), vFolders.end(), CStringCompareIgnoreCase_LengthFirst());
+	}
+	else
+	{
+		sort(vFolders.begin(), vFolders.end(), CStringCompareIgnoreCase());
+	}
 
 	return true;
 }
@@ -544,6 +725,40 @@ void ZMain::PrevFolder()
 	}
 }
 
+void ZMain::_GetFileListAndSort(const std::string & strFolderPathAndWildCard, FileListVector & vFileList)
+{
+	vFileList.clear();
+	ZFindFile(strFolderPathAndWildCard.c_str(), vFileList, false);
+
+	// 얻은 파일을 정렬한다.
+	switch ( m_sortOrder )
+	{
+	case eFileSortOrder_FILENAME:
+
+		if ( m_osKind == eOSKind_XP )
+		{
+			sort(vFileList.begin(), vFileList.end(), CFileDataSort_OnlyFilenameCompare_XP());
+		}
+		else
+		{
+			sort(vFileList.begin(), vFileList.end(), CFileDataSort_OnlyFilenameCompare());
+		}
+		break;
+
+	case eFileSortOrder_FILESIZE:
+		sort(vFileList.begin(), vFileList.end(), CFileDataSort_FileSize());
+		break;
+
+	case eFileSortOrder_LAST_MODIFY_TIME:
+		sort(vFileList.begin(), vFileList.end(), CFileDataSort_LastModifiedTime());
+		break;
+
+	default:
+		_ASSERTE(false);
+
+	}
+}
+
 void ZMain::OpenFolder(const std::string strFolder)
 {
 	// 특정 폴더의 하위 파일들을 검색해서 정렬 후 첫번째 파일을 연다.
@@ -552,9 +767,8 @@ void ZMain::OpenFolder(const std::string strFolder)
 	strTemp += "\\*.*";
 
 	vector < FileData > vFiles;
-	ZFindFile(strTemp.c_str(), vFiles, false);
 
-	sort(vFiles.begin(), vFiles.end(), CFileDataSort_OnlyFilenameCompare());
+	_GetFileListAndSort(strTemp, vFiles);
 
 	if ( vFiles.size() == 0 )
 	{
@@ -577,7 +791,6 @@ void ZMain::OpenFile(const string & strFilename)
 
 	// 스캔한 파일 중 현재 파일을 찾는다.
 	std::vector< FileData >::iterator it, endit = m_vFile.end();
-	//= find(m_vFile.begin(), m_vFile.end(), strFilename);
 
 	for ( it = m_vFile.begin(); it != endit; ++it)
 	{
@@ -972,7 +1185,7 @@ void ZMain::ShellTrayShow()
 }
 
 
-void ZMain::ChangeFilrSort(eFileSortOrder sortOrder)
+void ZMain::ChangeFileSort(eFileSortOrder sortOrder)
 {
 	m_sortOrder = sortOrder;
 	ReLoadFileList();

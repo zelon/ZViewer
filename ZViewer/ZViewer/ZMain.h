@@ -23,6 +23,13 @@ enum eFileSortOrder
 	eFileSortOrder_FILESIZE,
 };
 
+enum eOSKind
+{
+	eOSKind_UNKNOWN,
+	eOSKind_98,
+	eOSKind_2000,
+	eOSKind_XP,
+};
 
 class ZMain
 {
@@ -134,7 +141,7 @@ public:
 
 	void ShellTrayShow();
 
-	void ChangeFilrSort(eFileSortOrder sortOrder);
+	void ChangeFileSort(eFileSortOrder sortOrder);
 	void ReLoadFileList();
 
 	void LoadCurrent();
@@ -145,8 +152,14 @@ private:
 	void SetStatusBarText();
 	void SetTitle();
 
+	BOOL _SetOSVersion();
+	eOSKind m_osKind;
+
 	void InitOpenFileDialog();
 
+	typedef std::vector< FileData > FileListVector;
+
+	void _GetFileListAndSort(const std::string & strFolderPathAndWildCard, FileListVector & vFileList);
 	void ShellTrayHide();
 
 	// 현재 파일이 지워졌을 때 후의 처리. 파일 삭제, 이동 후에 불리는 함수이다.
@@ -162,7 +175,7 @@ private:
 	std::string m_strCurrentFilename;	// 현재 보여주고 있는 파일이름
 	
 	//std::vector<std::string> m_vFile;
-	std::vector< FileData > m_vFile;
+	FileListVector m_vFile;
 	eFileSortOrder m_sortOrder;
 
 	int m_iCurretFileIndex;

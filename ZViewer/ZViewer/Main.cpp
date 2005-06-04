@@ -506,15 +506,15 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 				break;
 
 			case ID_SORT_FILENAME:
-				ZMain::GetInstance().ChangeFilrSort(eFileSortOrder_FILENAME);
+				ZMain::GetInstance().ChangeFileSort(eFileSortOrder_FILENAME);
 				break;
 
 			case ID_SORT_FILESIZE:
-				ZMain::GetInstance().ChangeFilrSort(eFileSortOrder_FILESIZE);
+				ZMain::GetInstance().ChangeFileSort(eFileSortOrder_FILESIZE);
 				break;
 
 			case ID_SORT_FILEDATE:
-				ZMain::GetInstance().ChangeFilrSort(eFileSortOrder_LAST_MODIFY_TIME);
+				ZMain::GetInstance().ChangeFileSort(eFileSortOrder_LAST_MODIFY_TIME);
 				break;
 
 			case ID_FILE_RESCAN_FOLDER:
