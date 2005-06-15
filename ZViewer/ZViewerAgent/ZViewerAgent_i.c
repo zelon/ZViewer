@@ -6,7 +6,7 @@
 
 
  /* File created by MIDL compiler version 6.00.0361 */
-/* at Fri Dec 10 11:40:25 2004
+/* at Wed Jun 15 11:15:08 2005
  */
 /* Compiler settings for .\ZViewerAgent.idl:
     Oicf, W1, Zp8, env=Win32 (32b run)
