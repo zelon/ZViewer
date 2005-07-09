@@ -37,6 +37,12 @@ public:
 public:
 	static bool StartupLibrary(){ return true; }
 	static bool CleanupLibrary(){ return true; }
+	static bool IsValidImageFileExt(const char * szFilename);
+	static const char * GetLibraryVersion()
+	{
+		return FreeImage_GetVersion();
+	}
+
 	WORD GetWidth() { return m_image.getWidth(); }
 	WORD GetHeight() { return m_image.getHeight(); }
 	WORD GetBPP() { return m_image.getBitsPerPixel(); }
@@ -62,11 +68,6 @@ public:
 		return false;
 	}
 
-	static const char * GetLibraryVersion()
-	{
-		return FreeImage_GetVersion();
-	}
-
 	bool SaveToFile(const std::string & strFilename, int iFlag)
 	{
 		return ( TRUE == m_image.save(strFilename.c_str(), iFlag));
@@ -85,8 +86,6 @@ public:
 	{
 		return m_image.getImageSize();
 	}
-
-	static bool IsValidImageFileExt(const char * szFilename);
 
 private:
 	fipImage m_image;
