@@ -54,7 +54,7 @@ END
 
 IDR_MAIN_MENU MENU 
 BEGIN
-    POPUP "파일(&F)"
+    POPUP "&File"
     BEGIN
         MENUITEM "파일 열기(&O)\tCtrl+O",       ID_MAINMENU_FILE_OPEN
         MENUITEM "현재 폴더 파일목록 다시 읽기\tF5", ID_FILE_RESCAN_FOLDER
@@ -72,7 +72,7 @@ BEGIN
         MENUITEM "작은 그림 화면에 맞게 확대",  ID_VIEW_SMALLTOSCREENSTRETCH
         MENUITEM SEPARATOR
         MENUITEM "시계 방향으로 90도 회전\t]",  ID_VIEW_ROTATECLOCKWISE
-        MENUITEM "반시계 방향으로 90도 회전\t[", ID_VIEW_ROTATECOUNTERCLOCKWISE
+        MENUITEM "반시계 방향으로 90도 회전\t[",  ID_VIEW_ROTATECOUNTERCLOCKWISE
 
         MENUITEM SEPARATOR
         MENUITEM "다음 이미지(&N)\tPageDown",   ID_MOVE_NEXTIMAGE
@@ -91,9 +91,9 @@ BEGIN
         MENUITEM SEPARATOR
         POPUP "파일순서 정렬"
         BEGIN
-            MENUITEM "파일이름 - A 가 먼저",       ID_SORT_FILENAME
-            MENUITEM "파일크기 - 큰파일이 먼저",     ID_SORT_FILESIZE
-            MENUITEM "파일날짜 - 최근파일이 먼저",     ID_SORT_FILEDATE
+            MENUITEM "파일이름 - A 가 먼저",        ID_SORT_FILENAME
+            MENUITEM "파일크기 - 큰파일이 먼저",    ID_SORT_FILESIZE
+            MENUITEM "파일날짜 - 최근파일이 먼저",  ID_SORT_FILEDATE
         END
     END
     POPUP "옵션(&O)"
@@ -119,7 +119,6 @@ BEGIN
         MENUITEM "큰 그림 화면에 맞게 축소",    ID_POPUPMENU_BIGTOSCREENSTRETCH
 
         MENUITEM "작은 그림 화면에 맞게 확대",  ID_POPUPMENU_SMALLTOSCREENSTRETCH
-        , GRAYED
         MENUITEM SEPARATOR
         MENUITEM "현재 파일 지우기\tDelete",    ID_DELETETHISFILE
         MENUITEM SEPARATOR
@@ -213,7 +212,7 @@ BEGIN
     LTEXT           "캐시 적중률 : ",IDC_STATIC_HITRATE,7,50,112,8
     LTEXT           "캐시 메모리량 :",IDC_STATIC_CACHE_MEMORY,7,63,235,8
     LTEXT           "프로그램 경로 :",IDC_STATIC_PROGRAM_PATH,7,79,235,8
-    LTEXT           "라이브러리 버젼 :",IDC_STATIC_LIBRARY_VERSION,7,93,164,8
+    LTEXT           "라이브러리 버젼 :",IDC_STATIC_LIBRARY_VERSION,7,9,125,8
 END
 
 IDD_FILE_EXT_DIALOG DIALOGEX 0, 0, 121, 95
