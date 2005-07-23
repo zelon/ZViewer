@@ -952,6 +952,9 @@ void ZMain::ToggleFullScreen()
 
 	CheckMenuItem(m_hMainMenu, ID_VIEW_FULLSCREEN, m_option.m_bFullScreen ? MF_CHECKED : MF_UNCHECKED);
 	CheckMenuItem(m_hPopupMenu, ID_VIEW_FULLSCREEN, m_option.m_bFullScreen ? MF_CHECKED : MF_UNCHECKED);
+
+	m_iShowingX = 0;
+	m_iShowingY = 0;
 }
 
 
