@@ -357,6 +357,8 @@ void ZMain::Draw(bool bEraseBg)
 		bNeedClipping = true;
 	}
 
+#pragma message("TODO : 화면을 지워야할 때 Rectangle 로 지우지 않고, 화면 크기만큼 memoryDC 를 잡은 후 검게 칠하고, 그림을 거기 그리고, 그 memDC 를 그리자")
+#pragma message("TODO : memDC 가 다시 세팅되어야하는지를 flag 로 관리해서 화면을 스크롤할 때, 좀더 부드럽게 하자")
 
 	/// 그림이 화면보다 큰가 확인
 	if ( bNeedClipping )
@@ -382,7 +384,7 @@ void ZMain::Draw(bool bEraseBg)
 			iDrawX = (currentScreenRect.right - toRect.right) / 2;
 			iDrawY = (currentScreenRect.bottom - toRect.bottom) / 2;
 
-			if ( bEraseBg )	// 배경을 지워야 하면 지운다.
+			if ( bEraseBg )	// 배경을 지워야 하면 지운다. 새로운 그림을 그리기 직전에 그려야 깜빡임이 적다.
 			{
 				SelectObject(mainDC, GetStockObject(BLACK_BRUSH));
 				Rectangle(mainDC, 0, 0, currentScreenRect.right, currentScreenRect.bottom);
@@ -421,7 +423,7 @@ void ZMain::Draw(bool bEraseBg)
 				m_currentImage.GetBitmapInfo(),
 				DIB_RGB_COLORS, SRCCOPY);
 
-			if ( bEraseBg )	// 배경을 지워야 하면 지운다.
+			if ( bEraseBg )	// 배경을 지워야 하면 지운다. 새로운 그림을 그리기 직전에 그려야 깜빡임이 적다.
 			{
 				SelectObject(mainDC, GetStockObject(BLACK_BRUSH));
 				Rectangle(mainDC, 0, 0, currentScreenRect.right, currentScreenRect.bottom);
@@ -443,12 +445,6 @@ void ZMain::Draw(bool bEraseBg)
 	}
 	else	/// 화면이 그림보다 작으면...
 	{
-		if ( bEraseBg )	// 배경을 지워야 하면 지운다.
-		{
-			SelectObject(mainDC, GetStockObject(BLACK_BRUSH));
-			Rectangle(mainDC, 0, 0, currentScreenRect.right, currentScreenRect.bottom);
-		}
-
 		if ( m_option.m_bSmallToBigStretchImage )
 		{
 			/// 작은 그림을 화면에 맞게 확대해서 그린다.
@@ -470,6 +466,12 @@ void ZMain::Draw(bool bEraseBg)
 			int iDrawPointX = (currentScreenRect.right - toRect.right) / 2;
 			int iDrawPointY = (currentScreenRect.bottom - toRect.bottom) / 2;
 			
+			if ( bEraseBg )	// 배경을 지워야 하면 지운다. 새로운 그림을 그리기 직전에 그려야 깜빡임이 적다.
+			{
+				SelectObject(mainDC, GetStockObject(BLACK_BRUSH));
+				Rectangle(mainDC, 0, 0, currentScreenRect.right, currentScreenRect.bottom);
+			}
+
 			int r = StretchDIBits(mainDC,
 				iDrawPointX, iDrawPointY, 
 				toRect.right, toRect.bottom,
@@ -481,6 +483,12 @@ void ZMain::Draw(bool bEraseBg)
 		}
 		else
 		{
+			if ( bEraseBg )	// 배경을 지워야 하면 지운다. 새로운 그림을 그리기 직전에 그려야 깜빡임이 적다.
+			{
+				SelectObject(mainDC, GetStockObject(BLACK_BRUSH));
+				Rectangle(mainDC, 0, 0, currentScreenRect.right, currentScreenRect.bottom);
+			}
+
 			/// 작은 그림을 화면 가운데에 그린다.
 			int r = StretchDIBits(mainDC,
 				iDrawX, iDrawY, 
@@ -751,7 +759,7 @@ void ZMain::PrevFolder()
 
 void ZMain::_GetFileListAndSort(const std::string & strFolderPathAndWildCard, FileListVector & vFileList)
 {
-	vFileList.clear();
+	vFileList.resize(0);
 	ZFindFile(strFolderPathAndWildCard.c_str(), vFileList, false);
 
 	// 얻은 파일을 정렬한다.
@@ -1257,7 +1265,7 @@ void ZMain::_ProcAfterRemoveThisFile()
 		m_iCurretFileIndex = 0;
 		m_strCurrentFilename = "";
 
-		m_vFile.clear();
+		m_vFile.resize(0);
 
 		SetTitle();
 		SetStatusBarText();
