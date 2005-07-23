@@ -8,7 +8,10 @@ ZViewerAgentPSD.*
 banner.jpg
 *.pdb
 ZViewerIconsD.dll
+ZViewerIcons.dll
 ZViewerAgent.lib
 *.zip
 *.lib
 *.DPbcd
+ZViewerD.exe
+ZViewer.exe
