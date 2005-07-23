@@ -119,7 +119,6 @@ BEGIN
         MENUITEM "BigToScreenStretch",          ID_POPUPMENU_BIGTOSCREENSTRETCH
 
         MENUITEM "SmallToScreenStretch",        ID_POPUPMENU_SMALLTOSCREENSTRETCH
-        , GRAYED
         MENUITEM SEPARATOR
         MENUITEM "DeleteThisFile",              ID_DELETETHISFILE
         MENUITEM SEPARATOR

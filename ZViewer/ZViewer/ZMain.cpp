@@ -371,7 +371,7 @@ void ZMain::Draw(bool bEraseBg)
 
 			RECT toRect;
 			SetRect(&toRect, 0, 0, m_currentImage.GetWidth(), m_currentImage.GetHeight());
-			toRect = GetResizedRect(rt, toRect);
+			toRect = GetResizedRectForBigToSmall(rt, toRect);
 
 			ZImage stretchedImage(m_currentImage);
 
@@ -445,18 +445,44 @@ void ZMain::Draw(bool bEraseBg)
 	}
 	else	/// 화면이 그림보다 작으면...
 	{
+		if ( bEraseBg )	// 배경을 지워야 하면 지운다.
+		{
+			SelectObject(mainDC, GetStockObject(BLACK_BRUSH));
+			Rectangle(mainDC, 0, 0, rt.right, rt.bottom);
+		}
+
 		if ( m_option.m_bSmallToBigStretchImage )
 		{
 			/// 작은 그림을 화면에 맞게 확대해서 그린다.
+			RECT originalImageRect;
+			SetRect(&originalImageRect, 0, 0, m_currentImage.GetWidth(), m_currentImage.GetHeight());
+			RECT toRect = GetResizedRectForBigToSmall(rt, originalImageRect);
+
+			ZImage stretchedImage(m_currentImage);
+
+			if ( stretchedImage.GetBPP() == 8 )
+			{
+				stretchedImage.ConvertTo32Bit();
+			}
+			stretchedImage.Resize((WORD)toRect.right, (WORD)toRect.bottom);
+			
+			_ASSERTE(toRect.right == stretchedImage.GetWidth());
+			_ASSERTE(toRect.bottom == stretchedImage.GetHeight());
+
+			int iDrawPointX = (rt.right - toRect.right) / 2;
+			int iDrawPointY = (rt.bottom - toRect.bottom) / 2;
+			
+			int r = StretchDIBits(mainDC,
+				iDrawPointX, iDrawPointY, 
+				toRect.right, toRect.bottom,
+				0, 0,
+				toRect.right, toRect.bottom,
+				stretchedImage.GetData(),
+				stretchedImage.GetBitmapInfo(),
+				DIB_RGB_COLORS, SRCCOPY);
 		}
 		else
 		{
-			if ( bEraseBg )	// 배경을 지워야 하면 지운다.
-			{
-				SelectObject(mainDC, GetStockObject(BLACK_BRUSH));
-				Rectangle(mainDC, 0, 0, rt.right, rt.bottom);
-			}
-
 			/// 작은 그림을 화면 가운데에 그린다.
 			int r = StretchDIBits(mainDC,
 				iDrawX, iDrawY, 
@@ -802,7 +828,7 @@ void ZMain::OpenFile(const string & strFilename)
 
 	if ( m_vFile.size() <= 0 )
 	{
-		_ASSERTE(!"size of scanned file list is 0.");
+		_ASSERTE(!"size of scanned file list is 0. Check folder name or path!!");
 
 		return;
 	}
@@ -926,6 +952,17 @@ void ZMain::ToggleFullScreen()
 
 	CheckMenuItem(m_hMainMenu, ID_VIEW_FULLSCREEN, m_option.m_bFullScreen ? MF_CHECKED : MF_UNCHECKED);
 	CheckMenuItem(m_hPopupMenu, ID_VIEW_FULLSCREEN, m_option.m_bFullScreen ? MF_CHECKED : MF_UNCHECKED);
+}
+
+
+void ZMain::ToggleSmallToScreenStretch()
+{
+	m_option.m_bSmallToBigStretchImage = ! m_option.m_bSmallToBigStretchImage;
+
+	CheckMenuItem(m_hMainMenu, ID_VIEW_SMALLTOSCREENSTRETCH, m_option.m_bSmallToBigStretchImage ? MF_CHECKED : MF_UNCHECKED);
+	CheckMenuItem(m_hPopupMenu, ID_POPUPMENU_SMALLTOSCREENSTRETCH, m_option.m_bSmallToBigStretchImage ? MF_CHECKED : MF_UNCHECKED);
+
+	Draw();
 }
 
 void ZMain::ToggleBigToScreenStretch()

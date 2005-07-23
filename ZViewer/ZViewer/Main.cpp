@@ -578,6 +578,11 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 				ZMain::GetInstance().ToggleBigToScreenStretch();
 				break;
 
+			case ID_VIEW_SMALLTOSCREENSTRETCH:
+			case ID_POPUPMENU_SMALLTOSCREENSTRETCH:
+				ZMain::GetInstance().ToggleSmallToScreenStretch();
+				break;
+
 			case ID_VIEW_ROTATECLOCKWISE:
 				ZMain::GetInstance().Rotate(true);
 				break;

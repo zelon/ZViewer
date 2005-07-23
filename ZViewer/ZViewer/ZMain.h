@@ -99,6 +99,7 @@ public:
 	void ToggleFullScreen();
 
 	void ToggleBigToScreenStretch();
+	void ToggleSmallToScreenStretch();
 
 	int GetLogCacheHitRate();
 
