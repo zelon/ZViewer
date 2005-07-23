@@ -1,0 +1,3 @@
+
+ 1. Extract files FindProc.zip and KillProcDLL-bin.zip
+ 2. Move to *.dll files to NSIS 'Plugins' folder. ex) C:\Program Files\NSIS\Plugins
