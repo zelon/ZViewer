@@ -80,16 +80,16 @@ bool  ZFileExtReg::RegSetDocumentType()
 
 void ZFileExtReg::Clear()
 {
-	m_strExtension.clear();
-	m_strContentType.clear();
-	m_strShellOpenCommand.clear();
-	m_strShellNewCommand.clear();
-	m_strShellNewFileName.clear();
+	m_strExtension.resize(0);
+	m_strContentType.resize(0);
+	m_strShellOpenCommand.resize(0);
+	m_strShellNewCommand.resize(0);
+	m_strShellNewFileName.resize(0);
 
-	m_strDocumentClassName.clear();
-	m_strDocumentDescription.clear();
-	m_strDocumentCLSID.clear();
-	m_strDocumentCurrentVersion.clear();
-	m_strDocumentDefaultIcon.clear();
-	m_strDocumentShellOpenCommand.clear();
+	m_strDocumentClassName.resize(0);
+	m_strDocumentDescription.resize(0);
+	m_strDocumentCLSID.resize(0);
+	m_strDocumentCurrentVersion.resize(0);
+	m_strDocumentDefaultIcon.resize(0);
+	m_strDocumentShellOpenCommand.resize(0);
 }
