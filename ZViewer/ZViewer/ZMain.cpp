@@ -305,20 +305,19 @@ void ZMain::OnInit()
 
 void ZMain::Draw(bool bEraseBg)
 {
-	//return;
 	if ( m_currentImage.IsValid() == FALSE ) return;
 	if ( m_hMainDlg == NULL ) return;
 
-	RECT rt;
-	GetClientRect(m_hMainDlg, &rt);
-	if ( m_option.m_bFullScreen == false ) rt.bottom -= STATUSBAR_HEIGHT;
+	RECT currentScreenRect;
+	GetClientRect(m_hMainDlg, &currentScreenRect);
+	if ( m_option.m_bFullScreen == false ) currentScreenRect.bottom -= STATUSBAR_HEIGHT;
 
 	HDC mainDC = GetDC(m_hMainDlg);
 
 	if ( m_vFile.size() <= 0 )
 	{
 		SelectObject(mainDC, GetStockObject(BLACK_BRUSH));
-		Rectangle(mainDC, 0, 0, rt.right, rt.bottom);
+		Rectangle(mainDC, 0, 0, currentScreenRect.right, currentScreenRect.bottom);
 
 		ReleaseDC(m_hMainDlg, mainDC);
 		return;
@@ -332,36 +331,35 @@ void ZMain::Draw(bool bEraseBg)
 	int iDrawPartX = 0;
 	int iDrawPartY = 0;
 
-	bool bWidthBig = false;
-	bool bHeightBig = false;
+	bool bNeedClipping = false;
 
-	if ( m_currentImage.GetWidth() < rt.right )
+	if ( m_currentImage.GetWidth() < currentScreenRect.right )
 	{
 		// 가로 길이가 화면보다 작을 때는 중앙에 오게
-		iDrawX = (rt.right/2) - (m_currentImage.GetWidth()/2);
+		iDrawX = (currentScreenRect.right/2) - (m_currentImage.GetWidth()/2);
 	}
 	else
 	{
 		// 가로 길이가 화면보다 크면 클리핑
 		iDrawPartX = m_iShowingX;
-		bWidthBig = true;
+		bNeedClipping = true;
 	}
 
-	if ( m_currentImage.GetHeight() < rt.bottom )
+	if ( m_currentImage.GetHeight() < currentScreenRect.bottom )
 	{
 		// 세로 길이가 화면보다 작을 때는 중앙에 오게
-		iDrawY = (rt.bottom/2) - (m_currentImage.GetHeight()/2);
+		iDrawY = (currentScreenRect.bottom/2) - (m_currentImage.GetHeight()/2);
 	}
 	else
 	{
 		// 세로 길이가 화면보다 크면 클리핑
 		iDrawPartY = m_iShowingY;
-		bHeightBig = true;
+		bNeedClipping = true;
 	}
 
 
 	/// 그림이 화면보다 큰가 확인
-	if ( bWidthBig || bHeightBig )
+	if ( bNeedClipping )
 	{
 		/// 그림이 화면보다 크면...
 
@@ -371,7 +369,7 @@ void ZMain::Draw(bool bEraseBg)
 
 			RECT toRect;
 			SetRect(&toRect, 0, 0, m_currentImage.GetWidth(), m_currentImage.GetHeight());
-			toRect = GetResizedRectForBigToSmall(rt, toRect);
+			toRect = GetResizedRectForBigToSmall(currentScreenRect, toRect);
 
 			ZImage stretchedImage(m_currentImage);
 
@@ -381,13 +379,13 @@ void ZMain::Draw(bool bEraseBg)
 			}
 			stretchedImage.Resize((WORD)toRect.right, (WORD)toRect.bottom);
 			
-			iDrawX = (rt.right/2) - (toRect.right/2);
-			iDrawY = (rt.bottom/2) - (toRect.bottom/2);
+			iDrawX = (currentScreenRect.right - toRect.right) / 2;
+			iDrawY = (currentScreenRect.bottom - toRect.bottom) / 2;
 
 			if ( bEraseBg )	// 배경을 지워야 하면 지운다.
 			{
 				SelectObject(mainDC, GetStockObject(BLACK_BRUSH));
-				Rectangle(mainDC, 0, 0, rt.right, rt.bottom);
+				Rectangle(mainDC, 0, 0, currentScreenRect.right, currentScreenRect.bottom);
 			}
 
 			int r = StretchDIBits(mainDC,
@@ -426,18 +424,18 @@ void ZMain::Draw(bool bEraseBg)
 			if ( bEraseBg )	// 배경을 지워야 하면 지운다.
 			{
 				SelectObject(mainDC, GetStockObject(BLACK_BRUSH));
-				Rectangle(mainDC, 0, 0, rt.right, rt.bottom);
+				Rectangle(mainDC, 0, 0, currentScreenRect.right, currentScreenRect.bottom);
 			}
 
 			// 메모리것을 화면에 그린다.
 			BOOL b = BitBlt(mainDC, 
 				iDrawX, iDrawY,			// 그릴 화면의 x, y 좌표. 화면에 꽉 찰 때는 0, 0 이어야한다.
-				m_currentImage.GetWidth(), rt.bottom,		// 그려질 화면의 가로, 세로 길이. 
+				m_currentImage.GetWidth(), currentScreenRect.bottom,		// 그려질 화면의 가로, 세로 길이. 
 				memDC, 
 				iDrawPartX, iDrawPartY,			// 그려질 이미지 원본의 시작 x,y 좌표
 				SRCCOPY);
 
-			DebugPrintf("rt.bottom : %d, PartX : %d, iDrawPartY : %d", rt.bottom, iDrawPartX, iDrawPartY);
+			DebugPrintf("rt.bottom : %d, PartX : %d, iDrawPartY : %d", currentScreenRect.bottom, iDrawPartX, iDrawPartY);
 
 			DeleteObject(hbmScreen);
 			DeleteDC(memDC);
@@ -448,7 +446,7 @@ void ZMain::Draw(bool bEraseBg)
 		if ( bEraseBg )	// 배경을 지워야 하면 지운다.
 		{
 			SelectObject(mainDC, GetStockObject(BLACK_BRUSH));
-			Rectangle(mainDC, 0, 0, rt.right, rt.bottom);
+			Rectangle(mainDC, 0, 0, currentScreenRect.right, currentScreenRect.bottom);
 		}
 
 		if ( m_option.m_bSmallToBigStretchImage )
@@ -456,7 +454,7 @@ void ZMain::Draw(bool bEraseBg)
 			/// 작은 그림을 화면에 맞게 확대해서 그린다.
 			RECT originalImageRect;
 			SetRect(&originalImageRect, 0, 0, m_currentImage.GetWidth(), m_currentImage.GetHeight());
-			RECT toRect = GetResizedRectForBigToSmall(rt, originalImageRect);
+			RECT toRect = GetResizedRectForBigToSmall(currentScreenRect, originalImageRect);
 
 			ZImage stretchedImage(m_currentImage);
 
@@ -469,8 +467,8 @@ void ZMain::Draw(bool bEraseBg)
 			_ASSERTE(toRect.right == stretchedImage.GetWidth());
 			_ASSERTE(toRect.bottom == stretchedImage.GetHeight());
 
-			int iDrawPointX = (rt.right - toRect.right) / 2;
-			int iDrawPointY = (rt.bottom - toRect.bottom) / 2;
+			int iDrawPointX = (currentScreenRect.right - toRect.right) / 2;
+			int iDrawPointY = (currentScreenRect.bottom - toRect.bottom) / 2;
 			
 			int r = StretchDIBits(mainDC,
 				iDrawPointX, iDrawPointY, 
@@ -497,8 +495,8 @@ void ZMain::Draw(bool bEraseBg)
 	ReleaseDC(m_hMainDlg, mainDC);
 
 	// 마우스 커서 모양
-	if ( m_currentImage.GetWidth() > rt.right ||
-		m_currentImage.GetHeight() > rt.bottom
+	if ( m_currentImage.GetWidth() > currentScreenRect.right ||
+		m_currentImage.GetHeight() > currentScreenRect.bottom
 		)
 	{
 		// 마우스 커서를 hand 로
