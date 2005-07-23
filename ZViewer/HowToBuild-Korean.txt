@@ -1,0 +1,21 @@
+
+ == How To Build ==
+
+ === 빌드 환경 ===
+ 1. Build 환경 : Visual Studio .NET 2003
+ 2. 설치파일만드는 환경 : NSIS 2.08 이상
+ 3. 프로그래머 작업 환경 : WinXP Pro Korean
+
+ === 빌드 ===
+
+ 1. Visual Studio .NET 2003 에서 ZViewerWin32.sln 파일을 불러들여 빌드 솔루션을 한다.
+ 2. output 폴더에 실행 파일 및 부속 파일들이 생긴다.
+
+
+ === 설치 파일 만들기 ===
+
+ 1. http://nsis.sf.net 에서 최신 NSIS 를 받아 설치한다.
+ 2. exttool 에 있는 zip 파일들의 압축을 풀어 각각 안에 있는 DLL 파일을 NSIS 가 설치된 폴더 밑에 있는
+    'Plugins' 폴더에 넣는다.
+ 3. output 폴더에 가서 ZViewer.nsi 파일에 대고 마우스 오른쪽 클릭을 한 후, 'Compile NSIS Script' 를 선택한다.
+ 4. 설치 파일이 생성된다.
