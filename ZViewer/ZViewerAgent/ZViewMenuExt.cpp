@@ -353,7 +353,7 @@ STDMETHODIMP CZViewMenuExt::OnMeasureItem ( MEASUREITEMSTRUCT* pmis, LRESULT* pR
 	RECT original = { 0, 0, m_lBmpWidth, m_lBmpHeight };
 	RECT max = { 0, 0, m_lMaxThumbnailSize, m_lMaxThumbnailSize };
 
-	RECT result = GetResizedRect(max, original);
+	RECT result = GetResizedRectForBigToSmall(max, original);
 
 	lThumbWidth = result.right;
 	lThumbHeight = result.bottom;
