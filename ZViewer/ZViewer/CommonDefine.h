@@ -69,7 +69,7 @@ class CFileDataSort_FileSize
 public:
 	bool operator()(const FileData & a, const FileData & b)
 	{
-		return a.m_nFileSize < b.m_nFileSize;
+		return a.m_nFileSize > b.m_nFileSize;
 	}
 };
 
