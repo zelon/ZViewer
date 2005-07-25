@@ -450,7 +450,7 @@ void ZMain::Draw(bool bEraseBg)
 			/// 작은 그림을 화면에 맞게 확대해서 그린다.
 			RECT originalImageRect;
 			SetRect(&originalImageRect, 0, 0, m_currentImage.GetWidth(), m_currentImage.GetHeight());
-			RECT toRect = GetResizedRectForBigToSmall(currentScreenRect, originalImageRect);
+			RECT toRect = GetResizedRectForSmallToBig(currentScreenRect, originalImageRect);
 
 			ZImage stretchedImage(m_currentImage);
 
