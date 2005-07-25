@@ -54,7 +54,7 @@ END
 
 IDR_MAIN_MENU MENU 
 BEGIN
-    POPUP "&File"
+    POPUP "파일(&F)"
     BEGIN
         MENUITEM "파일 열기(&O)\tCtrl+O",       ID_MAINMENU_FILE_OPEN
         MENUITEM "현재 폴더 파일목록 다시 읽기\tF5", ID_FILE_RESCAN_FOLDER
@@ -72,7 +72,8 @@ BEGIN
         MENUITEM "작은 그림 화면에 맞게 확대",  ID_VIEW_SMALLTOSCREENSTRETCH
         MENUITEM SEPARATOR
         MENUITEM "시계 방향으로 90도 회전\t]",  ID_VIEW_ROTATECLOCKWISE
-        MENUITEM "반시계 방향으로 90도 회전\t[",  ID_VIEW_ROTATECOUNTERCLOCKWISE
+        MENUITEM "반시계 방향으로 90도 회전\t[", 
+                                                ID_VIEW_ROTATECOUNTERCLOCKWISE
 
         MENUITEM SEPARATOR
         MENUITEM "다음 이미지(&N)\tPageDown",   ID_MOVE_NEXTIMAGE
@@ -119,6 +120,7 @@ BEGIN
         MENUITEM "큰 그림 화면에 맞게 축소",    ID_POPUPMENU_BIGTOSCREENSTRETCH
 
         MENUITEM "작은 그림 화면에 맞게 확대",  ID_POPUPMENU_SMALLTOSCREENSTRETCH
+
         MENUITEM SEPARATOR
         MENUITEM "현재 파일 지우기\tDelete",    ID_DELETETHISFILE
         MENUITEM SEPARATOR
@@ -212,7 +214,8 @@ BEGIN
     LTEXT           "캐시 적중률 : ",IDC_STATIC_HITRATE,7,50,112,8
     LTEXT           "캐시 메모리량 :",IDC_STATIC_CACHE_MEMORY,7,63,235,8
     LTEXT           "프로그램 경로 :",IDC_STATIC_PROGRAM_PATH,7,79,235,8
-    LTEXT           "라이브러리 버젼 :",IDC_STATIC_LIBRARY_VERSION,7,95,125,8
+    LTEXT           "라이브러리 버젼 :",IDC_STATIC_LIBRARY_VERSION,7,95,125,
+                    8
 END
 
 IDD_FILE_EXT_DIALOG DIALOGEX 0, 0, 121, 95
@@ -338,6 +341,10 @@ BEGIN
                             "First 나 Last 를 했을 경우 마지막으로 봤던 이미지로 갑니다."
     ID_MOVE_REDOIMAGEPOSITION "Undo 하기 전의 이미지로 갑니다."
     IDS_ASSOCIATE_FILE_EXTS "그림 파일을 연결하시겠습니까?"
+END
+
+STRINGTABLE 
+BEGIN
     IDS_SAME_FILE_EXIST_OVERWRITE "같은 파일이 있습니다. 덮어쓰시겠습니까?"
 END
 
