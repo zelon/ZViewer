@@ -86,9 +86,8 @@ bool SetRegistryValue(HKEY hOpenKey, const std::string & strKey,LPCTSTR szValue,
 // 최대 크기를 넘지 않는 적당한 리사이즈 크기를 돌려준다.
 RECT GetResizedRectForBigToSmall(const RECT & MaximumSize, const RECT & originalSize)
 {
-	if ( originalSize.right > MaximumSize.right && originalSize.bottom >= MaximumSize.bottom )
+	if ( originalSize.right <= MaximumSize.right && originalSize.bottom <= MaximumSize.bottom )
 	{
-		_ASSERTE(!"원래 화면보다 큰 그림이다.");
 		RECT ret = originalSize;
 		return ret;
 	}
@@ -132,7 +131,7 @@ RECT GetResizedRectForBigToSmall(const RECT & MaximumSize, const RECT & original
 
 RECT GetResizedRectForSmallToBig(const RECT & MaximumSize, const RECT & originalSize)
 {
-	if ( originalSize.right >= MaximumSize.right && originalSize.bottom >= MaximumSize.bottom )
+	if ( originalSize.right > MaximumSize.right && originalSize.bottom > MaximumSize.bottom )
 	{
 		return GetResizedRectForBigToSmall(MaximumSize, originalSize);
 	}
@@ -143,7 +142,7 @@ RECT GetResizedRectForSmallToBig(const RECT & MaximumSize, const RECT & original
 	double dWidthRate = (double)originalSize.right / (double)MaximumSize.right;
 	double dHeightRate = (double)originalSize.bottom / (double)MaximumSize.bottom;
 
-	if ( dHeightRate >=  dWidthRate)
+	if ( dHeightRate <=  dWidthRate)
 	{
 		bSetWidth = true;
 	}
@@ -159,12 +158,12 @@ RECT GetResizedRectForSmallToBig(const RECT & MaximumSize, const RECT & original
 	if ( bSetWidth == true )
 	{
 		// 가로 크기가 기준이다.
-		SetRect(&ret, 0, 0, (int)(originalSize.right*dWidthRate), (int)(originalSize.bottom*dWidthRate));
+		SetRect(&ret, 0, 0, (int)(MaximumSize.right), (int)(MaximumSize.right * originalSize.bottom/originalSize.right));
 	}
 	else
 	{
 		// 세로 크기가 기준이다.
-		SetRect(&ret, 0, 0, (int)(originalSize.right*dHeightRate), (int)(originalSize.bottom*dHeightRate));
+		SetRect(&ret, 0, 0, (int)(originalSize.right * MaximumSize.bottom / originalSize.bottom), (int)(MaximumSize.bottom));
 	}
 
 
