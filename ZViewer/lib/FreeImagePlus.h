@@ -108,6 +108,8 @@ public:
 	@see FreeImage_AllocateT
 	*/
 	BOOL setSize(FREE_IMAGE_TYPE image_type, WORD width, WORD height, WORD bpp, unsigned red_mask = 0, unsigned green_mask = 0, unsigned blue_mask = 0);
+	/// Destroy image data
+	virtual void clear();
 	//@}
 
 	/**@name Copying */
@@ -132,8 +134,8 @@ public:
 
 	/**
 	@brief Copy a sub part of the current image and returns it as a fipImage object.
-
-	The bit depth of the bitmap must be equal to 1, 4, 8, 16, 24 or 32.
+	
+	This method works with any bitmap type.
 	@param dst Output subimage
 	@param left Specifies the left position of the cropped rectangle. 
 	@param top Specifies the top position of the cropped rectangle. 
@@ -175,6 +177,12 @@ public:
 	BOOL load(const char* lpszPathName, int flag = 0);
 
 	/**
+	UNICODE version of load (this function only works under WIN32 and does nothing on other OS)
+	@see load
+	*/
+	BOOL loadU(const wchar_t* lpszPathName, int flag = 0);
+
+	/**
 	@brief Loads an image using the specified FreeImageIO struct and fi_handle, and an optional flag.
 	@param io FreeImageIO structure
 	@param handle FreeImage fi_handle
@@ -201,6 +209,12 @@ public:
 	@see FreeImage_Save, FreeImage documentation
 	*/
 	BOOL save(const char* lpszPathName, int flag = 0);
+
+	/**
+	UNICODE version of save (this function only works under WIN32 and does nothing on other OS)
+	@see save
+	*/
+	BOOL saveU(const wchar_t* lpszPathName, int flag = 0);
 
 	/**
 	@brief Saves an image using the specified FreeImageIO struct and fi_handle, and an optional flag.
@@ -473,7 +487,7 @@ public:
 	/** 
 	Converts the bitmap to 8 bits.<br> 
 	For palletized bitmaps, the color map is converted to a greyscale ramp.
-	@see convertTo8Bits
+	@see FreeImage_ConvertToGreyscale
 	@return Returns TRUE if successfull, FALSE otherwise. 
 	*/
 	BOOL convertToGrayscale();
@@ -798,21 +812,41 @@ public:
 
 	/// Destructor
 	~fipWinImage();
+	/// Destroy image data
+	virtual void clear();
 	//@}
 
 	/**@name Copying */
 	//@{	
-	/// Copy constructor
-	fipWinImage(const fipImage& Img);
+
+	/**
+	Copy constructor. 
+	Delete internal _display_dib data and copy the base class image data. 
+	Tone mapping parameters are left unchanged. 
+	@see FreeImage_Clone
+	*/
+	fipWinImage& operator=(const fipImage& src);
+
+	/**
+	Copy constructor
+	Delete internal _display_dib data and copy tone mapping parameters. 
+	Copy also the base class image data. 
+	@see FreeImage_Clone
+	*/
+	fipWinImage& operator=(const fipWinImage& src);
 
 	/** Clone function used for clipboard copy.<br>
 	Convert the FIBITMAP image to a DIB, 
-	and transfer the DIB in a global bitmap handle.
+	and transfer the DIB in a global bitmap handle.<br>
+	For non standard bitmaps, the BITMAPINFOHEADER->biCompression field is set to 0xFF + FreeImage_GetImageType(_dib), 
+	in order to recognize the bitmap as non standard. 
 	*/
 	HANDLE copyToHandle();
 
 	/** Copy constructor used for clipboard paste.<br>
-	Converts a global object to a FIBITMAP. The clipboard format must be CF_DIB.
+	Converts a global object to a FIBITMAP. The clipboard format must be CF_DIB.<br>
+	When the BITMAPINFOHEADER->biCompression field is set to 0xFF + [one of the predefined FREE_IMAGE_TYPE], 
+	the bitmap is recognized as non standard and correctly copied. 
 	@return Returns TRUE if successful, returns FALSE otherwise
 	*/
 	BOOL copyFromHandle(HANDLE hMem);
@@ -1006,7 +1040,7 @@ public :
 /** Multi-page file stream
 
 	fipMultiPage encapsulates the multi-page API. It supports reading/writing 
-	multi-page TIFF and ICO files. 
+	multi-page TIFF, ICO and GIF files. 
 */
 class FIP_API fipMultiPage : public fipObject 
 {
@@ -1037,10 +1071,11 @@ public:
 	@param lpszPathName Name of the multi-page bitmap file
 	@param create_new When TRUE, it means that a new bitmap will be created rather than an existing one being opened
 	@param read_only When TRUE the bitmap is opened read-only
+	@param flags Load flags. The signification of this flag depends on the image to be loaded.
 	@return Returns TRUE if successful, returns FALSE otherwise
 	@see FreeImage_OpenMultiBitmap
 	*/
-	BOOL open(const char* lpszPathName, BOOL create_new, BOOL read_only);
+	BOOL open(const char* lpszPathName, BOOL create_new, BOOL read_only, int flags = 0);
 
 	/**
 	Close a file stream
