@@ -15,6 +15,10 @@
 #include "src/ZResourceManager.h"
 #include "src/ZCacheImage.h"
 
+#ifdef _DEBUG
+#include "vld/vld.h"
+#endif
+
 int CALLBACK WndProc(HWND,UINT,WPARAM,LPARAM);
 int CALLBACK AboutWndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam);
 
