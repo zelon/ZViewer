@@ -183,7 +183,7 @@ std::string toString(int i)
 
 bool SelectFolder(HWND hWnd, char * szFolder)
 {
-	LPMALLOC pMalloc;
+	//LPMALLOC pMalloc;
 	LPITEMIDLIST pidl;
 	BROWSEINFO bi;
 
@@ -204,6 +204,7 @@ bool SelectFolder(HWND hWnd, char * szFolder)
 
 	SHGetPathFromIDList(pidl, szFolder);
 
+	/*
 	if ( SHGetMalloc(&pMalloc) != NOERROR )
 	{
 		return false;
@@ -211,6 +212,7 @@ bool SelectFolder(HWND hWnd, char * szFolder)
 
 	pMalloc->Free(pidl);
 	pMalloc->Release();
+	*/
 
 	return true;
 }
