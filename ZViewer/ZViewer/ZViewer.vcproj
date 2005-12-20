@@ -35,6 +35,7 @@
 				AdditionalDependencies="shlwapi.lib comctl32.lib $(SolutionDir)/lib/FreeImage.lib $(SolutionDir)/lib/FreeImagePlus.lib"
 				OutputFile="$(OutDir)/ZViewerD.exe"
 				LinkIncremental="2"
+				AdditionalLibraryDirectories="$(SolutionDir)/lib/vld"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile="$(OutDir)/ZViewerD.pdb"
 				SubSystem="2"
@@ -342,6 +343,16 @@
 			<File
 				RelativePath="..\lib\ZImage.h">
 			</File>
+			<Filter
+				Name="vld"
+				Filter="">
+				<File
+					RelativePath="..\lib\vld\vld.h">
+				</File>
+				<File
+					RelativePath="..\lib\vld\vldapi.h">
+				</File>
+			</Filter>
 		</Filter>
 	</Files>
 	<Globals>
