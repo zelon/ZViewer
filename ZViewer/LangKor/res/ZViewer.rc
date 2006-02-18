@@ -57,6 +57,7 @@ BEGIN
     POPUP "파일(&F)"
     BEGIN
         MENUITEM "파일 열기(&O)\tCtrl+O",       ID_MAINMENU_FILE_OPEN
+        MENUITEM "다른 형식으로 저장(&A)\tCtrl+S", ID_FILE_SAVE_AS
         MENUITEM "현재 폴더 파일목록 다시 읽기\tF5", ID_FILE_RESCAN_FOLDER
         MENUITEM SEPARATOR
         MENUITEM "파일 이동...\tAlt+M",         ID_FILE_MOVETO

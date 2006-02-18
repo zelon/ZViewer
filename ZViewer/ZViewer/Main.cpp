@@ -440,6 +440,10 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 				ZMain::GetInstance().OpenFileDialog();
 				break;
 
+			case ID_FILE_SAVE_AS_NEW_EXT:
+				ZMain::GetInstance().SaveFileDialog();
+				break;
+
 			case ID_FILE_MOVETO:
 				ZMain::GetInstance().MoveThisFile();
 				break;

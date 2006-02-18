@@ -14,6 +14,7 @@
 #include "src/ZResourceManager.h"
 #include "../lib/DesktopWallPaper.h"
 #include "src/MoveToDlg.h"
+#include "src/SaveAs.h"
 
 #include <ShlObj.h>
 #include <cstdio>
@@ -283,6 +284,23 @@ void ZMain::OpenFileDialog()
 	if (GetOpenFileName(&ofn)==TRUE) 
 	{
 		OpenFile(ofn.lpstrFile);
+	}
+}
+
+/// 현재 파일을 다른 형식으로 저장하는 파일 다이얼로그를 연다.
+void ZMain::SaveFileDialog()
+{
+	CSaveAs::getInstance().setParentHWND(m_hMainDlg);
+	CSaveAs::getInstance().setDefaultSaveFilename(m_strCurrentFolder, m_strCurrentFilename);
+	
+	if ( CSaveAs::getInstance().showDialog() )
+	{
+		std::string strSaveFilename = CSaveAs::getInstance().getSaveFileName();
+
+		if ( false == m_currentImage.SaveToFile(strSaveFilename, 0) )
+		{
+			MessageBox(m_hMainDlg, "unsupported file type", "ZViewer", MB_OK);
+		}
 	}
 }
 

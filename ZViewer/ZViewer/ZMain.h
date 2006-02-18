@@ -133,6 +133,9 @@ public:
 	void OpenFolder(const std::string strFolder);
 	void OpenFileDialog();
 
+	/// 현재 파일을 다른 형식으로 저장하는 파일 다이얼로그를 연다.
+	void SaveFileDialog();
+
 	void Undo();
 	void Redo();
 

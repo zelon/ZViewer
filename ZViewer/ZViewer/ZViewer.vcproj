@@ -286,6 +286,12 @@
 				RelativePath=".\src\OptionFile.h">
 			</File>
 			<File
+				RelativePath=".\src\SaveAs.cpp">
+			</File>
+			<File
+				RelativePath=".\src\SaveAs.h">
+			</File>
+			<File
 				RelativePath=".\src\ZCacheImage.cpp">
 			</File>
 			<File

@@ -57,6 +57,7 @@ BEGIN
     POPUP "&File"
     BEGIN
         MENUITEM "&Open\tCtrl+O",               ID_MAINMENU_FILE_OPEN
+        MENUITEM "Save &As...\tCtrl+S",         ID_FILE_SAVE_AS_NEW_EXT
         MENUITEM "Rescan FileList Current Folder\tF5", ID_FILE_RESCAN_FOLDER
         MENUITEM SEPARATOR
         MENUITEM "Move to...\tAlt+M",           ID_FILE_MOVETO
@@ -119,6 +120,7 @@ BEGIN
         MENUITEM "BigToScreenStretch",          ID_POPUPMENU_BIGTOSCREENSTRETCH
 
         MENUITEM "SmallToScreenStretch",        ID_POPUPMENU_SMALLTOSCREENSTRETCH
+
         MENUITEM SEPARATOR
         MENUITEM "DeleteThisFile",              ID_DELETETHISFILE
         MENUITEM SEPARATOR
@@ -338,6 +340,10 @@ BEGIN
                             "Go to the last image when you select first image or last image."
     ID_MOVE_REDOIMAGEPOSITION "Go to the before Undo"
     IDS_ASSOCIATE_FILE_EXTS "Associate Image Files Exts?"
+END
+
+STRINGTABLE 
+BEGIN
     IDS_SAME_FILE_EXIST_OVERWRITE "Same file exist. Overwrite?"
 END
 

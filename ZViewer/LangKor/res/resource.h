@@ -68,13 +68,14 @@
 #define ID_SORT_FILEDATE                40078
 #define ID_FILE_RESCAN_FOLDER           40080
 #define ID_SHOW_CACHED_FILENAME         40081
+#define ID_FILE_SAVE_AS_NEW_EXT         40084
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        115
-#define _APS_NEXT_COMMAND_VALUE         40083
+#define _APS_NEXT_COMMAND_VALUE         40085
 #define _APS_NEXT_CONTROL_VALUE         1014
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
