@@ -1096,8 +1096,7 @@ void ZMain::SetTitle()
 		char szFileExt[MAX_PATH] = { 0 };
 		_splitpath(m_strCurrentFilename.c_str(), NULL, NULL, szFileName, szFileExt);
 
-		//_snprintf(szTemp, sizeof(szTemp), "%s%s - ZViewer for rubi v%s", szFileName, szFileExt, g_strVersion.c_str() );
-		_snprintf(szTemp, sizeof(szTemp), "%s%s - %s [for rubi :D]", szFileName, szFileExt, m_strCurrentFilename.c_str());
+		_snprintf(szTemp, sizeof(szTemp), "%s%s - %s [ for you ]", szFileName, szFileExt, m_strCurrentFilename.c_str());
 	}
 	SetWindowText(m_hMainDlg, szTemp);
 }
