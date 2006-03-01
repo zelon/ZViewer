@@ -13,26 +13,31 @@
 
 class ZOption
 {
-public:
-
 	ZOption()
-		:	m_bOptionChanged(false)
-		,	m_strOptionFilename("option.ini")
 	{
+		m_strOptionFilename = "option.ini";
+		m_bOptionChanged = false;
 		SetDefaultOption();
 
 		LoadFromFile();
 	}
+
+public:
+	static ZOption & GetInstance();
 
 	~ZOption()
 	{
 		SaveToFile();
 	}
 
+	bool IsFullScreen() const
+	{
+		return m_bFullScreen;
+	}
+	void SetFullScreen(bool bFullScreen) { m_bFullScreen = bFullScreen; }
+
 	//-----------------------------------------------------------
 	// 아래는 프로그램 구동 후에 임시로 쓰이는 옵션들. 파일에 저장하지 않는다.
-	/// 전체 화면 모드인가.
-	bool m_bFullScreen;
 
 	/// 화면보다 큰 그림을 화면에 맞게 축소할 것인가
 	bool m_bBigToSmallStretchImage;
@@ -42,6 +47,13 @@ public:
 
 	//// 그림의 시작 위치. 일본 만화의 경우 우측 상단부터 시작하기 위해서...
 	bool m_bRightTopFirstDraw;
+
+	/// 한 화면에 2장의 그림을 보여줄 것인가.
+	bool m_bTwoInSaveView;
+
+protected:
+	/// 전체 화면 모드인가.m_bOptionChanged(false)
+	bool m_bFullScreen;
 
 private:
 	//----------------------------------------------------------
@@ -53,7 +65,7 @@ private:
 	/// 최대 캐시되는 그림 파일
 	int m_iMaximumCacheFileNum;
 
-	const std::string m_strOptionFilename;
+	std::string m_strOptionFilename;
 
 	void SetDefaultOption();
 

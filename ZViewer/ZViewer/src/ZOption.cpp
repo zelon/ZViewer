@@ -13,6 +13,12 @@
 #include "OptionFile.h"
 #include "CommonFunc.h"
 
+ZOption & ZOption::GetInstance()
+{
+	static ZOption inst;
+	return inst;
+}
+
 void ZOption::SetDefaultOption()
 {
 	m_bFullScreen = false;
