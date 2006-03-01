@@ -15,6 +15,7 @@
 #include "../lib/DesktopWallPaper.h"
 #include "src/MoveToDlg.h"
 #include "src/SaveAs.h"
+#include "src/ZOption.h"
 
 #include <ShlObj.h>
 #include <cstdio>
@@ -236,12 +237,12 @@ ZMain::~ZMain(void)
 {
 }
 
-int ZMain::GetLogCacheHitRate()
+int ZMain::GetLogCacheHitRate() const
 {
 	return ZCacheImage::GetInstance().GetLogCacheHitRate();
 }
 
-long ZMain::GetCachedKByte()
+long ZMain::GetCachedKByte() const
 {
 	return ZCacheImage::GetInstance().GetCachedKByte();
 }
@@ -328,7 +329,7 @@ void ZMain::Draw(bool bEraseBg)
 
 	RECT currentScreenRect;
 	GetClientRect(m_hMainDlg, &currentScreenRect);
-	if ( m_option.m_bFullScreen == false ) currentScreenRect.bottom -= STATUSBAR_HEIGHT;
+	if ( ZOption::GetInstance().IsFullScreen() == false ) currentScreenRect.bottom -= STATUSBAR_HEIGHT;
 
 	HDC mainDC = GetDC(m_hMainDlg);
 
@@ -383,7 +384,7 @@ void ZMain::Draw(bool bEraseBg)
 	{
 		/// 그림이 화면보다 크면...
 
-		if ( m_option.m_bBigToSmallStretchImage )
+		if ( ZOption::GetInstance().m_bBigToSmallStretchImage )
 		{
 			/// 큰 그림을 축소시켜서 그린다.
 
@@ -463,7 +464,7 @@ void ZMain::Draw(bool bEraseBg)
 	}
 	else	/// 화면이 그림보다 작으면...
 	{
-		if ( m_option.m_bSmallToBigStretchImage )
+		if ( ZOption::GetInstance().m_bSmallToBigStretchImage )
 		{
 			/// 작은 그림을 화면에 맞게 확대해서 그린다.
 			RECT originalImageRect;
@@ -535,7 +536,7 @@ void ZMain::Draw(bool bEraseBg)
 	}
 	PostMessage(m_hMainDlg, WM_SETCURSOR, 0, 0);
 
-	if ( false == m_option.m_bFullScreen )
+	if ( false == ZOption::GetInstance().IsFullScreen() )
 	{
 		PostMessage(m_hStatus, WM_PAINT, 0, 0);
 	}
@@ -943,9 +944,9 @@ void ZMain::ToggleFullScreen()
 {
 	static RECT lastPosition;
 
-	if ( m_option.m_bFullScreen )	// 현재 풀스크린이면 원래 화면으로 돌아간다.
+	if ( ZOption::GetInstance().IsFullScreen() )	// 현재 풀스크린이면 원래 화면으로 돌아간다.
 	{
-		m_option.m_bFullScreen = !m_option.m_bFullScreen;
+		ZOption::GetInstance().SetFullScreen(!ZOption::GetInstance().IsFullScreen());
 
 		ShellTrayShow();	// 숨겨졌던 작업 표시줄을 보여준다.
 
@@ -955,7 +956,7 @@ void ZMain::ToggleFullScreen()
 	}
 	else	// 현재 풀스크린이 아니면 풀스크린으로 만든다.
 	{
-		m_option.m_bFullScreen = !m_option.m_bFullScreen;
+		ZOption::GetInstance().SetFullScreen(!ZOption::GetInstance().IsFullScreen());
 		// 현재 크기를 기억한다.
 #pragma message("TODO: Maximized 되었을 때 처리")
 		GetWindowRect(m_hMainDlg, &lastPosition);
@@ -974,8 +975,8 @@ void ZMain::ToggleFullScreen()
 		//m_iRestoreX = 
 	}
 
-	CheckMenuItem(m_hMainMenu, ID_VIEW_FULLSCREEN, m_option.m_bFullScreen ? MF_CHECKED : MF_UNCHECKED);
-	CheckMenuItem(m_hPopupMenu, ID_VIEW_FULLSCREEN, m_option.m_bFullScreen ? MF_CHECKED : MF_UNCHECKED);
+	CheckMenuItem(m_hMainMenu, ID_VIEW_FULLSCREEN, ZOption::GetInstance().IsFullScreen() ? MF_CHECKED : MF_UNCHECKED);
+	CheckMenuItem(m_hPopupMenu, ID_VIEW_FULLSCREEN, ZOption::GetInstance().IsFullScreen() ? MF_CHECKED : MF_UNCHECKED);
 
 	m_iShowingX = 0;
 	m_iShowingY = 0;
@@ -984,20 +985,20 @@ void ZMain::ToggleFullScreen()
 
 void ZMain::ToggleSmallToScreenStretch()
 {
-	m_option.m_bSmallToBigStretchImage = ! m_option.m_bSmallToBigStretchImage;
+	ZOption::GetInstance().m_bSmallToBigStretchImage = ! ZOption::GetInstance().m_bSmallToBigStretchImage;
 
-	CheckMenuItem(m_hMainMenu, ID_VIEW_SMALLTOSCREENSTRETCH, m_option.m_bSmallToBigStretchImage ? MF_CHECKED : MF_UNCHECKED);
-	CheckMenuItem(m_hPopupMenu, ID_POPUPMENU_SMALLTOSCREENSTRETCH, m_option.m_bSmallToBigStretchImage ? MF_CHECKED : MF_UNCHECKED);
+	CheckMenuItem(m_hMainMenu, ID_VIEW_SMALLTOSCREENSTRETCH, ZOption::GetInstance().m_bSmallToBigStretchImage ? MF_CHECKED : MF_UNCHECKED);
+	CheckMenuItem(m_hPopupMenu, ID_POPUPMENU_SMALLTOSCREENSTRETCH, ZOption::GetInstance().m_bSmallToBigStretchImage ? MF_CHECKED : MF_UNCHECKED);
 
 	Draw();
 }
 
 void ZMain::ToggleBigToScreenStretch()
 {
-	m_option.m_bBigToSmallStretchImage = !m_option.m_bBigToSmallStretchImage;
+	ZOption::GetInstance().m_bBigToSmallStretchImage = !ZOption::GetInstance().m_bBigToSmallStretchImage;
 
-	CheckMenuItem(m_hMainMenu, ID_VIEW_BIGTOSCREENSTRETCH , m_option.m_bBigToSmallStretchImage ? MF_CHECKED : MF_UNCHECKED);
-	CheckMenuItem(m_hPopupMenu, ID_POPUPMENU_BIGTOSCREENSTRETCH, m_option.m_bBigToSmallStretchImage ? MF_CHECKED : MF_UNCHECKED);
+	CheckMenuItem(m_hMainMenu, ID_VIEW_BIGTOSCREENSTRETCH , ZOption::GetInstance().m_bBigToSmallStretchImage ? MF_CHECKED : MF_UNCHECKED);
+	CheckMenuItem(m_hPopupMenu, ID_POPUPMENU_BIGTOSCREENSTRETCH, ZOption::GetInstance().m_bBigToSmallStretchImage ? MF_CHECKED : MF_UNCHECKED);
 
 	Draw();
 }
@@ -1173,7 +1174,7 @@ void ZMain::LoadCurrent()
 	m_iShowingX = 0;
 	m_iShowingY = 0;
 
-	if ( m_option.m_bRightTopFirstDraw )	// 우측 상단부터 시작해야하면
+	if ( ZOption::GetInstance().m_bRightTopFirstDraw )	// 우측 상단부터 시작해야하면
 	{
 		RECT rt;
 		GetClientRect(m_hMainDlg, &rt);
@@ -1190,7 +1191,7 @@ void ZMain::OnDrag(int x, int y)
 {
 	if ( !m_currentImage.IsValid()) return;
 
-	if ( m_option.m_bBigToSmallStretchImage )
+	if ( ZOption::GetInstance().m_bBigToSmallStretchImage )
 	{
 		/// 큰 그림을 화면에 맞게 스트레칭할 때는 드래그는 하지 않아도 된다.
 		return;
@@ -1199,7 +1200,7 @@ void ZMain::OnDrag(int x, int y)
 	RECT rt;
 	GetClientRect(m_hMainDlg, &rt);
 
-	if ( m_option.m_bFullScreen == false ) rt.bottom -= STATUSBAR_HEIGHT;
+	if ( ZOption::GetInstance().IsFullScreen() == false ) rt.bottom -= STATUSBAR_HEIGHT;
 
 	int iNowShowingX = m_iShowingX;
 	int iNowShowingY = m_iShowingY;
@@ -1236,6 +1237,7 @@ void ZMain::OnDrag(int x, int y)
 	}
 }
 
+/// 작업 표시줄을 보이게 해준다.
 void ZMain::ShellTrayShow()
 {
 	// 작업 표시줄을 보이게 해준다.
@@ -1379,7 +1381,7 @@ void ZMain::OnFocusLose()
 void ZMain::OnFocusGet()
 {
 	DebugPrintf("OnFocusGet()");
-	if ( m_option.m_bFullScreen )
+	if ( ZOption::GetInstance().IsFullScreen() )
 	{
 		DebugPrintf("OnFocusGet() at fullscreen");
 		SetWindowPos(m_hMainDlg, HWND_TOPMOST, 0, 0, ::GetSystemMetrics(SM_CXSCREEN),::GetSystemMetrics(SM_CYSCREEN), SWP_NOMOVE|SWP_NOSIZE);
@@ -1420,10 +1422,10 @@ void ZMain::Redo()
 
 void ZMain::OnRightTopFirstDraw()
 {
-	m_option.m_bRightTopFirstDraw = !m_option.m_bRightTopFirstDraw;
+	ZOption::GetInstance().m_bRightTopFirstDraw = !ZOption::GetInstance().m_bRightTopFirstDraw;
 
-	CheckMenuItem(m_hMainMenu, ID_VIEW_RIGHTTOPFIRSTDRAW, m_option.m_bRightTopFirstDraw ? MF_CHECKED : MF_UNCHECKED);
-	CheckMenuItem(m_hPopupMenu, ID_VIEW_RIGHTTOPFIRSTDRAW, m_option.m_bRightTopFirstDraw ? MF_CHECKED : MF_UNCHECKED);
+	CheckMenuItem(m_hMainMenu, ID_VIEW_RIGHTTOPFIRSTDRAW, ZOption::GetInstance().m_bRightTopFirstDraw ? MF_CHECKED : MF_UNCHECKED);
+	CheckMenuItem(m_hPopupMenu, ID_VIEW_RIGHTTOPFIRSTDRAW, ZOption::GetInstance().m_bRightTopFirstDraw ? MF_CHECKED : MF_UNCHECKED);
 }
 
 void ZMain::ShowFileExtDlg()

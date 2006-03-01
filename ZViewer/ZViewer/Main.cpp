@@ -14,6 +14,7 @@
 #include "src/ZFileExtDlg.h"
 #include "src/ZResourceManager.h"
 #include "src/ZCacheImage.h"
+#include "src/ZOption.h"
 
 #ifdef _DEBUG
 #include "vld/vld.h"
@@ -23,6 +24,11 @@ int CALLBACK WndProc(HWND,UINT,WPARAM,LPARAM);
 int CALLBACK AboutWndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam);
 
 HMENU g_hPopupMenu;
+
+enum
+{
+	ARROW_MOVEMENT_LENGTH = 100
+};
 
 
 int APIENTRY WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance ,LPSTR lpszCmdParam,int nCmdShow)
@@ -103,7 +109,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance ,LPSTR lpszCmdP
 #endif
 	ZImage::StartupLibrary();
 
-	ZMain::GetInstance().setInitArg(strInitArg);
+	ZMain::GetInstance().SetInitArg(strInitArg);
 
 	ZMain::GetInstance().SetInstance(hInstance);
 
@@ -137,14 +143,14 @@ int APIENTRY WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance ,LPSTR lpszCmdP
 
 	hWnd=CreateWindow(
 		lpszClass,
-		lpszClass,		// Window Title
-		WS_OVERLAPPEDWINDOW,// | WS_EX_ACCEPTFILES,
-		iXPosition,		// 기본 x 위치
-		iYPosition,		// 기본 y 위치
-		iWidth,				// width
-		iHeight,			// height
+		lpszClass,		///< Window Title
+		WS_OVERLAPPEDWINDOW,///< | WS_EX_ACCEPTFILES,
+		iXPosition,		///< 기본 x 위치
+		iYPosition,		///< 기본 y 위치
+		iWidth,			///< width
+		iHeight,		///< height
 		NULL,
-		hMenu,	// MainMenu
+		hMenu,			///< MainMenu
 		hInstance,NULL);
 
 	// 탐색기에서의 Drag&Drop 을 가능하게 한다.
@@ -218,7 +224,7 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 		}
 		break;
 
-	case WM_DROPFILES:
+	case WM_DROPFILES:///< 탐색기에서 드래그 앤 드랍으로 놓았을 때
 		{
 			HDROP hDrop = (HDROP)wParam;
 
@@ -314,7 +320,7 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 
 	case WM_CLOSE:
 		{
-			if ( ZMain::GetInstance().IsFullScreen() )
+			if ( ZOption::GetInstance().IsFullScreen() )
 			{
 				ZMain::GetInstance().ShellTrayShow();
 			}
@@ -326,7 +332,7 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 		{
 			RECT rt;
 			GetClientRect(hWnd, &rt);
-			if ( ZMain::GetInstance().IsFullScreen() == false ) rt.bottom -= STATUSBAR_HEIGHT;	// StatusBar 를 위해 뺀다.
+			if ( ZOption::GetInstance().IsFullScreen() == false ) rt.bottom -= STATUSBAR_HEIGHT;	// StatusBar 를 위해 뺀다.
 
 			POINT pt;
 			GetCursorPos(&pt);
@@ -334,7 +340,7 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 
 			if ( PtInRect(&rt, pt) )
 			{
-				if ( ZMain::GetInstance().m_bHandCursor )
+				if ( ZMain::GetInstance().IsHandCursor() )
 				{
 					if ( HIWORD(lParam) == 513 )	// 마우스 왼쪽 버튼을 누르고 있으면
 					{
@@ -387,7 +393,7 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 
 			RECT rt;
 			GetClientRect(hWnd, &rt);
-			if ( ZMain::GetInstance().IsFullScreen() == false ) rt.bottom -= STATUSBAR_HEIGHT;
+			if ( ZOption::GetInstance().IsFullScreen() == false ) rt.bottom -= STATUSBAR_HEIGHT;
 
 			ZMain::GetInstance().OnChangeCurrentSize(rt.right, rt.bottom);
 		}
@@ -406,7 +412,7 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 		break;
 
 	case WM_CONTEXTMENU:
-		ZMain::GetInstance().m_bHandCursor = false;
+		ZMain::GetInstance().SetHandCursor(false);
 		TrackPopupMenu(g_hPopupMenu, TPM_LEFTALIGN, LOWORD(lParam), HIWORD(lParam), 0, hWnd, NULL);
 		break;
 
@@ -536,7 +542,7 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 			case ID_ACCELERATOR_CANCEL_FULLSCREEN:
 				{
 					// 현재 풀 스크린 일 때만 풀스크린을 취소한다.
-					if ( ZMain::GetInstance().IsFullScreen() )
+					if ( ZOption::GetInstance().IsFullScreen() )
 					{
 						ZMain::GetInstance().ToggleFullScreen();
 					}
@@ -558,19 +564,19 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 				break;
 
 			case ID_ACCELERATOR_RIGHT:
-				ZMain::GetInstance().OnDrag(100, 0);
+				ZMain::GetInstance().OnDrag(ARROW_MOVEMENT_LENGTH, 0);
 				break;
 
 			case ID_ACCELERATOR_LEFT:
-				ZMain::GetInstance().OnDrag(-100, 0);
+				ZMain::GetInstance().OnDrag(-ARROW_MOVEMENT_LENGTH, 0);
 				break;
 
 			case ID_ACCELERATOR_UP:
-				ZMain::GetInstance().OnDrag(0, -100);
+				ZMain::GetInstance().OnDrag(0, -ARROW_MOVEMENT_LENGTH);
 				break;
 
 			case ID_ACCELERATOR_DOWN:
-				ZMain::GetInstance().OnDrag(0, 100);
+				ZMain::GetInstance().OnDrag(0, ARROW_MOVEMENT_LENGTH);
 				break;
 
 			case ID_VIEW_RIGHTTOPFIRSTDRAW:
