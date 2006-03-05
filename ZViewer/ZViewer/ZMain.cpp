@@ -841,7 +841,7 @@ void ZMain::OpenFile(const string & strFilename)
 	RescanFolder();
 
 	// 스캔한 파일 중 현재 파일을 찾는다.
-	std::vector< FileData >::iterator it, endit = m_vFile.end();
+	std::vector< FileData >::const_iterator it, endit = m_vFile.end();
 
 	for ( it = m_vFile.begin(); it != endit; ++it)
 	{
@@ -851,7 +851,7 @@ void ZMain::OpenFile(const string & strFilename)
 		}
 	}
 
-	if ( m_vFile.size() <= 0 )
+	if ( m_vFile.empty() )
 	{
 		_ASSERTE(!"size of scanned file list is 0. Check folder name or path!!");
 
@@ -1132,14 +1132,14 @@ void ZMain::LoadCurrent()
 
 		bool bLoadOK = false;
 
-		for ( int i=0; i<10; ++i)
+		for ( unsigned int i=0; i<10; ++i)
 		{
 			bLoadOK = m_currentImage.LoadFromFile(m_strCurrentFilename);
 			if ( bLoadOK || i >= 5) break;
 
 			DebugPrintf("Direct Load failed. sleep");
 
-			Sleep(100);
+			Sleep(10);
 		}
 
 		if ( bLoadOK == false )

@@ -74,8 +74,8 @@ void ZCacheImage::SetImageVector(const std::vector < FileData > & v)
 
 	for ( size_t i = 0; i < m_numImageVectorSize; ++i)
 	{
-		m_imageMap[(int)i] = v[i].m_strFileName;
-		m_imageMapRev[v[i].m_strFileName] = (int)i;
+		m_imageMap.insert(std::make_pair((int)i, v[i].m_strFileName));
+		m_imageMapRev.insert(std::make_pair(v[i].m_strFileName, (int)i));
 	}
 
 	DebugPrintf("imageMapSize : %d", m_imageMap.size());

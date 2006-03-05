@@ -408,7 +408,7 @@ STDMETHODIMP CZViewMenuExt::OnDrawItem ( DRAWITEMSTRUCT* pdis, LRESULT* pResult 
 	}
 
 	// Draw the sunken 3D border.
-	for ( int i = 1; i <= m_l3DBorderWidth; i++ )
+	for ( unsigned int i = 1; i <= m_l3DBorderWidth; i++ )
 	{
 		pdcMenu->Draw3dRect ( rcDraw, GetSysColor ( COLOR_3DDKSHADOW ),
 			GetSysColor ( COLOR_3DHILIGHT ));
