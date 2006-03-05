@@ -1097,7 +1097,7 @@ void ZMain::SetTitle()
 		char szFileExt[MAX_PATH] = { 0 };
 		_splitpath(m_strCurrentFilename.c_str(), NULL, NULL, szFileName, szFileExt);
 
-		_snprintf(szTemp, sizeof(szTemp), "%s%s - %s [ for you ]", szFileName, szFileExt, m_strCurrentFilename.c_str());
+		_snprintf(szTemp, sizeof(szTemp), "%s%s - %s", szFileName, szFileExt, m_strCurrentFilename.c_str());
 	}
 	SetWindowText(m_hMainDlg, szTemp);
 }
@@ -1435,8 +1435,10 @@ void ZMain::ShowFileExtDlg()
 
 void ZMain::DeleteThisFile()
 {
-	/// TODO : LoadString() 을 이용해서 리소스에서 불러오도록 변경해야함.
-	int iRet = MessageBox(m_hMainDlg, ZResourceManager::GetInstance().GetString(IDS_DELETE_THIS_FILE).c_str(), "ZViewer", MB_YESNO);
+	char szDeleteMsg[256];
+
+	_snprintf(szDeleteMsg, sizeof(szDeleteMsg), ZResourceManager::GetInstance().GetString(IDS_DELETE_THIS_FILE).c_str(), GetFileNameFromFullFileName(m_strCurrentFilename).c_str());
+	int iRet = MessageBox(m_hMainDlg, szDeleteMsg, "ZViewer", MB_YESNO);
 
 	if ( iRet == IDYES )
 	{
@@ -1490,18 +1492,6 @@ void ZMain::MoveThisFile()
 	MoveFileEx(m_strCurrentFilename.c_str(), strToFileName.c_str(), MOVEFILE_REPLACE_EXISTING);
 	_ProcAfterRemoveThisFile();
 }
-
-/*
-void ZMain::LoadLanguage()
-{
-	ZINIOption opt;
-	opt.LoadFromFile("language/korean.ini");
-
-	// 메뉴를 세팅한다.
-	ModifyMenu(m_hPopupMenu, ID_DELETETHISFILE, MF_BYCOMMAND, ID_DELETETHISFILE, opt.GetValue("MenuFileOpen").c_str());
-	//SetDlgItemText(m_hPopupMenu, ID_DELETETHISFILE, opt.GetValue("MenuDeleteThisFile").c_str());
-}
-*/
 
 void ZMain::Rotate(bool bClockWise)
 {

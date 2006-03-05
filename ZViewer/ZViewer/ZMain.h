@@ -125,9 +125,6 @@ public:
 		return m_strProgramFolder;
 	}
 
-	/// 적절한 언어 ini 를 읽어와서 화면을 세팅한다.
-	//void LoadLanguage();
-
 	void SetInstance(HINSTANCE hInstance) { m_hMainInstance = hInstance; }
 	HINSTANCE GetHInstance() const { return m_hMainInstance; }
 	void OnChangeCurrentSize(int iWidth, int iHeight);
