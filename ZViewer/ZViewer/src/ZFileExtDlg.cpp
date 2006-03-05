@@ -58,6 +58,10 @@ void ZFileExtDlg::ExtMapInit()
 	extSet.m_strExt = "jpeg";
 	m_extConnect.push_back(extSet);
 
+	extSet.m_numIconIndex = 2;
+	extSet.m_strExt = "jpe";
+	m_extConnect.push_back(extSet);
+
 	extSet.m_numIconIndex = 3;
 	extSet.m_strExt = "png";
 	m_extConnect.push_back(extSet);
@@ -89,6 +93,47 @@ void ZFileExtDlg::ExtMapInit()
 	extSet.m_numIconIndex = 0;
 	extSet.m_strExt = "xbm";
 	m_extConnect.push_back(extSet);
+
+	extSet.m_numIconIndex = 0;
+	extSet.m_strExt = "tif";
+	m_extConnect.push_back(extSet);
+
+	extSet.m_numIconIndex = 0;
+	extSet.m_strExt = "tiff";
+	m_extConnect.push_back(extSet);
+
+	extSet.m_numIconIndex = 0;
+	extSet.m_strExt = "cut";
+	m_extConnect.push_back(extSet);
+
+	extSet.m_numIconIndex = 0;
+	extSet.m_strExt = "ico";
+	m_extConnect.push_back(extSet);
+
+	extSet.m_numIconIndex = 0;
+	extSet.m_strExt = "hdr";
+	m_extConnect.push_back(extSet);
+
+	extSet.m_numIconIndex = 0;
+	extSet.m_strExt = "jng";
+	m_extConnect.push_back(extSet);
+
+	extSet.m_numIconIndex = 0;
+	extSet.m_strExt = "koa";
+	m_extConnect.push_back(extSet);
+
+	extSet.m_numIconIndex = 0;
+	extSet.m_strExt = "mng";
+	m_extConnect.push_back(extSet);
+
+	extSet.m_numIconIndex = 0;
+	extSet.m_strExt = "pcd";
+	m_extConnect.push_back(extSet);
+
+	extSet.m_numIconIndex = 0;
+	extSet.m_strExt = "ras";
+	m_extConnect.push_back(extSet);
+
 }
 int CALLBACK ZFileExtDlg::FileExtDlgProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 {

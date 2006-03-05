@@ -25,21 +25,29 @@ bool ZImage::IsValidImageFileExt(const char * szFilename)
 
 	strlwr(szLowerExt);
 
-	std::string strExt = szLowerExt + 1;
+	const char * szExtOnly = szLowerExt + 1;
 
-	if ( strcmp(strExt.c_str(), "bmp") == 0 ||
-		0 == strcmp(strExt.c_str(), "jpg") ||
-		0 == strcmp(strExt.c_str(), "jpeg") ||
-		0 == strcmp(strExt.c_str(), "gif") ||
-		0 == strcmp(strExt.c_str(), "ico") ||
-		0 == strcmp(strExt.c_str(), "pcx") ||
-		0 == strcmp(strExt.c_str(), "psd") ||
-		0 == strcmp(strExt.c_str(), "tif") ||
-		0 == strcmp(strExt.c_str(), "tga") ||
-		0 == strcmp(strExt.c_str(), "dds") ||
-		0 == strcmp(strExt.c_str(), "xbm") ||
-		0 == strcmp(strExt.c_str(), "xpm") ||
-		0 == strcmp(strExt.c_str(), "png") 
+	if ( strcmp(szExtOnly, "bmp") == 0 ||
+		0 == strcmp(szExtOnly, "jpg") ||
+		0 == strcmp(szExtOnly, "jpeg") ||
+		0 == strcmp(szExt, "gif") ||
+		0 == strcmp(szExtOnly, "ico") ||
+		0 == strcmp(szExtOnly, "pcx") ||
+		0 == strcmp(szExtOnly, "psd") ||
+		0 == strcmp(szExtOnly, "tif") ||
+		0 == strcmp(szExtOnly, "tiff") ||
+		0 == strcmp(szExtOnly, "tga") ||
+		0 == strcmp(szExtOnly, "dds") ||
+		0 == strcmp(szExtOnly, "xbm") ||
+		0 == strcmp(szExtOnly, "xpm") ||
+		0 == strcmp(szExtOnly, "cut") ||
+		0 == strcmp(szExtOnly, "hdr") ||
+		0 == strcmp(szExtOnly, "jng") ||
+		0 == strcmp(szExtOnly, "koa") ||
+		0 == strcmp(szExtOnly, "mng") ||
+		0 == strcmp(szExtOnly, "pcd") ||
+		0 == strcmp(szExtOnly, "ras") ||
+		0 == strcmp(szExtOnly, "png") 
 		)
 	{
 		return true;

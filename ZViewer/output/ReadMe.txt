@@ -4,6 +4,7 @@
 
 -- 주요 기능 --
 
+ * 지원하는 확장자 : bmp, jpg, png, tif, psd, gif, dds, tga, pcx, xpm, xbm, cut, ico, hdr, jng, koa, mng, pcd, ras
  * 이미지를 캐시해두어 빨리 볼 수 있게 함. 50메가 캐시 메모리 제한.
  * 파일 이동, 삭제 기능
  * 실수로 Home, Last 등을 눌러 처음, 마지막 파일로 갔을 때 Backspace 키를 이용한 이전 위치로 돌아가기
@@ -29,6 +30,7 @@
  * v0.5.0(......)
   * freeimage library 3.8.0 으로 업데이트
   * 다른 형식의 그림 파일로 저장 기능
+  * 지원하는 이미지 형식 추가 - tif, cut, ico, hdr, jng, koa, mng, pcd, ras
 
  * v0.4.0(2005. 08. 06)
   * 파일이름 정렬, 파일크기 정렬, 파일 수정날짜 정렬 기능
