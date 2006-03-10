@@ -11,10 +11,14 @@
 #include "CommonFunc.h"
 #include <shlobj.h>
 #include <io.h>
+#include "LogManager.h"
 
 void DebugPrintf( const char *fmt, ... )
 {
-#ifdef _DEBUG
+#ifndef _DEBUG
+	return;
+#endif
+
 	va_list v;
 	char buf[1024*4];
 	int len;
@@ -25,7 +29,8 @@ void DebugPrintf( const char *fmt, ... )
 
 	OutputDebugString( buf );
 	OutputDebugString( "\r\n" );
-#endif
+
+	CLogManager::getInstance().Output(buf);
 }
 
 /*
@@ -151,10 +156,8 @@ RECT GetResizedRectForSmallToBig(const RECT & MaximumSize, const RECT & original
 		bSetWidth = false;
 	}
 
-	// 큰 값이 MaximumSize 가 되게 하는 비례를 찾는다.
 	RECT ret;
 
-	double dRate = 1;
 	if ( bSetWidth == true )
 	{
 		// 가로 크기가 기준이다.
