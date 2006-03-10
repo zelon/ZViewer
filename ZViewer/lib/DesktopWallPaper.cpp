@@ -53,6 +53,7 @@ void CDesktopWallPaper::SetDesktopWallPaper()
 
 }
 
+/// 바탕화면 이미지를 없앤다.
 void CDesktopWallPaper::ClearDesktopWallPaper()
 {
 	CDesktopWallPaper wallPaper("");
