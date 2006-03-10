@@ -15,6 +15,7 @@
 #include "src/ZResourceManager.h"
 #include "src/ZCacheImage.h"
 #include "src/ZOption.h"
+#include "../lib/LogManager.h"
 
 #ifdef _DEBUG
 #include "vld/vld.h"
@@ -179,6 +180,8 @@ int APIENTRY WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance ,LPSTR lpszCmdP
 		}
 	}
 
+	ZCacheImage::GetInstance().CleanUp();
+	CLogManager::getInstance().CleanUp();
 	ZImage::CleanupLibrary();
 
 	return (int)Message.wParam;
@@ -220,6 +223,14 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 				ZMain::GetInstance().OnDrag(5000, 5000);
 				break;
 
+#ifdef _DEBUG
+			case '`':
+				ZCacheImage::GetInstance().debugShowCacheInfo();
+				break;
+
+			case '~':
+				ZCacheImage::GetInstance().clearCache();
+#endif
 			}
 		}
 		break;
@@ -331,8 +342,7 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 	case WM_SETCURSOR:
 		{
 			RECT rt;
-			GetClientRect(hWnd, &rt);
-			if ( ZOption::GetInstance().IsFullScreen() == false ) rt.bottom -= STATUSBAR_HEIGHT;	// StatusBar ¸¦ À§ÇØ »«´Ù.
+			ZMain::GetInstance().getCurrentScreenRect(rt);
 
 			POINT pt;
 			GetCursorPos(&pt);
@@ -390,12 +400,7 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 	case WM_SIZE:
 		{
 			SendMessage(ZMain::GetInstance().GetStatusHandle(), WM_SIZE, wParam, lParam);
-
-			RECT rt;
-			GetClientRect(hWnd, &rt);
-			if ( ZOption::GetInstance().IsFullScreen() == false ) rt.bottom -= STATUSBAR_HEIGHT;
-
-			ZMain::GetInstance().OnChangeCurrentSize(rt.right, rt.bottom);
+			ZMain::GetInstance().OnWindowResized();
 		}
 		break;
 
@@ -622,7 +627,7 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 				break;
 
 			case ID_SETDESKTOPWALLPAPER_CLEAR:
-				ZMain::GetInstance().ClearDesktopWallPaper();
+				CDesktopWallPaper::ClearDesktopWallPaper();
 				break;
 				// End of Main Menu
 				/////////////////////////////////////////////
