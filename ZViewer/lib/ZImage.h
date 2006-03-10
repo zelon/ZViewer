@@ -33,8 +33,6 @@ public:
 class ZImage : public IImage
 {
 public:
-
-public:
 	static bool StartupLibrary(){ return true; }
 	static bool CleanupLibrary(){ return true; }
 	static bool IsValidImageFileExt(const char * szFilename);
@@ -45,6 +43,10 @@ public:
 
 	WORD GetWidth() { return m_image.getWidth(); }
 	WORD GetHeight() { return m_image.getHeight(); }
+
+	WORD GetOriginalWidth() { return m_originalWidth; }
+	WORD GetOriginalHeight() { return m_originalHeight; }
+
 	WORD GetBPP() { return m_image.getBitsPerPixel(); }
 	BYTE * GetData() { return m_image.accessPixels(); }
 	BITMAPINFO * GetBitmapInfo() { return m_image.getInfo(); }
@@ -57,12 +59,16 @@ public:
 		{
 			if ( m_image.load(strFilename.c_str()) == TRUE )
 			{
+				m_originalWidth = m_image.getWidth();
+				m_originalHeight = m_image.getHeight();
+				m_originalSize = m_image.getImageSize();
 				return true;
 			}
 		}
 		catch ( ... )
 		{
 #pragma message("TODO : 이 부분에 exception 이 발생하는 이유를 찾아야함...")
+			_ASSERTE(false);
 			return false;
 		}
 		return false;
@@ -87,10 +93,22 @@ public:
 		return m_image.getImageSize();
 	}
 
+	long GetOriginalImageSize()
+	{
+		return m_originalSize;
+	}
+
 private:
 	fipImage m_image;
 
+	/// Image's original width - before resizing
+	WORD m_originalWidth;
 
+	/// Image's original height - before resizing
+	WORD m_originalHeight;
+
+	/// Image's original size - before resizing
+	long m_originalSize;
 
 
 
