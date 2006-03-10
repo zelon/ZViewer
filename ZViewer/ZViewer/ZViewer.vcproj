@@ -338,6 +338,15 @@
 				RelativePath="..\lib\DesktopWallPaper.h">
 			</File>
 			<File
+				RelativePath="..\lib\LockUtil.h">
+			</File>
+			<File
+				RelativePath="..\lib\LogManager.cpp">
+			</File>
+			<File
+				RelativePath="..\lib\LogManager.h">
+			</File>
+			<File
 				RelativePath=".\lib\ZFileExtReg.cpp">
 			</File>
 			<File
