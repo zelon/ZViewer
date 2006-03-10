@@ -30,6 +30,25 @@ ZMain & ZMain::GetInstance()
 	return aInstance;
 }
 
+
+ZMain::ZMain(void)
+:	m_hMainDlg(NULL)
+,	m_sortOrder(eFileSortOrder_FILENAME)
+,	m_osKind(eOSKind_UNKNOWN)
+{
+	m_bLastCacheHit = false;
+	SetProgramFolder();
+
+	_SetOSVersion();
+
+	_ASSERTE(m_osKind != eOSKind_UNKNOWN);
+}
+
+ZMain::~ZMain(void)
+{
+}
+
+
 BOOL ZMain::_SetOSVersion()
 {
 	const int BUFSIZE = 1024;
@@ -221,22 +240,6 @@ BOOL ZMain::_SetOSVersion()
 }
 
 
-ZMain::ZMain(void)
-:	m_hMainDlg(NULL)
-,	m_sortOrder(eFileSortOrder_FILENAME)
-,	m_osKind(eOSKind_UNKNOWN)
-{
-	SetProgramFolder();
-
-	_SetOSVersion();
-
-	_ASSERTE(m_osKind != eOSKind_UNKNOWN);
-}
-
-ZMain::~ZMain(void)
-{
-}
-
 int ZMain::GetLogCacheHitRate() const
 {
 	return ZCacheImage::GetInstance().GetLogCacheHitRate();
@@ -328,8 +331,7 @@ void ZMain::Draw(bool bEraseBg)
 	if ( m_hMainDlg == NULL ) return;
 
 	RECT currentScreenRect;
-	GetClientRect(m_hMainDlg, &currentScreenRect);
-	if ( ZOption::GetInstance().IsFullScreen() == false ) currentScreenRect.bottom -= STATUSBAR_HEIGHT;
+	getCurrentScreenRect(currentScreenRect);
 
 	HDC mainDC = GetDC(m_hMainDlg);
 
@@ -352,10 +354,13 @@ void ZMain::Draw(bool bEraseBg)
 
 	bool bNeedClipping = false;
 
-	if ( m_currentImage.GetWidth() < currentScreenRect.right )
+	const WORD currentImageWidth = m_currentImage.GetWidth();
+	const WORD currentImageHeight = m_currentImage.GetHeight();
+
+	if ( currentImageWidth <= currentScreenRect.right )
 	{
 		// 가로 길이가 화면보다 작을 때는 중앙에 오게
-		iDrawX = (currentScreenRect.right/2) - (m_currentImage.GetWidth()/2);
+		iDrawX = (currentScreenRect.right/2) - (currentImageWidth/2);
 	}
 	else
 	{
@@ -364,10 +369,10 @@ void ZMain::Draw(bool bEraseBg)
 		bNeedClipping = true;
 	}
 
-	if ( m_currentImage.GetHeight() < currentScreenRect.bottom )
+	if ( currentImageHeight <= currentScreenRect.bottom )
 	{
 		// 세로 길이가 화면보다 작을 때는 중앙에 오게
-		iDrawY = (currentScreenRect.bottom/2) - (m_currentImage.GetHeight()/2);
+		iDrawY = (currentScreenRect.bottom/2) - (currentImageHeight/2);
 	}
 	else
 	{
@@ -382,6 +387,8 @@ void ZMain::Draw(bool bEraseBg)
 	/// 그림이 화면보다 큰가 확인
 	if ( bNeedClipping )
 	{
+		DebugPrintf("!!!!!!!!! clipping on draw......");
+
 		/// 그림이 화면보다 크면...
 
 		if ( ZOption::GetInstance().m_bBigToSmallStretchImage )
@@ -389,7 +396,7 @@ void ZMain::Draw(bool bEraseBg)
 			/// 큰 그림을 축소시켜서 그린다.
 
 			RECT toRect;
-			SetRect(&toRect, 0, 0, m_currentImage.GetWidth(), m_currentImage.GetHeight());
+			SetRect(&toRect, 0, 0, currentImageWidth, currentImageHeight);
 			toRect = GetResizedRectForBigToSmall(currentScreenRect, toRect);
 
 			ZImage stretchedImage(m_currentImage);
@@ -423,14 +430,9 @@ void ZMain::Draw(bool bEraseBg)
 			/// 큰 그림을 스크롤이 가능하게 클리핑해서 그린다.
 			HDC memDC = CreateCompatibleDC(mainDC);
 
-			int x = m_currentImage.GetWidth();
-			int y = m_currentImage.GetHeight();
-			HBITMAP hbmScreen = CreateCompatibleBitmap(mainDC,
-				x, 
-				y); 
+			HBITMAP hbmScreen = CreateCompatibleBitmap(mainDC, currentImageWidth, currentImageHeight); 
 
 			SelectObject(memDC, hbmScreen);
-
 
 			// 메모리에 전체 그림을 그린다.
 			int r = StretchDIBits(memDC,
@@ -456,19 +458,22 @@ void ZMain::Draw(bool bEraseBg)
 				iDrawPartX, iDrawPartY,			// 그려질 이미지 원본의 시작 x,y 좌표
 				SRCCOPY);
 
-			DebugPrintf("rt.bottom : %d, PartX : %d, iDrawPartY : %d", currentScreenRect.bottom, iDrawPartX, iDrawPartY);
+			//DebugPrintf("rt.bottom : %d, PartX : %d, iDrawPartY : %d", currentScreenRect.bottom, iDrawPartX, iDrawPartY);
 
 			DeleteObject(hbmScreen);
 			DeleteDC(memDC);
 		}
 	}
-	else	/// 화면이 그림보다 작으면...
+	else	/// image is smaller than screen
 	{
-		if ( ZOption::GetInstance().m_bSmallToBigStretchImage )
+		if ( currentImageWidth < currentScreenRect.right && currentImageHeight < currentScreenRect.bottom 
+			&& ZOption::GetInstance().m_bSmallToBigStretchImage ) ///< if option is on
 		{
+			DebugPrintf("!!!!!!!!!!!! stretching on draw...");
+
 			/// 작은 그림을 화면에 맞게 확대해서 그린다.
 			RECT originalImageRect;
-			SetRect(&originalImageRect, 0, 0, m_currentImage.GetWidth(), m_currentImage.GetHeight());
+			SetRect(&originalImageRect, 0, 0, currentImageWidth, currentImageHeight);
 			RECT toRect = GetResizedRectForSmallToBig(currentScreenRect, originalImageRect);
 
 			ZImage stretchedImage(m_currentImage);
@@ -511,9 +516,9 @@ void ZMain::Draw(bool bEraseBg)
 			/// 작은 그림을 화면 가운데에 그린다.
 			int r = StretchDIBits(mainDC,
 				iDrawX, iDrawY, 
-				m_currentImage.GetWidth(), m_currentImage.GetHeight(),
+				currentImageWidth, currentImageHeight,
 				0, 0,
-				m_currentImage.GetWidth(), m_currentImage.GetHeight(),
+				currentImageWidth, currentImageHeight,
 				m_currentImage.GetData(),
 				m_currentImage.GetBitmapInfo(),
 				DIB_RGB_COLORS, SRCCOPY);
@@ -522,8 +527,8 @@ void ZMain::Draw(bool bEraseBg)
 	ReleaseDC(m_hMainDlg, mainDC);
 
 	// 마우스 커서 모양
-	if ( m_currentImage.GetWidth() > currentScreenRect.right ||
-		m_currentImage.GetHeight() > currentScreenRect.bottom
+	if ( currentImageWidth > currentScreenRect.right ||
+		currentImageHeight > currentScreenRect.bottom
 		)
 	{
 		// 마우스 커서를 hand 로
@@ -990,7 +995,11 @@ void ZMain::ToggleSmallToScreenStretch()
 	CheckMenuItem(m_hMainMenu, ID_VIEW_SMALLTOSCREENSTRETCH, ZOption::GetInstance().m_bSmallToBigStretchImage ? MF_CHECKED : MF_UNCHECKED);
 	CheckMenuItem(m_hPopupMenu, ID_POPUPMENU_SMALLTOSCREENSTRETCH, ZOption::GetInstance().m_bSmallToBigStretchImage ? MF_CHECKED : MF_UNCHECKED);
 
+	LoadCurrent();
 	Draw();
+
+	ZCacheImage::GetInstance().clearCache();
+	ZCacheImage::GetInstance().setCacheEvent();
 }
 
 void ZMain::ToggleBigToScreenStretch()
@@ -1000,7 +1009,11 @@ void ZMain::ToggleBigToScreenStretch()
 	CheckMenuItem(m_hMainMenu, ID_VIEW_BIGTOSCREENSTRETCH , ZOption::GetInstance().m_bBigToSmallStretchImage ? MF_CHECKED : MF_UNCHECKED);
 	CheckMenuItem(m_hPopupMenu, ID_POPUPMENU_BIGTOSCREENSTRETCH, ZOption::GetInstance().m_bBigToSmallStretchImage ? MF_CHECKED : MF_UNCHECKED);
 
+	LoadCurrent();
 	Draw();
+
+	ZCacheImage::GetInstance().clearCache();
+	ZCacheImage::GetInstance().setCacheEvent();
 }
 
 void ZMain::SetStatusBarText()
@@ -1040,7 +1053,7 @@ void ZMain::SetStatusBarText()
 		SendMessage(m_hStatus, SB_SETTEXT, 0, (LPARAM)szTemp);
 
 		// 해상도 정보
-		_snprintf(szTemp, sizeof(szTemp), "%dx%dx%dbpp", m_currentImage.GetWidth(), m_currentImage.GetHeight(), m_currentImage.GetBPP());
+		_snprintf(szTemp, sizeof(szTemp), "%dx%dx%dbpp", m_currentImage.GetOriginalWidth(), m_currentImage.GetOriginalHeight(), m_currentImage.GetBPP());
 		SendMessage(m_hStatus, SB_SETTEXT, 1, (LPARAM)szTemp);
 
 		// image size
@@ -1063,14 +1076,19 @@ void ZMain::SetStatusBarText()
 		}
 		SendMessage(m_hStatus, SB_SETTEXT, 2, (LPARAM)szTemp);
 
-
-
 		// 임시로 http://wimy.com
 		_snprintf(szTemp, sizeof(szTemp), "http://wimy.com");
 		SendMessage(m_hStatus, SB_SETTEXT, 3, (LPARAM)szTemp);
 
 		// 로딩시간
-		_snprintf(szTemp, sizeof(szTemp), "%.3fsec", (float)(m_dwLoadingTime / 1000.0));
+		if ( m_bLastCacheHit )
+		{
+			_snprintf(szTemp, sizeof(szTemp), "%.3fsec [C]", (float)(m_dwLoadingTime / 1000.0));
+		}
+		else
+		{
+			_snprintf(szTemp, sizeof(szTemp), "%.3fsec [N]", (float)(m_dwLoadingTime / 1000.0));
+		}
 		SendMessage(m_hStatus, SB_SETTEXT, 4, (LPARAM)szTemp);
 
 		// 파일명
@@ -1122,13 +1140,16 @@ void ZMain::LoadCurrent()
 			ZCacheImage::GetInstance().getCachedData(m_strCurrentFilename, m_currentImage);
 		}
 
-		DebugPrintf("Cache Hit!!!!!!!!!!!!!\r\n");
+		DebugPrintf("Cache Hit!!!!!!!!!!!!!");
+
+		m_bLastCacheHit = true;
 
 		ZCacheImage::GetInstance().LogCacheHit();
 	}
 	else
 	{
 		// 캐시에서 찾을 수 없으면 지금 읽어들이고, 캐시에 추가한다.
+		DebugPrintf("Can't find in cache. load now...");
 
 		bool bLoadOK = false;
 
@@ -1156,16 +1177,10 @@ void ZMain::LoadCurrent()
 		}
 		else
 		{
-			if ( !ZCacheImage::GetInstance().hasCachedData(m_strCurrentFilename, m_iCurretFileIndex))
-			{
-				ZCacheImage::GetInstance().AddCacheData(m_strCurrentFilename, m_currentImage);
-			}
-			
-			DebugPrintf("Cache miss. Add to cache.");
+			DebugPrintf("Cache miss.");
+			m_bLastCacheHit = false;
 			ZCacheImage::GetInstance().LogCacheMiss();
 		}
-
-
 	}
 	m_dwLoadingTime = GetTickCount() - start;
 	SetTitle();	// 파일명을 윈도우 타이틀바에 적는다.
@@ -1177,14 +1192,13 @@ void ZMain::LoadCurrent()
 	if ( ZOption::GetInstance().m_bRightTopFirstDraw )	// 우측 상단부터 시작해야하면
 	{
 		RECT rt;
-		GetClientRect(m_hMainDlg, &rt);
+		getCurrentScreenRect(rt);
 
 		if ( m_currentImage.GetWidth() > rt.right )
 		{
 			m_iShowingX = m_currentImage.GetWidth() - rt.right;
 		}
 	}
-
 }
 
 void ZMain::OnDrag(int x, int y)
@@ -1198,9 +1212,7 @@ void ZMain::OnDrag(int x, int y)
 	}
 
 	RECT rt;
-	GetClientRect(m_hMainDlg, &rt);
-
-	if ( ZOption::GetInstance().IsFullScreen() == false ) rt.bottom -= STATUSBAR_HEIGHT;
+	getCurrentScreenRect(rt);
 
 	int iNowShowingX = m_iShowingX;
 	int iNowShowingY = m_iShowingY;
@@ -1240,7 +1252,7 @@ void ZMain::OnDrag(int x, int y)
 /// 작업 표시줄을 보이게 해준다.
 void ZMain::ShellTrayShow()
 {
-	// 작업 표시줄을 보이게 해준다.
+	/// 작업 표시줄을 보이게 해준다.
 	HWND h = FindWindow("Shell_TrayWnd", "");
 
 	if ( h != INVALID_HANDLE_VALUE )
@@ -1364,7 +1376,7 @@ void ZMain::_ProcAfterRemoveThisFile()
 
 void ZMain::OnFocusLose()
 {
-	DebugPrintf("OnFocusLose()");
+	//DebugPrintf("OnFocusLose()");
 
 	ShellTrayShow();
 	/*
@@ -1380,7 +1392,7 @@ void ZMain::OnFocusLose()
 
 void ZMain::OnFocusGet()
 {
-	DebugPrintf("OnFocusGet()");
+	//DebugPrintf("OnFocusGet()");
 	if ( ZOption::GetInstance().IsFullScreen() )
 	{
 		DebugPrintf("OnFocusGet() at fullscreen");
@@ -1540,7 +1552,27 @@ void ZMain::SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyle style)
 	wallPaper.SetDesktopWallPaper();
 }
 
-void ZMain::ClearDesktopWallPaper()
+
+/// 현재 화면의 그릴 수 있는 영역의 크기를 받아온다.
+void ZMain::getCurrentScreenRect(RECT & rect)
 {
-	CDesktopWallPaper::ClearDesktopWallPaper();
+	_ASSERTE(m_hMainDlg);
+	GetClientRect(m_hMainDlg, &rect);
+	if ( ZOption::GetInstance().IsFullScreen() == false ) rect.bottom -= STATUSBAR_HEIGHT;
+}
+
+/// On Window is resized
+void ZMain::OnWindowResized()
+{
+	RECT rt;
+	getCurrentScreenRect(rt);
+
+	OnChangeCurrentSize(rt.right, rt.bottom);
+
+	if ( ZOption::GetInstance().m_bBigToSmallStretchImage || ZOption::GetInstance().m_bSmallToBigStretchImage )
+	{
+		ZCacheImage::GetInstance().clearCache();
+		ZCacheImage::GetInstance().setCacheEvent();
+		LoadCurrent();
+	}
 }

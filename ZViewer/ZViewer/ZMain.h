@@ -37,6 +37,12 @@ public:
 	static ZMain & GetInstance();
 	~ZMain(void);
 
+	/// 현재 화면의 그릴 수 있는 영역의 크기를 받아온다.
+	void getCurrentScreenRect(RECT & rect);
+
+	/// On Window is resized
+	void OnWindowResized();
+
 	bool IsHandCursor() const { return m_bHandCursor; }
 	void SetHandCursor(bool bHandCursor) { m_bHandCursor = bHandCursor; }
 
@@ -48,9 +54,6 @@ public:
 
 	/// 현재보고 있는 이미지를 윈도우 바탕화면의 배경으로 지정한다.
 	void SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyle style);
-	
-	/// 바탕화면 이미지를 없앤다.
-	void ClearDesktopWallPaper();
 
 	/// 현재 위치의 폴더 이웃 폴더 - 상위 폴더의 하위 폴더들 - 를 얻어온다.
 	bool GetNeighborFolders(std::vector < std::string > & vFolders);
@@ -200,7 +203,12 @@ private:
 
 	/// 현재 보여주고 있는 이미지
 	ZImage m_currentImage;
-	DWORD m_dwLoadingTime;				///< 현재 이미지를 로딩하는 데 걸린 시간
+	
+	///< 현재 이미지를 로딩하는 데 걸린 시간
+	DWORD m_dwLoadingTime;
+
+	/// last image load is from cache
+	bool m_bLastCacheHit;
 
 	HWND m_hMainDlg;
 	HWND m_hStatus;
