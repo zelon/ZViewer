@@ -19,6 +19,22 @@ ZOption & ZOption::GetInstance()
 	return inst;
 }
 
+
+ZOption::ZOption()
+{
+	m_bUseCache = true;
+	m_strOptionFilename = "option.ini";
+	m_bOptionChanged = false;
+	m_iMaxCacheImageNum = 50;
+
+#ifdef _DEBUG
+	m_iMaxCacheImageNum = 10;
+#endif
+	SetDefaultOption();
+
+	LoadFromFile();
+}
+
 void ZOption::SetDefaultOption()
 {
 	m_bFullScreen = false;

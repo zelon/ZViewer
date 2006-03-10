@@ -13,14 +13,7 @@
 
 class ZOption
 {
-	ZOption()
-	{
-		m_strOptionFilename = "option.ini";
-		m_bOptionChanged = false;
-		SetDefaultOption();
-
-		LoadFromFile();
-	}
+	ZOption();
 
 public:
 	static ZOption & GetInstance();
@@ -50,6 +43,12 @@ public:
 
 	/// 한 화면에 2장의 그림을 보여줄 것인가.
 	bool m_bTwoInSaveView;
+
+	/// 캐쉬 시스템을 쓸것인가... 메모리가 적은 컴퓨터에서는 끌 수 있도록 하기 위해서
+	bool m_bUseCache;
+
+	/// 최대 캐시할 이미지 갯수. 여기서 절반반큼 왼쪽, 오른쪽으로 간다.
+	int m_iMaxCacheImageNum;
 
 protected:
 	/// 전체 화면 모드인가.m_bOptionChanged(false)
