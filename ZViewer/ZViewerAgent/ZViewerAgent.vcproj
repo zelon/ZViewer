@@ -366,6 +366,12 @@
 				RelativePath="..\lib\FreeImagePlus.h">
 			</File>
 			<File
+				RelativePath="..\lib\LogManager.cpp">
+			</File>
+			<File
+				RelativePath="..\lib\LogManager.h">
+			</File>
+			<File
 				RelativePath="..\lib\ZImage.cpp">
 			</File>
 			<File
