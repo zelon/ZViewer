@@ -98,6 +98,15 @@ public:
 		return m_originalSize;
 	}
 
+	bool isTransparent()
+	{
+		return (m_image.isTransparent() == TRUE);
+	}
+
+	const fipImage & getFipImage()
+	{
+		return m_image;
+	}
 private:
 	fipImage m_image;
 
