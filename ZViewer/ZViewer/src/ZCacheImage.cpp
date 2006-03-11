@@ -30,6 +30,7 @@ ZCacheImage::ZCacheImage()
 ,	m_numImageVectorSize(0)
 ,	m_lastActionDirection(eLastActionDirection_FORWARD)
 {
+	m_bNowCaching = false;
 	m_hThread = INVALID_HANDLE_VALUE;
 	m_imageMap.clear();
 	m_imageMapRev.clear();
@@ -159,7 +160,6 @@ bool ZCacheImage::_CacheIndex(int iIndex)
 
 	if ( iIndex < 0 ) iIndex = 0;
 	if ( iIndex >= (int)m_numImageVectorSize ) iIndex = (int)m_numImageVectorSize - 1;
-	if ( iIndex == m_iCurrentIndex ) return true;
 
 	// 이미 캐시되어 있는지 찾는다.
 	bool bFound = false;
@@ -356,15 +356,20 @@ void ZCacheImage::ThreadFunc()
 
 	while ( m_bGoOn ) // thread loop
 	{
-		iPos = 1;
+		m_bNowCaching = true;
+		iPos = 0;
 		_ASSERTE((int)m_numImageVectorSize == (int)m_imageMap.size());
 		_ASSERTE(m_iCurrentIndex <= (int)m_imageMap.size());
 		_ASSERTE(m_iCurrentIndex <= (int)m_numImageVectorSize);
 
 #ifdef _DEBUG
-		if ( m_cacheData.empty() )
+		
 		{
-			_ASSERTE(m_lCacheSize == 0);
+			CLockObjUtil lock(m_cacheLock);
+			if ( m_cacheData.empty() )
+			{
+				_ASSERTE(m_lCacheSize == 0);
+			}
 		}
 #endif
 
@@ -372,6 +377,7 @@ void ZCacheImage::ThreadFunc()
 		{
 			if ( m_bNewChange) break;	// 현재보고 있는 파일 인덱스가 바뀌었으면 빨리 다음 for 를 시작한다.
 			
+			/// 현재보고 있는 방향에 따라서 어디쪽 이미지를 먼저 캐시할 것인지 판단한다.
 			if ( m_lastActionDirection == eLastActionDirection_FORWARD )
 			{
 				// right side
@@ -398,6 +404,7 @@ void ZCacheImage::ThreadFunc()
 
 		//DebugPrintf("wait event");
 
+		m_bNowCaching = false;
 		m_hCacheEvent.wait();
 		m_bNewChange = false;
 
@@ -476,10 +483,10 @@ void ZCacheImage::debugShowCacheInfo()
 	ZMain::GetInstance().getCurrentScreenRect(rt);
 	DebugPrintf("CurrentScreenSize : %d, %d", rt.right, rt.bottom);
 
-	CLockObjUtil lock(m_cacheLock);
 
 	std::map < std::string, ZImage >::iterator it;
 
+	CLockObjUtil lock(m_cacheLock);
 	for ( it = m_cacheData.begin(); it != m_cacheData.end(); ++it )
 	{
 		ZImage & image = it->second;
@@ -491,6 +498,7 @@ void ZCacheImage::debugShowCacheInfo()
 
 void ZCacheImage::clearCache()
 {
+	CLockObjUtil lock(m_cacheLock);
 	m_cacheData.clear();
 	m_lCacheSize = 0;
 	DebugPrintf("Clear cache data");
