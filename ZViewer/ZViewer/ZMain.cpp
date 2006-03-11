@@ -447,14 +447,32 @@ void ZMain::Draw(bool bEraseBg)
 			SelectObject(memDC, hbmScreen);
 
 			// 메모리에 전체 그림을 그린다.
-			int r = StretchDIBits(memDC,
-				0, 0, 
-				m_currentImage.GetWidth(), m_currentImage.GetHeight(),
-				0, 0,
-				m_currentImage.GetWidth(), m_currentImage.GetHeight(),
-				m_currentImage.GetData(),
-				m_currentImage.GetBitmapInfo(),
-				DIB_RGB_COLORS, SRCCOPY);
+			if ( m_currentImage.isTransparent() )
+			{
+				DebugPrintf("Drawing transparent image...");
+				fipWinImage tempImage;
+				tempImage = m_currentImage.getFipImage();
+
+				tempImage.rescale(currentImageWidth, currentImageHeight, FILTER_BOX);
+				RECT rt;
+				rt.left = 0;
+				rt.top = 0;
+				rt.right = currentImageWidth;
+				rt.bottom = currentImageHeight;
+
+				tempImage.drawEx(memDC, rt, TRUE);
+			}
+			else
+			{
+				int r = StretchDIBits(memDC,
+					0, 0, 
+					currentImageWidth, currentImageHeight,
+					0, 0,
+					currentImageWidth, currentImageHeight,
+					m_currentImage.GetData(),
+					m_currentImage.GetBitmapInfo(),
+					DIB_RGB_COLORS, SRCCOPY);
+			}
 
 			if ( bEraseBg )	// 배경을 지워야 하면 지운다. 새로운 그림을 그리기 직전에 그려야 깜빡임이 적다.
 			{
@@ -494,6 +512,7 @@ void ZMain::Draw(bool bEraseBg)
 			{
 				stretchedImage.ConvertTo32Bit();
 			}
+
 			stretchedImage.Resize((WORD)toRect.right, (WORD)toRect.bottom);
 			
 			_ASSERTE(toRect.right == stretchedImage.GetWidth());
@@ -508,14 +527,34 @@ void ZMain::Draw(bool bEraseBg)
 				Rectangle(mainDC, 0, 0, currentScreenRect.right, currentScreenRect.bottom);
 			}
 
-			int r = StretchDIBits(mainDC,
-				iDrawPointX, iDrawPointY, 
-				toRect.right, toRect.bottom,
-				0, 0,
-				toRect.right, toRect.bottom,
-				stretchedImage.GetData(),
-				stretchedImage.GetBitmapInfo(),
-				DIB_RGB_COLORS, SRCCOPY);
+			if ( stretchedImage.isTransparent() )
+			{
+				DebugPrintf("drawing trans.....");
+//				stretchedImage.Resize(currentImageWidth, currentImageHeight);
+
+				fipWinImage temp;
+				temp = stretchedImage.getFipImage();
+
+				RECT rt;
+				rt.left = iDrawPointX;
+				rt.top = iDrawPointY;
+				rt.right = toRect.right;
+				rt.bottom = toRect.bottom;
+
+				temp.drawEx(mainDC, rt, TRUE);
+			}
+			else
+			{
+				int r = StretchDIBits(mainDC,
+					iDrawPointX, iDrawPointY, 
+					toRect.right, toRect.bottom,
+					0, 0,
+					toRect.right, toRect.bottom,
+					stretchedImage.GetData(),
+					stretchedImage.GetBitmapInfo(),
+					DIB_RGB_COLORS, SRCCOPY);
+			}
+
 		}
 		else
 		{
@@ -525,15 +564,34 @@ void ZMain::Draw(bool bEraseBg)
 				Rectangle(mainDC, 0, 0, currentScreenRect.right, currentScreenRect.bottom);
 			}
 
-			/// 작은 그림을 화면 가운데에 그린다.
-			int r = StretchDIBits(mainDC,
-				iDrawX, iDrawY, 
-				currentImageWidth, currentImageHeight,
-				0, 0,
-				currentImageWidth, currentImageHeight,
-				m_currentImage.GetData(),
-				m_currentImage.GetBitmapInfo(),
-				DIB_RGB_COLORS, SRCCOPY);
+			if ( m_currentImage.isTransparent() )
+			{
+				DebugPrintf("Drawing transparent image...");
+				fipWinImage tempImage;
+				tempImage = m_currentImage.getFipImage();
+				
+				/// rescale 을 하면, 투명한 배경에 체크무늬가 그려진다... 왜 이럴까;;;
+				tempImage.rescale(currentImageWidth, currentImageHeight, FILTER_BOX);
+				RECT rt;
+				rt.left = iDrawX;
+				rt.top = iDrawY;
+				rt.right = rt.left + currentImageWidth;
+				rt.bottom = rt.top + currentImageHeight;
+				tempImage.drawEx(mainDC, rt, TRUE);
+			}
+			else
+			{
+				/// 작은 그림을 화면 가운데에 그린다.
+				int r = StretchDIBits(mainDC,
+					iDrawX, iDrawY, 
+					currentImageWidth, currentImageHeight,
+					0, 0,
+					currentImageWidth, currentImageHeight,
+					m_currentImage.GetData(),
+					m_currentImage.GetBitmapInfo(),
+					DIB_RGB_COLORS, SRCCOPY);
+			}
+
 		}
 	}
 	ReleaseDC(m_hMainDlg, mainDC);
@@ -1069,11 +1127,12 @@ void ZMain::ToggleSmallToScreenStretch()
 	CheckMenuItem(m_hMainMenu, ID_VIEW_SMALLTOSCREENSTRETCH, ZOption::GetInstance().m_bSmallToBigStretchImage ? MF_CHECKED : MF_UNCHECKED);
 	CheckMenuItem(m_hPopupMenu, ID_POPUPMENU_SMALLTOSCREENSTRETCH, ZOption::GetInstance().m_bSmallToBigStretchImage ? MF_CHECKED : MF_UNCHECKED);
 
+	ZCacheImage::GetInstance().clearCache();
+	ZCacheImage::GetInstance().setCacheEvent();
+
 	LoadCurrent();
 	Draw();
 
-	ZCacheImage::GetInstance().clearCache();
-	ZCacheImage::GetInstance().setCacheEvent();
 }
 
 void ZMain::ToggleBigToScreenStretch()
@@ -1083,11 +1142,12 @@ void ZMain::ToggleBigToScreenStretch()
 	CheckMenuItem(m_hMainMenu, ID_VIEW_BIGTOSCREENSTRETCH , ZOption::GetInstance().m_bBigToSmallStretchImage ? MF_CHECKED : MF_UNCHECKED);
 	CheckMenuItem(m_hPopupMenu, ID_POPUPMENU_BIGTOSCREENSTRETCH, ZOption::GetInstance().m_bBigToSmallStretchImage ? MF_CHECKED : MF_UNCHECKED);
 
+	ZCacheImage::GetInstance().clearCache();
+	ZCacheImage::GetInstance().setCacheEvent();
+
 	LoadCurrent();
 	Draw();
 
-	ZCacheImage::GetInstance().clearCache();
-	ZCacheImage::GetInstance().setCacheEvent();
 }
 
 void ZMain::SetStatusBarText()
