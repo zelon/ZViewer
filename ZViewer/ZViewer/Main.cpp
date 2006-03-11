@@ -253,13 +253,31 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 				break;
 
 			case '~':
-				DWORD dwStart = GetTickCount();
-				ZCacheImage::GetInstance().clearCache();
-				DWORD dwClearTime = GetTickCount() - dwStart;
+				{
+					DWORD dwStart = GetTickCount();
+					ZCacheImage::GetInstance().clearCache();
+					DWORD dwClearTime = GetTickCount() - dwStart;
 
-				DebugPrintf("clear spend time : %d", dwClearTime);
+					DebugPrintf("clear spend time : %d", dwClearTime);
+				}
+				break;
+
+			case '0':
+				{
+					fipMultiPage image;
+					image.open("C:\\_Samples\\ljyzzno_2.gif", FALSE, TRUE);
+
+					int iGetPageCount = image.getPageCount();
+
+					FIBITMAP * pBitmap = FreeImage_Clone(image.lockPage(0));
+
+					fipImage a;
+					a = pBitmap;
 
 
+					int k = 0;
+					++k;
+				}
 				break;
 #endif
 			}
