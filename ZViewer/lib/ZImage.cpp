@@ -30,7 +30,7 @@ bool ZImage::IsValidImageFileExt(const char * szFilename)
 	if ( strcmp(szExtOnly, "bmp") == 0 ||
 		0 == strcmp(szExtOnly, "jpg") ||
 		0 == strcmp(szExtOnly, "jpeg") ||
-		0 == strcmp(szExt, "gif") ||
+		0 == strcmp(szExtOnly, "gif") ||
 		0 == strcmp(szExtOnly, "ico") ||
 		0 == strcmp(szExtOnly, "pcx") ||
 		0 == strcmp(szExtOnly, "psd") ||
