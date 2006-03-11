@@ -37,6 +37,9 @@ public:
 	static ZMain & GetInstance();
 	~ZMain(void);
 
+	/// Timer 를 받았을 때
+	void onTimer();
+
 	/// 현재 화면의 그릴 수 있는 영역의 크기를 받아온다.
 	void getCurrentScreenRect(RECT & rect);
 
@@ -110,8 +113,11 @@ public:
 
 	long GetCachedKByte() const;
 
-	void SetStatusHandle(HWND hWnd) { m_hStatus = hWnd; }
-	HWND GetStatusHandle() const { return m_hStatus; }
+	void SetStatusHandle(HWND hWnd) { m_hStatusBar = hWnd; }
+	HWND GetStatusHandle() const { return m_hStatusBar; }
+
+	/// Cache status 를 상태 표시줄에 표시한다.
+	void showCacheStatus();
 
 	void ToggleFullScreen();
 
@@ -210,8 +216,12 @@ private:
 	/// last image load is from cache
 	bool m_bLastCacheHit;
 
+	/// 메인 윈도우에 대한 핸들
 	HWND m_hMainDlg;
-	HWND m_hStatus;
+
+	/// 창 아래의 상태 표시줄에 대한 핸들
+	HWND m_hStatusBar;
+
 	HINSTANCE m_hMainInstance;
 
 	HMENU m_hMainMenu;

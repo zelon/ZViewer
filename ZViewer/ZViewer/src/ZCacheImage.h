@@ -82,7 +82,12 @@ public:
 		m_lastActionDirection = last;
 	}
 
+	bool isCachingNow() const { return m_bNowCaching; }
+
 private:
+
+	/// 현재 캐쉬 중인가...
+	bool m_bNowCaching;
 
 	/// 캐쉬의 효율성을 위해서 사용자가 마지막으로 어느 방향으로 움직였는지를 기억해놓는다.
 	eLastActionDirection m_lastActionDirection;

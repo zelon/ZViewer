@@ -49,6 +49,18 @@ ZMain::~ZMain(void)
 }
 
 
+
+/// Timer 를 받았을 때
+void ZMain::onTimer()
+{
+	if ( ZCacheImage::GetInstance().isCachingNow() )
+	{
+		DebugPrintf("now caching...");
+	}
+	showCacheStatus();
+}
+
+
 BOOL ZMain::_SetOSVersion()
 {
 	const int BUFSIZE = 1024;
@@ -543,7 +555,7 @@ void ZMain::Draw(bool bEraseBg)
 
 	if ( false == ZOption::GetInstance().IsFullScreen() )
 	{
-		PostMessage(m_hStatus, WM_PAINT, 0, 0);
+		PostMessage(m_hStatusBar, WM_PAINT, 0, 0);
 	}
 }
 
@@ -930,7 +942,7 @@ void ZMain::FormHide()
 	LONG style = GetWindowLong(m_hMainDlg, GWL_STYLE);
 	style &= ~WS_CAPTION;
 	style &= ~WS_THICKFRAME;
-	ShowWindow(m_hStatus, SW_HIDE);
+	ShowWindow(m_hStatusBar, SW_HIDE);
 	SetMenu(m_hMainDlg, NULL);
 	SetWindowLong(m_hMainDlg, GWL_STYLE, style);
 }
@@ -940,10 +952,72 @@ void ZMain::FormShow()
 	LONG style = GetWindowLong(m_hMainDlg, GWL_STYLE);
 	style |= WS_CAPTION;
 	style |= WS_THICKFRAME;
-	ShowWindow(m_hStatus, SW_SHOW);
+	ShowWindow(m_hStatusBar, SW_SHOW);
 	SetMenu(m_hMainDlg, m_hMainMenu);
 	SetWindowLong(m_hMainDlg, GWL_STYLE, style);
 }
+
+/// Cache status 를 상태 표시줄에 표시한다.
+void ZMain::showCacheStatus()
+{
+	// 해상도 정보
+	//_snprintf(szTemp, sizeof(szTemp), "");
+	//SendMessage(m_hStatusBar, SB_SETTEXT, 1, (LPARAM)szTemp);
+
+	static bool bLastActionIsCache = false;
+
+	bool bNowActionIsCache = ZCacheImage::GetInstance().isCachingNow();
+
+	if ( bLastActionIsCache != bNowActionIsCache )
+	{
+		bLastActionIsCache = bNowActionIsCache;
+		
+		if ( bNowActionIsCache )
+		{
+			PostMessage(m_hStatusBar, SB_SETTEXT, 5, (LPARAM)"Caching");
+		}
+		else
+		{
+			PostMessage(m_hStatusBar, SB_SETTEXT, 5, (LPARAM)"Cached");
+		}
+
+		/*
+		HDC hDC = ::GetDC(m_hStatusBar);
+
+		enum
+		{
+			eCacheShowWindowSize = 20
+		};
+		RECT drawRect;
+		drawRect.left  = 503;
+		drawRect.right = drawRect.left + eCacheShowWindowSize;
+		drawRect.top = 3;
+		drawRect.bottom = 19;
+
+		static int percentage = 0;
+
+		if ( ZCacheImage::GetInstance().isCachingNow() )
+		{
+			++percentage;
+
+			if ( percentage > 100 ) percentage = 0;
+
+			drawRect.right = drawRect.left + (eCacheShowWindowSize * ( percentage / 100.0 ));
+		}
+
+		LOGBRUSH logBrush;
+		logBrush.lbStyle = BS_SOLID;
+		logBrush.lbColor = RGB(100, 200, 200);
+		logBrush.lbHatch = 0;
+		HBRUSH hBrush = CreateBrushIndirect(&logBrush);
+		HBRUSH hOldBrush = (HBRUSH)SelectObject(hDC, hBrush);
+		Rectangle(hDC, drawRect.left, drawRect.top, drawRect.right, drawRect.bottom);
+		SelectObject(hDC, hOldBrush);
+		DeleteObject(hBrush);
+		*/
+	}
+}
+
 
 void ZMain::ToggleFullScreen()
 {
@@ -1024,37 +1098,40 @@ void ZMain::SetStatusBarText()
 	{
 		// File Index
 		_snprintf(szTemp, sizeof(szTemp), "No File");
-		SendMessage(m_hStatus, SB_SETTEXT, 0, (LPARAM)szTemp);
+		SendMessage(m_hStatusBar, SB_SETTEXT, 0, (LPARAM)szTemp);
 
 		// 해상도 정보
 		_snprintf(szTemp, sizeof(szTemp), "");
-		SendMessage(m_hStatus, SB_SETTEXT, 1, (LPARAM)szTemp);
+		SendMessage(m_hStatusBar, SB_SETTEXT, 1, (LPARAM)szTemp);
 
 		// 이미지 사이즈
 		_snprintf(szTemp, sizeof(szTemp), "");
-		SendMessage(m_hStatus, SB_SETTEXT, 2, (LPARAM)szTemp);
+		SendMessage(m_hStatusBar, SB_SETTEXT, 2, (LPARAM)szTemp);
 
 		// 임시로 http://wimy.com
 		_snprintf(szTemp, sizeof(szTemp), "http://wimy.com");
-		SendMessage(m_hStatus, SB_SETTEXT, 3, (LPARAM)szTemp);
+		SendMessage(m_hStatusBar, SB_SETTEXT, 3, (LPARAM)szTemp);
 
 		// 로딩시간
 		_snprintf(szTemp, sizeof(szTemp), "");
-		SendMessage(m_hStatus, SB_SETTEXT, 4, (LPARAM)szTemp);
+		SendMessage(m_hStatusBar, SB_SETTEXT, 4, (LPARAM)szTemp);
 
 		// 파일명
 		_snprintf(szTemp, sizeof(szTemp), "No File");
-		SendMessage(m_hStatus, SB_SETTEXT, 5, (LPARAM)szTemp);
+
+		showCacheStatus(); ///< 5
+
+		SendMessage(m_hStatusBar, SB_SETTEXT, 6, (LPARAM)szTemp);
 	}
 	else
 	{
 		// File Index
 		_snprintf(szTemp, sizeof(szTemp), "%d/%d", m_iCurretFileIndex+1, m_vFile.size());
-		SendMessage(m_hStatus, SB_SETTEXT, 0, (LPARAM)szTemp);
+		SendMessage(m_hStatusBar, SB_SETTEXT, 0, (LPARAM)szTemp);
 
 		// 해상도 정보
 		_snprintf(szTemp, sizeof(szTemp), "%dx%dx%dbpp", m_currentImage.GetOriginalWidth(), m_currentImage.GetOriginalHeight(), m_currentImage.GetBPP());
-		SendMessage(m_hStatus, SB_SETTEXT, 1, (LPARAM)szTemp);
+		SendMessage(m_hStatusBar, SB_SETTEXT, 1, (LPARAM)szTemp);
 
 		// image size
 		long imageSize = m_vFile[m_iCurretFileIndex].m_nFileSize;
@@ -1074,11 +1151,11 @@ void ZMain::SetStatusBarText()
 		{
 			_snprintf(szTemp, sizeof(szTemp), "%dByte", imageSize);
 		}
-		SendMessage(m_hStatus, SB_SETTEXT, 2, (LPARAM)szTemp);
+		SendMessage(m_hStatusBar, SB_SETTEXT, 2, (LPARAM)szTemp);
 
 		// 임시로 http://wimy.com
 		_snprintf(szTemp, sizeof(szTemp), "http://wimy.com");
-		SendMessage(m_hStatus, SB_SETTEXT, 3, (LPARAM)szTemp);
+		SendMessage(m_hStatusBar, SB_SETTEXT, 3, (LPARAM)szTemp);
 
 		// 로딩시간
 		if ( m_bLastCacheHit )
@@ -1089,15 +1166,16 @@ void ZMain::SetStatusBarText()
 		{
 			_snprintf(szTemp, sizeof(szTemp), "%.3fsec [N]", (float)(m_dwLoadingTime / 1000.0));
 		}
-		SendMessage(m_hStatus, SB_SETTEXT, 4, (LPARAM)szTemp);
+		SendMessage(m_hStatusBar, SB_SETTEXT, 4, (LPARAM)szTemp);
 
 		// 파일명
 		char szFilename[MAX_PATH], szFileExt[MAX_PATH];
 		_splitpath(m_strCurrentFilename.c_str(), NULL, NULL, szFilename, szFileExt);
 
-		_snprintf(szTemp, sizeof(szTemp), "%s%s", szFilename, szFileExt);
-		SendMessage(m_hStatus, SB_SETTEXT, 5, (LPARAM)szTemp);
+		showCacheStatus(); ///< 5
 
+		_snprintf(szTemp, sizeof(szTemp), "%s%s", szFilename, szFileExt);
+		SendMessage(m_hStatusBar, SB_SETTEXT, 6, (LPARAM)szTemp);
 	}
 }
 

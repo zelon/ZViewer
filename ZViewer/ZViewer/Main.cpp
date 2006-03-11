@@ -162,6 +162,20 @@ int APIENTRY WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance ,LPSTR lpszCmdP
 	// 단축키 설정. 여기서 반환된 핸들은 프로그램이 종료될 때 자동적으로 close 됨.
 	HACCEL hAccel = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDR_MAIN_ACCELERATOR));
 
+	/// Add Timer
+	enum
+	{
+		eTimerValue = 9153
+	};
+	UINT_PTR timerPtr = SetTimer(hWnd, eTimerValue, 100, NULL);
+
+	if ( timerPtr == 0 )
+	{
+		MessageBox(hWnd, "Can't make timer", "ZViewer", MB_OK);
+		return 0;
+	}
+
+
 	while(GetMessage(&Message,0,0,0))
 	{
 		if (!TranslateAccelerator(hWnd, hAccel, &Message))
@@ -170,6 +184,16 @@ int APIENTRY WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance ,LPSTR lpszCmdP
 			DispatchMessage(&Message);
 		}
 	}
+
+	/*
+	/// KillTimer
+	if ( timerPtr != 0 )
+	{
+		BOOL bRet = KillTimer(hWnd, eTimerValue);
+
+		_ASSERTE(bRet);
+	}
+	*/
 
 	//
 	if ( hLang )
@@ -229,7 +253,14 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 				break;
 
 			case '~':
+				DWORD dwStart = GetTickCount();
 				ZCacheImage::GetInstance().clearCache();
+				DWORD dwClearTime = GetTickCount() - dwStart;
+
+				DebugPrintf("clear spend time : %d", dwClearTime);
+
+
+				break;
 #endif
 			}
 		}
@@ -306,17 +337,18 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 			HWND hStatusBar = CreateStatusWindow(WS_CHILD | WS_VISIBLE, "Status line", hWnd, 0);
 			ZMain::GetInstance().SetStatusHandle(hStatusBar);
 
-			// StatusBar 를 split 한다.
-			int SBPart[6] =
+			// StatusBar 를 split 한다. 아래의 숫자는 크기가 아니라 절대 위치라는 것을 명심!!!!!!!
+			int SBPart[7] =
 			{
 				70,		/// %d/%d 현재보고 있는 이미지 파일의 index number
 				200,	/// %dx%dx%dbpp 해상도와 color depth, image size
 				300,		/// image size
 				420,	/// temp banner http://www.wimy.com
 				500,	/// 파일을 읽어들이는데 걸린 시간
-				2000,	/// 파일명표시
+				553,		/// cache status
+				1860,	/// 파일명표시
 			};
-			SendMessage(hStatusBar, SB_SETPARTS, 6, (LPARAM)SBPart);
+			SendMessage(hStatusBar, SB_SETPARTS, 7, (LPARAM)SBPart);
 
 			// 팝업 메뉴를 불러놓는다.
 			HMENU hMenu = LoadMenu(ZResourceManager::GetInstance().GetHInstance(), MAKEINTRESOURCE(IDR_POPUP_MENU));
@@ -650,6 +682,10 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 		return 0;
 	case WM_DESTROY:
 		SendMessage(hWnd, WM_CLOSE, 0, 0);
+		return 0;
+
+	case WM_TIMER:
+		ZMain::GetInstance().onTimer();
 		return 0;
 	}
 	return (int)(DefWindowProc(hWnd,iMessage,wParam,lParam));
