@@ -43,9 +43,8 @@ STDMETHODIMP CZViewMenuExt::Initialize (LPCITEMIDLIST pidlFolder, LPDATAOBJECT  
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
 	COleDataObject dataobj;
-	HGLOBAL        hglobal;
-	HDROP          hdrop;
-	bool           bOK = false;
+	HGLOBAL hglobal;
+	HDROP hdrop;
 
     dataobj.Attach ( pDO, FALSE );      // FALSE = don't release IDataObject interface when destroyed
 
@@ -61,42 +60,43 @@ STDMETHODIMP CZViewMenuExt::Initialize (LPCITEMIDLIST pidlFolder, LPDATAOBJECT  
     if ( NULL == hdrop )
         return E_INVALIDARG;
 
-    // Get the name of the first selected file.
-	if ( DragQueryFile ( hdrop, 0, m_szFile, MAX_PATH ))
-	{
-		// Is its extension .BMP?
-		if ( ZImage::IsValidImageFileExt(m_szFile) )
-		{
-			if ( m_originalImage.LoadFromFile(m_szFile) )
-			{
-				bOK = true;
-			//	MsgBox("Here");
+	/// 탐색기의 오른쪽 버튼을 눌렀을 때 미리보기창을 넣을 것인가
+	bool bPreviewMenuInsert = false;
 
-				if ( m_originalImage.GetBPP() == 8 )
-				{
-					m_b8bit = true;
-				}
-			}
-			else
+	/// 만약 Shift 키를 누르고 메뉴를 띄운 것이면 이미지 미리보기를 보여주지 않는다.
+	if ( GetKeyState(VK_LSHIFT) >= 0 )
+	{
+		// Get the name of the first selected file.
+		if ( DragQueryFile ( hdrop, 0, m_szFile, MAX_PATH ))
+		{
+			// Is it's extension is valid 'Image File'
+			if ( ZImage::IsValidImageFileExt(m_szFile) )
 			{
-				bOK = false;
-			//	MsgBox("Here2");
+				if ( m_originalImage.LoadFromFile(m_szFile) )
+				{
+					bPreviewMenuInsert = true;
+					//	MsgBox("Here");
+
+					if ( m_originalImage.GetBPP() == 8 )
+					{
+						m_b8bit = true;
+					}
+				}
+				else
+				{
+					//	MsgBox("Here2");
+				}
 			}
 		}
 	}
 
 	GlobalUnlock ( hglobal );
 
-    return bOK ? S_OK : E_FAIL;
+    return ( bPreviewMenuInsert ? S_OK : E_FAIL );
 }
 
 
-STDMETHODIMP CZViewMenuExt::QueryContextMenu (
-    HMENU hmenu,
-    UINT uIndex,
-    UINT uidCmdFirst,
-    UINT uidCmdLast,
-    UINT uFlags )
+STDMETHODIMP CZViewMenuExt::QueryContextMenu(HMENU hmenu, UINT uIndex, UINT uidCmdFirst, UINT uidCmdLast, UINT uFlags )
 {
     // If the flags include CMF_DEFAULTONLY then we shouldn't do anything.
     if ( uFlags & CMF_DEFAULTONLY )
@@ -282,7 +282,7 @@ STDMETHODIMP CZViewMenuExt::InvokeCommand ( LPCMINVOKECOMMANDINFO pInfo )	// 그�
     return S_OK;
 }
 
-STDMETHODIMP CZViewMenuExt::HandleMenuMsg ( UINT uMsg, WPARAM wParam, LPARAM lParam )
+STDMETHODIMP CZViewMenuExt::HandleMenuMsg(UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
@@ -296,8 +296,7 @@ STDMETHODIMP CZViewMenuExt::HandleMenuMsg ( UINT uMsg, WPARAM wParam, LPARAM lPa
     return MenuMessageHandler ( uMsg, wParam, lParam, &res );
 }
 
-STDMETHODIMP CZViewMenuExt::HandleMenuMsg2 ( UINT uMsg, WPARAM wParam, LPARAM lParam,
-                                              LRESULT* pResult )
+STDMETHODIMP CZViewMenuExt::HandleMenuMsg2(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT * pResult)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
@@ -319,13 +318,13 @@ STDMETHODIMP CZViewMenuExt::HandleMenuMsg2 ( UINT uMsg, WPARAM wParam, LPARAM lP
 	}
 }
 
-STDMETHODIMP CZViewMenuExt::MenuMessageHandler ( UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT* pResult )
+STDMETHODIMP CZViewMenuExt::MenuMessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT * pResult)
 {
     switch ( uMsg )
 	{
         case WM_MEASUREITEM:
             return OnMeasureItem ( (MEASUREITEMSTRUCT*) lParam, pResult );
-        break;
+			break;
 
         case WM_DRAWITEM:
             return OnDrawItem ( (DRAWITEMSTRUCT*) lParam, pResult );
@@ -373,7 +372,7 @@ STDMETHODIMP CZViewMenuExt::OnMeasureItem ( MEASUREITEMSTRUCT* pmis, LRESULT* pR
     return S_OK;
 }
 
-STDMETHODIMP CZViewMenuExt::OnDrawItem ( DRAWITEMSTRUCT* pdis, LRESULT* pResult )
+STDMETHODIMP CZViewMenuExt::OnDrawItem(DRAWITEMSTRUCT * pdis, LRESULT * pResult )
 {
     // Check that we're getting called for our own menu item.
     if ( m_uOurItemID != pdis->itemID )
@@ -420,6 +419,7 @@ STDMETHODIMP CZViewMenuExt::OnDrawItem ( DRAWITEMSTRUCT* pdis, LRESULT* pResult 
 	if ( rcDraw.Width() < m_originalImage.GetWidth()
 		|| rcDraw.Height() < m_originalImage.GetHeight() )
 	{
+		/*
 		if ( m_b8bit )	// 8bit 컬러는 32로 바꾼 후에 rescale 해줘야 한다... 으음.. 왜 이럴까;;
 		{
 			if ( !m_originalImage.ConvertTo32Bit() )
@@ -429,6 +429,8 @@ STDMETHODIMP CZViewMenuExt::OnDrawItem ( DRAWITEMSTRUCT* pdis, LRESULT* pResult 
 #endif
 			}
 		}
+		*/
+
 		m_originalImage.Resize(rcDraw.Width(), rcDraw.Height());
 	}
 
@@ -492,7 +494,7 @@ void CZViewMenuExt::SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyl
 	}
 
 	std::string strSaveFileName = szSystemFolder;
-	strSaveFileName += "\\rubi_bg.bmp";
+	strSaveFileName += "\\zviewer_bg.bmp";
 
 	ZImage tempImage;
 	if ( !tempImage.LoadFromFile(m_szFile) )
@@ -500,7 +502,6 @@ void CZViewMenuExt::SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyl
 		MessageBox(HWND_DESKTOP, "Can't load the image file", "ZViewer", MB_OK);
 		return;
 	}
-
 
 	if ( FALSE == tempImage.SaveToFile(strSaveFileName, BMP_DEFAULT) )
 	{
