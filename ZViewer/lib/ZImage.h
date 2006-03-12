@@ -37,7 +37,7 @@ public:
 	bool IsValid() { return (m_image.isValid() == TRUE); }
 	bool LoadFromFile(const std::string & strFilename)
 	{
-		DebugPrintf("LoadFromFile : %s", strFilename.c_str());
+		//DebugPrintf("LoadFromFile : %s", strFilename.c_str());
 
 		try
 		{
