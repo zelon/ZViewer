@@ -13,6 +13,7 @@
 #include "FreeImagePlus.h"
 #include "CommonFunc.h"
 
+/// FreeImagePlus 의 클래스인 fipWinImage 를 래핑하여 함수 등을 쓰기 쉽게 하는 클래스
 class ZImage
 {
 public:
@@ -62,7 +63,7 @@ public:
 		return ( TRUE == m_image.save(strFilename.c_str(), iFlag));
 	}
 
-	inline void Rotate(double dAngle) { m_image.rotate(dAngle);	}
+	void Rotate(double dAngle) { m_image.rotate(dAngle);	}
 
 	bool Resize(WORD newWidth, WORD newHeight)
 	{
@@ -86,12 +87,13 @@ public:
 		return (m_image.isTransparent() == TRUE);
 	}
 
-	const fipImage & getFipImage()
+	const fipWinImage & getFipImage()
 	{
 		return m_image;
 	}
+
 private:
-	fipImage m_image;
+	fipWinImage m_image;
 
 	/// Image's original width - before resizing
 	WORD m_originalWidth;
