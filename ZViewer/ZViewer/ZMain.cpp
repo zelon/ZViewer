@@ -1674,7 +1674,7 @@ void ZMain::SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyle style)
 	_splitpath(m_vFile[m_iCurretFileIndex].m_strFileName.c_str(), 0, 0, szFileName, 0);
 
 	std::string strSaveFileName = szSystemFolder;
-	strSaveFileName += "\\RUBI_bg_";
+	strSaveFileName += "\\zviewer_bg_";
 	strSaveFileName += szFileName;
 	strSaveFileName += ".bmp";
 
