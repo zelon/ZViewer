@@ -12,11 +12,11 @@
 #include "DesktopWallPaper.h"
 #include "CommonFunc.h"
 
-void CDesktopWallPaper::SetDesktopWallPaper()
+void CDesktopWallPaper::SetDesktopWallPaper(const std::string & strBitmapFileName, eDesktopWallPaperStyle style)
 {
 	std::string strStyle = "0";
 
-	switch ( m_eStyle )
+	switch ( style )
 	{
 	case eDesktopWallPaperStyle_CENTER:
 		strStyle = "0";
@@ -34,7 +34,7 @@ void CDesktopWallPaper::SetDesktopWallPaper()
 		_ASSERTE(false);
 	}
 	SetRegistryValue(HKEY_CURRENT_USER, "Control Panel\\Desktop", "WallpaperStyle", strStyle.c_str());
-	SetRegistryValue(HKEY_CURRENT_USER, "Control Panel\\Desktop", "Wallpaper", m_strFileName.c_str());
+	SetRegistryValue(HKEY_CURRENT_USER, "Control Panel\\Desktop", "Wallpaper", strBitmapFileName.c_str());
 
 	if ( strStyle == "1" )
 	{
@@ -46,7 +46,7 @@ void CDesktopWallPaper::SetDesktopWallPaper()
 	}
 
 	// 실제로 적용시킨다.
-	if ( 0 == SystemParametersInfo(SPI_SETDESKWALLPAPER, 0, (PVOID)m_strFileName.c_str(), SPIF_SENDCHANGE) )
+	if ( 0 == SystemParametersInfo(SPI_SETDESKWALLPAPER, 0, (PVOID)strBitmapFileName.c_str(), SPIF_SENDCHANGE) )
 	{
 		_ASSERTE(false);
 	}
@@ -56,6 +56,5 @@ void CDesktopWallPaper::SetDesktopWallPaper()
 /// 바탕화면 이미지를 없앤다.
 void CDesktopWallPaper::ClearDesktopWallPaper()
 {
-	CDesktopWallPaper wallPaper("");
-	wallPaper.SetDesktopWallPaper();
+	CDesktopWallPaper::SetDesktopWallPaper("", eDesktopWallPaperStyle_CENTER);
 }
