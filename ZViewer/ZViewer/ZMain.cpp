@@ -413,10 +413,13 @@ void ZMain::Draw(bool bEraseBg)
 
 			ZImage stretchedImage(m_currentImage);
 
+			/*
 			if ( stretchedImage.GetBPP() == 8 )
 			{
 				stretchedImage.ConvertTo32Bit();
 			}
+			*/
+
 			stretchedImage.Resize((WORD)toRect.right, (WORD)toRect.bottom);
 			
 			iDrawX = (currentScreenRect.right - toRect.right) / 2;
@@ -508,10 +511,12 @@ void ZMain::Draw(bool bEraseBg)
 
 			ZImage stretchedImage(m_currentImage);
 
+			/*
 			if ( stretchedImage.GetBPP() == 8 )
 			{
 				stretchedImage.ConvertTo32Bit();
 			}
+			*/
 
 			stretchedImage.Resize((WORD)toRect.right, (WORD)toRect.bottom);
 			
