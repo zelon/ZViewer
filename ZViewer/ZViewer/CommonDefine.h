@@ -81,7 +81,7 @@ public:
 		// 돌려주는 부등호가 > 이면 최근것이 앞에, < 이면 최근것이 뒤에 간다.
 		if ( a.m_timeModified.dwHighDateTime == b.m_timeModified.dwHighDateTime)
 		{
-			a.m_timeModified.dwLowDateTime >= b.m_timeModified.dwLowDateTime;
+			return a.m_timeModified.dwLowDateTime >= b.m_timeModified.dwLowDateTime;
 		}
 		return a.m_timeModified.dwHighDateTime >= b.m_timeModified.dwHighDateTime;
 	}
