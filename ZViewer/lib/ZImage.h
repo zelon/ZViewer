@@ -13,24 +13,7 @@
 #include "FreeImagePlus.h"
 #include "CommonFunc.h"
 
-class IImage
-{
-public:
-
-	virtual WORD GetWidth() = 0;
-	virtual WORD GetHeight() = 0;
-	virtual WORD GetBPP() = 0;
-	virtual BYTE * GetData() = 0;
-	virtual BITMAPINFO * GetBitmapInfo() = 0;
-	virtual bool IsValid() = 0;
-	virtual bool LoadFromFile(const std::string & strFilename) = 0;
-	virtual bool Resize(WORD newWidth, WORD newHeight) = 0;
-	virtual bool ConvertTo32Bit() = 0;
-
-};
-
-
-class ZImage : public IImage
+class ZImage
 {
 public:
 	static bool StartupLibrary(){ return true; }
@@ -118,79 +101,4 @@ private:
 
 	/// Image's original size - before resizing
 	long m_originalSize;
-
-
-
-
-
-
-	/*
-	ZImage()
-	{
-	m_bValid = false;
-	}
-
-	static bool StartupLibrary()
-	{
-	ilInit();
-	iluInit();
-	ilutRenderer(ILUT_WIN32);
-
-	return true;
-	}
-
-	static bool CleanupLibrary()
-	{
-	}
-
-	WORD GetWidth()
-	{
-	return m_devilimage.Width();
-	}
-	WORD GetHeight()
-	{
-	return m_devilimage.Height();
-	}
-	WORD GetBPP()
-	{
-	return m_devilimage.Bpp();
-	}
-	BYTE * GetData()
-	{
-	return ilWin32::GetPadData(m_devilimage);
-	}
-	BITMAPINFO * GetBitmapInfo()
-	{
-	ilWin32::GetInfo(m_devilimage, &m_info);
-	return &m_info;
-	}
-	bool IsValid()
-	{
-	return ( m_bValid );
-	}
-	bool LoadFromFile(const std::string & strFilename)
-	{
-	char szFilename[MAX_PATH];
-	_snprintf(szFilename, sizeof(szFilename), strFilename.c_str());
-
-	if ( m_devilimage.Load(szFilename, IL_TYPE_UNKNOWN) == TRUE )
-	{
-	m_bValid = true;
-	}
-	return m_bValid;
-	}
-	bool Resize(WORD newWidth, WORD newHeight)
-	{
-	return ( m_devilimage.Resize(newWidth, newHeight,3) == TRUE);
-	}
-	bool ConvertTo32Bit()
-	{
-	return true;
-	}
-
-	private:
-	ilImage m_devilimage;
-	BITMAPINFO m_info;
-	bool m_bValid;
-	*/
 };
