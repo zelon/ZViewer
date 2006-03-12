@@ -1684,10 +1684,7 @@ void ZMain::SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyle style)
 		return;
 	}
 
-
-	CDesktopWallPaper wallPaper(strSaveFileName);
-	wallPaper.SetWallPaperStyle(style);
-	wallPaper.SetDesktopWallPaper();
+	CDesktopWallPaper::SetDesktopWallPaper(strSaveFileName, style);
 }
 
 

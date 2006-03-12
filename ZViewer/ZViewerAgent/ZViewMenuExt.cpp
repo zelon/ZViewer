@@ -509,7 +509,5 @@ void CZViewMenuExt::SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyl
 	}
 
 
-	CDesktopWallPaper wallPaper(strSaveFileName);
-	wallPaper.SetWallPaperStyle(style);
-	wallPaper.SetDesktopWallPaper();
+	CDesktopWallPaper::SetDesktopWallPaper(strSaveFileName, style);
 }
