@@ -36,16 +36,23 @@ ZMain::ZMain(void)
 ,	m_sortOrder(eFileSortOrder_FILENAME)
 ,	m_osKind(eOSKind_UNKNOWN)
 {
+	m_hBufferDC = NULL;
 	m_bLastCacheHit = false;
 	SetProgramFolder();
-
-	_SetOSVersion();
-
-	_ASSERTE(m_osKind != eOSKind_UNKNOWN);
 }
 
 ZMain::~ZMain(void)
 {
+	if ( NULL != m_hBufferDC )
+	{
+		DebugPrintf("Before delete bufferDC");
+		BOOL bRet = DeleteDC(m_hBufferDC);
+		DebugPrintf("after delete bufferDC");
+	
+		_ASSERTE(bRet);
+
+		m_hBufferDC = NULL;
+	}
 }
 
 
@@ -55,200 +62,9 @@ void ZMain::onTimer()
 {
 	if ( ZCacheImage::GetInstance().isCachingNow() )
 	{
-		DebugPrintf("now caching...");
+		//DebugPrintf("now cache status...");
 	}
 	showCacheStatus();
-}
-
-
-BOOL ZMain::_SetOSVersion()
-{
-	const int BUFSIZE = 1024;
-
-	OSVERSIONINFOEX osvi;
-	BOOL bOsVersionInfoEx;
-
-	// Try calling GetVersionEx using the OSVERSIONINFOEX structure.
-	// If that fails, try using the OSVERSIONINFO structure.
-
-	ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
-	osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
-
-	if( !(bOsVersionInfoEx = GetVersionEx ((OSVERSIONINFO *) &osvi)) )
-	{
-		osvi.dwOSVersionInfoSize = sizeof (OSVERSIONINFO);
-		if (! GetVersionEx ( (OSVERSIONINFO *) &osvi) ) 
-			return FALSE;
-	}
-
-	switch (osvi.dwPlatformId)
-	{
-		// Test for the Windows NT product family.
-	case VER_PLATFORM_WIN32_NT:
-
-		// Test for the specific product family.
-		if ( osvi.dwMajorVersion == 5 && osvi.dwMinorVersion == 2 )
-		{
-			m_osKind = eOSKind_XP;
-			printf ("Microsoft Windows Server&nbsp;2003 family, ");
-		}
-
-		if ( osvi.dwMajorVersion == 5 && osvi.dwMinorVersion == 1 )
-		{
-			m_osKind = eOSKind_XP;
-			printf ("Microsoft Windows XP ");
-		}
-
-		if ( osvi.dwMajorVersion == 5 && osvi.dwMinorVersion == 0 )
-		{
-			m_osKind = eOSKind_2000;
-			printf ("Microsoft Windows 2000 ");
-		}
-
-		if ( osvi.dwMajorVersion <= 4 )
-			printf("Microsoft Windows NT ");
-
-		// Test for specific product on Windows NT 4.0 SP6 and later.
-		if( bOsVersionInfoEx )
-		{
-			// Test for the workstation type.
-			if ( osvi.wProductType == VER_NT_WORKSTATION )
-			{
-				if( osvi.dwMajorVersion == 4 )
-					printf ( "Workstation 4.0 " );
-				else if( osvi.wSuiteMask & VER_SUITE_PERSONAL )
-					printf ( "Home Edition " );
-				else
-					printf ( "Professional " );
-			}
-
-			// Test for the server type.
-			else if ( osvi.wProductType == VER_NT_SERVER )
-			{
-				if( osvi.dwMajorVersion == 5 && osvi.dwMinorVersion == 2 )
-				{
-					if( osvi.wSuiteMask & VER_SUITE_DATACENTER )
-						printf ( "Datacenter Edition " );
-					else if( osvi.wSuiteMask & VER_SUITE_ENTERPRISE )
-						printf ( "Enterprise Edition " );
-					else if ( osvi.wSuiteMask == VER_SUITE_BLADE )
-						printf ( "Web Edition " );
-					else
-						printf ( "Standard Edition " );
-				}
-
-				else if( osvi.dwMajorVersion == 5 && osvi.dwMinorVersion == 0 )
-				{
-					if( osvi.wSuiteMask & VER_SUITE_DATACENTER )
-						printf ( "Datacenter Server " );
-					else if( osvi.wSuiteMask & VER_SUITE_ENTERPRISE )
-						printf ( "Advanced Server " );
-					else
-						printf ( "Server " );
-				}
-
-				else  // Windows NT 4.0 
-				{
-					if( osvi.wSuiteMask & VER_SUITE_ENTERPRISE )
-						printf ("Server 4.0, Enterprise Edition " );
-					else
-						printf ( "Server 4.0 " );
-				}
-			}
-		}
-		else  // Test for specific product on Windows NT 4.0 SP5 and earlier
-		{
-			HKEY hKey;
-			char szProductType[BUFSIZE];
-			DWORD dwBufLen=BUFSIZE;
-			LONG lRet;
-
-			lRet = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
-				"SYSTEM\\CurrentControlSet\\Control\\ProductOptions",
-				0, KEY_QUERY_VALUE, &hKey );
-			if( lRet != ERROR_SUCCESS )
-				return FALSE;
-
-			lRet = RegQueryValueEx( hKey, "ProductType", NULL, NULL,
-				(LPBYTE) szProductType, &dwBufLen);
-			if( (lRet != ERROR_SUCCESS) || (dwBufLen > BUFSIZE) )
-				return FALSE;
-
-			RegCloseKey( hKey );
-
-			if ( lstrcmpi( "WINNT", szProductType) == 0 )
-				printf( "Workstation " );
-			if ( lstrcmpi( "LANMANNT", szProductType) == 0 )
-				printf( "Server " );
-			if ( lstrcmpi( "SERVERNT", szProductType) == 0 )
-				printf( "Advanced Server " );
-
-			printf( "%d.%d ", osvi.dwMajorVersion, osvi.dwMinorVersion );
-		}
-
-		// Display service pack (if any) and build number.
-
-		if( osvi.dwMajorVersion == 4 && 
-			lstrcmpi( osvi.szCSDVersion, "Service Pack 6" ) == 0 )
-		{
-			HKEY hKey;
-			LONG lRet;
-
-			// Test for SP6 versus SP6a.
-			lRet = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
-				"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Hotfix\\Q246009",
-				0, KEY_QUERY_VALUE, &hKey );
-			if( lRet == ERROR_SUCCESS )
-				printf( "Service Pack 6a (Build %d)\n", osvi.dwBuildNumber & 0xFFFF );         
-			else // Windows NT 4.0 prior to SP6a
-			{
-				printf( "%s (Build %d)\n",
-					osvi.szCSDVersion,
-					osvi.dwBuildNumber & 0xFFFF);
-			}
-
-			RegCloseKey( hKey );
-		}
-		else // Windows NT 3.51 and earlier or Windows 2000 and later
-		{
-			printf( "%s (Build %d)\n",
-				osvi.szCSDVersion,
-				osvi.dwBuildNumber & 0xFFFF);
-		}
-
-
-		break;
-
-		// Test for the Windows 95 product family.
-	case VER_PLATFORM_WIN32_WINDOWS:
-
-		if (osvi.dwMajorVersion == 4 && osvi.dwMinorVersion == 0)
-		{
-			printf ("Microsoft Windows 95 ");
-			if ( osvi.szCSDVersion[1] == 'C' || osvi.szCSDVersion[1] == 'B' )
-				printf("OSR2 " );
-		} 
-
-		if (osvi.dwMajorVersion == 4 && osvi.dwMinorVersion == 10)
-		{
-			m_osKind = eOSKind_98;
-			printf ("Microsoft Windows 98 ");
-			if ( osvi.szCSDVersion[1] == 'A' )
-				printf("SE " );
-		} 
-
-		if (osvi.dwMajorVersion == 4 && osvi.dwMinorVersion == 90)
-		{
-			printf ("Microsoft Windows Millennium Edition\n");
-		} 
-		break;
-
-	case VER_PLATFORM_WIN32s:
-
-		printf ("Microsoft Win32s\n");
-		break;
-	}
-	return TRUE; 
 }
 
 
@@ -442,39 +258,49 @@ void ZMain::Draw(bool bEraseBg)
 		}
 		else
 		{
-			/// 큰 그림을 스크롤이 가능하게 클리핑해서 그린다.
-			HDC memDC = CreateCompatibleDC(mainDC);
-
-			HBITMAP hbmScreen = CreateCompatibleBitmap(mainDC, currentImageWidth, currentImageHeight); 
-
-			SelectObject(memDC, hbmScreen);
-
-			// 메모리에 전체 그림을 그린다.
-			if ( m_currentImage.isTransparent() )
+			/// 버퍼의 DC 가 NULL 이란 것은 이전 캐시가 없거나, 무효화되었다는 것이다.
+			if ( m_hBufferDC == NULL )
 			{
-				DebugPrintf("Drawing transparent image...");
-				fipWinImage tempImage;
-				tempImage = m_currentImage.getFipImage();
+				DebugPrintf("!!!!! no DC cache clipping...");
+				/// 큰 그림을 스크롤이 가능하게 클리핑해서 그린다.
+				m_hBufferDC = CreateCompatibleDC(mainDC);
 
-				tempImage.rescale(currentImageWidth, currentImageHeight, FILTER_BOX);
-				RECT rt;
-				rt.left = 0;
-				rt.top = 0;
-				rt.right = currentImageWidth;
-				rt.bottom = currentImageHeight;
+				HBITMAP hbmScreen = CreateCompatibleBitmap(mainDC, currentImageWidth, currentImageHeight); 
 
-				tempImage.drawEx(memDC, rt, TRUE);
+				SelectObject(m_hBufferDC, hbmScreen);
+
+				// 메모리에 전체 그림을 그린다.
+				if ( m_currentImage.isTransparent() )
+				{
+					DebugPrintf("Drawing transparent image...");
+					fipWinImage tempImage;
+					tempImage = m_currentImage.getFipImage();
+
+					tempImage.rescale(currentImageWidth, currentImageHeight, FILTER_BOX);
+					RECT rt;
+					rt.left = 0;
+					rt.top = 0;
+					rt.right = currentImageWidth;
+					rt.bottom = currentImageHeight;
+
+					tempImage.drawEx(m_hBufferDC, rt, TRUE);
+				}
+				else
+				{
+					int r = StretchDIBits(m_hBufferDC,
+						0, 0, 
+						currentImageWidth, currentImageHeight,
+						0, 0,
+						currentImageWidth, currentImageHeight,
+						m_currentImage.GetData(),
+						m_currentImage.GetBitmapInfo(),
+						DIB_RGB_COLORS, SRCCOPY);
+				}
+				DeleteObject(hbmScreen);
 			}
 			else
 			{
-				int r = StretchDIBits(memDC,
-					0, 0, 
-					currentImageWidth, currentImageHeight,
-					0, 0,
-					currentImageWidth, currentImageHeight,
-					m_currentImage.GetData(),
-					m_currentImage.GetBitmapInfo(),
-					DIB_RGB_COLORS, SRCCOPY);
+				DebugPrintf("DC cache clipping");
 			}
 
 			if ( bEraseBg )	// 배경을 지워야 하면 지운다. 새로운 그림을 그리기 직전에 그려야 깜빡임이 적다.
@@ -487,14 +313,13 @@ void ZMain::Draw(bool bEraseBg)
 			BOOL b = BitBlt(mainDC, 
 				iDrawX, iDrawY,			// 그릴 화면의 x, y 좌표. 화면에 꽉 찰 때는 0, 0 이어야한다.
 				m_currentImage.GetWidth(), currentScreenRect.bottom,		// 그려질 화면의 가로, 세로 길이. 
-				memDC, 
+				m_hBufferDC, 
 				iDrawPartX, iDrawPartY,			// 그려질 이미지 원본의 시작 x,y 좌표
 				SRCCOPY);
 
 			//DebugPrintf("rt.bottom : %d, PartX : %d, iDrawPartY : %d", currentScreenRect.bottom, iDrawPartX, iDrawPartY);
 
-			DeleteObject(hbmScreen);
-			DeleteDC(memDC);
+//				DeleteDC(memDC);
 		}
 	}
 	else	/// image is smaller than screen
@@ -622,7 +447,7 @@ void ZMain::Draw(bool bEraseBg)
 	}
 }
 
-void ZMain::ZFindFile(const char *path, std::vector< FileData > & foundStorage, bool bFindRecursive)
+void ZMain::FindFile(const char *path, std::vector< FileData > & foundStorage, bool bFindRecursive)
 {
 	HANDLE hSrch;
 	WIN32_FIND_DATA wfd;
@@ -642,7 +467,7 @@ void ZMain::ZFindFile(const char *path, std::vector< FileData > & foundStorage, 
 			if (wfd.cFileName[0]!='.' && bFindRecursive == true)
 			{
 				_snprintf(newpath, sizeof(newpath), "%s%s%s\\*.*",drive,dir,wfd.cFileName);
-				ZFindFile(newpath, foundStorage, bFindRecursive);
+				FindFile(newpath, foundStorage, bFindRecursive);
 			}
 		}
 		else
@@ -663,7 +488,7 @@ void ZMain::ZFindFile(const char *path, std::vector< FileData > & foundStorage, 
 	FindClose(hSrch);
 }
 
-void ZMain::ZFindFolders(const char *path, std::vector<std::string> & foundStorage, bool bFindRecursive)
+void ZMain::FindFolders(const char *path, std::vector<std::string> & foundStorage, bool bFindRecursive)
 {
 	HANDLE hSrch;
 	WIN32_FIND_DATA wfd;
@@ -689,7 +514,7 @@ void ZMain::ZFindFolders(const char *path, std::vector<std::string> & foundStora
 				if ( bFindRecursive == true )
 				{
 					_snprintf(newpath, sizeof(newpath), "%s%s%s\\*.*",drive,dir,wfd.cFileName);
-					ZFindFolders(newpath, foundStorage, bFindRecursive);
+					FindFolders(newpath, foundStorage, bFindRecursive);
 				}
 			}
 		}
@@ -765,7 +590,7 @@ bool ZMain::GetNeighborFolders(std::vector < std::string > & vFolders)
 
 		strParentFolder += "\\*.*";
 		// 상위 폴더의 하위 폴더들을 얻는다.
-		ZFindFolders(strParentFolder.c_str(), vFolders, false);
+		FindFolders(strParentFolder.c_str(), vFolders, false);
 
 		if ( vFolders.size() <= 0 )
 		{
@@ -859,7 +684,7 @@ void ZMain::PrevFolder()
 void ZMain::_GetFileListAndSort(const std::string & strFolderPathAndWildCard, FileListVector & vFileList)
 {
 	vFileList.resize(0);
-	ZFindFile(strFolderPathAndWildCard.c_str(), vFileList, false);
+	FindFile(strFolderPathAndWildCard.c_str(), vFileList, false);
 
 	// 얻은 파일을 정렬한다.
 	switch ( m_sortOrder )
@@ -890,7 +715,7 @@ void ZMain::_GetFileListAndSort(const std::string & strFolderPathAndWildCard, Fi
 	}
 }
 
-void ZMain::OpenFolder(const std::string strFolder)
+void ZMain::OpenFolder(const std::string & strFolder)
 {
 	// 특정 폴더의 하위 파일들을 검색해서 정렬 후 첫번째 파일을 연다.
 
@@ -1276,7 +1101,14 @@ void ZMain::LoadCurrent()
 	}
 
 	DWORD start = GetTickCount();
-	
+
+	if ( m_hBufferDC != NULL )
+	{
+		BOOL bRet = DeleteDC(m_hBufferDC);
+		_ASSERTE(bRet);
+		m_hBufferDC = NULL;
+	}
+
 	if ( ZCacheImage::GetInstance().hasCachedData(m_strCurrentFilename, m_iCurretFileIndex) )
 	{
 		{
