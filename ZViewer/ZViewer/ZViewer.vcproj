@@ -292,6 +292,12 @@
 				RelativePath=".\src\SaveAs.h">
 			</File>
 			<File
+				RelativePath=".\src\ShortTimeMessage.cpp">
+			</File>
+			<File
+				RelativePath=".\src\ShortTimeMessage.h">
+			</File>
+			<File
 				RelativePath=".\src\ZCacheImage.cpp">
 			</File>
 			<File
