@@ -293,8 +293,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 0,3,2,1
- PRODUCTVERSION 0,3,2,1
+ FILEVERSION 0,5,0,1
+ PRODUCTVERSION 0,5,0,1
  FILEFLAGSMASK 0x17L
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -312,12 +312,12 @@ BEGIN
             VALUE "Comments", "Author by Kim Jinwook in Korea"
             VALUE "CompanyName", "Rh Lab."
             VALUE "FileDescription", "ZViewer"
-            VALUE "FileVersion", "0, 3, 2, 1"
+            VALUE "FileVersion", "0, 5, 0, 1"
             VALUE "InternalName", "ZViewer"
             VALUE "LegalCopyright", "Copyright (c) - 2005"
             VALUE "OriginalFilename", "ZViewer.rc"
             VALUE "ProductName", "ZViewer"
-            VALUE "ProductVersion", "0, 3, 2, 1"
+            VALUE "ProductVersion", "0, 5, 0, 1"
         END
     END
     BLOCK "VarFileInfo"
