@@ -53,8 +53,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,0,0,1
- PRODUCTVERSION 1,0,0,1
+ FILEVERSION 1,0,0,2
+ PRODUCTVERSION 1,0,0,2
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -69,7 +69,7 @@ BEGIN
     BEGIN
         BLOCK "041203b5"
         BEGIN
-            VALUE "CompanyName", "RhLab http://wimy.com"
+            VALUE "CompanyName", "RhLab http://www.wimy.com"
             VALUE "FileDescription", "Explorer Image Preview"
             VALUE "FileVersion", "1.0.0.1"
             VALUE "InternalName", "ZViewerAgent.dll"
