@@ -25,6 +25,11 @@ public:
 		return FreeImage_GetVersion();
 	}
 
+	void clear()
+	{
+		m_image.clear();
+	}
+
 	WORD GetWidth() { return m_image.getWidth(); }
 	WORD GetHeight() { return m_image.getHeight(); }
 
