@@ -22,14 +22,7 @@ enum eFileSortOrder
 	eFileSortOrder_FILESIZE,
 };
 
-enum eOSKind
-{
-	eOSKind_UNKNOWN,
-	eOSKind_98,
-	eOSKind_2000,
-	eOSKind_XP,
-};
-
+/// 대부분의 작업을 처리하는 메인 클래스
 class ZMain
 {
 	ZMain(void);
@@ -119,6 +112,7 @@ public:
 	/// Cache status 를 상태 표시줄에 표시한다.
 	void showCacheStatus();
 
+	/// 전체화면 모드를 토글한다.
 	void ToggleFullScreen();
 
 	void ToggleBigToScreenStretch();
@@ -126,7 +120,10 @@ public:
 
 	int GetLogCacheHitRate() const;
 
+	/// 현재 파일을 삭제한다.
 	void DeleteThisFile();
+
+	/// 현재 파일을 이동한다.
 	void MoveThisFile();
 
 	const std::string & GetProgramFolder() const	// 프로그램 실행 파일이 있는 폴더를 가져온다.
@@ -148,7 +145,7 @@ public:
 	void OpenFile(const std::string & strFilename);
 
 	/// 특정 폴더의 첫번째 파일을 연다.
-	void OpenFolder(const std::string strFolder);
+	void OpenFolder(const std::string & strFolder);
 	void OpenFileDialog();
 
 	/// 현재 파일을 다른 형식으로 저장하는 파일 다이얼로그를 연다.
@@ -175,7 +172,6 @@ private:
 	void SetStatusBarText();
 	void SetTitle();
 
-	BOOL _SetOSVersion();
 	eOSKind m_osKind;
 
 	void InitOpenFileDialog();
@@ -222,23 +218,25 @@ private:
 	/// 창 아래의 상태 표시줄에 대한 핸들
 	HWND m_hStatusBar;
 
-	HINSTANCE m_hMainInstance;
+	HINSTANCE m_hMainInstance;			///< 메인 인스턴스 핸들
 
-	HMENU m_hMainMenu;
-	HMENU m_hPopupMenu;
+	HMENU m_hMainMenu;					///< 메인 메뉴에 대한 핸들
+	HMENU m_hPopupMenu;					///< 팝업 메뉴에 대한 핸들
 
 	int m_iShowingX;					///< 그림 중 어디를 찍기 시작하나.
 	int m_iShowingY;					///< 그림 중 어디를 찍기 시작하나.
 
-	void ZFindFile(const char *path, std::vector< FileData > & foundStorage, bool bFindRecursive);
-	void ZFindFolders(const char *path, std::vector<std::string> & foundStorage, bool bFindRecursive = false);
+	static void FindFile(const char *path, std::vector< FileData > & foundStorage, bool bFindRecursive);
+	static void FindFolders(const char *path, std::vector<std::string> & foundStorage, bool bFindRecursive = false);
 
-	// For Open File Dialog
-	OPENFILENAME ofn;       // common dialog box structure
+	/// For Open File Dialog
+	OPENFILENAME ofn;
 	char szFile[MAX_PATH];       // buffer for file name
 	//bool m_bOpeningFileDialog;	// 전체화면일 때 파일 다이얼로그를 열면 깜빡거림을 막기 위해
 
 	// For Undo/Redo
 	ZHistory m_history;
 
+	/// For Cache DC
+	HDC m_hBufferDC;
 };
