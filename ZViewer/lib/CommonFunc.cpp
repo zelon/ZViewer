@@ -244,3 +244,195 @@ std::string GetFileNameFromFullFileName(const std::string & strFullFilename)
 	return strFilename;
 }
 
+
+eOSKind getOSVersion()
+{
+	const int BUFSIZE = 1024;
+
+	OSVERSIONINFOEX osvi;
+	BOOL bOsVersionInfoEx;
+
+	// Try calling GetVersionEx using the OSVERSIONINFOEX structure.
+	// If that fails, try using the OSVERSIONINFO structure.
+
+	ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
+	osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
+
+	if( !(bOsVersionInfoEx = GetVersionEx ((OSVERSIONINFO *) &osvi)) )
+	{
+		osvi.dwOSVersionInfoSize = sizeof (OSVERSIONINFO);
+		if (! GetVersionEx ( (OSVERSIONINFO *) &osvi) ) 
+			return eOSKind_UNKNOWN;
+	}
+
+	eOSKind retKind = eOSKind_UNKNOWN;
+
+	switch (osvi.dwPlatformId)
+	{
+		// Test for the Windows NT product family.
+	case VER_PLATFORM_WIN32_NT:
+
+		// Test for the specific product family.
+		if ( osvi.dwMajorVersion == 5 && osvi.dwMinorVersion == 2 )
+		{
+			retKind = eOSKind_XP;
+			printf ("Microsoft Windows Server&nbsp;2003 family, ");
+		}
+
+		if ( osvi.dwMajorVersion == 5 && osvi.dwMinorVersion == 1 )
+		{
+			retKind = eOSKind_XP;
+			printf ("Microsoft Windows XP ");
+		}
+
+		if ( osvi.dwMajorVersion == 5 && osvi.dwMinorVersion == 0 )
+		{
+			retKind = eOSKind_2000;
+			printf ("Microsoft Windows 2000 ");
+		}
+
+		if ( osvi.dwMajorVersion <= 4 )
+			printf("Microsoft Windows NT ");
+
+		// Test for specific product on Windows NT 4.0 SP6 and later.
+		if( bOsVersionInfoEx )
+		{
+			// Test for the workstation type.
+			if ( osvi.wProductType == VER_NT_WORKSTATION )
+			{
+				if( osvi.dwMajorVersion == 4 )
+					printf ( "Workstation 4.0 " );
+				else if( osvi.wSuiteMask & VER_SUITE_PERSONAL )
+					printf ( "Home Edition " );
+				else
+					printf ( "Professional " );
+			}
+
+			// Test for the server type.
+			else if ( osvi.wProductType == VER_NT_SERVER )
+			{
+				if( osvi.dwMajorVersion == 5 && osvi.dwMinorVersion == 2 )
+				{
+					if( osvi.wSuiteMask & VER_SUITE_DATACENTER )
+						printf ( "Datacenter Edition " );
+					else if( osvi.wSuiteMask & VER_SUITE_ENTERPRISE )
+						printf ( "Enterprise Edition " );
+					else if ( osvi.wSuiteMask == VER_SUITE_BLADE )
+						printf ( "Web Edition " );
+					else
+						printf ( "Standard Edition " );
+				}
+
+				else if( osvi.dwMajorVersion == 5 && osvi.dwMinorVersion == 0 )
+				{
+					if( osvi.wSuiteMask & VER_SUITE_DATACENTER )
+						printf ( "Datacenter Server " );
+					else if( osvi.wSuiteMask & VER_SUITE_ENTERPRISE )
+						printf ( "Advanced Server " );
+					else
+						printf ( "Server " );
+				}
+
+				else  // Windows NT 4.0 
+				{
+					if( osvi.wSuiteMask & VER_SUITE_ENTERPRISE )
+						printf ("Server 4.0, Enterprise Edition " );
+					else
+						printf ( "Server 4.0 " );
+				}
+			}
+		}
+		else  // Test for specific product on Windows NT 4.0 SP5 and earlier
+		{
+			HKEY hKey;
+			char szProductType[BUFSIZE];
+			DWORD dwBufLen=BUFSIZE;
+			LONG lRet;
+
+			lRet = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
+				"SYSTEM\\CurrentControlSet\\Control\\ProductOptions",
+				0, KEY_QUERY_VALUE, &hKey );
+			if( lRet != ERROR_SUCCESS )
+				return eOSKind_UNKNOWN;
+
+			lRet = RegQueryValueEx( hKey, "ProductType", NULL, NULL,
+				(LPBYTE) szProductType, &dwBufLen);
+			if( (lRet != ERROR_SUCCESS) || (dwBufLen > BUFSIZE) )
+				return eOSKind_UNKNOWN;
+
+			RegCloseKey( hKey );
+
+			if ( lstrcmpi( "WINNT", szProductType) == 0 )
+				printf( "Workstation " );
+			if ( lstrcmpi( "LANMANNT", szProductType) == 0 )
+				printf( "Server " );
+			if ( lstrcmpi( "SERVERNT", szProductType) == 0 )
+				printf( "Advanced Server " );
+
+			printf( "%d.%d ", osvi.dwMajorVersion, osvi.dwMinorVersion );
+		}
+
+		// Display service pack (if any) and build number.
+
+		if( osvi.dwMajorVersion == 4 && 
+			lstrcmpi( osvi.szCSDVersion, "Service Pack 6" ) == 0 )
+		{
+			HKEY hKey;
+			LONG lRet;
+
+			// Test for SP6 versus SP6a.
+			lRet = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
+				"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Hotfix\\Q246009",
+				0, KEY_QUERY_VALUE, &hKey );
+			if( lRet == ERROR_SUCCESS )
+				printf( "Service Pack 6a (Build %d)\n", osvi.dwBuildNumber & 0xFFFF );         
+			else // Windows NT 4.0 prior to SP6a
+			{
+				printf( "%s (Build %d)\n",
+					osvi.szCSDVersion,
+					osvi.dwBuildNumber & 0xFFFF);
+			}
+
+			RegCloseKey( hKey );
+		}
+		else // Windows NT 3.51 and earlier or Windows 2000 and later
+		{
+			printf( "%s (Build %d)\n",
+				osvi.szCSDVersion,
+				osvi.dwBuildNumber & 0xFFFF);
+		}
+
+
+		break;
+
+		// Test for the Windows 95 product family.
+	case VER_PLATFORM_WIN32_WINDOWS:
+
+		if (osvi.dwMajorVersion == 4 && osvi.dwMinorVersion == 0)
+		{
+			printf ("Microsoft Windows 95 ");
+			if ( osvi.szCSDVersion[1] == 'C' || osvi.szCSDVersion[1] == 'B' )
+				printf("OSR2 " );
+		} 
+
+		if (osvi.dwMajorVersion == 4 && osvi.dwMinorVersion == 10)
+		{
+			retKind = eOSKind_98;
+			printf ("Microsoft Windows 98 ");
+			if ( osvi.szCSDVersion[1] == 'A' )
+				printf("SE " );
+		} 
+
+		if (osvi.dwMajorVersion == 4 && osvi.dwMinorVersion == 90)
+		{
+			printf ("Microsoft Windows Millennium Edition\n");
+		} 
+		break;
+
+	case VER_PLATFORM_WIN32s:
+
+		printf ("Microsoft Win32s\n");
+		break;
+	}
+	return retKind; 
+}

@@ -9,6 +9,15 @@
 *********************************************************************/
 #pragma once
 
+/// OS 종류를 판단할 때 쓰일 enum
+enum eOSKind
+{
+	eOSKind_UNKNOWN,
+	eOSKind_98,
+	eOSKind_2000,
+	eOSKind_XP,
+};
+
 const std::string GetOnlyFileName(const std::string & strFullFileName);
 
 class CStringCompareIgnoreCase
@@ -65,10 +74,10 @@ void DebugPrintf( const char *fmt, ... );
 
 bool SetRegistryValue(HKEY hOpenKey, const std::string & strKey,LPCTSTR szValue, const std::string & strData);
 
-// 최대 크기를 넘지 않는 적당한 리사이즈 크기를 돌려준다.
+/// 최대 크기를 넘지 않는 적당한 리사이즈 크기를 돌려준다.
 RECT GetResizedRectForBigToSmall(const RECT & MaximumSize, const RECT & originalSize);
 
-// 최대 크기를 넘지 않는 적당한 리사이즈 크기를 돌려준다.
+/// 최대 크기를 넘지 않는 적당한 리사이즈 크기를 돌려준다.
 RECT GetResizedRectForSmallToBig(const RECT & MaximumSize, const RECT & originalSize);
 
 std::string toString(int i);
@@ -77,3 +86,5 @@ bool SelectFolder(HWND hWnd, char * szFolder);
 
 std::string GetFolderNameFromFullFileName(const std::string & strFullFilename);
 std::string GetFileNameFromFullFileName(const std::string & strFullFilename);
+
+eOSKind getOSVersion();
