@@ -10,12 +10,14 @@
 
 #pragma once
 
+/// 파일 이동을 할 때 보여주는 다이얼로그를 위한 클래스
 class CMoveToDlg
 {
 public:
 	CMoveToDlg();
 	~CMoveToDlg();
 
+	/// 다이얼로그를 화면에 띄운다.
 	bool DoModal();
 
 	const std::string & GetMoveToFolder() const { return m_strMoveToFolder; }

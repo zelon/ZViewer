@@ -11,6 +11,7 @@
 
 #pragma once
 
+/// 다중 언어 지원을 위해 HINSTANCE 및 리소스를 관리하는 클래스
 class ZResourceManager
 {
 	ZResourceManager();
