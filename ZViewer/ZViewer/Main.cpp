@@ -8,6 +8,34 @@
 *                                       http://www.wimy.com
 *********************************************************************/
 
+/**
+	@mainpage ZViewer's Document
+
+	ZViewer 는 GPL 에 의해 배포되는 이미지 뷰어 프로그램입니다.
+
+	Created by zelon (JKim, Jinwook in Korea)
+
+	Project Homepage : http://kldp.net/projects/zviewer/
+
+	Createor Homepage : http://www.wimy.com
+
+
+	주요 기능은 다음과 같습니다.
+
+	- 다양한 확장자를 가진 이미지 파일을 볼 수 있습니다.
+
+	- 탐색기에서 오른쪽 버튼을 통한 미리보기가 가능합니다.
+
+	- 이미지 파일들을 캐시해두어 빠른 이미지 보기가 가능합니다.
+
+	- 실행 크기가 작아 빨리 로딩됩니다.
+
+	- 이미지 파일을 다른 형식으로 변환이 가능합니다.
+
+	- 화면 크기게 맞게 확대/축소하여 이미지를 볼 수 있습니다.
+
+*/
+
 #include "stdafx.h"
 #include "resource.h"
 #include "ZMain.h"
