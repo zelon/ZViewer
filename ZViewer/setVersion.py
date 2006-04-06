@@ -57,14 +57,13 @@ def zviewerRcVersionUp(major, minor, patch):
 	file = open(r"ZViewer\res\ZViewer.rc")
 	
 	lines = file.readlines()
-	
-#				VALUE "ProductVersion", "0, 5, 0, 1"
+
 	productVersionPattern = r"(\s*VALUE \"ProductVersion\", )\"(\d.\d.\d.\d)\""
 	fileVersionPattern = r"(\s*VALUE \"FileVersion\", )\"(\d.\d.\d.\d)\""
-	
+
 	outputs = []
 	for i in lines:
-		
+
 		if re.match(r" FILEVERSION \d,\d,\d,\d\n", i) != None:
 			outputs.append(" FILEVERSION " + str(major) + "," + str(minor) + "," + str(patch) + ",0\n")
 		elif re.match(r" PRODUCTVERSION \d,\d,\d,\d\n", i) != None:
@@ -75,9 +74,9 @@ def zviewerRcVersionUp(major, minor, patch):
 			outputs.append(re.sub(fileVersionPattern, r"\1" + "\"" + str(major) + "." + str(minor) + "." + str(patch) + ".0\"", i))
 		else:
 			outputs.append(i)
-	
+
 	file.close()
-	
+
 	file = open(r"ZViewer\res\ZViewer.rc", "w")
 	file.writelines(outputs)
 	file.close()
@@ -98,9 +97,9 @@ def nsisVersionUp(major, minor, patch):
     		outputs.append("!define PRODUCT_VERSION \"" + str(major) + "." + str(minor) + "." + str(patch) + "\"\n")
     	else:
     		outputs.append(i)
-    
+
     file.close()
-    
+   
     file = open(r"output\ZViewer.nsi", "w")
     file.writelines(outputs)
     file.close()
