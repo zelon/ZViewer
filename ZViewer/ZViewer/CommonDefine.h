@@ -16,7 +16,7 @@
 #include "CommonFunc.h"
 #define STATUSBAR_HEIGHT		20
 
-const std::string g_strVersion = "0.4.0";
+const std::string g_strVersion = "0.5.0";
 
 struct FileData
 {
