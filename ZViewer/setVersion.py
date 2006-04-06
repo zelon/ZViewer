@@ -28,6 +28,9 @@ def zviewerAgentRcVersionUp(major, minor, patch):
 	
 	lines = file.readlines()
 	
+	productVersionPattern = r"(\s*VALUE \"ProductVersion\", )\"(\d.\d.\d.\d)\""
+	fileVersionPattern = r"(\s*VALUE \"FileVersion\", )\"(\d.\d.\d.\d)\""
+	
 	outputs = []	
 	for i in lines:
 		
@@ -35,6 +38,10 @@ def zviewerAgentRcVersionUp(major, minor, patch):
 			outputs.append(" FILEVERSION " + str(major) + "," + str(minor) + "," + str(patch) + ",0\n")
 		elif re.match(r" PRODUCTVERSION \d,\d,\d,\d\n", i) != None:
 			outputs.append(" PRODUCTVERSION " + str(major) + "," + str(minor) + "," + str(patch) + ",0\n")
+		elif re.match(productVersionPattern, i) != None:
+			outputs.append(re.sub(productVersionPattern, r"\1" + "\"" + str(major) + "." + str(minor) + "." + str(patch) + ".0\"", i))
+		elif re.match(fileVersionPattern, i) != None:
+			outputs.append(re.sub(fileVersionPattern, r"\1" + "\"" + str(major) + "." + str(minor) + "." + str(patch) + ".0\"", i))
 		else:
 			outputs.append(i)
 	
@@ -51,6 +58,10 @@ def zviewerRcVersionUp(major, minor, patch):
 	
 	lines = file.readlines()
 	
+#				VALUE "ProductVersion", "0, 5, 0, 1"
+	productVersionPattern = r"(\s*VALUE \"ProductVersion\", )\"(\d, \d, \d, \d)\""
+	fileVersionPattern = r"(\s*VALUE \"FileVersion\", )\"(\d, \d, \d, \d)\""
+	
 	outputs = []
 	for i in lines:
 		
@@ -58,6 +69,10 @@ def zviewerRcVersionUp(major, minor, patch):
 			outputs.append(" FILEVERSION " + str(major) + "," + str(minor) + "," + str(patch) + ",0\n")
 		elif re.match(r" PRODUCTVERSION \d,\d,\d,\d\n", i) != None:
 			outputs.append(" PRODUCTVERSION " + str(major) + "," + str(minor) + "," + str(patch) + ",0\n")
+		elif re.match(productVersionPattern, i) != None:
+			outputs.append(re.sub(productVersionPattern, r"\1" + "\"" + str(major) + ", " + str(minor) + ", " + str(patch) + ", 0\"", i))
+		elif re.match(fileVersionPattern, i) != None:
+			outputs.append(re.sub(fileVersionPattern, r"\1" + "\"" + str(major) + ", " + str(minor) + ", " + str(patch) + ", 0\"", i))
 		else:
 			outputs.append(i)
 	
