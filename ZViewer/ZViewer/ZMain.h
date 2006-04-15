@@ -239,4 +239,7 @@ private:
 
 	/// For Cache DC
 	HDC m_hBufferDC;
+
+	/// 버퍼로 쓰이는 DC 를 릴리즈한다.
+	void _releaseBufferDC();
 };

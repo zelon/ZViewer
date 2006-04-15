@@ -56,6 +56,16 @@ ZMain::~ZMain(void)
 }
 
 
+/// 버퍼로 쓰이는 DC 를 릴리즈한다.
+void ZMain::_releaseBufferDC()
+{
+	if ( m_hBufferDC != NULL )
+	{
+		BOOL bRet = DeleteDC(m_hBufferDC);
+		_ASSERTE(bRet);
+		m_hBufferDC = NULL;
+	}
+}
 
 /// Timer 를 받았을 때
 void ZMain::onTimer()
@@ -1102,12 +1112,7 @@ void ZMain::LoadCurrent()
 
 	DWORD start = GetTickCount();
 
-	if ( m_hBufferDC != NULL )
-	{
-		BOOL bRet = DeleteDC(m_hBufferDC);
-		_ASSERTE(bRet);
-		m_hBufferDC = NULL;
-	}
+	_releaseBufferDC();
 
 	if ( ZCacheImage::GetInstance().hasCachedData(m_strCurrentFilename, m_iCurretFileIndex) )
 	{
@@ -1276,8 +1281,6 @@ void ZMain::_ProcAfterRemoveThisFile()
 		SetTitle();
 		SetStatusBarText();
 		Draw(true);
-
-
 	}
 	else
 	{
@@ -1343,8 +1346,6 @@ void ZMain::_ProcAfterRemoveThisFile()
 			SetStatusBarText();
 			Draw(true);
 		}
-
-
 	}
 }
 
@@ -1492,6 +1493,12 @@ void ZMain::Rotate(bool bClockWise)
 		{
 			m_currentImage.Rotate(90);
 		}
+
+		m_iShowingX = 0;
+		m_iShowingY = 0;
+
+		_releaseBufferDC();
+
 		Draw(true);
 	}
 }
