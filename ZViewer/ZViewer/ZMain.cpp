@@ -1423,6 +1423,12 @@ void ZMain::ShowFileExtDlg()
 
 void ZMain::DeleteThisFile()
 {
+	/// 현재 보고 있는 파일이 없으면 바로 리턴한다.
+	if ( m_strCurrentFilename.empty() )
+	{
+		return;
+	}
+
 	char szDeleteMsg[256];
 
 	_snprintf(szDeleteMsg, sizeof(szDeleteMsg), ZResourceManager::GetInstance().GetString(IDS_DELETE_THIS_FILE).c_str(), GetFileNameFromFullFileName(m_strCurrentFilename).c_str());
@@ -1444,6 +1450,11 @@ void ZMain::DeleteThisFile()
 
 void ZMain::MoveThisFile()
 {
+	/// 현재 보고 있는 파일이 없으면 바로 리턴한다.
+	if ( m_strCurrentFilename.empty() )
+	{
+		return;
+	}
 
 	CMoveToDlg aDlg;
 	
@@ -1474,7 +1485,6 @@ void ZMain::MoveThisFile()
 		{
 			return;
 		}
-
 	}
 	
 	MoveFileEx(m_strCurrentFilename.c_str(), strToFileName.c_str(), MOVEFILE_REPLACE_EXISTING);
