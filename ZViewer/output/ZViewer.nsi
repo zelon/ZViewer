@@ -2,7 +2,7 @@
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "ZViewer"
-!define PRODUCT_VERSION "0.5.0"
+!define PRODUCT_VERSION "0.5.1"
 !define PRODUCT_PUBLISHER "RhLab"
 !define PRODUCT_WEB_SITE "http://www.wimy.com"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
