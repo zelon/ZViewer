@@ -68,7 +68,7 @@ public:
 		return ( TRUE == m_image.save(strFilename.c_str(), iFlag));
 	}
 
-	void Rotate(double dAngle) { m_image.rotate(dAngle);	}
+	void Rotate(double dAngle) { m_image.rotate(dAngle); }
 
 	bool Resize(WORD newWidth, WORD newHeight)
 	{
