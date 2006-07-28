@@ -3,10 +3,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ZViewerAgent", "ZViewerAgen
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ZViewerAgentPS", "ZViewerAgent\ZViewerAgentPS.vcproj", "{819725B5-F42F-4FCE-9582-6F70FA75A64C}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ZViewer", "ZViewer\ZViewer.vcproj", "{F22C641A-3DB2-41A2-9530-8B39EEC1E4D8}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
@@ -20,9 +16,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LangKor", "LangKor\LangKor.
 	EndProjectSection
 EndProject
 Global
-	GlobalSection(DPCodeReviewSolutionGUID) = preSolution
-		DPCodeReviewSolutionGUID = {00000000-0000-0000-0000-000000000000}
-	EndGlobalSection
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
 		Release = Release
@@ -36,12 +29,6 @@ Global
 		{FF216AE6-86AC-49FA-81D4-40A0B41D4C2B}.Release.Build.0 = Release|Win32
 		{FF216AE6-86AC-49FA-81D4-40A0B41D4C2B}.ZViewerDebug.ActiveCfg = Debug|Win32
 		{FF216AE6-86AC-49FA-81D4-40A0B41D4C2B}.ZViewerRelease.ActiveCfg = ZViewerRelease|Win32
-		{819725B5-F42F-4FCE-9582-6F70FA75A64C}.Debug.ActiveCfg = Debug|Win32
-		{819725B5-F42F-4FCE-9582-6F70FA75A64C}.Debug.Build.0 = Debug|Win32
-		{819725B5-F42F-4FCE-9582-6F70FA75A64C}.Release.ActiveCfg = Release|Win32
-		{819725B5-F42F-4FCE-9582-6F70FA75A64C}.Release.Build.0 = Release|Win32
-		{819725B5-F42F-4FCE-9582-6F70FA75A64C}.ZViewerDebug.ActiveCfg = Debug|Win32
-		{819725B5-F42F-4FCE-9582-6F70FA75A64C}.ZViewerRelease.ActiveCfg = ZViewerRelease|Win32
 		{F22C641A-3DB2-41A2-9530-8B39EEC1E4D8}.Debug.ActiveCfg = Debug|Win32
 		{F22C641A-3DB2-41A2-9530-8B39EEC1E4D8}.Debug.Build.0 = Debug|Win32
 		{F22C641A-3DB2-41A2-9530-8B39EEC1E4D8}.Release.ActiveCfg = Release|Win32
@@ -70,5 +57,8 @@ Global
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection
 	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+	GlobalSection(DPCodeReviewSolutionGUID) = preSolution
+		DPCodeReviewSolutionGUID = {00000000-0000-0000-0000-000000000000}
 	EndGlobalSection
 EndGlobal
