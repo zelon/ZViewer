@@ -47,21 +47,17 @@
 // Version information ------------------------------------------------------
 
 #define FREEIMAGE_MAJOR_VERSION   3
-#define FREEIMAGE_MINOR_VERSION   8
-#define FREEIMAGE_RELEASE_SERIAL  0
+#define FREEIMAGE_MINOR_VERSION   9
+#define FREEIMAGE_RELEASE_SERIAL  1
 
 // Compiler options ---------------------------------------------------------
 
 #include <wchar.h>	// needed for UNICODE functions
 
-#if defined(FREEIMAGE_LIB) || !(defined(WIN32) || defined(__WIN32__))
+#if defined(FREEIMAGE_LIB) || !(defined(_WIN32) || defined(__WIN32__))
 #define DLL_API
 #define DLL_CALLCONV
 #else
-
-#ifdef __MINGW32__		// prevents a bug in mingw32
-#include <windows.h>
-#endif // __MINGW32__
 
 #define DLL_CALLCONV __stdcall
 // The following ifdef block is the standard way of creating macros which make exporting 
@@ -81,7 +77,7 @@
 // If your big endian system isn't being detected, add an OS specific check
 #if (defined(BYTE_ORDER) && BYTE_ORDER==BIG_ENDIAN) || \
 	(defined(__BYTE_ORDER) && __BYTE_ORDER==__BIG_ENDIAN) || \
-	defined(__APPLE__)
+	defined(__BIG_ENDIAN__)
 #define FREEIMAGE_BIGENDIAN
 #endif // BYTE_ORDER
 
@@ -128,15 +124,24 @@ FI_STRUCT (FIMULTIBITMAP) { void *data; };
 #define SEEK_END  2
 #endif
 
-#ifndef __MINGW32__		// prevents a bug in mingw32
-
+#ifndef _MSC_VER
+// define portable types for 32-bit / 64-bit OS
+#include <stdint.h>
+typedef int32_t BOOL;
+typedef uint8_t BYTE;
+typedef uint16_t WORD;
+typedef uint32_t DWORD;
+typedef int32_t LONG;
+#else
+// MS is not C99 ISO compliant
 typedef long BOOL;
 typedef unsigned char BYTE;
 typedef unsigned short WORD;
 typedef unsigned long DWORD;
 typedef long LONG;
+#endif // _MSC_VER
 
-#if (defined(WIN32) || defined(__WIN32__))
+#if (defined(_WIN32) || defined(__WIN32__))
 #pragma pack(push, 1)
 #else
 #pragma pack(1)
@@ -167,7 +172,7 @@ typedef struct tagRGBTRIPLE {
 #endif // FREEIMAGE_BIGENDIAN
 } RGBTRIPLE;
 
-#if (defined(WIN32) || defined(__WIN32__))
+#if (defined(_WIN32) || defined(__WIN32__))
 #pragma pack(pop)
 #else
 #pragma pack()
@@ -192,13 +197,11 @@ typedef struct tagBITMAPINFO {
   RGBQUAD          bmiColors[1];
 } BITMAPINFO, *PBITMAPINFO;
 
-#endif // __MINGW32__
-
 #endif // _WINDOWS_
 
 // Types used in the library (specific to FreeImage) ------------------------
 
-#if (defined(WIN32) || defined(__WIN32__))
+#if (defined(_WIN32) || defined(__WIN32__))
 #pragma pack(push, 1)
 #else
 #pragma pack(1)
@@ -247,7 +250,7 @@ typedef struct tagFICOMPLEX {
     double i;
 } FICOMPLEX;
 
-#if (defined(WIN32) || defined(__WIN32__))
+#if (defined(_WIN32) || defined(__WIN32__))
 #pragma pack(pop)
 #else
 #pragma pack()
@@ -347,7 +350,9 @@ FI_ENUM(FREE_IMAGE_FORMAT) {
 	FIF_XPM		= 23,
 	FIF_DDS		= 24,
 	FIF_GIF     = 25,
-	FIF_HDR		= 26
+	FIF_HDR		= 26,
+	FIF_FAXG3	= 27,
+	FIF_SGI		= 28
 };
 
 /** Image type used in FreeImage.
@@ -513,7 +518,7 @@ typedef unsigned (DLL_CALLCONV *FI_WriteProc) (void *buffer, unsigned size, unsi
 typedef int (DLL_CALLCONV *FI_SeekProc) (fi_handle handle, long offset, int origin);
 typedef long (DLL_CALLCONV *FI_TellProc) (fi_handle handle);
 
-#if (defined(WIN32) || defined(__WIN32__))
+#if (defined(_WIN32) || defined(__WIN32__))
 #pragma pack(push, 1)
 #else
 #pragma pack(1)
@@ -526,7 +531,7 @@ FI_STRUCT(FreeImageIO) {
     FI_TellProc  tell_proc;     // pointer to the function used to aquire the current position
 };
 
-#if (defined(WIN32) || defined(__WIN32__))
+#if (defined(_WIN32) || defined(__WIN32__))
 #pragma pack(pop)
 #else
 #pragma pack()
@@ -589,6 +594,7 @@ typedef void (DLL_CALLCONV *FI_InitProc)(Plugin *plugin, int format_id);
 #define BMP_SAVE_RLE        1
 #define CUT_DEFAULT         0
 #define DDS_DEFAULT			0
+#define FAXG3_DEFAULT		0
 #define GIF_DEFAULT			0
 #define GIF_LOAD256			1		// Load the image as a 256 color image with ununsed palette entries, if it's 16 or 2 color
 #define GIF_PLAYBACK		2		// 'Play' the GIF to generate each frame (as 32bpp) instead of returning raw frame data when loading
@@ -605,6 +611,7 @@ typedef void (DLL_CALLCONV *FI_InitProc)(Plugin *plugin, int format_id);
 #define JPEG_QUALITYAVERAGE 0x400
 #define JPEG_QUALITYBAD     0x800
 #define JPEG_CMYK			0x1000	// load separated CMYK "as is" (use | to combine with other flags)
+#define JPEG_PROGRESSIVE	0x2000	// save as a progressive-JPEG (use | to combine with other flags)
 #define KOALA_DEFAULT       0
 #define LBM_DEFAULT         0
 #define MNG_DEFAULT         0
@@ -620,6 +627,7 @@ typedef void (DLL_CALLCONV *FI_InitProc)(Plugin *plugin, int format_id);
 #define PNM_SAVE_ASCII      1       // If set the writer saves in ASCII format (i.e. P1, P2 or P3)
 #define PSD_DEFAULT         0
 #define RAS_DEFAULT         0
+#define SGI_DEFAULT			0
 #define TARGA_DEFAULT       0
 #define TARGA_LOAD_RGB888   1       // If set the loader converts RGB555 and ARGB8888 -> RGB888.
 #define TIFF_DEFAULT        0
@@ -683,6 +691,8 @@ DLL_API BOOL DLL_CALLCONV FreeImage_SaveToMemory(FREE_IMAGE_FORMAT fif, FIBITMAP
 DLL_API long DLL_CALLCONV FreeImage_TellMemory(FIMEMORY *stream);
 DLL_API BOOL DLL_CALLCONV FreeImage_SeekMemory(FIMEMORY *stream, long offset, int origin);
 DLL_API BOOL DLL_CALLCONV FreeImage_AcquireMemory(FIMEMORY *stream, BYTE **data, DWORD *size_in_bytes);
+DLL_API unsigned DLL_CALLCONV FreeImage_ReadMemory(void *buffer, unsigned size, unsigned count, FIMEMORY *stream);
+DLL_API unsigned DLL_CALLCONV FreeImage_WriteMemory(const void *buffer, unsigned size, unsigned count, FIMEMORY *stream);
 
 // Plugin Interface ---------------------------------------------------------
 
@@ -715,7 +725,7 @@ DLL_API void DLL_CALLCONV FreeImage_AppendPage(FIMULTIBITMAP *bitmap, FIBITMAP *
 DLL_API void DLL_CALLCONV FreeImage_InsertPage(FIMULTIBITMAP *bitmap, int page, FIBITMAP *data);
 DLL_API void DLL_CALLCONV FreeImage_DeletePage(FIMULTIBITMAP *bitmap, int page);
 DLL_API FIBITMAP * DLL_CALLCONV FreeImage_LockPage(FIMULTIBITMAP *bitmap, int page);
-DLL_API void DLL_CALLCONV FreeImage_UnlockPage(FIMULTIBITMAP *bitmap, FIBITMAP *page, BOOL changed);
+DLL_API void DLL_CALLCONV FreeImage_UnlockPage(FIMULTIBITMAP *bitmap, FIBITMAP *data, BOOL changed);
 DLL_API BOOL DLL_CALLCONV FreeImage_MovePage(FIMULTIBITMAP *bitmap, int target, int source);
 DLL_API BOOL DLL_CALLCONV FreeImage_GetLockedPageNumbers(FIMULTIBITMAP *bitmap, int *pages, int *count);
 
@@ -916,6 +926,7 @@ DLL_API BOOL DLL_CALLCONV FreeImage_JPEGTransform(const char *src_file, const ch
 
 // upsampling / downsampling
 DLL_API FIBITMAP *DLL_CALLCONV FreeImage_Rescale(FIBITMAP *dib, int dst_width, int dst_height, FREE_IMAGE_FILTER filter);
+DLL_API FIBITMAP *DLL_CALLCONV FreeImage_MakeThumbnail(FIBITMAP *dib, int max_pixel_size, BOOL convert FI_DEFAULT(TRUE));
 
 // color manipulation routines (point operations)
 DLL_API BOOL DLL_CALLCONV FreeImage_AdjustCurve(FIBITMAP *dib, BYTE *LUT, FREE_IMAGE_COLOR_CHANNEL channel);

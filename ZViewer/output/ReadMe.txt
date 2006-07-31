@@ -20,6 +20,9 @@
 
 -- version history --
 
+ * v0.6
+  * freeimage library 3.9.1 로 업데이트
+
  * v0.5.1(2005. 04. 18)
   * freeimage library 3.8.0 으로 업데이트
   * 다른 형식의 그림 파일로 저장 기능
