@@ -22,6 +22,7 @@ ZOption & ZOption::GetInstance()
 
 ZOption::ZOption()
 {
+	m_bLoopImages = true;
 	m_bUseCache = true;
 	m_strOptionFilename = "option.ini";
 	m_bOptionChanged = false;

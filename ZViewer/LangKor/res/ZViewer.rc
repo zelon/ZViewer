@@ -100,6 +100,7 @@ BEGIN
     END
     POPUP "옵션(&O)"
     BEGIN
+        MENUITEM "마지막 다음이 처음으로",      ID_OPTION_VIEWLOOP
         MENUITEM "파일 확장자...",              ID_OPTION_FILE_EXT
     END
     POPUP "도움말(&H)"

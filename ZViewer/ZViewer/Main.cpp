@@ -666,6 +666,10 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 				ZMain::GetInstance().OnRightTopFirstDraw();
 				break;
 
+			case ID_OPTION_VIEWLOOP:
+				ZMain::GetInstance().ToggleLoopImage();
+				break;
+
 			case ID_OPTION_FILE_EXT:
 				ZMain::GetInstance().ShowFileExtDlg();
 				break;

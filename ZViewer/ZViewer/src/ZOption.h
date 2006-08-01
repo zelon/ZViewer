@@ -50,6 +50,9 @@ public:
 	/// 최대 캐시할 이미지 갯수. 여기서 절반반큼 왼쪽, 오른쪽으로 간다.
 	int m_iMaxCacheImageNum;
 
+	/// 마지막 그림 파일에서 다음으로 가면 처음 그림 파일로 갈 것인가?
+	bool m_bLoopImages;
+
 protected:
 	/// 전체 화면 모드인가.m_bOptionChanged(false)
 	bool m_bFullScreen;

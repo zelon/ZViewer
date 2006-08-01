@@ -99,6 +99,7 @@ BEGIN
     END
     POPUP "Option"
     BEGIN
+        MENUITEM "View Loop",                   ID_OPTION_VIEWLOOP
         MENUITEM "File Extension...",           ID_OPTION_FILE_EXT
     END
     POPUP "&Help"

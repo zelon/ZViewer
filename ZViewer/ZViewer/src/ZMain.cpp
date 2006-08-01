@@ -161,7 +161,18 @@ void ZMain::OnInit()
 		// 시작 인자가 있으면 그 파일을 보여준다.
 		OpenFile(m_strInitArg);
 	}
+
+	/// 여러 컨트롤들을 초기화시켜준다.
+	_InitControls();
 }
+
+
+/// 여러 컨트롤들을 초기화시켜준다.
+void ZMain::_InitControls()
+{
+	CheckMenuItem(m_hMainMenu, ID_OPTION_VIEWLOOP, ZOption::GetInstance().m_bLoopImages ? MF_CHECKED : MF_UNCHECKED);
+}
+
 
 void ZMain::Draw(bool bEraseBg)
 {
@@ -791,8 +802,29 @@ bool ZMain::MoveIndex(int iIndex)
 {
 	if ( m_vFile.empty() ) return false;
 
-	if ( iIndex < 0 ) iIndex = 0;
-	if ( iIndex >= (int)m_vFile.size() ) iIndex = (int)m_vFile.size() - 1;
+	if ( iIndex < 0 )
+	{
+		if ( ZOption::GetInstance().m_bLoopImages )
+		{
+			iIndex = (int)(m_vFile.size() - ((-1*iIndex) % m_vFile.size()));
+		}
+		else
+		{
+			iIndex = 0;
+		}
+	}
+
+	if ( iIndex >= (int)m_vFile.size() )
+	{
+		if ( ZOption::GetInstance().m_bLoopImages )
+		{
+			iIndex = (int)( iIndex % m_vFile.size() );
+		}
+		else
+		{
+			iIndex = (int)m_vFile.size() - 1;
+		}
+	}
 
 	if ( m_iCurretFileIndex == iIndex ) return false;
 
@@ -988,6 +1020,13 @@ void ZMain::ToggleBigToScreenStretch()
 	LoadCurrent();
 	Draw();
 
+}
+
+void ZMain::ToggleLoopImage()
+{
+	ZOption::GetInstance().m_bLoopImages = !(ZOption::GetInstance().m_bLoopImages);
+
+	CheckMenuItem(m_hMainMenu, ID_OPTION_VIEWLOOP, ZOption::GetInstance().m_bLoopImages ? MF_CHECKED : MF_UNCHECKED);
 }
 
 void ZMain::SetStatusBarText()

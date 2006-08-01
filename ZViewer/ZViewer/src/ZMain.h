@@ -45,7 +45,12 @@ public:
 	void SetInitArg(const std::string & strArg) { m_strInitArg = strArg; }
 	void SetProgramFolder();
 	void RescanFolder();			///< 파일목록을 다시 읽어들인다.
+	
 	void OnInit();
+
+	/// 여러 컨트롤들을 초기화시켜준다.
+	void _InitControls();
+
 	void Draw(bool bEraseBg = true);
 
 	/// 현재보고 있는 이미지를 윈도우 바탕화면의 배경으로 지정한다.
@@ -117,6 +122,9 @@ public:
 
 	void ToggleBigToScreenStretch();
 	void ToggleSmallToScreenStretch();
+
+	/// Loop Image 를 토글한다.
+	void ToggleLoopImage();
 
 	int GetLogCacheHitRate() const;
 
