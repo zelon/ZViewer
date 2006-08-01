@@ -28,7 +28,7 @@
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="3"
-				ProgramDataBaseFileName="$(OutDir)/ZViewerAgent.pdb"
+				ProgramDataBaseFileName="$(OutDir)/ZViewerAgentD.pdb"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="TRUE"
 				DebugInformationFormat="3"/>
