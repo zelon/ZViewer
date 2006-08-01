@@ -11,7 +11,7 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "ZFileExtDlg.h"
-#include "../ZMain.h"
+#include "ZMain.h"
 #include "ZResourceManager.h"
 #include <ShlObj.h>
 

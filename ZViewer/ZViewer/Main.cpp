@@ -38,7 +38,7 @@
 
 #include "stdafx.h"
 #include "resource.h"
-#include "ZMain.h"
+#include "src/ZMain.h"
 #include "src/ZFileExtDlg.h"
 #include "src/ZResourceManager.h"
 #include "src/ZCacheImage.h"

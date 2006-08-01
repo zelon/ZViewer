@@ -11,7 +11,7 @@
 #include "stdafx.h"
 #include "ZCacheImage.h"
 #include "ZOption.h"
-#include "../ZMain.h"
+#include "ZMain.h"
 
 using namespace std;
 

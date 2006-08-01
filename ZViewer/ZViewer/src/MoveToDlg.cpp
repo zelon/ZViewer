@@ -13,7 +13,7 @@
 
 #include "resource.h"
 #include "ZResourceManager.h"
-#include "../ZMain.h"
+#include "ZMain.h"
 
 CMoveToDlg * pThis = NULL;
 

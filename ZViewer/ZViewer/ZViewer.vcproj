@@ -19,7 +19,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="$(SolutionDir)/ZViewer/res;$(SolutionDir)/lib;"
+				AdditionalIncludeDirectories="$(SolutionDir)/ZViewer;$(SolutionDir)/ZViewer/res;$(SolutionDir)/lib;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
@@ -223,28 +223,13 @@
 						UsePrecompiledHeader="1"/>
 				</FileConfiguration>
 			</File>
-			<File
-				RelativePath=".\ZMain.cpp">
-			</File>
 		</Filter>
 		<Filter
 			Name="헤더 파일"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
 			<File
-				RelativePath=".\CommonDefine.h">
-			</File>
-			<File
-				RelativePath="..\lib\FreeImage.h">
-			</File>
-			<File
-				RelativePath="..\lib\FreeImagePlus.h">
-			</File>
-			<File
 				RelativePath=".\stdafx.h">
-			</File>
-			<File
-				RelativePath=".\ZMain.h">
 			</File>
 		</Filter>
 		<Filter
@@ -273,6 +258,9 @@
 		<Filter
 			Name="src"
 			Filter="">
+			<File
+				RelativePath=".\src\CommonDefine.h">
+			</File>
 			<File
 				RelativePath=".\src\MoveToDlg.cpp">
 			</File>
@@ -314,6 +302,12 @@
 			</File>
 			<File
 				RelativePath=".\src\ZHistory.h">
+			</File>
+			<File
+				RelativePath=".\src\ZMain.cpp">
+			</File>
+			<File
+				RelativePath=".\src\ZMain.h">
 			</File>
 			<File
 				RelativePath=".\src\ZOption.cpp">
