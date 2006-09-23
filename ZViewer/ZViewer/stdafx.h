@@ -35,4 +35,4 @@
 
 #include "FreeImagePlus.h"
 
-#include "src/CommonDefine.h"
+#include "../lib/CommonDefine.h"
