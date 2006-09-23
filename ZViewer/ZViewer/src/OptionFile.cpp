@@ -50,8 +50,6 @@ void COptionFile::LoadFromFile(const tstring & strFilename, iniMap & settings)
 		}
 
 		tstring strValue = aLine.substr(pos+1);
-
-		strValue.resize(pos);
 		tstring strKey = aLine.substr(0, pos);
 
 		_ASSERTE(strKey.empty() == false);
