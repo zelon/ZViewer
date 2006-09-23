@@ -499,7 +499,7 @@ void CZViewMenuExt::SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyl
 	ZImage tempImage;
 	if ( !tempImage.LoadFromFile(m_szFile) )
 	{
-		MessageBox(HWND_DESKTOP, TEXT("Can't load the image file"), TEXT("ZViewer"), MB_OK);
+		MessageBox(HWND_DESKTOP, GetMessage(TEXT("CANNOT_LOAD_IMAGE_FILE")), TEXT("ZViewer"), MB_OK);
 		return;
 	}
 
