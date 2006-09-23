@@ -71,7 +71,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance ,LPTSTR lpszC
 #ifndef _DEBUG
 	if ( GetSystemDefaultLangID() == 0x0412 )
 	{
-		hLang = LoadLibrary("language/korean.dll");
+		hLang = LoadLibrary(TEXT("language/korean.dll"));
 
 		if ( hLang )
 		{

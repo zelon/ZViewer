@@ -133,8 +133,8 @@ STDMETHODIMP CZViewMenuExt::QueryContextMenu(HMENU hmenu, UINT uIndex, UINT uidC
 	}
 
 	// 이미지 파일에 대한 정보를 수집해놓는다.
-	char szImageInfo[256];
-	_snprintf(szImageInfo, sizeof(szImageInfo), "%dx%d %dbpp", m_originalImage.GetWidth(), m_originalImage.GetHeight(), m_originalImage.GetBPP());
+	TCHAR szImageInfo[256];
+	StringCchPrintf(szImageInfo, sizeof(szImageInfo), TEXT("%dx%d %dbpp"), m_originalImage.GetWidth(), m_originalImage.GetHeight(), m_originalImage.GetBPP());
 
 	// Store the menu item's ID so we can check against it later when
 	// WM_MEASUREITEM/WM_DRAWITEM are sent.
@@ -159,19 +159,19 @@ STDMETHODIMP CZViewMenuExt::QueryContextMenu(HMENU hmenu, UINT uIndex, UINT uidC
 	
 	HMENU hSubMenu = CreatePopupMenu();
 	{
-		InsertMenu( hSubMenu, 0, MF_BYPOSITION | MF_STRING, uID++, "View in ZViewer");
+		InsertMenu( hSubMenu, 0, MF_BYPOSITION | MF_STRING, uID++, TEXT("View in ZViewer"));
 		InsertMenu( hSubMenu, 1, MF_SEPARATOR, NULL, NULL);
-		InsertMenu( hSubMenu, 2, MF_BYPOSITION | MF_STRING, uID++, "DesktopWallpaper CENTER");
-		InsertMenu( hSubMenu, 3, MF_BYPOSITION | MF_STRING, uID++, "DesktopWallpaper STRETCH");
-		InsertMenu( hSubMenu, 4, MF_BYPOSITION | MF_STRING, uID++, "DesktopWallpaper TILE");
+		InsertMenu( hSubMenu, 2, MF_BYPOSITION | MF_STRING, uID++, TEXT("DesktopWallpaper CENTER"));
+		InsertMenu( hSubMenu, 3, MF_BYPOSITION | MF_STRING, uID++, TEXT("DesktopWallpaper STRETCH"));
+		InsertMenu( hSubMenu, 4, MF_BYPOSITION | MF_STRING, uID++, TEXT("DesktopWallpaper TILE"));
 		InsertMenu( hSubMenu, 5, MF_SEPARATOR, NULL, NULL);
-		InsertMenu( hSubMenu, 6, MF_BYPOSITION | MF_STRING, uID++, "DesktopWallpaper CLEAR");
+		InsertMenu( hSubMenu, 6, MF_BYPOSITION | MF_STRING, uID++, TEXT("DesktopWallpaper CLEAR"));
 
 		ZeroMemory(&mii, sizeof(MENUITEMINFO));
 		mii.cbSize = sizeof(MENUITEMINFO);
 		mii.fMask  = MIIM_ID | MIIM_TYPE | MIIM_SUBMENU;
 		mii.wID    = uID++;
-		mii.dwTypeData = _T(szImageInfo);
+		mii.dwTypeData = szImageInfo;
 	}
 
 	InsertMenu( hmenu, 0, MF_BYPOSITION | MF_POPUP, (UINT_PTR)hSubMenu, szImageInfo);
@@ -188,10 +188,10 @@ STDMETHODIMP CZViewMenuExt::GetCommandString (UINT uCmd, UINT uFlags, UINT* puRe
 	// 여기서 uCmd 는 메뉴에 넣은 순서대로 0 부터 순서대로 온다. 단, 선택할 수 없는 메뉴는 무시한 순서다.
 
 #ifdef _DEBUG
-	char szTemp[256];
-	_snprintf(szTemp, sizeof(szTemp), "ucmd(%d), uFlags(%d), pszName(%s), cchMax(%d)", uCmd, uFlags, pszName, cchMax);
+	TCHAR szTemp[256];
+	StringCchPrintf(szTemp, sizeof(szTemp), TEXT("ucmd(%d), uFlags(%d), pszName(%s), cchMax(%d)"), uCmd, uFlags, pszName, cchMax);
 	OutputDebugString(szTemp);
-	OutputDebugString("\r\n");
+	OutputDebugString(TEXT("\r\n"));
 #endif
 
 	// 메뉴에 넣은 갯수를 넘어서면 안된다.
@@ -449,21 +449,21 @@ STDMETHODIMP CZViewMenuExt::OnDrawItem(DRAWITEMSTRUCT * pdis, LRESULT * pResult 
 
 void CZViewMenuExt::ExecZViewer()
 {
-	char command[FILENAME_MAX] = { 0 };
-	char szGetFileName[FILENAME_MAX] = { 0 };
+	TCHAR command[FILENAME_MAX] = { 0 };
+	TCHAR szGetFileName[FILENAME_MAX] = { 0 };
 
 #ifdef _DEBUG
-	DWORD ret = GetModuleFileName(GetModuleHandle("ZViewerAgentD.dll"), szGetFileName, FILENAME_MAX);
+	DWORD ret = GetModuleFileName(GetModuleHandle(TEXT("ZViewerAgentD.dll")), szGetFileName, FILENAME_MAX);
 #else
-	DWORD ret = GetModuleFileName(GetModuleHandle("ZViewerAgent.dll"), szGetFileName, FILENAME_MAX);
+	DWORD ret = GetModuleFileName(GetModuleHandle(TEXT("ZViewerAgent.dll")), szGetFileName, FILENAME_MAX);
 #endif
 	if ( ret == 0 )
 	{
 		_ASSERTE(!"Can't get module folder");
 	}
-	char szDrive[_MAX_DRIVE] = { 0 };
-	char szDir[_MAX_DIR] = { 0 };
-	_splitpath(szGetFileName, szDrive, szDir, 0, 0);
+	TCHAR szDrive[_MAX_DRIVE] = { 0 };
+	TCHAR szDir[_MAX_DIR] = { 0 };
+	_tsplitpath(szGetFileName, szDrive, szDir, 0, 0);
 
 	tstring strProgramFolder = szDrive;
 	strProgramFolder += szDir;
@@ -485,7 +485,7 @@ void CZViewMenuExt::ExecZViewer()
 void CZViewMenuExt::SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyle style)
 {
 	// 현재보고 있는 파일을 윈도우 폴더에 저장한다.
-	char szSystemFolder[_MAX_PATH] = { 0 };
+	TCHAR szSystemFolder[_MAX_PATH] = { 0 };
 
 	if ( E_FAIL == SHGetFolderPath(NULL, CSIDL_WINDOWS, NULL, SHGFP_TYPE_CURRENT, szSystemFolder) )
 	{
