@@ -44,6 +44,7 @@
 #include "src/ZCacheImage.h"
 #include "src/ZOption.h"
 #include "../lib/LogManager.h"
+#include "src/MessageManager.h"
 
 #ifdef _DEBUG
 #include "vld/vld.h"
@@ -199,7 +200,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance ,LPTSTR lpszC
 
 	if ( timerPtr == 0 )
 	{
-		MessageBox(hWnd, TEXT("Can't make timer"), TEXT("ZViewer"), MB_OK);
+		MessageBox(hWnd, GetMessage(TEXT("")), TEXT("ZViewer"), MB_OK);
 		return 0;
 	}
 
@@ -331,7 +332,7 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 			}
 			else
 			{
-				MessageBox(hWnd, TEXT("Invalid image file"), TEXT("ZViewer"), MB_OK);
+				MessageBox(hWnd, GetMessage(TEXT("INVALID_IMAGE_FILE")), TEXT("ZViewer"), MB_OK);
 			}
 		}
 		break;

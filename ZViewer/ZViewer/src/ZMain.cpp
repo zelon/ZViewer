@@ -16,6 +16,7 @@
 #include "src/MoveToDlg.h"
 #include "src/SaveAs.h"
 #include "src/ZOption.h"
+#include "MessageManager.h"
 
 #include <ShlObj.h>
 #include <cstdio>
@@ -142,7 +143,7 @@ void ZMain::SaveFileDialog()
 
 		if ( false == m_currentImage.SaveToFile(strSaveFilename, 0) )
 		{
-			MessageBox(m_hMainDlg, TEXT("unsupported file type"), TEXT("ZViewer"), MB_OK);
+			MessageBox(m_hMainDlg, GetMessage(TEXT("UNSUPPORTED_FILE_TYPE")), TEXT("ZViewer"), MB_OK);
 		}
 	}
 }
@@ -582,7 +583,7 @@ bool ZMain::GetNeighborFolders(std::vector < tstring > & vFolders)
 
 		if ( pos == m_strCurrentFolder.npos )
 		{
-			MessageBox(m_hMainDlg, TEXT("Can't find parent folder."), TEXT("ZViewer"), MB_OK);
+			MessageBox(m_hMainDlg, GetMessage(TEXT("CANNOT_FIND_PARENT_DIRECTORY")), TEXT("ZViewer"), MB_OK);
 			return false;
 		}
 
@@ -592,7 +593,7 @@ bool ZMain::GetNeighborFolders(std::vector < tstring > & vFolders)
 
 		if ( pos == strParentFolder.npos )
 		{
-			MessageBox(m_hMainDlg, TEXT("Can't find parent folder."), TEXT("ZViewer"), MB_OK);
+			MessageBox(m_hMainDlg, GetMessage(TEXT("CANNOT_FIND_PARENT_DIRECTORY")), TEXT("ZViewer"), MB_OK);
 			return false;
 		}
 
@@ -646,7 +647,7 @@ void ZMain::NextFolder()
 		if ( (iFoundIndex + 1) >= (int)vFolders.size() )
 		{
 			// 마지막 폴더이다.
-			MessageBox(m_hMainDlg, TEXT("Here is the last folder."), TEXT("ZViewer"), MB_OK);
+			MessageBox(m_hMainDlg, GetMessage(TEXT("LAST_DIRECTORY")), TEXT("ZViewer"), MB_OK);
 			return;
 		}
 		else
@@ -681,7 +682,7 @@ void ZMain::PrevFolder()
 		if ( (iFoundIndex-1 < 0 ) )
 		{
 			// 마지막 폴더이다.
-			MessageBox(m_hMainDlg, TEXT("Here is the first folder."), TEXT("ZViewer"), MB_OK);
+			MessageBox(m_hMainDlg, GetMessage(TEXT("FIRST_FOLDER")), TEXT("ZViewer"), MB_OK);
 			return;
 		}
 		else
@@ -738,9 +739,9 @@ void ZMain::OpenFolder(const tstring & strFolder)
 
 	if ( vFiles.size() == 0 )
 	{
-		tstring strMsg = strFolder;
-		strMsg += TEXT(" folder has no image file.");
-		MessageBox(m_hMainDlg, strMsg.c_str(), TEXT("ZViewer"), MB_OK);
+		TCHAR msg[256];
+		StringCchPrintf(msg, sizeof(msg), GetMessage(TEXT("THIS_DIRECTORY_HAS_NO_IMAGE")), strFolder.c_str());
+		MessageBox(m_hMainDlg, msg, TEXT("ZViewer"), MB_OK);
 		return;
 	}
 	else
@@ -1470,7 +1471,7 @@ void ZMain::DeleteThisFile()
 		}
 		else
 		{
-			MessageBox(m_hMainDlg, TEXT("Can't delete this file!"), TEXT("ZViewer"), MB_OK);
+			MessageBox(m_hMainDlg, GetMessage(TEXT("CANNOT_DELETE_THIS_FILE")), TEXT("ZViewer"), MB_OK);
 		}
 	}
 }
@@ -1501,7 +1502,7 @@ void ZMain::MoveThisFile()
 	// 옮겨갈 폴더에 같은 파일이 있는지 확인한다.
 	if ( 0 != _taccess(aDlg.GetMoveToFolder().c_str(), 00) )
 	{
-		MessageBox(m_hMainDlg, TEXT("Wrong folder name"), TEXT("ZViewer"), MB_OK);
+		MessageBox(m_hMainDlg, GetMessage(TEXT("WRONG_DIRECTORY_NAME")), TEXT("ZViewer"), MB_OK);
 		return;
 	}
 
@@ -1509,7 +1510,7 @@ void ZMain::MoveThisFile()
 	if ( 0 == _taccess(strToFileName.c_str(), 00) )
 	{
 		// 이미 존재하면
-		if ( IDNO == MessageBox(m_hMainDlg, TEXT("There is a file same name. Overwrite?"), TEXT("ZViewer"), MB_YESNO) )
+		if ( IDNO == MessageBox(m_hMainDlg, GetMessage(TEXT("ASK_OVERWRITE_FILE")), TEXT("ZViewer"), MB_YESNO) )
 		{
 			return;
 		}
