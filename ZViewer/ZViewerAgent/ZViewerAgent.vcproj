@@ -19,7 +19,7 @@
 			UseOfMFC="2"
 			UseOfATL="1"
 			ATLMinimizesCRunTimeLibraryUsage="FALSE"
-			CharacterSet="2">
+			CharacterSet="1">
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
@@ -89,7 +89,7 @@
 			UseOfMFC="1"
 			UseOfATL="1"
 			ATLMinimizesCRunTimeLibraryUsage="FALSE"
-			CharacterSet="2">
+			CharacterSet="1">
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories="$(SolutionDir)/lib/Devil/include"
@@ -189,7 +189,7 @@
 			UseOfMFC="1"
 			UseOfATL="1"
 			ATLMinimizesCRunTimeLibraryUsage="FALSE"
-			CharacterSet="2">
+			CharacterSet="1">
 			<Tool
 				Name="VCCLCompilerTool"
 				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG;_USRDLL;_ATL_NO_UUIDOF"
