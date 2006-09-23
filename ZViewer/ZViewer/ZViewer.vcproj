@@ -15,7 +15,7 @@
 			OutputDirectory="../output"
 			IntermediateDirectory="../obj/ZViewerD"
 			ConfigurationType="1"
-			CharacterSet="2">
+			CharacterSet="1">
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
