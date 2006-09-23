@@ -10,6 +10,7 @@
 
 #pragma once
 
+#include <strsafe.h>
 #include "FreeImagePlus.h"
 #include "CommonFunc.h"
 
@@ -44,10 +45,15 @@ public:
 	{
 		//DebugPrintf("LoadFromFile : %s", strFilename.c_str());
 
-		char buffer[256];
+		char buffer[256] = {0};
 
 #ifdef _UNICODE
-		WideCharToMultiByte(CP_THREAD_ACP, MB_PRECOMPOSED, strFilename.c_str(), (int)strFilename.size(), buffer, 256, NULL, NULL);
+		if ( 0 == WideCharToMultiByte(CP_THREAD_ACP, 0, strFilename.c_str(), (int)strFilename.size(), buffer, 256, NULL, NULL) )
+		{
+			DWORD dwError = GetLastError();
+			_ASSERTE(false);
+			return false;
+		}
 #else
 		StringCchPrintf(buffer, sizeof(buffer), strFilename.c_str());
 #endif
@@ -75,7 +81,7 @@ public:
 	{
 #ifdef _UNICODE
 		char buffer[256];
-		WideCharToMultiByte(CP_THREAD_ACP, MB_PRECOMPOSED, strFilename.c_str(), (int)strFilename.size(), buffer, 256, NULL, NULL);
+		WideCharToMultiByte(CP_THREAD_ACP, 0, strFilename.c_str(), (int)strFilename.size(), buffer, 256, NULL, NULL);
 		return ( TRUE == m_image.save(buffer, iFlag));
 #else
 		return ( TRUE == m_image.save(strFilename.c_str(), iFlag));

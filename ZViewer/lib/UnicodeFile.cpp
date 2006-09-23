@@ -5,10 +5,10 @@
 /// 파일을 연다.
 bool CUnicodeFile::open(const tstring & strFileName, eFileOpenMode openMode)
 {
-	char filename[256];
+	char filename[256] = { 0 };
 
 #ifdef _UNICODE
-	WideCharToMultiByte(CP_THREAD_ACP, MB_PRECOMPOSED, strFileName.c_str(), (int)strFileName.size(), filename, 256, NULL, NULL);
+	WideCharToMultiByte(CP_THREAD_ACP, 0, strFileName.c_str(), (int)strFileName.size(), filename, 256, NULL, NULL);
 #else
 	StringCchPrintf(filename, sizeof(filename), strFileName.c_str());
 #endif
