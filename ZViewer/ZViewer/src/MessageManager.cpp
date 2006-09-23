@@ -14,8 +14,17 @@
 #include "UnicodeFile.h"
 #include "CommonFunc.h"
 
+CMessageManager & CMessageManager::getInstance()
+{
+	static CMessageManager inst;
+	return inst;
+}
+
 CMessageManager::CMessageManager()
 {
+	_LoadLanguage(eLanguage_ENGLISH);
+
+	m_errorMSg = TEXT("(null)");
 }
 
 
@@ -24,20 +33,44 @@ CMessageManager::~CMessageManager()
 }
 
 
-/// 어떤 언어를 쓸건지 선택한다.
-void CMessageManager::SetLanguage(const std::string & lang)
+/// 해당 언어에 맞는 파일을 읽어들여 메시지 맵을 구성한다.
+void CMessageManager::_LoadLanguage(eLanguage lang)
 {
 	tstring strFileName = GetProgramFolder();
 	strFileName += TEXT("\\language\\");
 
-
-	if ( lang == "korean" )
+	switch ( lang )
 	{
-		strFileName = TEXT("korean.txt");
-	}
-	else /// 기본값은 영어이다.
-	{
-		strFileName = TEXT("english.txt");
+	case eLanguage_KOREAN:
+		strFileName += TEXT("korean.txt");
+		break;
+
+	default:
+		strFileName += TEXT("english.txt");
 	}
 
+	COptionFile::LoadFromFile(strFileName, m_messageMap);
+}
+
+/// 어떤 언어를 쓸건지 선택한다.
+void CMessageManager::SetLanguage(eLanguage lang)
+{
+	_LoadLanguage(lang);
+}
+
+
+
+/// 이 메시지를 얻는다.
+const tstring & CMessageManager::GetMessage(const tstring & key) const
+{
+	iniMap::const_iterator it = m_messageMap.find(key);
+
+	if ( it == m_messageMap.end() )
+	{
+		_ASSERTE(false);
+		DebugPrintf(TEXT("Can't find message from messagemap"));
+		return m_errorMSg;
+	}
+
+	return it->second;
 }
