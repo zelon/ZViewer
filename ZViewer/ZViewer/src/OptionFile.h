@@ -12,7 +12,7 @@
 
 #include <map>
 
-typedef std::map < std::string, std::string > iniMap;
+typedef std::map < tstring, tstring > iniMap;
 
 class COptionFile
 {
@@ -21,9 +21,11 @@ public:
 	COptionFile();
 	~COptionFile();
 
-	/// 데이터를 읽어들여서 맵을 구성한다.
-	static void LoadFromFile(const std::string & strFilename, iniMap & settings);
-	static void SaveToFile(const std::string & strFilename, const iniMap & settings);
+	/// 데이터 파일을 읽어들여서 맵을 구성한다.
+	static void LoadFromFile(const tstring & strFilename, iniMap & settings);
+
+	/// 맵 내용을 데이터 파일에 쓴다.
+	static void SaveToFile(const tstring & strFilename, const iniMap & settings);
 
 private:
 };

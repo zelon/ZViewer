@@ -34,7 +34,7 @@ bool CSaveAs::showDialog()
 	ZeroMemory(&m_ofn, sizeof(m_ofn));
 	m_ofn.lStructSize = sizeof(m_ofn);
 	m_ofn.hwndOwner = m_hParent;
-	_snprintf(m_szFilenamebuf, sizeof(m_szFilenamebuf), m_strSaveFileName.c_str());
+	StringCchPrintf(m_szFilenamebuf, sizeof(m_szFilenamebuf), m_strSaveFileName.c_str());
 	m_ofn.lpstrFile = m_szFilenamebuf;
 	//
 	// Set lpstrFile[0] to '\0' so that GetOpenFileName does not 
@@ -42,7 +42,7 @@ bool CSaveAs::showDialog()
 	//
 	m_ofn.lpstrFile[0] = '\0';
 	m_ofn.nMaxFile = FILENAME_MAX;
-	m_ofn.lpstrFilter = "ImageFiles(jpg,gif,png,bmp,psd,tga,tif,ico)\0*.jpg;*.jpeg;*.gif;*.png;*.bmp;*.psd,*.tga;*.tif;*.ico\0All(*.*)\0*.*\0";
+	m_ofn.lpstrFilter = TEXT("ImageFiles(jpg,gif,png,bmp,psd,tga,tif,ico)\0*.jpg;*.jpeg;*.gif;*.png;*.bmp;*.psd,*.tga;*.tif;*.ico\0All(*.*)\0*.*\0");
 	m_ofn.nFilterIndex = 1;
 	m_ofn.lpstrFileTitle = NULL;
 	m_ofn.nMaxFileTitle = 0;

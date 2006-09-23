@@ -11,62 +11,73 @@
 #include "stdafx.h"
 #include "OptionFile.h"
 #include "CommonFunc.h"
+#include "UnicodeFile.h"
 #include <fstream>
 
 using namespace std;
 
-void COptionFile::LoadFromFile(const std::string & strFilename, iniMap & settings)
+/// 데이터 파일을 읽어들여서 맵을 구성한다.
+void COptionFile::LoadFromFile(const tstring & strFilename, iniMap & settings)
 {
-	ifstream fin(strFilename.c_str());
-
-	if ( !fin.is_open() )
+	CUnicodeFile file;
+	if ( false == file.open(strFilename, CUnicodeFile::eFileOpenMode_READ) )
 	{
-		DebugPrintf("Can't open the option file : %s", strFilename.c_str());
+		_ASSERTE(false);
 		return;
 	}
 
-	char szData[256];
-	while ( !fin.eof())
+	tstring aLine;
+
+	while ( file.getLine(aLine) )
 	{
-		memset(szData, 0, sizeof(szData));
+		if ( aLine.empty() ) continue;
 
-		fin.getline(szData, 256);
-
-		if ( szData[0] != '\0' )	/// 데이터를 받은게 있다.
+		if ( aLine[0] == L'#' || aLine[0] == L'/' )	// 처음 바이트가 # 이거나 / 이면 무시한다.
 		{
-			if ( szData[0] == '#' || szData[0] == '/' )	// 처음 바이트가 # 이거나 / 이면 무시한다.
-			{
-				continue;
-			}
-
-			if ( strlen(szData) <= 3 )	// 데이터로 볼 수 없는 길이면 무시한다.
-			{
-				continue;
-			}
-
-			std::string strData = szData;
-
-			std::string::size_type pos = strData.find("=");
-
-			if ( pos == strData.npos )	// 처음 '=' 을 찾을 수 없으면 이상한 줄이다.
-			{
-				continue;
-			}
-
-			std::string strValue = strData.substr(pos+1);
-
-			strData.resize(pos);
-			std::string strKey = strData;
-
-			_ASSERTE(strKey.empty() == false);
-			_ASSERTE(strValue.empty() == false);
-
-			settings[strKey] = strValue;
+			continue;
 		}
+
+		if ( aLine.size() <= 3 )	// 데이터로 볼 수 없는 길이면 무시한다.
+		{
+			continue;
+		}
+
+		tstring::size_type pos = aLine.find(TEXT("="));
+
+		if ( pos == aLine.npos )	// 처음 '=' 을 찾을 수 없으면 이상한 줄이다.
+		{
+			continue;
+		}
+
+		tstring strValue = aLine.substr(pos+1);
+
+		strValue.resize(pos);
+		tstring strKey = aLine.substr(0, pos);
+
+		_ASSERTE(strKey.empty() == false);
+		_ASSERTE(strValue.empty() == false);
+
+		settings[strKey] = strValue;
 	}
 }
 
-void COptionFile::SaveToFile(const std::string & strFilename, const iniMap & settings)
+/// 맵 내용을 데이터 파일에 쓴다.
+void COptionFile::SaveToFile(const tstring & strFilename, const iniMap & settings)
 {
+	CUnicodeFile file;
+	file.open(strFilename, CUnicodeFile::eFileOpenMode_WRITE);
 	
+	iniMap::const_iterator it;
+
+	for ( it = settings.begin(); it != settings.end(); ++it )
+	{
+		const tstring key = it->first;
+		const tstring value = it->second;
+
+		tstring line = key;
+		line += TEXT("=");
+		line += value;
+
+		file.writeLine(line);
+	}
 }

@@ -19,7 +19,7 @@ class ZImage
 public:
 	static bool StartupLibrary(){ return true; }
 	static bool CleanupLibrary(){ return true; }
-	static bool IsValidImageFileExt(const char * szFilename);
+	static bool IsValidImageFileExt(const TCHAR * szFilename);
 	static const char * GetLibraryVersion()
 	{
 		return FreeImage_GetVersion();
@@ -40,13 +40,21 @@ public:
 	BYTE * GetData() { return m_image.accessPixels(); }
 	BITMAPINFO * GetBitmapInfo() { return m_image.getInfo(); }
 	bool IsValid() { return (m_image.isValid() == TRUE); }
-	bool LoadFromFile(const std::string & strFilename)
+	bool LoadFromFile(const tstring & strFilename)
 	{
 		//DebugPrintf("LoadFromFile : %s", strFilename.c_str());
 
+		char buffer[256];
+
+#ifdef _UNICODE
+		WideCharToMultiByte(CP_THREAD_ACP, MB_PRECOMPOSED, strFilename.c_str(), (int)strFilename.size(), buffer, 256, NULL, NULL);
+#else
+		StringCchPrintf(buffer, sizeof(buffer), strFilename.c_str());
+#endif
+
 		try
 		{
-			if ( m_image.load(strFilename.c_str()) == TRUE )
+			if ( m_image.load(buffer) == TRUE )
 			{
 				m_originalWidth = m_image.getWidth();
 				m_originalHeight = m_image.getHeight();
@@ -63,9 +71,16 @@ public:
 		return false;
 	}
 
-	bool SaveToFile(const std::string & strFilename, int iFlag)
+	bool SaveToFile(const tstring & strFilename, int iFlag)
 	{
+#ifdef _UNICODE
+		char buffer[256];
+		WideCharToMultiByte(CP_THREAD_ACP, MB_PRECOMPOSED, strFilename.c_str(), (int)strFilename.size(), buffer, 256, NULL, NULL);
+		return ( TRUE == m_image.save(buffer, iFlag));
+#else
 		return ( TRUE == m_image.save(strFilename.c_str(), iFlag));
+#endif
+
 	}
 
 	void Rotate(double dAngle) { m_image.rotate(dAngle); }

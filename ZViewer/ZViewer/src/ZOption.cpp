@@ -12,6 +12,8 @@
 #include "ZOption.h"
 #include "OptionFile.h"
 #include "CommonFunc.h"
+#include "ZMain.h"
+
 
 ZOption & ZOption::GetInstance()
 {
@@ -24,7 +26,18 @@ ZOption::ZOption()
 {
 	m_bLoopImages = true;
 	m_bUseCache = true;
-	m_strOptionFilename = "option.ini";
+	
+	TCHAR buffer[256];
+	if ( S_OK != SHGetFolderPath(NULL, CSIDL_LOCAL_APPDATA, NULL, SHGFP_TYPE_CURRENT, buffer) )
+	{
+		m_strOptionFilename = ZMain::GetInstance().GetProgramFolder();
+	}
+	else
+	{
+		m_strOptionFilename = buffer;
+	}
+
+	m_strOptionFilename += TEXT("\\zviewer.ini");
 	m_bOptionChanged = false;
 	m_iMaxCacheImageNum = 50;
 
@@ -54,11 +67,13 @@ void ZOption::SaveToFile()
 {
 	iniMap data;
 
+	m_bOptionChanged = true;
+
 	// 저장해야하는 옵션 중 변경된 것이 있으면
 	if ( m_bOptionChanged )
 	{
-		data["maximumcachememory"] = toString(m_iMaximumCacheMemory);
-		data["maximumcachefilenum"] = toString(m_iMaximumCacheFileNum);
+		data[TEXT("maximumcachememory")] = toString(m_iMaximumCacheMemory);
+		data[TEXT("maximumcachefilenum")] = toString(m_iMaximumCacheFileNum);
 	}
 
 	COptionFile::SaveToFile(m_strOptionFilename, data);

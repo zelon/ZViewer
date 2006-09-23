@@ -21,7 +21,7 @@ public:
 	static CLogManager & getInstance();
 	~CLogManager(void);
 
-	void Output(const char *fmt, ... );
+	void Output(const TCHAR *fmt, ... );
 
 	void CleanUp()
 	{

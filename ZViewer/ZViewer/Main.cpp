@@ -60,7 +60,7 @@ enum
 };
 
 
-int APIENTRY WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance ,LPSTR lpszCmdParam,int nCmdShow)
+int APIENTRY _tWinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance ,LPTSTR lpszCmdParam,int nCmdShow)
 {
 	// 기본적인 언어팩은 프로젝트에 있는 영어이다.
 	ZResourceManager::GetInstance().SetHandleInstance(hInstance);
@@ -88,9 +88,9 @@ int APIENTRY WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance ,LPSTR lpszCmdP
 
 //	MessageBox(HWND_DESKTOP, strInitArg.c_str(), "asdf", MB_OK);
 
-	if ( strcmp(lpszCmdParam, "/fileext") == 0 )	
+	if ( _tcscmp(lpszCmdParam, TEXT("/fileext")) == 0 )	
 	{
-		int iRet = MessageBox(HWND_DESKTOP, ZResourceManager::GetInstance().GetString(IDS_ASSOCIATE_FILE_EXTS).c_str(), "ZViewer", MB_YESNO);
+		int iRet = MessageBox(HWND_DESKTOP, ZResourceManager::GetInstance().GetString(IDS_ASSOCIATE_FILE_EXTS).c_str(), TEXT("ZViewer"), MB_YESNO);
 
 		if ( iRet == IDYES )
 		{
@@ -98,19 +98,19 @@ int APIENTRY WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance ,LPSTR lpszCmdP
 		}
 		return 0;
 	}
-	else if ( strcmp(lpszCmdParam, "/freezvieweragent") == 0 )	// uninstall 할 때 ZViewerAgent 를 unload 한다.
+	else if ( _tcscmp(lpszCmdParam, TEXT("/freezvieweragent")) == 0 )	// uninstall 할 때 ZViewerAgent 를 unload 한다.
 	{
 		CoFreeUnusedLibraries();
 		return 0;
 	}
 
-	std::string strCmdString;
+	tstring strCmdString;
 
 	// 쉘에서 보낼 때는 따옴표로 둘러싸서 준다. 그래서 따옴표를 제거한다.
-	if ( strlen(lpszCmdParam) > 0 )
+	if ( _tcslen(lpszCmdParam) > 0 )
 	{
 		// 만약 따옴표를 포함하고 있으면(바탕화면에서 보냈을 때)
-		size_t iLen = strlen(lpszCmdParam);
+		size_t iLen = _tcslen(lpszCmdParam);
 		for ( unsigned int i=0; i<iLen; ++i)
 		{
 			if ( lpszCmdParam[i] == '\"')
@@ -122,18 +122,18 @@ int APIENTRY WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance ,LPSTR lpszCmdP
 	}
 
 	// ~1 형식으로 긴 파일명이 온다면, 원래 긴 패스를 얻는다.
-	char szTemp[MAX_PATH] = { 0 };
+	TCHAR szTemp[MAX_PATH] = { 0 };
 	GetLongPathName(strCmdString.c_str(), szTemp, MAX_PATH);
 
 	strCmdString = szTemp;
 
-	std::string strInitArg = strCmdString;
+	tstring strInitArg = strCmdString;
 
 
 	//MessageBox(HWND_DESKTOP, strInitArg.c_str(), "sf", MB_OK);
 
 #ifdef _DEBUG
-	strInitArg = "C:\\_Samples\\19028-1.jpg";
+	strInitArg = TEXT("Z:\\(__개인자료__)\\긁어모은 사진들\\19028-1.jpg");
 	//strInitArg = "C:\\A.bmp";
 #endif
 	ZImage::StartupLibrary();
@@ -147,7 +147,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance ,LPSTR lpszCmdP
 	MSG Message;
 	WNDCLASS WndClass;
 
-	char lpszClass[256] = "ZViewer";
+	TCHAR lpszClass[256] = TEXT("ZViewer");
 
 	WndClass.cbClsExtra=0;
 	WndClass.cbWndExtra=0;
@@ -199,7 +199,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance ,LPSTR lpszCmdP
 
 	if ( timerPtr == 0 )
 	{
-		MessageBox(hWnd, "Can't make timer", "ZViewer", MB_OK);
+		MessageBox(hWnd, TEXT("Can't make timer"), TEXT("ZViewer"), MB_OK);
 		return 0;
 	}
 
@@ -286,7 +286,7 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 					ZCacheImage::GetInstance().clearCache();
 					DWORD dwClearTime = GetTickCount() - dwStart;
 
-					DebugPrintf("clear spend time : %d", dwClearTime);
+					DebugPrintf(TEXT("clear spend time : %d"), dwClearTime);
 				}
 				break;
 
@@ -322,7 +322,7 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 
 			if ( iFileNum <= 0 ) break;
 
-			char szFileName[MAX_PATH] = { 0 };
+			TCHAR szFileName[MAX_PATH] = { 0 };
 			DragQueryFile(hDrop, 0, szFileName, MAX_PATH);
 
 			if ( ZImage::IsValidImageFileExt(szFileName) )
@@ -331,7 +331,7 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 			}
 			else
 			{
-				MessageBox(hWnd, "Invalid image file", "ZViewer", MB_OK);
+				MessageBox(hWnd, TEXT("Invalid image file"), TEXT("ZViewer"), MB_OK);
 			}
 		}
 		break;
@@ -380,7 +380,7 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 			SendMessage(hWnd, WM_SETICON, ICON_BIG, (LPARAM)LoadIcon(ZMain::GetInstance().GetHInstance(), MAKEINTRESOURCE(IDI_BIG_MAIN)));
 
 			// StatusBar 를 생성한다.
-			HWND hStatusBar = CreateStatusWindow(WS_CHILD | WS_VISIBLE, "Status line", hWnd, 0);
+			HWND hStatusBar = CreateStatusWindow(WS_CHILD | WS_VISIBLE, TEXT("Status line"), hWnd, 0);
 			ZMain::GetInstance().SetStatusHandle(hStatusBar);
 
 			// StatusBar 를 split 한다. 아래의 숫자는 크기가 아니라 절대 위치라는 것을 명심!!!!!!!
@@ -728,7 +728,7 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 
 		SendMessage(ZMain::GetInstance().GetStatusHandle(), WM_PAINT, wParam, lParam);
 
-		DebugPrintf("Recv WM_PAINT");
+		DebugPrintf(TEXT("Recv WM_PAINT"));
 		return 0;
 	case WM_DESTROY:
 		SendMessage(hWnd, WM_CLOSE, 0, 0);
@@ -750,23 +750,23 @@ int CALLBACK AboutWndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 		{
 			SetDlgItemText(hWnd, IDC_STATIC_VERSION, g_strVersion.c_str());
 
-			char szTemp[MAX_PATH];
-			_snprintf(szTemp, sizeof(szTemp), "CacheHitRate : %d%%", ZMain::GetInstance().GetLogCacheHitRate());
+			TCHAR szTemp[MAX_PATH];
+			StringCchPrintf(szTemp, sizeof(szTemp), TEXT("CacheHitRate : %d%%"), ZMain::GetInstance().GetLogCacheHitRate());
 			SetDlgItemText(hWnd, IDC_STATIC_HITRATE, szTemp);
 
-			NUMBERFMT nFmt = { 0, 0, 3, ".", ",", 1 };
+			NUMBERFMT nFmt = { 0, 0, 3, TEXT("."), TEXT(","), 1 };
 
 			TCHAR szOUT[20];
-			_snprintf(szTemp, sizeof(szTemp), "%d",ZMain::GetInstance().GetCachedKByte());
+			StringCchPrintf(szTemp, sizeof(szTemp), TEXT("%d"),ZMain::GetInstance().GetCachedKByte());
 			::GetNumberFormat(NULL, NULL, szTemp, &nFmt, szOUT, 20);
 
-			_snprintf(szTemp, sizeof(szTemp), "CachedMemory : %sKB, Num of Cached Image : %d", szOUT, ZCacheImage::GetInstance().GetNumOfCacheImage());
+			StringCchPrintf(szTemp, sizeof(szTemp), TEXT("CachedMemory : %sKB, Num of Cached Image : %d"), szOUT, ZCacheImage::GetInstance().GetNumOfCacheImage());
 			SetDlgItemText(hWnd, IDC_STATIC_CACHE_MEMORY, szTemp);
 
-			_snprintf(szTemp, sizeof(szTemp), "ProgramPath : %s", ZMain::GetInstance().GetProgramFolder().c_str());
+			StringCchPrintf(szTemp, sizeof(szTemp), TEXT("ProgramPath : %s"), ZMain::GetInstance().GetProgramFolder().c_str());
 			SetDlgItemText(hWnd, IDC_STATIC_PROGRAM_PATH, szTemp);
 
-			_snprintf(szTemp, sizeof(szTemp), "Library Version : %s", ZImage::GetLibraryVersion());
+			StringCchPrintf(szTemp, sizeof(szTemp), TEXT("Library Version : %s"), ZImage::GetLibraryVersion());
 			SetDlgItemText(hWnd, IDC_STATIC_LIBRARY_VERSION, szTemp);
 		}
 		return TRUE;

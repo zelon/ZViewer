@@ -9,6 +9,8 @@
 *********************************************************************/
 #pragma once
 
+#include "CommonDefine.h"
+
 /// OS 종류를 판단할 때 쓰일 enum
 enum eOSKind
 {
@@ -18,12 +20,12 @@ enum eOSKind
 	eOSKind_XP,
 };
 
-const std::string GetOnlyFileName(const std::string & strFullFileName);
+const tstring GetOnlyFileName(const tstring & strFullFileName);
 
 class CStringCompareIgnoreCase
 {
 public:
-	bool operator()(const std::string & a, const std::string & b)
+	bool operator()(const tstring & a, const tstring & b)
 	{
 		/*
 		// 문자열 비교를 할 때 모두 소문자로 바꿔서 비교한다.
@@ -35,14 +37,14 @@ public:
 
 		return (strcmp(szTempB, szTempA) > 0);
 		*/
-		return (strcmp(b.c_str(), a.c_str()) > 0);
+		return (_tcscmp(b.c_str(), a.c_str()) > 0);
 	}
 };
 
 class CStringCompareIgnoreCase_LengthFirst
 {
 public:
-	bool operator()(const std::string & a, const std::string & b)
+	bool operator()(const tstring & a, tstring & b)
 	{
 		// 길이를 우선.
 		if ( a.size() < b.size() )
@@ -65,14 +67,14 @@ public:
 
 		return (strcmp(szTempB, szTempA) > 0);
 		*/
-		return (strcmpi(b.c_str(), a.c_str()) > 0);
+		return (_tcscmp(b.c_str(), a.c_str()) > 0);
 
 	}
 };
 
-void DebugPrintf( const char *fmt, ... );
+void DebugPrintf( const TCHAR *fmt, ... );
 
-bool SetRegistryValue(HKEY hOpenKey, const std::string & strKey,LPCTSTR szValue, const std::string & strData);
+bool SetRegistryValue(HKEY hOpenKey, const tstring & strKey,LPCTSTR szValue, const tstring & strData);
 
 /// 최대 크기를 넘지 않는 적당한 리사이즈 크기를 돌려준다.
 RECT GetResizedRectForBigToSmall(const RECT & MaximumSize, const RECT & originalSize);
@@ -80,11 +82,17 @@ RECT GetResizedRectForBigToSmall(const RECT & MaximumSize, const RECT & original
 /// 최대 크기를 넘지 않는 적당한 리사이즈 크기를 돌려준다.
 RECT GetResizedRectForSmallToBig(const RECT & MaximumSize, const RECT & originalSize);
 
-std::string toString(int i);
+tstring toString(int i);
 
-bool SelectFolder(HWND hWnd, char * szFolder);
+bool SelectFolder(HWND hWnd, TCHAR * szFolder);
 
-std::string GetFolderNameFromFullFileName(const std::string & strFullFilename);
-std::string GetFileNameFromFullFileName(const std::string & strFullFilename);
+tstring GetFolderNameFromFullFileName(const tstring & strFullFilename);
+tstring GetFileNameFromFullFileName(const tstring & strFullFilename);
 
 eOSKind getOSVersion();
+
+/// string 을 wstring 으로 변환
+std::wstring getWStringFromString(const std::string & str);
+
+/// 현재 실행 파일이 있는 폴더를 얻는다.
+tstring GetProgramFolder();

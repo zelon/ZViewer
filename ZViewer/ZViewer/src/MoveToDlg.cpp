@@ -42,7 +42,7 @@ void CMoveToDlg::OnBrowserButton()
 
 int CALLBACK CMoveToDlg::MoveToDlgPrc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 {
-	static std::string strLastFolder = "";
+	static tstring strLastFolder = TEXT("");
 
 	switch(iMessage)
 	{
@@ -63,7 +63,7 @@ int CALLBACK CMoveToDlg::MoveToDlgPrc(HWND hWnd,UINT iMessage,WPARAM wParam,LPAR
 			{
 			case IDOK:
 				{
-					char szTemp[MAX_PATH];
+					TCHAR szTemp[MAX_PATH];
 					GetDlgItemText(hWnd, IDC_EDIT_MOVE_TO_FOLDER, szTemp, sizeof(szTemp));
 
 					pThis->m_strMoveToFolder = szTemp;
@@ -80,7 +80,7 @@ int CALLBACK CMoveToDlg::MoveToDlgPrc(HWND hWnd,UINT iMessage,WPARAM wParam,LPAR
 
 			case IDC_BUTTON_SELECT_FOLDER:
 				{
-					char szFolder[MAX_PATH] = { 0 };
+					TCHAR szFolder[MAX_PATH] = { 0 };
 
 					if ( SelectFolder(hWnd, szFolder) )
 					{
@@ -99,7 +99,7 @@ int CALLBACK CMoveToDlg::MoveToDlgPrc(HWND hWnd,UINT iMessage,WPARAM wParam,LPAR
 	return FALSE;
 }
 
-void CMoveToDlg::SetFolder(const std::string & strFolder)
+void CMoveToDlg::SetFolder(const tstring & strFolder)
 {
 	m_strMoveToFolder = strFolder;
 

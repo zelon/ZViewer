@@ -1,4 +1,4 @@
-/********************************************************************
+I/********************************************************************
 *
 * Created by zelon(Kim, Jinwook Korea)
 * 
@@ -12,50 +12,37 @@
 #include <shlobj.h>
 #include <io.h>
 #include "LogManager.h"
+#include <strsafe.h>
 
-void DebugPrintf( const char *fmt, ... )
+void DebugPrintf( const TCHAR *fmt, ... )
 {
 #ifndef _DEBUG
 	return;
 #endif
 
 	va_list v;
-	char buf[1024*4];
+	TCHAR buf[1024*4];
 	int len;
 
 	va_start( v, fmt );
-	len = wvsprintf( buf, fmt, v );
+	len = StringCbVPrintf( buf, sizeof(buf) , fmt, v );
 	va_end( v );
 
 	OutputDebugString( buf );
-	OutputDebugString( "\r\n" );
+	OutputDebugString( TEXT("\r\n") );
 
 	CLogManager::getInstance().Output(buf);
 }
 
-/*
-bool StringCompare(const std::string & a, const std::string & b)
+const tstring GetOnlyFileName(const tstring & strFullFileName)
 {
-	// 문자열 비교를 할 때 모두 소문자로 바꿔서 비교한다.
-	char szTempA[FILENAME_MAX], szTempB[FILENAME_MAX];
-	_snprintf(szTempA, sizeof(szTempA), a.c_str());
-	_snprintf(szTempB, sizeof(szTempB), b.c_str());
-	strlwr(szTempA);
-	strlwr(szTempB);
-
-	return (strcmp(szTempB, szTempA) > 0);
-}
-*/
-
-const std::string GetOnlyFileName(const std::string & strFullFileName)
-{
-	char szFile[MAX_PATH] = { 0 };
-	_splitpath(strFullFileName.c_str(), 0, 0, szFile, 0);
+	TCHAR szFile[MAX_PATH] = { 0 };
+	_tsplitpath(strFullFileName.c_str(), 0, 0, szFile, 0);
 
 	return szFile;
 }
 
-bool SetRegistryValue(HKEY hOpenKey, const std::string & strKey,LPCTSTR szValue, const std::string & strData)
+bool SetRegistryValue(HKEY hOpenKey, const tstring & strKey,LPCTSTR szValue, const tstring & strData)
 {
 	if( !hOpenKey || strKey.empty() || !szValue)
 	{
@@ -176,15 +163,15 @@ RECT GetResizedRectForSmallToBig(const RECT & MaximumSize, const RECT & original
 	return ret;
 }
 
-std::string toString(int i)
+tstring toString(int i)
 {
-	char szTemp[20];
-	_snprintf(szTemp, sizeof(szTemp), "%d", i);
+	TCHAR szTemp[20];
+	StringCchPrintf(szTemp, sizeof(szTemp), TEXT("%d"), i);
 
-	return std::string(szTemp);
+	return tstring(szTemp);
 }
 
-bool SelectFolder(HWND hWnd, char * szFolder)
+bool SelectFolder(HWND hWnd, TCHAR * szFolder)
 {
 	//LPMALLOC pMalloc;
 	LPITEMIDLIST pidl;
@@ -193,7 +180,7 @@ bool SelectFolder(HWND hWnd, char * szFolder)
 	bi.hwndOwner = hWnd;
 	bi.pidlRoot = NULL;
 	bi.pszDisplayName = NULL;
-	bi.lpszTitle = "Select folder";
+	bi.lpszTitle = TEXT("Select folder");
 	bi.ulFlags = 0;
 	bi.lpfn = 0;
 	bi.lParam = 0;
@@ -220,25 +207,25 @@ bool SelectFolder(HWND hWnd, char * szFolder)
 	return true;
 }
 
-std::string GetFolderNameFromFullFileName(const std::string & strFullFilename)
+tstring GetFolderNameFromFullFileName(const tstring & strFullFilename)
 {
-	char szDrive[_MAX_DRIVE] = { 0 };
-	char szDir[_MAX_DIR] = { 0 };
-	_splitpath(strFullFilename.c_str(), szDrive, szDir, 0, 0);
+	TCHAR szDrive[_MAX_DRIVE] = { 0 };
+	TCHAR szDir[_MAX_DIR] = { 0 };
+	_tsplitpath(strFullFilename.c_str(), szDrive, szDir, 0, 0);
 
-	std::string strFolder = szDrive;
+	tstring strFolder = szDrive;
 	strFolder += szDir;
 
 	return strFolder;
 }
 
-std::string GetFileNameFromFullFileName(const std::string & strFullFilename)
+tstring GetFileNameFromFullFileName(const tstring & strFullFilename)
 {
-	char szFileName[MAX_PATH] = { 0 };
-	char szFileExt[MAX_PATH] = { 0 };
-	_splitpath(strFullFilename.c_str(), 0, 0, szFileName, szFileExt);
+	TCHAR szFileName[MAX_PATH] = { 0 };
+	TCHAR szFileExt[MAX_PATH] = { 0 };
+	_tsplitpath(strFullFilename.c_str(), 0, 0, szFileName, szFileExt);
 
-	std::string strFilename = szFileName;
+	tstring strFilename = szFileName;
 	strFilename += szFileExt;
 
 	return strFilename;
@@ -345,28 +332,28 @@ eOSKind getOSVersion()
 		else  // Test for specific product on Windows NT 4.0 SP5 and earlier
 		{
 			HKEY hKey;
-			char szProductType[BUFSIZE];
+			TCHAR szProductType[BUFSIZE];
 			DWORD dwBufLen=BUFSIZE;
 			LONG lRet;
 
 			lRet = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
-				"SYSTEM\\CurrentControlSet\\Control\\ProductOptions",
+				TEXT("SYSTEM\\CurrentControlSet\\Control\\ProductOptions"),
 				0, KEY_QUERY_VALUE, &hKey );
 			if( lRet != ERROR_SUCCESS )
 				return eOSKind_UNKNOWN;
 
-			lRet = RegQueryValueEx( hKey, "ProductType", NULL, NULL,
+			lRet = RegQueryValueEx( hKey, TEXT("ProductType"), NULL, NULL,
 				(LPBYTE) szProductType, &dwBufLen);
 			if( (lRet != ERROR_SUCCESS) || (dwBufLen > BUFSIZE) )
 				return eOSKind_UNKNOWN;
 
 			RegCloseKey( hKey );
 
-			if ( lstrcmpi( "WINNT", szProductType) == 0 )
+			if ( lstrcmpi( TEXT("WINNT"), szProductType) == 0 )
 				printf( "Workstation " );
-			if ( lstrcmpi( "LANMANNT", szProductType) == 0 )
+			if ( lstrcmpi( TEXT("LANMANNT"), szProductType) == 0 )
 				printf( "Server " );
-			if ( lstrcmpi( "SERVERNT", szProductType) == 0 )
+			if ( lstrcmpi( TEXT("SERVERNT"), szProductType) == 0 )
 				printf( "Advanced Server " );
 
 			printf( "%d.%d ", osvi.dwMajorVersion, osvi.dwMinorVersion );
@@ -375,14 +362,14 @@ eOSKind getOSVersion()
 		// Display service pack (if any) and build number.
 
 		if( osvi.dwMajorVersion == 4 && 
-			lstrcmpi( osvi.szCSDVersion, "Service Pack 6" ) == 0 )
+			lstrcmpi( osvi.szCSDVersion, TEXT("Service Pack 6") ) == 0 )
 		{
 			HKEY hKey;
 			LONG lRet;
 
 			// Test for SP6 versus SP6a.
 			lRet = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
-				"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Hotfix\\Q246009",
+				TEXT("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Hotfix\\Q246009"),
 				0, KEY_QUERY_VALUE, &hKey );
 			if( lRet == ERROR_SUCCESS )
 				printf( "Service Pack 6a (Build %d)\n", osvi.dwBuildNumber & 0xFFFF );         
@@ -435,4 +422,39 @@ eOSKind getOSVersion()
 		break;
 	}
 	return retKind; 
+}
+
+
+/// string 을 wstring 으로 변환
+std::wstring getWStringFromString(const std::string & str)
+{
+	WCHAR buff[256] = { 0 };
+	if ( 0 == MultiByteToWideChar(CP_THREAD_ACP, MB_PRECOMPOSED, str.c_str(), (int)str.size(), buff, 256) )
+	{
+		return L"failedConvert";
+	}
+	return std::wstring(buff);
+}
+
+
+/// 현재 실행 파일이 있는 폴더를 얻는다.
+tstring GetProgramFolder()
+{
+	tstring retString;
+
+	TCHAR szGetFileName[FILENAME_MAX] = { 0 };
+	DWORD ret = GetModuleFileName(GetModuleHandle(NULL), szGetFileName, FILENAME_MAX);
+
+	if ( ret == 0 )
+	{
+		_ASSERTE(!"Can't get module folder");
+	}
+	TCHAR szDrive[_MAX_DRIVE] = { 0 };
+	TCHAR szDir[_MAX_DIR] = { 0 };
+	_tsplitpath(szGetFileName, szDrive, szDir, 0, 0);
+
+	retString = szDrive;
+	retString += szDir;
+
+	return retString;
 }

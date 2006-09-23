@@ -32,17 +32,17 @@ public:
 	bool RegSetExtension();			/// HKEY_CLASSES_ROOT\.<Extension> 를 등록한다.
 	bool RegSetDocumentType();		/// DocumentType 을 등록한다.
 
-	std::string		m_strExtension;
-	std::string		m_strContentType;
-	std::string		m_strShellOpenCommand;
-	std::string		m_strShellNewCommand;
-	std::string		m_strShellNewFileName;
+	tstring		m_strExtension;
+	tstring		m_strContentType;
+	tstring		m_strShellOpenCommand;
+	tstring		m_strShellNewCommand;
+	tstring		m_strShellNewFileName;
 
-	std::string		m_strDocumentClassName;
-	std::string		m_strDocumentDescription;
-	std::string		m_strDocumentCLSID;
-	std::string		m_strDocumentCurrentVersion;
-	std::string		m_strDocumentDefaultIcon;
-	std::string		m_strDocumentShellOpenCommand;
+	tstring		m_strDocumentClassName;
+	tstring		m_strDocumentDescription;
+	tstring		m_strDocumentCLSID;
+	tstring		m_strDocumentCurrentVersion;
+	tstring		m_strDocumentDefaultIcon;
+	tstring		m_strDocumentShellOpenCommand;
 
 };

@@ -15,7 +15,7 @@
 			OutputDirectory="../output"
 			IntermediateDirectory="../obj/ZViewerD"
 			ConfigurationType="1"
-			CharacterSet="2">
+			CharacterSet="1">
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
@@ -262,6 +262,12 @@
 				RelativePath=".\src\CommonDefine.h">
 			</File>
 			<File
+				RelativePath=".\src\MessageManager.cpp">
+			</File>
+			<File
+				RelativePath=".\src\MessageManager.h">
+			</File>
+			<File
 				RelativePath=".\src\MoveToDlg.cpp">
 			</File>
 			<File
@@ -345,6 +351,12 @@
 			</File>
 			<File
 				RelativePath="..\lib\LogManager.h">
+			</File>
+			<File
+				RelativePath="..\lib\UnicodeFile.cpp">
+			</File>
+			<File
+				RelativePath="..\lib\UnicodeFile.h">
 			</File>
 			<File
 				RelativePath=".\lib\ZFileExtReg.cpp">

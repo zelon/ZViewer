@@ -13,14 +13,19 @@
 #include <string>
 #include <windows.h>
 
-#include "CommonFunc.h"
 #define STATUSBAR_HEIGHT		20
 
-const std::string g_strVersion = "0.5.1";
+#ifdef _UNICODE
+typedef std::wstring tstring;
+#else
+typedef std::string tstring;
+#endif
+
+const tstring g_strVersion = TEXT("0.5.1");
 
 struct FileData
 {
-	std::string m_strFileName;	// 파일명
+	tstring m_strFileName;	// 파일명
 	_FILETIME m_timeModified;	// 최근 수정된 날짜
 	DWORD m_nFileSize;			// 파일크기
 };
@@ -40,7 +45,7 @@ public:
 
 		return (strcmp(szTempB, szTempA) > 0);
 		*/
-		return (strcmpi(b.m_strFileName.c_str(), a.m_strFileName.c_str()) > 0);
+		return (_tcsicmp(b.m_strFileName.c_str(), a.m_strFileName.c_str()) > 0);
 	}
 };
 
@@ -60,7 +65,7 @@ public:
 		return (StrCmp(szTempB, szTempA) > 0);
 		*/
 
-		return ( strcmpi(b.m_strFileName.c_str(), a.m_strFileName.c_str()) > 0);
+		return ( _tcsicmp(b.m_strFileName.c_str(), a.m_strFileName.c_str()) > 0);
 	}
 };
 

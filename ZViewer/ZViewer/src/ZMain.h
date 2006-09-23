@@ -42,7 +42,7 @@ public:
 	bool IsHandCursor() const { return m_bHandCursor; }
 	void SetHandCursor(bool bHandCursor) { m_bHandCursor = bHandCursor; }
 
-	void SetInitArg(const std::string & strArg) { m_strInitArg = strArg; }
+	void SetInitArg(const tstring & strArg) { m_strInitArg = strArg; }
 	void SetProgramFolder();
 	void RescanFolder();			///< 파일목록을 다시 읽어들인다.
 	
@@ -57,7 +57,7 @@ public:
 	void SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyle style);
 
 	/// 현재 위치의 폴더 이웃 폴더 - 상위 폴더의 하위 폴더들 - 를 얻어온다.
-	bool GetNeighborFolders(std::vector < std::string > & vFolders);
+	bool GetNeighborFolders(std::vector < tstring > & vFolders);
 
 	/// 다음 폴더로 이동
 	void NextFolder();
@@ -134,7 +134,7 @@ public:
 	/// 현재 파일을 이동한다.
 	void MoveThisFile();
 
-	const std::string & GetProgramFolder() const	// 프로그램 실행 파일이 있는 폴더를 가져온다.
+	const tstring & GetProgramFolder() const	// 프로그램 실행 파일이 있는 폴더를 가져온다.
 	{
 		return m_strProgramFolder;
 	}
@@ -150,10 +150,10 @@ public:
 	void OnRightTopFirstDraw();
 
 	/// 특정 파일을 연다.
-	void OpenFile(const std::string & strFilename);
+	void OpenFile(const tstring & strFilename);
 
 	/// 특정 폴더의 첫번째 파일을 연다.
-	void OpenFolder(const std::string & strFolder);
+	void OpenFolder(const tstring & strFolder);
 	void OpenFileDialog();
 
 	/// 현재 파일을 다른 형식으로 저장하는 파일 다이얼로그를 연다.
@@ -186,7 +186,7 @@ private:
 
 	typedef std::vector< FileData > FileListVector;
 
-	void _GetFileListAndSort(const std::string & strFolderPathAndWildCard, FileListVector & vFileList);
+	void _GetFileListAndSort(const tstring & strFolderPathAndWildCard, FileListVector & vFileList);
 
 	/// 윈도우의 작업 표시줄을 숨긴다.
 	void ShellTrayHide();
@@ -197,11 +197,11 @@ private:
 	void FormShow();
 	void FormHide();
 
-	std::string m_strInitArg;			///< 프로그램 시작 인자.
-	std::string m_strProgramFolder;		///< 프로그램 실행 파일이 있는 폴더
+	tstring m_strInitArg;			///< 프로그램 시작 인자.
+	tstring m_strProgramFolder;		///< 프로그램 실행 파일이 있는 폴더
 
-	std::string m_strCurrentFolder;		///< 현재 폴더
-	std::string m_strCurrentFilename;	///< 현재 보여주고 있는 파일이름
+	tstring m_strCurrentFolder;		///< 현재 폴더
+	tstring m_strCurrentFilename;	///< 현재 보여주고 있는 파일이름
 	
 	FileListVector m_vFile;
 	eFileSortOrder m_sortOrder;
@@ -234,12 +234,12 @@ private:
 	int m_iShowingX;					///< 그림 중 어디를 찍기 시작하나.
 	int m_iShowingY;					///< 그림 중 어디를 찍기 시작하나.
 
-	static void FindFile(const char *path, std::vector< FileData > & foundStorage, bool bFindRecursive);
-	static void FindFolders(const char *path, std::vector<std::string> & foundStorage, bool bFindRecursive = false);
+	static void FindFile(const TCHAR *path, std::vector< FileData > & foundStorage, bool bFindRecursive);
+	static void FindFolders(const TCHAR *path, std::vector<tstring> & foundStorage, bool bFindRecursive = false);
 
 	/// For Open File Dialog
 	OPENFILENAME ofn;
-	char szFile[MAX_PATH];       // buffer for file name
+	TCHAR szFile[MAX_PATH];       // buffer for file name
 	//bool m_bOpeningFileDialog;	// 전체화면일 때 파일 다이얼로그를 열면 깜빡거림을 막기 위해
 
 	// For Undo/Redo

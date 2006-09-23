@@ -73,9 +73,9 @@ public:
 	void ThreadFunc();
 
 	void SetImageVector(const std::vector < FileData > & v);
-	bool hasCachedData(const std::string & strFilename, int iIndex);
-	void getCachedData(const std::string & strFilename, ZImage & image);
-	void AddCacheData(const std::string & strFilename, ZImage & image);
+	bool hasCachedData(const tstring & strFilename, int iIndex);
+	void getCachedData(const tstring & strFilename, ZImage & image);
+	void AddCacheData(const tstring & strFilename, ZImage & image);
 
 	void SetLastActionDirection(eLastActionDirection last)
 	{
@@ -111,13 +111,13 @@ private:
 	/// threadfunc 를 계속 실행시킬 것인가. 프로그램이 끝날 때 false 로 해줘야함
 	bool m_bGoOn;
 
-	std::map < std::string, ZImage > m_cacheData;
-	typedef std::map < std::string, ZImage >::iterator CacheMapIterator;
+	std::map < tstring, ZImage > m_cacheData;
+	typedef std::map < tstring, ZImage >::iterator CacheMapIterator;
 
 	size_t m_numImageVectorSize;
 
-	std::map < int , std::string > m_imageMap;
-	std::map < std::string, int > m_imageMapRev;
+	std::map < int , tstring > m_imageMap;
+	std::map < tstring, int > m_imageMapRev;
 
 	/// 현재보고 있는 index;
 	volatile int m_iCurrentIndex;

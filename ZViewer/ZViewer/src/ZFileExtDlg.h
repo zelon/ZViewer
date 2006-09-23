@@ -13,7 +13,7 @@
 struct ExtSetting
 {
 	unsigned int m_numIconIndex;		// icon dll 에서의 index
-	std::string m_strExt;				// 파일의 확장자
+	tstring m_strExt;				// 파일의 확장자
 };
 
 class ZFileExtDlg
@@ -42,11 +42,12 @@ private:
 //	bool m_bChanged;
 
 	/// 실제로 파일 연결을 세팅하는 함수
-	bool SetExtWithProgram(const std::string & strProgramName, const std::string & strExt, std::string strFullProgramPath = "", const std::string & strIcon = "", int iIconIndex = 0);
+	bool SetExtWithProgram(const tstring & strProgramName, const tstring & strExt, tstring strFullProgramPath = TEXT(""), const tstring & strIcon = TEXT(""), int iIconIndex = 0);
 
 	/// 확장자를 연결
 	void ExtMapInit();
+
+	void _AddExtSet(const int iIconIndex, const TCHAR * ext);
+
 	std::vector < ExtSetting > m_extConnect;
-//	typedef std::map< eFileExt, std::string> extMapType;
-//	extMapType	m_extMap;
 };

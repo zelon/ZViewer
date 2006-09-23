@@ -31,10 +31,10 @@ public:
 		return m_hInstance;
 	}
 
-	const std::string GetString(UINT iStringID);
+	const tstring GetString(UINT iStringID);
 
 	HINSTANCE m_hInstance;
 
 private:
-	std::map < UINT, std::string > m_stringMap;	/// ID 에 해당하는 String 을 캐시한다.
+	std::map < UINT, tstring > m_stringMap;	/// ID 에 해당하는 String 을 캐시한다.
 };

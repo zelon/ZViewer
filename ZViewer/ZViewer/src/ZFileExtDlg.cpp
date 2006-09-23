@@ -42,98 +42,43 @@ void ZFileExtDlg::ShowDlg()
 	}
 }
 
+
+void ZFileExtDlg::_AddExtSet(const int iIconIndex, const TCHAR * ext)
+{
+	ExtSetting extSet;
+
+	extSet.m_numIconIndex = iIconIndex;
+	extSet.m_strExt = ext;
+	m_extConnect.push_back(extSet);
+}
+
+
 void ZFileExtDlg::ExtMapInit()
 {
 	ExtSetting extSet;
 
-	extSet.m_numIconIndex = 1;
-	extSet.m_strExt = "bmp";
-	m_extConnect.push_back(extSet);
-
-	extSet.m_numIconIndex = 2;
-	extSet.m_strExt = "jpg";
-	m_extConnect.push_back(extSet);
-
-	extSet.m_numIconIndex = 2;
-	extSet.m_strExt = "jpeg";
-	m_extConnect.push_back(extSet);
-
-	extSet.m_numIconIndex = 2;
-	extSet.m_strExt = "jpe";
-	m_extConnect.push_back(extSet);
-
-	extSet.m_numIconIndex = 3;
-	extSet.m_strExt = "png";
-	m_extConnect.push_back(extSet);
-
-	extSet.m_numIconIndex = 4;
-	extSet.m_strExt = "psd";
-	m_extConnect.push_back(extSet);
-
-	extSet.m_numIconIndex = 5;
-	extSet.m_strExt = "gif";
-	m_extConnect.push_back(extSet);
-
-	extSet.m_numIconIndex = 0;
-	extSet.m_strExt = "dds";
-	m_extConnect.push_back(extSet);
-
-	extSet.m_numIconIndex = 0;
-	extSet.m_strExt = "tga";
-	m_extConnect.push_back(extSet);
-
-	extSet.m_numIconIndex = 0;
-	extSet.m_strExt = "pcx";
-	m_extConnect.push_back(extSet);
-
-	extSet.m_numIconIndex = 0;
-	extSet.m_strExt = "xpm";
-	m_extConnect.push_back(extSet);
-
-	extSet.m_numIconIndex = 0;
-	extSet.m_strExt = "xbm";
-	m_extConnect.push_back(extSet);
-
-	extSet.m_numIconIndex = 0;
-	extSet.m_strExt = "tif";
-	m_extConnect.push_back(extSet);
-
-	extSet.m_numIconIndex = 0;
-	extSet.m_strExt = "tiff";
-	m_extConnect.push_back(extSet);
-
-	extSet.m_numIconIndex = 0;
-	extSet.m_strExt = "cut";
-	m_extConnect.push_back(extSet);
-
-	extSet.m_numIconIndex = 0;
-	extSet.m_strExt = "ico";
-	m_extConnect.push_back(extSet);
-
-	extSet.m_numIconIndex = 0;
-	extSet.m_strExt = "hdr";
-	m_extConnect.push_back(extSet);
-
-	extSet.m_numIconIndex = 0;
-	extSet.m_strExt = "jng";
-	m_extConnect.push_back(extSet);
-
-	extSet.m_numIconIndex = 0;
-	extSet.m_strExt = "koa";
-	m_extConnect.push_back(extSet);
-
-	extSet.m_numIconIndex = 0;
-	extSet.m_strExt = "mng";
-	m_extConnect.push_back(extSet);
-
-	extSet.m_numIconIndex = 0;
-	extSet.m_strExt = "pcd";
-	m_extConnect.push_back(extSet);
-
-	extSet.m_numIconIndex = 0;
-	extSet.m_strExt = "ras";
-	m_extConnect.push_back(extSet);
-
+	_AddExtSet(1, TEXT("bmp"));
+	_AddExtSet(2, TEXT("jpg"));
+	_AddExtSet(2, TEXT("jpeg"));
+	_AddExtSet(2, TEXT("jpe"));
+	_AddExtSet(3, TEXT("png"));
+	_AddExtSet(4, TEXT("psd"));
+	_AddExtSet(5, TEXT("gif"));
+	_AddExtSet(0, TEXT("dds"));
+	_AddExtSet(0, TEXT("tga"));
+	_AddExtSet(0, TEXT("pcx"));
+	_AddExtSet(0, TEXT("xpm"));
+	_AddExtSet(0, TEXT("xbm"));
+	_AddExtSet(0, TEXT("tif"));
+	_AddExtSet(0, TEXT("tiff"));
+	_AddExtSet(0, TEXT("cut"));
+	_AddExtSet(0, TEXT("ico"));
+	_AddExtSet(0, TEXT("hdr"));
+	_AddExtSet(0, TEXT("jng"));
+	_AddExtSet(0, TEXT("koa"));
+	_AddExtSet(0, TEXT("mng"));
+	_AddExtSet(0, TEXT("pcd"));
+	_AddExtSet(0, TEXT("ras"));
 }
 int CALLBACK ZFileExtDlg::FileExtDlgProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 {
@@ -187,10 +132,10 @@ void ZFileExtDlg::SaveExtEnv()
 {
 	std::vector < ExtSetting >::iterator it, endit = m_extConnect.end();
 
-	std::string strProgramFolder;
+	tstring strProgramFolder;
 
 	{
-		char szGetFileName[FILENAME_MAX] = { 0 };
+		TCHAR szGetFileName[FILENAME_MAX] = { 0 };
 		DWORD ret = GetModuleFileName(GetModuleHandle(NULL), szGetFileName, FILENAME_MAX);
 
 		if ( ret == 0 )
@@ -198,23 +143,23 @@ void ZFileExtDlg::SaveExtEnv()
 			_ASSERTE(!"Can't get module folder");
 			return;
 		}
-		char szDrive[_MAX_DRIVE] = { 0 };
-		char szDir[_MAX_DIR] = { 0 };
-		_splitpath(szGetFileName, szDrive, szDir, 0, 0);
+		TCHAR szDrive[_MAX_DRIVE] = { 0 };
+		TCHAR szDir[_MAX_DIR] = { 0 };
+		_tsplitpath(szGetFileName, szDrive, szDir, 0, 0);
 
 		strProgramFolder = szDrive;
 		strProgramFolder += szDir;
 	}
 
-	std::string strIconDll = strProgramFolder;
-	strIconDll += "ZViewerIcons.dll";
+	tstring strIconDll = strProgramFolder;
+	strIconDll += TEXT("ZViewerIcons.dll");
 
 	for ( it = m_extConnect.begin(); it != endit; ++it)
 	{
 		const ExtSetting & extset = *it;
 
-		SetExtWithProgram("ZViewer", extset.m_strExt, 
-			"",	/// 프로그램 Full Path. 비워두면 현재 프로그램이다.
+		SetExtWithProgram(TEXT("ZViewer"), extset.m_strExt, 
+			TEXT(""),	/// 프로그램 Full Path. 비워두면 현재 프로그램이다.
 			strIconDll.c_str(),	/// 아이콘 프로그램
 			extset.m_numIconIndex	/// 아이콘 index
 		);
@@ -224,7 +169,7 @@ void ZFileExtDlg::SaveExtEnv()
 	SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST, NULL, NULL);
 }
 
-bool ZFileExtDlg::SetExtWithProgram(const std::string & strProgramName, const std::string & strExt, std::string strFullProgramPath, const std::string & strIcon, int iIconIndex)
+bool ZFileExtDlg::SetExtWithProgram(const tstring & strProgramName, const tstring & strExt, tstring strFullProgramPath, const tstring & strIcon, int iIconIndex)
 {
 	ZFileExtReg fileExtReg;
 
@@ -232,25 +177,25 @@ bool ZFileExtDlg::SetExtWithProgram(const std::string & strProgramName, const st
 	if ( strFullProgramPath.size() == 0 )
 	{
 		// get full file path to program executable file
-		char szProgPath[MAX_PATH];
+		TCHAR szProgPath[MAX_PATH];
 		::GetModuleFileName(NULL, szProgPath, sizeof(szProgPath));
 
 		strFullProgramPath = szProgPath;
 	}
 
-	std::string strTempText;
+	tstring strTempText;
 
 	fileExtReg.m_strExtension = strExt.c_str();
 
 	// 프로그램에게 인자를 넘겨줄 때의 full path 를 만든다.
 	strTempText  = strFullProgramPath;
-	strTempText += " \"%1\"";
+	strTempText += TEXT(" \"%1\"");
 	fileExtReg.m_strShellOpenCommand = strTempText.c_str();
 	fileExtReg.m_strDocumentShellOpenCommand = strTempText.c_str();
 
 	// 레지스트리에 등록할 때의 프로그램의 이름과 확장자를 정한다.
-	std::string strClassName = strProgramName;
-	strClassName += ".";
+	tstring strClassName = strProgramName;
+	strClassName += TEXT(".");
 	strClassName += strExt;
 	fileExtReg.m_strDocumentClassName = strClassName.c_str();
 
@@ -259,7 +204,7 @@ bool ZFileExtDlg::SetExtWithProgram(const std::string & strProgramName, const st
 	{
 		// 아이콘 프로그램을 지정하지 않으면 원래 프로그램의 첫번째 아이콘을 쓴다.
 		strTempText  = strFullProgramPath;
-		strTempText += ",0";
+		strTempText += TEXT(",0");
 	}
 	else
 	{
@@ -271,10 +216,10 @@ bool ZFileExtDlg::SetExtWithProgram(const std::string & strProgramName, const st
 		}
 
 		strTempText = strIcon;
-		strTempText += ",";
+		strTempText += TEXT(",");
 
-		char szTemp[256];
-		_snprintf(szTemp, sizeof(szTemp), "%d", iIconIndex);
+		TCHAR szTemp[256];
+		StringCchPrintf(szTemp, sizeof(szTemp), TEXT("%d"), iIconIndex);
 		strTempText += szTemp;
 	}
 	fileExtReg.m_strDocumentDefaultIcon = strTempText.c_str();

@@ -33,9 +33,9 @@ enum
 
 
 
-void CZViewMenuExt::MsgBox(const std::string & strMsg)
+void CZViewMenuExt::MsgBox(const tstring & strMsg)
 {
-	MessageBox(HWND_DESKTOP, strMsg.c_str(), "ZViewerAgent", MB_OK);
+	MessageBox(HWND_DESKTOP, strMsg.c_str(), TEXT("ZViewerAgent"), MB_OK);
 }
 
 STDMETHODIMP CZViewMenuExt::Initialize (LPCITEMIDLIST pidlFolder, LPDATAOBJECT  pDO, HKEY hkeyProgID )
@@ -465,10 +465,10 @@ void CZViewMenuExt::ExecZViewer()
 	char szDir[_MAX_DIR] = { 0 };
 	_splitpath(szGetFileName, szDrive, szDir, 0, 0);
 
-	std::string strProgramFolder = szDrive;
+	tstring strProgramFolder = szDrive;
 	strProgramFolder += szDir;
 
-	_snprintf(command, sizeof(command), "%s\\ZViewer.exe %s", strProgramFolder.c_str(), m_szFile);
+	StringCchPrintf(command, sizeof(command), TEXT("%s\\ZViewer.exe %s"), strProgramFolder.c_str(), m_szFile);
 
 	STARTUPINFO si;
 	PROCESS_INFORMATION pi;
@@ -493,13 +493,13 @@ void CZViewMenuExt::SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyl
 		return;
 	}
 
-	std::string strSaveFileName = szSystemFolder;
-	strSaveFileName += "\\zviewer_bg.bmp";
+	tstring strSaveFileName = szSystemFolder;
+	strSaveFileName += TEXT("\\zviewer_bg.bmp");
 
 	ZImage tempImage;
 	if ( !tempImage.LoadFromFile(m_szFile) )
 	{
-		MessageBox(HWND_DESKTOP, "Can't load the image file", "ZViewer", MB_OK);
+		MessageBox(HWND_DESKTOP, TEXT("Can't load the image file"), TEXT("ZViewer"), MB_OK);
 		return;
 	}
 

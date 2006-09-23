@@ -26,7 +26,7 @@ public:
 		m_hParent = hwnd;
 	}
 
-	void setDefaultSaveFilename(const std::string & strInitialiFolder, const std::string & strFilename)
+	void setDefaultSaveFilename(const tstring & strInitialiFolder, const tstring & strFilename)
 	{
 		m_strInitialiFolder = strInitialiFolder;
 		m_strSaveFileName = strFilename;
@@ -35,7 +35,7 @@ public:
 	/// 다른 이름으로 저장창을 띄운다. 반환값이 false 이면 저장하지 않는다.
 	bool showDialog();
 
-	const char * getSaveFileName() const
+	const TCHAR * getSaveFileName() const
 	{
 		return m_szFilenamebuf;
 	}
@@ -45,8 +45,8 @@ protected:
 	OPENFILENAME m_ofn;
 
 	HWND m_hParent;
-	std::string m_strInitialiFolder;
-	std::string m_strSaveFileName;
+	tstring m_strInitialiFolder;
+	tstring m_strSaveFileName;
 
-	char m_szFilenamebuf[FILENAME_MAX];
+	TCHAR m_szFilenamebuf[FILENAME_MAX];
 };

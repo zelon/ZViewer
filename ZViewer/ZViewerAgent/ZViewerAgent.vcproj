@@ -372,6 +372,12 @@
 				RelativePath="..\lib\LogManager.h">
 			</File>
 			<File
+				RelativePath="..\lib\UnicodeFile.cpp">
+			</File>
+			<File
+				RelativePath="..\lib\UnicodeFile.h">
+			</File>
+			<File
 				RelativePath="..\lib\ZImage.cpp">
 			</File>
 			<File

@@ -11,43 +11,43 @@
 #include "stdafx.h"
 #include "ZImage.h"
 
-bool ZImage::IsValidImageFileExt(const char * szFilename)
+bool ZImage::IsValidImageFileExt(const TCHAR * szFilename)
 {
-	char szExt[MAX_PATH];
+	TCHAR szExt[MAX_PATH];
 
-	_splitpath(szFilename, NULL, NULL, NULL, szExt);
+	_tsplitpath(szFilename, NULL, NULL, NULL, szExt);
 
-	if ( strlen(szExt) < 2 ) return false;
+	if ( _tcslen(szExt) < 2 ) return false;
 
-	char szLowerExt[MAX_PATH];
+	TCHAR szLowerExt[MAX_PATH];
 
-	strncpy(szLowerExt, szExt, min(strlen(szExt)+1, MAX_PATH));
+	_tcsncpy(szLowerExt, szExt, min(_tcslen(szExt)+1, MAX_PATH));
 
-	strlwr(szLowerExt);
+	_tcslwr(szLowerExt);
 
-	const char * szExtOnly = szLowerExt + 1;
+	const TCHAR * szExtOnly = szLowerExt + 1;
 
-	if ( strcmp(szExtOnly, "bmp") == 0 ||
-		0 == strcmp(szExtOnly, "jpg") ||
-		0 == strcmp(szExtOnly, "jpeg") ||
-		0 == strcmp(szExtOnly, "gif") ||
-		0 == strcmp(szExtOnly, "ico") ||
-		0 == strcmp(szExtOnly, "pcx") ||
-		0 == strcmp(szExtOnly, "psd") ||
-		0 == strcmp(szExtOnly, "tif") ||
-		0 == strcmp(szExtOnly, "tiff") ||
-		0 == strcmp(szExtOnly, "tga") ||
-		0 == strcmp(szExtOnly, "dds") ||
-		0 == strcmp(szExtOnly, "xbm") ||
-		0 == strcmp(szExtOnly, "xpm") ||
-		0 == strcmp(szExtOnly, "cut") ||
-		0 == strcmp(szExtOnly, "hdr") ||
-		0 == strcmp(szExtOnly, "jng") ||
-		0 == strcmp(szExtOnly, "koa") ||
-		0 == strcmp(szExtOnly, "mng") ||
-		0 == strcmp(szExtOnly, "pcd") ||
-		0 == strcmp(szExtOnly, "ras") ||
-		0 == strcmp(szExtOnly, "png") 
+	if ( _tcscmp(szExtOnly, TEXT("bmp")) == 0 ||
+		0 == _tcscmp(szExtOnly, TEXT("jpg")) ||
+		0 == _tcscmp(szExtOnly, TEXT("jpeg")) ||
+		0 == _tcscmp(szExtOnly, TEXT("gif")) ||
+		0 == _tcscmp(szExtOnly, TEXT("ico")) ||
+		0 == _tcscmp(szExtOnly, TEXT("pcx")) ||
+		0 == _tcscmp(szExtOnly, TEXT("psd")) ||
+		0 == _tcscmp(szExtOnly, TEXT("tif")) ||
+		0 == _tcscmp(szExtOnly, TEXT("tiff")) ||
+		0 == _tcscmp(szExtOnly, TEXT("tga")) ||
+		0 == _tcscmp(szExtOnly, TEXT("dds")) ||
+		0 == _tcscmp(szExtOnly, TEXT("xbm")) ||
+		0 == _tcscmp(szExtOnly, TEXT("xpm")) ||
+		0 == _tcscmp(szExtOnly, TEXT("cut")) ||
+		0 == _tcscmp(szExtOnly, TEXT("hdr")) ||
+		0 == _tcscmp(szExtOnly, TEXT("jng")) ||
+		0 == _tcscmp(szExtOnly, TEXT("koa")) ||
+		0 == _tcscmp(szExtOnly, TEXT("mng")) ||
+		0 == _tcscmp(szExtOnly, TEXT("pcd")) ||
+		0 == _tcscmp(szExtOnly, TEXT("ras")) ||
+		0 == _tcscmp(szExtOnly, TEXT("png")) 
 		)
 	{
 		return true;

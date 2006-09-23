@@ -26,11 +26,12 @@
 #include <string>
 #include <functional>
 #include <algorithm>
+#include <tchar.h>
+#include <strsafe.h>
 
 #include <shlobj.h>
 #include <io.h>
 
-#pragma deprecated(sprintf)
 
 #include "FreeImagePlus.h"
 

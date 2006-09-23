@@ -76,7 +76,7 @@ protected:
 	/// 바탕화면 파일을 지정한다.
 	void SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyle style);
 
-	void MsgBox(const std::string & strMsg);		// for debugging messagebox
+	void MsgBox(const tstring & strMsg);		// for debugging messagebox
     TCHAR   m_szFile[MAX_PATH];
 	CBitmap m_bmp;
 	bool m_b8bit;

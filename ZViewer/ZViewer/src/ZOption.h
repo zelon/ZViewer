@@ -67,7 +67,7 @@ private:
 	/// 최대 캐시되는 그림 파일
 	int m_iMaximumCacheFileNum;
 
-	std::string m_strOptionFilename;
+	tstring m_strOptionFilename;
 
 	void SetDefaultOption();
 

@@ -28,21 +28,21 @@ bool ZFileExtReg::RegSetExtension()
 		return false;
 	}
 
-	std::string strKey = ".";
+	tstring strKey = TEXT(".");
 	strKey += m_strExtension;
 
-	SetRegistryValue(HKEY_CLASSES_ROOT, strKey.c_str(), "", m_strDocumentClassName.c_str());
+	SetRegistryValue(HKEY_CLASSES_ROOT, strKey.c_str(), TEXT(""), m_strDocumentClassName.c_str());
 
 	if( !m_strShellOpenCommand.empty() )
 	{
-		strKey += "\\shell\\open\\command";
-		SetRegistryValue(HKEY_CLASSES_ROOT, strKey.c_str(), "", m_strShellOpenCommand.c_str());
+		strKey += TEXT("\\shell\\open\\command");
+		SetRegistryValue(HKEY_CLASSES_ROOT, strKey.c_str(), TEXT(""), m_strShellOpenCommand.c_str());
 	}
 
 	// 확장자에 따른 기본 프로그램을 정한다.
-	strKey = "SoftWare\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FileExts\\.";
+	strKey = TEXT("SoftWare\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FileExts\\.");
 	strKey += m_strExtension;
-	SetRegistryValue(HKEY_CURRENT_USER, strKey.c_str(), "ProgID", m_strDocumentClassName.c_str());
+	SetRegistryValue(HKEY_CURRENT_USER, strKey.c_str(), TEXT("ProgID"), m_strDocumentClassName.c_str());
 
 	return TRUE;
 }
@@ -55,24 +55,24 @@ bool  ZFileExtReg::RegSetDocumentType()
 		return false;
 	}
 
-	std::string strKey = m_strDocumentClassName;
+	tstring strKey = m_strDocumentClassName;
 
-	SetRegistryValue(HKEY_CLASSES_ROOT, strKey.c_str(), "", m_strDocumentDescription.c_str());
+	SetRegistryValue(HKEY_CLASSES_ROOT, strKey.c_str(), TEXT(""), m_strDocumentDescription.c_str());
 
 	// 기본 아이콘 등록
 	if( !m_strDocumentDefaultIcon.empty() )
 	{
 		strKey  = m_strDocumentClassName;
-		strKey += "\\DefaultIcon";
-		SetRegistryValue(HKEY_CLASSES_ROOT, strKey.c_str(), "", m_strDocumentDefaultIcon.c_str());
+		strKey += TEXT("\\DefaultIcon");
+		SetRegistryValue(HKEY_CLASSES_ROOT, strKey.c_str(), TEXT(""), m_strDocumentDefaultIcon.c_str());
 	}
 
 	// 더블 클릭했을 때 실행 시킬 명령
 	if( !m_strShellOpenCommand.empty() )
 	{
 		strKey  = m_strDocumentClassName;
-		strKey += "\\shell\\open\\command";
-		SetRegistryValue(HKEY_CLASSES_ROOT, strKey.c_str(), "", m_strShellOpenCommand.c_str());
+		strKey += TEXT("\\shell\\open\\command");
+		SetRegistryValue(HKEY_CLASSES_ROOT, strKey.c_str(), TEXT(""), m_strShellOpenCommand.c_str());
 	}
 
 	return true;

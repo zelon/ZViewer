@@ -19,6 +19,7 @@
 
 #include <ShlObj.h>
 #include <cstdio>
+#include <strsafe.h>
 
 #include "resource.h"
 
@@ -45,9 +46,9 @@ ZMain::~ZMain(void)
 {
 	if ( NULL != m_hBufferDC )
 	{
-		DebugPrintf("Before delete bufferDC");
+		DebugPrintf(TEXT("Before delete bufferDC"));
 		BOOL bRet = DeleteDC(m_hBufferDC);
-		DebugPrintf("after delete bufferDC");
+		DebugPrintf(TEXT("after delete bufferDC"));
 	
 		_ASSERTE(bRet);
 
@@ -107,7 +108,7 @@ void ZMain::InitOpenFileDialog()
 	//
 	ofn.lpstrFile[0] = '\0';
 	ofn.nMaxFile = sizeof(szFile);
-	ofn.lpstrFilter = "ImageFiles(jpg,gif,png,bmp,psd,tga,tif,ico)\0*.jpg;*.jpeg;*.gif;*.png;*.bmp;*.psd,*.tga;*.tif;*.ico\0All(*.*)\0*.*\0";
+	ofn.lpstrFilter = TEXT("ImageFiles(jpg,gif,png,bmp,psd,tga,tif,ico)\0*.jpg;*.jpeg;*.gif;*.png;*.bmp;*.psd,*.tga;*.tif;*.ico\0All(*.*)\0*.*\0");
 	ofn.nFilterIndex = 1;
 	ofn.lpstrFileTitle = NULL;
 	ofn.nMaxFileTitle = 0;
@@ -137,11 +138,11 @@ void ZMain::SaveFileDialog()
 	
 	if ( CSaveAs::getInstance().showDialog() )
 	{
-		std::string strSaveFilename = CSaveAs::getInstance().getSaveFileName();
+		tstring strSaveFilename = CSaveAs::getInstance().getSaveFileName();
 
 		if ( false == m_currentImage.SaveToFile(strSaveFilename, 0) )
 		{
-			MessageBox(m_hMainDlg, "unsupported file type", "ZViewer", MB_OK);
+			MessageBox(m_hMainDlg, TEXT("unsupported file type"), TEXT("ZViewer"), MB_OK);
 		}
 	}
 }
@@ -236,7 +237,7 @@ void ZMain::Draw(bool bEraseBg)
 	/// 그림이 화면보다 큰가 확인
 	if ( bNeedClipping )
 	{
-		DebugPrintf("!!!!!!!!! clipping on draw......");
+		DebugPrintf(TEXT("!!!!!!!!! clipping on draw......"));
 
 		/// 그림이 화면보다 크면...
 
@@ -282,7 +283,7 @@ void ZMain::Draw(bool bEraseBg)
 			/// 버퍼의 DC 가 NULL 이란 것은 이전 캐시가 없거나, 무효화되었다는 것이다.
 			if ( m_hBufferDC == NULL )
 			{
-				DebugPrintf("!!!!! no DC cache clipping...");
+				DebugPrintf(TEXT("!!!!! no DC cache clipping..."));
 				/// 큰 그림을 스크롤이 가능하게 클리핑해서 그린다.
 				m_hBufferDC = CreateCompatibleDC(mainDC);
 
@@ -293,7 +294,7 @@ void ZMain::Draw(bool bEraseBg)
 				// 메모리에 전체 그림을 그린다.
 				if ( m_currentImage.isTransparent() )
 				{
-					DebugPrintf("Drawing transparent image...");
+					DebugPrintf(TEXT("Drawing transparent image..."));
 					fipWinImage tempImage;
 					tempImage = m_currentImage.getFipImage();
 
@@ -321,7 +322,7 @@ void ZMain::Draw(bool bEraseBg)
 			}
 			else
 			{
-				DebugPrintf("DC cache clipping");
+				DebugPrintf(TEXT("DC cache clipping"));
 			}
 
 			if ( bEraseBg )	// 배경을 지워야 하면 지운다. 새로운 그림을 그리기 직전에 그려야 깜빡임이 적다.
@@ -348,7 +349,7 @@ void ZMain::Draw(bool bEraseBg)
 		if ( currentImageWidth < currentScreenRect.right && currentImageHeight < currentScreenRect.bottom 
 			&& ZOption::GetInstance().m_bSmallToBigStretchImage ) ///< if option is on
 		{
-			DebugPrintf("!!!!!!!!!!!! stretching on draw...");
+			DebugPrintf(TEXT("!!!!!!!!!!!! stretching on draw..."));
 
 			/// 작은 그림을 화면에 맞게 확대해서 그린다.
 			RECT originalImageRect;
@@ -380,7 +381,7 @@ void ZMain::Draw(bool bEraseBg)
 
 			if ( stretchedImage.isTransparent() )
 			{
-				DebugPrintf("drawing trans.....");
+				DebugPrintf(TEXT("drawing trans....."));
 //				stretchedImage.Resize(currentImageWidth, currentImageHeight);
 
 				fipWinImage temp;
@@ -417,7 +418,7 @@ void ZMain::Draw(bool bEraseBg)
 
 			if ( m_currentImage.isTransparent() )
 			{
-				DebugPrintf("Drawing transparent image...");
+				DebugPrintf(TEXT("Drawing transparent image..."));
 				fipWinImage tempImage;
 				tempImage = m_currentImage.getFipImage();
 				
@@ -468,32 +469,32 @@ void ZMain::Draw(bool bEraseBg)
 	}
 }
 
-void ZMain::FindFile(const char *path, std::vector< FileData > & foundStorage, bool bFindRecursive)
+void ZMain::FindFile(const TCHAR * path, std::vector< FileData > & foundStorage, bool bFindRecursive)
 {
 	HANDLE hSrch;
 	WIN32_FIND_DATA wfd;
 
-	char fname[_MAX_FNAME] = { 0 };
+	TCHAR fname[_MAX_FNAME] = { 0 };
 	BOOL bResult=TRUE;
-	char drive[_MAX_DRIVE] = { 0 };
-	char dir[_MAX_DIR] = { 0 };
-	char newpath[MAX_PATH] = { 0 };
+	TCHAR drive[_MAX_DRIVE] = { 0 };
+	TCHAR dir[_MAX_DIR] = { 0 };
+	TCHAR newpath[MAX_PATH] = { 0 };
 
 	hSrch=FindFirstFile(path,&wfd);
 	while (bResult)
 	{
-		_splitpath(path,drive,dir,NULL,NULL);
+		_tsplitpath(path,drive,dir,NULL,NULL);
 		if (wfd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
 		{
 			if (wfd.cFileName[0]!='.' && bFindRecursive == true)
 			{
-				_snprintf(newpath, sizeof(newpath), "%s%s%s\\*.*",drive,dir,wfd.cFileName);
+				StringCchPrintf(newpath, sizeof(newpath), TEXT("%s%s%s\\*.*"),drive,dir,wfd.cFileName);
 				FindFile(newpath, foundStorage, bFindRecursive);
 			}
 		}
 		else
 		{
-			_snprintf(fname, sizeof(fname), "%s%s%s",drive,dir,wfd.cFileName);
+			StringCchPrintf(fname, sizeof(fname), TEXT("%s%s%s"),drive,dir,wfd.cFileName);
 
 			if ( ZImage::IsValidImageFileExt(wfd.cFileName) )
 			{
@@ -509,32 +510,32 @@ void ZMain::FindFile(const char *path, std::vector< FileData > & foundStorage, b
 	FindClose(hSrch);
 }
 
-void ZMain::FindFolders(const char *path, std::vector<std::string> & foundStorage, bool bFindRecursive)
+void ZMain::FindFolders(const TCHAR *path, std::vector<tstring> & foundStorage, bool bFindRecursive)
 {
 	HANDLE hSrch;
 	WIN32_FIND_DATA wfd;
 	//memset(&wfd, 0, sizeof(wfd));
-	char fname[MAX_PATH] = { 0 };
+	TCHAR fname[MAX_PATH] = { 0 };
 	BOOL bResult=TRUE;
-	char drive[_MAX_DRIVE] = { 0 };
-	char dir[MAX_PATH] = { 0 };
-	char newpath[MAX_PATH] = { 0 };
+	TCHAR drive[_MAX_DRIVE] = { 0 };
+	TCHAR dir[MAX_PATH] = { 0 };
+	TCHAR newpath[MAX_PATH] = { 0 };
 
 	hSrch=FindFirstFile(path,&wfd);
 	while (bResult)
 	{
-		_splitpath(path,drive,dir,NULL,NULL);
+		_tsplitpath(path,drive,dir,NULL,NULL);
 		if (wfd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
 		{
 			if (wfd.cFileName[0]!='.' )
 			{
-				_snprintf(fname, sizeof(fname), "%s%s%s",drive,dir,wfd.cFileName);
+				StringCchPrintf(fname, sizeof(fname), TEXT("%s%s%s"),drive,dir,wfd.cFileName);
 
 				foundStorage.push_back(fname);
 
 				if ( bFindRecursive == true )
 				{
-					_snprintf(newpath, sizeof(newpath), "%s%s%s\\*.*",drive,dir,wfd.cFileName);
+					StringCchPrintf(newpath, sizeof(newpath), TEXT("%s%s%s\\*.*"),drive,dir,wfd.cFileName);
 					FindFolders(newpath, foundStorage, bFindRecursive);
 				}
 			}
@@ -547,9 +548,9 @@ void ZMain::FindFolders(const char *path, std::vector<std::string> & foundStorag
 
 void ZMain::RescanFolder()
 {
-	std::string strToFindFolder = m_strCurrentFolder;
+	tstring strToFindFolder = m_strCurrentFolder;
 
-	strToFindFolder += "*.*";
+	strToFindFolder += TEXT("*.*");
 
 	_GetFileListAndSort(strToFindFolder, m_vFile);
 
@@ -567,49 +568,37 @@ void ZMain::RescanFolder()
 
 void ZMain::SetProgramFolder()
 {
-	char szGetFileName[FILENAME_MAX] = { 0 };
-	DWORD ret = GetModuleFileName(GetModuleHandle(NULL), szGetFileName, FILENAME_MAX);
-
-	if ( ret == 0 )
-	{
-		_ASSERTE(!"Can't get module folder");
-	}
-	char szDrive[_MAX_DRIVE] = { 0 };
-	char szDir[_MAX_DIR] = { 0 };
-	_splitpath(szGetFileName, szDrive, szDir, 0, 0);
-
-	m_strProgramFolder = szDrive;
-	m_strProgramFolder += szDir;
+	m_strProgramFolder = GetProgramFolder();
 }
 
-bool ZMain::GetNeighborFolders(std::vector < std::string > & vFolders)
+bool ZMain::GetNeighborFolders(std::vector < tstring > & vFolders)
 {
-	std::string strParentFolder;
+	tstring strParentFolder;
 
 	// 현재 폴더의 상위 폴더를 검색한다.
 	{
 		// 현재 폴더에서 오른쪽부터 2번째의 \ 를 얻는다.
-		size_t pos = m_strCurrentFolder.find_last_of("\\");
+		size_t pos = m_strCurrentFolder.find_last_of(TEXT("\\"));
 
 		if ( pos == m_strCurrentFolder.npos )
 		{
-			MessageBox(m_hMainDlg, "Can't find parent folder.", "ZViewer", MB_OK);
+			MessageBox(m_hMainDlg, TEXT("Can't find parent folder."), TEXT("ZViewer"), MB_OK);
 			return false;
 		}
 
-		std::string strParentFolder = m_strCurrentFolder.substr(0, pos);
+		tstring strParentFolder = m_strCurrentFolder.substr(0, pos);
 
-		pos = strParentFolder.find_last_of("\\");
+		pos = strParentFolder.find_last_of(TEXT("\\"));
 
 		if ( pos == strParentFolder.npos )
 		{
-			MessageBox(m_hMainDlg, "Can't find parent folder.", "ZViewer", MB_OK);
+			MessageBox(m_hMainDlg, TEXT("Can't find parent folder."), TEXT("ZViewer"), MB_OK);
 			return false;
 		}
 
 		strParentFolder = strParentFolder.substr(0, pos);
 
-		strParentFolder += "\\*.*";
+		strParentFolder += TEXT("\\*.*");
 		// 상위 폴더의 하위 폴더들을 얻는다.
 		FindFolders(strParentFolder.c_str(), vFolders, false);
 
@@ -635,7 +624,7 @@ bool ZMain::GetNeighborFolders(std::vector < std::string > & vFolders)
 
 void ZMain::NextFolder()
 {
-	std::vector < std::string > vFolders;
+	std::vector < tstring > vFolders;
 
 	if ( !GetNeighborFolders(vFolders) ) return;
 
@@ -645,7 +634,7 @@ void ZMain::NextFolder()
 		// 현재 폴더의 index 를 찿는다.
 		for (unsigned int i=0; i<vFolders.size(); ++i)
 		{
-			if ( vFolders[i] + "\\" == m_strCurrentFolder )
+			if ( vFolders[i] + TEXT("\\") == m_strCurrentFolder )
 			{
 				iFoundIndex = i;
 				break;
@@ -657,7 +646,7 @@ void ZMain::NextFolder()
 		if ( (iFoundIndex + 1) >= (int)vFolders.size() )
 		{
 			// 마지막 폴더이다.
-			MessageBox(m_hMainDlg, "Here is the last folder.", "ZViewer", MB_OK);
+			MessageBox(m_hMainDlg, TEXT("Here is the last folder."), TEXT("ZViewer"), MB_OK);
 			return;
 		}
 		else
@@ -670,7 +659,7 @@ void ZMain::NextFolder()
 
 void ZMain::PrevFolder()
 {
-	std::vector < std::string > vFolders;
+	std::vector < tstring > vFolders;
 
 	if ( !GetNeighborFolders(vFolders) ) return;
 
@@ -680,7 +669,7 @@ void ZMain::PrevFolder()
 		// 현재 폴더의 index 를 찿는다.
 		for (unsigned int i=0; i<vFolders.size(); ++i)
 		{
-			if ( vFolders[i] + "\\" == m_strCurrentFolder )
+			if ( vFolders[i] + TEXT("\\") == m_strCurrentFolder )
 			{
 				iFoundIndex = i;
 				break;
@@ -692,7 +681,7 @@ void ZMain::PrevFolder()
 		if ( (iFoundIndex-1 < 0 ) )
 		{
 			// 마지막 폴더이다.
-			MessageBox(m_hMainDlg, "Here is the first folder.", "ZViewer", MB_OK);
+			MessageBox(m_hMainDlg, TEXT("Here is the first folder."), TEXT("ZViewer"), MB_OK);
 			return;
 		}
 		else
@@ -702,7 +691,7 @@ void ZMain::PrevFolder()
 	}
 }
 
-void ZMain::_GetFileListAndSort(const std::string & strFolderPathAndWildCard, FileListVector & vFileList)
+void ZMain::_GetFileListAndSort(const tstring & strFolderPathAndWildCard, FileListVector & vFileList)
 {
 	vFileList.resize(0);
 	FindFile(strFolderPathAndWildCard.c_str(), vFileList, false);
@@ -736,12 +725,12 @@ void ZMain::_GetFileListAndSort(const std::string & strFolderPathAndWildCard, Fi
 	}
 }
 
-void ZMain::OpenFolder(const std::string & strFolder)
+void ZMain::OpenFolder(const tstring & strFolder)
 {
 	// 특정 폴더의 하위 파일들을 검색해서 정렬 후 첫번째 파일을 연다.
 
-	std::string strTemp = strFolder;
-	strTemp += "\\*.*";
+	tstring strTemp = strFolder;
+	strTemp += TEXT("\\*.*");
 
 	vector < FileData > vFiles;
 
@@ -749,9 +738,9 @@ void ZMain::OpenFolder(const std::string & strFolder)
 
 	if ( vFiles.size() == 0 )
 	{
-		std::string strMsg = strFolder;
-		strMsg += " folder has no image file.";
-		MessageBox(m_hMainDlg, strMsg.c_str(), "ZViewer", MB_OK);
+		tstring strMsg = strFolder;
+		strMsg += TEXT(" folder has no image file.");
+		MessageBox(m_hMainDlg, strMsg.c_str(), TEXT("ZViewer"), MB_OK);
 		return;
 	}
 	else
@@ -761,7 +750,7 @@ void ZMain::OpenFolder(const std::string & strFolder)
 }
 
 
-void ZMain::OpenFile(const string & strFilename)
+void ZMain::OpenFile(const tstring & strFilename)
 {
 	m_strCurrentFolder = GetFolderNameFromFullFileName(strFilename);
 	RescanFolder();
@@ -1031,32 +1020,32 @@ void ZMain::ToggleLoopImage()
 
 void ZMain::SetStatusBarText()
 {
-	char szTemp[256];
+	TCHAR szTemp[256];
 
 	if ( m_vFile.size() == 0 || m_strCurrentFilename.empty() ) // 보고 있는 파일이 없으면
 	{
 		// File Index
-		_snprintf(szTemp, sizeof(szTemp), "No File");
+		StringCchPrintf(szTemp, sizeof(szTemp), TEXT("No File"));
 		SendMessage(m_hStatusBar, SB_SETTEXT, 0, (LPARAM)szTemp);
 
 		// 해상도 정보
-		_snprintf(szTemp, sizeof(szTemp), "");
+		StringCchPrintf(szTemp, sizeof(szTemp), TEXT(""));
 		SendMessage(m_hStatusBar, SB_SETTEXT, 1, (LPARAM)szTemp);
 
 		// 이미지 사이즈
-		_snprintf(szTemp, sizeof(szTemp), "");
+		StringCchPrintf(szTemp, sizeof(szTemp), TEXT(""));
 		SendMessage(m_hStatusBar, SB_SETTEXT, 2, (LPARAM)szTemp);
 
 		// 임시로 http://wimy.com
-		_snprintf(szTemp, sizeof(szTemp), "http://wimy.com");
+		StringCchPrintf(szTemp, sizeof(szTemp), TEXT("http://wimy.com"));
 		SendMessage(m_hStatusBar, SB_SETTEXT, 3, (LPARAM)szTemp);
 
 		// 로딩시간
-		_snprintf(szTemp, sizeof(szTemp), "");
+		StringCchPrintf(szTemp, sizeof(szTemp), TEXT(""));
 		SendMessage(m_hStatusBar, SB_SETTEXT, 4, (LPARAM)szTemp);
 
 		// 파일명
-		_snprintf(szTemp, sizeof(szTemp), "No File");
+		StringCchPrintf(szTemp, sizeof(szTemp), TEXT("No File"));
 
 		showCacheStatus(); ///< 5
 
@@ -1065,11 +1054,11 @@ void ZMain::SetStatusBarText()
 	else
 	{
 		// File Index
-		_snprintf(szTemp, sizeof(szTemp), "%d/%d", m_iCurretFileIndex+1, m_vFile.size());
+		StringCchPrintf(szTemp, sizeof(szTemp), TEXT("%d/%d"), m_iCurretFileIndex+1, m_vFile.size());
 		SendMessage(m_hStatusBar, SB_SETTEXT, 0, (LPARAM)szTemp);
 
 		// 해상도 정보
-		_snprintf(szTemp, sizeof(szTemp), "%dx%dx%dbpp", m_currentImage.GetOriginalWidth(), m_currentImage.GetOriginalHeight(), m_currentImage.GetBPP());
+		StringCchPrintf(szTemp, sizeof(szTemp), TEXT("%dx%dx%dbpp"), m_currentImage.GetOriginalWidth(), m_currentImage.GetOriginalHeight(), m_currentImage.GetBPP());
 		SendMessage(m_hStatusBar, SB_SETTEXT, 1, (LPARAM)szTemp);
 
 		// image size
@@ -1079,60 +1068,60 @@ void ZMain::SetStatusBarText()
 		{
 			if ( imageSize/1024 > 1024 )
 			{
-				_snprintf(szTemp, sizeof(szTemp), "%.2fMByte", imageSize/1024/1024.0f);
+				StringCchPrintf(szTemp, sizeof(szTemp), TEXT("%.2fMByte"), imageSize/1024/1024.0f);
 			}
 			else
 			{
-				_snprintf(szTemp, sizeof(szTemp), "%dKByte", imageSize/1024);
+				StringCchPrintf(szTemp, sizeof(szTemp), TEXT("%dKByte"), imageSize/1024);
 			}
 		}
 		else
 		{
-			_snprintf(szTemp, sizeof(szTemp), "%dByte", imageSize);
+			StringCchPrintf(szTemp, sizeof(szTemp), TEXT("%dByte"), imageSize);
 		}
 		SendMessage(m_hStatusBar, SB_SETTEXT, 2, (LPARAM)szTemp);
 
 		// 임시로 http://wimy.com
-		_snprintf(szTemp, sizeof(szTemp), "http://wimy.com");
+		StringCchPrintf(szTemp, sizeof(szTemp), TEXT("http://wimy.com"));
 		SendMessage(m_hStatusBar, SB_SETTEXT, 3, (LPARAM)szTemp);
 
 		// 로딩시간
 		if ( m_bLastCacheHit )
 		{
-			_snprintf(szTemp, sizeof(szTemp), "%.3fsec [C]", (float)(m_dwLoadingTime / 1000.0));
+			StringCchPrintf(szTemp, sizeof(szTemp), TEXT("%.3fsec [C]"), (float)(m_dwLoadingTime / 1000.0));
 		}
 		else
 		{
-			_snprintf(szTemp, sizeof(szTemp), "%.3fsec [N]", (float)(m_dwLoadingTime / 1000.0));
+			StringCchPrintf(szTemp, sizeof(szTemp), TEXT("%.3fsec [N]"), (float)(m_dwLoadingTime / 1000.0));
 		}
 		SendMessage(m_hStatusBar, SB_SETTEXT, 4, (LPARAM)szTemp);
 
 		// 파일명
-		char szFilename[MAX_PATH], szFileExt[MAX_PATH];
-		_splitpath(m_strCurrentFilename.c_str(), NULL, NULL, szFilename, szFileExt);
+		TCHAR szFilename[MAX_PATH], szFileExt[MAX_PATH];
+		_tsplitpath(m_strCurrentFilename.c_str(), NULL, NULL, szFilename, szFileExt);
 
 		showCacheStatus(); ///< 5
 
-		_snprintf(szTemp, sizeof(szTemp), "%s%s", szFilename, szFileExt);
+		StringCchPrintf(szTemp, sizeof(szTemp), TEXT("%s%s"), szFilename, szFileExt);
 		SendMessage(m_hStatusBar, SB_SETTEXT, 6, (LPARAM)szTemp);
 	}
 }
 
 void ZMain::SetTitle()
 {
-	char szTemp[MAX_PATH+256];
+	TCHAR szTemp[MAX_PATH+256];
 
 	if ( m_strCurrentFilename.empty() )	// 현재보고 있는 파일명이 없으면
 	{
-		_snprintf(szTemp, sizeof(szTemp), "ZViewer v%s", g_strVersion.c_str());
+		StringCchPrintf(szTemp, sizeof(szTemp), TEXT("ZViewer v%s"), g_strVersion.c_str());
 	}
 	else // 현재보고 있는 파일명이 있으면
 	{
-		char szFileName[MAX_PATH] = { 0 };
-		char szFileExt[MAX_PATH] = { 0 };
-		_splitpath(m_strCurrentFilename.c_str(), NULL, NULL, szFileName, szFileExt);
+		TCHAR szFileName[MAX_PATH] = { 0 };
+		TCHAR szFileExt[MAX_PATH] = { 0 };
+		_tsplitpath(m_strCurrentFilename.c_str(), NULL, NULL, szFileName, szFileExt);
 
-		_snprintf(szTemp, sizeof(szTemp), "%s%s - %s", szFileName, szFileExt, m_strCurrentFilename.c_str());
+		StringCchPrintf(szTemp, sizeof(szTemp), TEXT("%s%s - %s"), szFileName, szFileExt, m_strCurrentFilename.c_str());
 	}
 	SetWindowText(m_hMainDlg, szTemp);
 }
@@ -1159,7 +1148,7 @@ void ZMain::LoadCurrent()
 			ZCacheImage::GetInstance().getCachedData(m_strCurrentFilename, m_currentImage);
 		}
 
-		DebugPrintf("Cache Hit!!!!!!!!!!!!!");
+		DebugPrintf(TEXT("Cache Hit!!!!!!!!!!!!!"));
 
 		m_bLastCacheHit = true;
 
@@ -1168,7 +1157,7 @@ void ZMain::LoadCurrent()
 	else
 	{
 		// 캐시에서 찾을 수 없으면 지금 읽어들이고, 캐시에 추가한다.
-		DebugPrintf("Can't find in cache. load now...");
+		DebugPrintf(TEXT("Can't find in cache. load now..."));
 
 		bool bLoadOK = false;
 
@@ -1177,7 +1166,7 @@ void ZMain::LoadCurrent()
 			bLoadOK = m_currentImage.LoadFromFile(m_strCurrentFilename);
 			if ( bLoadOK || i >= 5) break;
 
-			DebugPrintf("Direct Load failed. sleep");
+			DebugPrintf(TEXT("Direct Load failed. sleep"));
 
 			Sleep(10);
 		}
@@ -1186,17 +1175,17 @@ void ZMain::LoadCurrent()
 		{
 			_ASSERTE(!"Can't load image");
 
-			string strErrorFilename = m_strProgramFolder;
-			strErrorFilename += "LoadError.png";
+			tstring strErrorFilename = m_strProgramFolder;
+			strErrorFilename += TEXT("LoadError.png");
 			if ( !m_currentImage.LoadFromFile(strErrorFilename) )
 			{
 				// 에러 때 표시하는 파일을 읽어들이지 못 했으면
-				MessageBox(m_hMainDlg, "Can't load Error Image file.", "ZViewer", MB_OK);
+				MessageBox(m_hMainDlg, TEXT("Can't load Error Image file."), TEXT("ZViewer"), MB_OK);
 			}
 		}
 		else
 		{
-			DebugPrintf("Cache miss.");
+			DebugPrintf(TEXT("Cache miss."));
 			m_bLastCacheHit = false;
 			ZCacheImage::GetInstance().LogCacheMiss();
 		}
@@ -1272,7 +1261,7 @@ void ZMain::OnDrag(int x, int y)
 void ZMain::ShellTrayShow()
 {
 	/// 작업 표시줄을 보이게 해준다.
-	HWND h = FindWindow("Shell_TrayWnd", "");
+	HWND h = FindWindow(TEXT("Shell_TrayWnd"), TEXT(""));
 
 	if ( h != INVALID_HANDLE_VALUE )
 	{
@@ -1289,7 +1278,7 @@ void ZMain::ChangeFileSort(eFileSortOrder sortOrder)
 
 void ZMain::ReLoadFileList()
 {
-	std::string strFileName = m_strCurrentFilename;
+	tstring strFileName = m_strCurrentFilename;
 	RescanFolder();
 
 	OpenFile(strFileName);
@@ -1298,7 +1287,7 @@ void ZMain::ReLoadFileList()
 void ZMain::ShellTrayHide()
 {
 	// 작업 표시줄을 보이게 해준다.
-	HWND h = FindWindow("Shell_TrayWnd", "");
+	HWND h = FindWindow(TEXT("Shell_TrayWnd"), TEXT(""));
 
 	if ( h != INVALID_HANDLE_VALUE )
 	{
@@ -1313,7 +1302,7 @@ void ZMain::_ProcAfterRemoveThisFile()
 	if ( m_vFile.size() <= 1 )
 	{
 		m_iCurretFileIndex = 0;
-		m_strCurrentFilename = "";
+		m_strCurrentFilename = TEXT("");
 
 		m_vFile.resize(0);
 
@@ -1410,7 +1399,7 @@ void ZMain::OnFocusGet()
 	//DebugPrintf("OnFocusGet()");
 	if ( ZOption::GetInstance().IsFullScreen() )
 	{
-		DebugPrintf("OnFocusGet() at fullscreen");
+		DebugPrintf(TEXT("OnFocusGet() at fullscreen"));
 		SetWindowPos(m_hMainDlg, HWND_TOPMOST, 0, 0, ::GetSystemMetrics(SM_CXSCREEN),::GetSystemMetrics(SM_CYSCREEN), SWP_NOMOVE|SWP_NOSIZE);
 		MoveWindow(m_hMainDlg, 0,0,::GetSystemMetrics(SM_CXSCREEN),::GetSystemMetrics(SM_CYSCREEN), TRUE);
 		SetWindowPos(m_hMainDlg, HWND_NOTOPMOST, 0, 0, ::GetSystemMetrics(SM_CXSCREEN),::GetSystemMetrics(SM_CYSCREEN), SWP_NOMOVE|SWP_NOSIZE);
@@ -1468,20 +1457,20 @@ void ZMain::DeleteThisFile()
 		return;
 	}
 
-	char szDeleteMsg[256];
+	TCHAR szDeleteMsg[256];
 
-	_snprintf(szDeleteMsg, sizeof(szDeleteMsg), ZResourceManager::GetInstance().GetString(IDS_DELETE_THIS_FILE).c_str(), GetFileNameFromFullFileName(m_strCurrentFilename).c_str());
-	int iRet = MessageBox(m_hMainDlg, szDeleteMsg, "ZViewer", MB_YESNO);
+	StringCchPrintf(szDeleteMsg, sizeof(szDeleteMsg), ZResourceManager::GetInstance().GetString(IDS_DELETE_THIS_FILE).c_str(), GetFileNameFromFullFileName(m_strCurrentFilename).c_str());
+	int iRet = MessageBox(m_hMainDlg, szDeleteMsg, TEXT("ZViewer"), MB_YESNO);
 
 	if ( iRet == IDYES )
 	{
-		if ( 0 == unlink(m_strCurrentFilename.c_str()) )
+		if ( 0 == _tunlink(m_strCurrentFilename.c_str()) )
 		{
 			_ProcAfterRemoveThisFile();
 		}
 		else
 		{
-			MessageBox(m_hMainDlg, "Can't delete this file!", "ZViewer", MB_OK);
+			MessageBox(m_hMainDlg, TEXT("Can't delete this file!"), TEXT("ZViewer"), MB_OK);
 		}
 	}
 }
@@ -1502,25 +1491,25 @@ void ZMain::MoveThisFile()
 		return;
 	}
 
-	std::string strFolder = aDlg.GetMoveToFolder();
+	tstring strFolder = aDlg.GetMoveToFolder();
 
-	std::string filename = GetFileNameFromFullFileName(m_strCurrentFilename);
-	std::string strToFileName = aDlg.GetMoveToFolder();
-	strToFileName += "\\";
+	tstring filename = GetFileNameFromFullFileName(m_strCurrentFilename);
+	tstring strToFileName = aDlg.GetMoveToFolder();
+	strToFileName += TEXT("\\");
 	strToFileName += filename;
 
 	// 옮겨갈 폴더에 같은 파일이 있는지 확인한다.
-	if ( 0 != _access(aDlg.GetMoveToFolder().c_str(), 00) )
+	if ( 0 != _taccess(aDlg.GetMoveToFolder().c_str(), 00) )
 	{
-		MessageBox(m_hMainDlg, "Wrong folder name", "ZViewer", MB_OK);
+		MessageBox(m_hMainDlg, TEXT("Wrong folder name"), TEXT("ZViewer"), MB_OK);
 		return;
 	}
 
 	// 같은 파일이 존재하는지 확인한다.
-	if ( 0 == _access(strToFileName.c_str(), 00) )
+	if ( 0 == _taccess(strToFileName.c_str(), 00) )
 	{
 		// 이미 존재하면
-		if ( IDNO == MessageBox(m_hMainDlg, "There is a file same name. Overwrite?", "ZViewer", MB_YESNO) )
+		if ( IDNO == MessageBox(m_hMainDlg, TEXT("There is a file same name. Overwrite?"), TEXT("ZViewer"), MB_YESNO) )
 		{
 			return;
 		}
@@ -1555,7 +1544,7 @@ void ZMain::Rotate(bool bClockWise)
 void ZMain::SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyle style)
 {
 	// 현재보고 있는 파일을 윈도우 폴더에 저장한다.
-	char szSystemFolder[_MAX_PATH] = { 0 };
+	TCHAR szSystemFolder[_MAX_PATH] = { 0 };
 
 	if ( E_FAIL == SHGetFolderPath(NULL, CSIDL_WINDOWS, NULL, SHGFP_TYPE_CURRENT, szSystemFolder) )
 	{
@@ -1563,13 +1552,13 @@ void ZMain::SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyle style)
 		return;
 	}
 
-	char szFileName[MAX_PATH] = { 0 };
-	_splitpath(m_vFile[m_iCurretFileIndex].m_strFileName.c_str(), 0, 0, szFileName, 0);
+	TCHAR szFileName[MAX_PATH] = { 0 };
+	_tsplitpath(m_vFile[m_iCurretFileIndex].m_strFileName.c_str(), 0, 0, szFileName, 0);
 
-	std::string strSaveFileName = szSystemFolder;
-	strSaveFileName += "\\zviewer_bg_";
+	tstring strSaveFileName = szSystemFolder;
+	strSaveFileName += TEXT("\\zviewer_bg_");
 	strSaveFileName += szFileName;
-	strSaveFileName += ".bmp";
+	strSaveFileName += TEXT(".bmp");
 
 	if ( FALSE == m_currentImage.SaveToFile(strSaveFileName, BMP_DEFAULT) )
 	{

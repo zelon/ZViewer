@@ -12,6 +12,9 @@
 #include "StdAfx.h"
 #include ".\logmanager.h"
 
+#include <strsafe.h>
+#include <tchar.h>
+
 CLogManager & CLogManager::getInstance()
 {
 	static CLogManager inst;
@@ -28,11 +31,11 @@ CLogManager::CLogManager(void)
 	{
 		DWORD errorCode = GetLastError();
 
-		char temp[20];
-		wsprintf(temp, "%d", errorCode);
-		MessageBox(NULL, temp, "Error", MB_OK);
+		TCHAR temp[20];
+		StringCchPrintf(temp, sizeof(temp), TEXT("%d"), errorCode);
+		MessageBox(NULL, temp, TEXT("Error"), MB_OK);
 
-		MessageBox(NULL, "AllocConsole Error!!!", "Error" , MB_OK);
+		MessageBox(NULL, TEXT("AllocConsole Error!!!"), TEXT("Error") , MB_OK);
 	}
 	else
 	{
@@ -46,7 +49,7 @@ CLogManager::~CLogManager(void)
 }
 
 
-void CLogManager::Output(const char * fmt, ...)
+void CLogManager::Output(const TCHAR * fmt, ...)
 {
 	if ( false == m_bGoOn ) return;
 #ifndef _DEBUG
@@ -54,19 +57,19 @@ void CLogManager::Output(const char * fmt, ...)
 #endif
 
 	va_list			argptr;
-	char			cBuf[512];
+	TCHAR cBuf[512];
 	int				iCnt;
 	DWORD			dwWritten;
 
 	// 가변 인자 정리
 	va_start(argptr, fmt);
-	iCnt = vsprintf(cBuf, fmt, argptr);
+	iCnt = StringCbVPrintf(cBuf, sizeof(cBuf), fmt, argptr);
 	va_end(argptr);
 
 	CLockObjUtil lock(m_logLock);
 
 	// 콘솔 윈도우에 출력
-	WriteConsole(m_hConsoleOutput, cBuf, (DWORD)(strlen(cBuf)), &dwWritten, NULL);
+	WriteConsole(m_hConsoleOutput, cBuf, (DWORD)(_tcslen(cBuf)), &dwWritten, NULL);
 	WriteConsole(m_hConsoleOutput, "\n", 1, &dwWritten, NULL);
 }
 
