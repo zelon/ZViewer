@@ -21,7 +21,7 @@ typedef std::wstring tstring;
 typedef std::string tstring;
 #endif
 
-const tstring g_strVersion = TEXT("0.5.1");
+const tstring g_strVersion = TEXT("0.6.0alpha");
 
 struct FileData
 {
