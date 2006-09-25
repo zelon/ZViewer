@@ -13,7 +13,7 @@
 
 	ZViewer 는 GPL 에 의해 배포되는 이미지 뷰어 프로그램입니다.
 
-	Created by zelon (JKim, Jinwook in Korea)
+	Created by zelon (Kim, Jinwook in Korea)
 
 	Project Homepage : http://kldp.net/projects/zviewer/
 
@@ -72,6 +72,8 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance ,LPTSTR lpszC
 #ifndef _DEBUG
 	if ( GetSystemDefaultLangID() == 0x0412 )
 	{
+		CMessageManager::getInstance().SetLanguage(eLanguage_KOREAN);
+
 		hLang = LoadLibrary(TEXT("language/korean.dll"));
 
 		if ( hLang )
@@ -91,7 +93,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance ,LPTSTR lpszC
 
 	if ( _tcscmp(lpszCmdParam, TEXT("/fileext")) == 0 )	
 	{
-		int iRet = MessageBox(HWND_DESKTOP, ZResourceManager::GetInstance().GetString(IDS_ASSOCIATE_FILE_EXTS).c_str(), TEXT("ZViewer"), MB_YESNO);
+		int iRet = MessageBox(HWND_DESKTOP, GetMessage(TEXT("REG_FILE_TYPE")), TEXT("ZViewer"), MB_YESNO);
 
 		if ( iRet == IDYES )
 		{
