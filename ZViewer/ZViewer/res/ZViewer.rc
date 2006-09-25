@@ -336,17 +336,7 @@ END
 
 STRINGTABLE 
 BEGIN
-    ID_FILE_OPEN40016       "Open Image File"
-    IDS_DELETE_THIS_FILE    "Delete this file(%s)?"
-    ID_MOVE_UNDOIMAGEPOSITION 
-                            "Go to the last image when you select first image or last image."
-    ID_MOVE_REDOIMAGEPOSITION "Go to the before Undo"
-    IDS_ASSOCIATE_FILE_EXTS "Associate Image Files Exts?"
-END
-
-STRINGTABLE 
-BEGIN
-    IDS_SAME_FILE_EXIST_OVERWRITE "Same file exist. Overwrite?"
+    ID_FILE_OPEN40016       "ZViewer Project do not use String Table."
 END
 
 #endif    // ÇÑ±¹¾î resources
