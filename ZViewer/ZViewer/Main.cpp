@@ -376,33 +376,19 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 
 	case WM_CREATE:
 		{
+			ZMain::GetInstance().SetHWND(hWnd);
+
 			InitCommonControls();
 			// 아이콘을 지정해준다.
 			SendMessage(hWnd, WM_SETICON, ICON_BIG, (LPARAM)LoadIcon(ZMain::GetInstance().GetHInstance(), MAKEINTRESOURCE(IDI_BIG_MAIN)));
 
-			// StatusBar 를 생성한다.
-			HWND hStatusBar = CreateStatusWindow(WS_CHILD | WS_VISIBLE, TEXT("Status line"), hWnd, 0);
-			ZMain::GetInstance().SetStatusHandle(hStatusBar);
-
-			// StatusBar 를 split 한다. 아래의 숫자는 크기가 아니라 절대 위치라는 것을 명심!!!!!!!
-			int SBPart[7] =
-			{
-				70,		/// %d/%d 현재보고 있는 이미지 파일의 index number
-				200,	/// %dx%dx%dbpp 해상도와 color depth, image size
-				300,		/// image size
-				420,	/// temp banner http://www.wimy.com
-				500,	/// 파일을 읽어들이는데 걸린 시간
-				553,		/// cache status
-				1860,	/// 파일명표시
-			};
-			SendMessage(hStatusBar, SB_SETPARTS, 7, (LPARAM)SBPart);
+			ZMain::GetInstance().CreateStatusBar();
 
 			// 팝업 메뉴를 불러놓는다.
 			HMENU hMenu = LoadMenu(ZResourceManager::GetInstance().GetHInstance(), MAKEINTRESOURCE(IDR_POPUP_MENU));
 			g_hPopupMenu = GetSubMenu(hMenu, 0);
 			ZMain::GetInstance().SetPopupMenu(g_hPopupMenu);
 
-			ZMain::GetInstance().SetHWND(hWnd);
 			ZMain::GetInstance().OnInit();
 			return TRUE;
 		}
