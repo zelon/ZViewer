@@ -1460,7 +1460,7 @@ void ZMain::DeleteThisFile()
 
 	TCHAR szDeleteMsg[256];
 
-	StringCchPrintf(szDeleteMsg, sizeof(szDeleteMsg), ZResourceManager::GetInstance().GetString(IDS_DELETE_THIS_FILE).c_str(), GetFileNameFromFullFileName(m_strCurrentFilename).c_str());
+	StringCchPrintf(szDeleteMsg, sizeof(szDeleteMsg), GetMessage(TEXT("DELETE_THIS_FILE")), GetFileNameFromFullFileName(m_strCurrentFilename).c_str());
 	int iRet = MessageBox(m_hMainDlg, szDeleteMsg, TEXT("ZViewer"), MB_YESNO);
 
 	if ( iRet == IDYES )

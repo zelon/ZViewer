@@ -12,6 +12,7 @@
 #include "stdafx.h"
 #include "ZResourceManager.h"
 
+
 ZResourceManager::ZResourceManager()
 : m_hInstance(NULL)
 {
@@ -27,6 +28,7 @@ ZResourceManager & ZResourceManager::GetInstance()
 	return instance;
 }
 
+/*
 const tstring ZResourceManager::GetString(UINT iStringID)
 {
 	if ( m_stringMap.find(iStringID ) == m_stringMap.end())
@@ -48,3 +50,4 @@ const tstring ZResourceManager::GetString(UINT iStringID)
 	// 맵에 있으면 맵에 있는 스트링을 반환한다.
 	return m_stringMap[iStringID];
 }
+*/
