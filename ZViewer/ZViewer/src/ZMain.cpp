@@ -894,11 +894,11 @@ void ZMain::showCacheStatus()
 		
 		if ( bNowActionIsCache )
 		{
-			PostMessage(m_hStatusBar, SB_SETTEXT, 5, (LPARAM)"Caching");
+			PostMessage(m_hStatusBar, SB_SETTEXT, 5, (LPARAM)TEXT("Caching"));
 		}
 		else
 		{
-			PostMessage(m_hStatusBar, SB_SETTEXT, 5, (LPARAM)"Cached");
+			PostMessage(m_hStatusBar, SB_SETTEXT, 5, (LPARAM)TEXT("Cached"));
 		}
 
 		/*
@@ -1593,4 +1593,25 @@ void ZMain::OnWindowResized()
 		ZCacheImage::GetInstance().setCacheEvent();
 		LoadCurrent();
 	}
+}
+
+
+/// 상태 표시 윈도우를 만든다.
+void ZMain::CreateStatusBar()
+{
+	// StatusBar 를 생성한다.
+	m_hStatusBar = CreateStatusWindow(WS_CHILD | WS_VISIBLE, TEXT("Status line"), m_hMainDlg, 0);
+
+	// StatusBar 를 split 한다. 아래의 숫자는 크기가 아니라 절대 위치라는 것을 명심!!!!!!!
+	int SBPart[7] =
+	{
+		70,		/// %d/%d 현재보고 있는 이미지 파일의 index number
+		200,	/// %dx%dx%dbpp 해상도와 color depth, image size
+		300,	/// image size
+		420,	/// temp banner http://www.wimy.com
+		500,	/// 파일을 읽어들이는데 걸린 시간
+		553,	/// cache status
+		1860,	/// 파일명표시
+	};
+	SendMessage(m_hStatusBar, SB_SETPARTS, 7, (LPARAM)SBPart);
 }
