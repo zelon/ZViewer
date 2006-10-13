@@ -49,6 +49,6 @@
 
 #include <string>
 
-#include "../lib/ZImage.h"
+#include "../commonSrc/ZImage.h"
 
 using namespace ATL;
