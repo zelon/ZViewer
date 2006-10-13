@@ -12,9 +12,9 @@
 #include ".\zmain.h"
 #include "src/ZFileExtDlg.h"
 #include "src/ZResourceManager.h"
-#include "../lib/DesktopWallPaper.h"
+#include "../commonSrc/DesktopWallPaper.h"
 #include "src/MoveToDlg.h"
-#include "src/SaveAs.h"
+#include "../commonSrc/SaveAs.h"
 #include "src/ZOption.h"
 #include "MessageManager.h"
 
@@ -80,6 +80,12 @@ void ZMain::onTimer()
 }
 
 
+/// ZViewer 전용 메시지 박스
+int ZMain::MessageBox(const TCHAR * msg, UINT button)
+{
+	return ::MessageBox(m_hMainDlg, GetMessage(msg), TEXT("ZViewer"), button);
+}
+
 int ZMain::GetLogCacheHitRate() const
 {
 	return ZCacheImage::GetInstance().GetLogCacheHitRate();
@@ -143,7 +149,7 @@ void ZMain::SaveFileDialog()
 
 		if ( false == m_currentImage.SaveToFile(strSaveFilename, 0) )
 		{
-			MessageBox(m_hMainDlg, GetMessage(TEXT("UNSUPPORTED_FILE_TYPE")), TEXT("ZViewer"), MB_OK);
+			MessageBox(TEXT("UNSUPPORTED_FILE_TYPE"));
 		}
 	}
 }
@@ -583,7 +589,7 @@ bool ZMain::GetNeighborFolders(std::vector < tstring > & vFolders)
 
 		if ( pos == m_strCurrentFolder.npos )
 		{
-			MessageBox(m_hMainDlg, GetMessage(TEXT("CANNOT_FIND_PARENT_DIRECTORY")), TEXT("ZViewer"), MB_OK);
+			MessageBox(TEXT("CANNOT_FIND_PARENT_DIRECTORY"));
 			return false;
 		}
 
@@ -593,7 +599,7 @@ bool ZMain::GetNeighborFolders(std::vector < tstring > & vFolders)
 
 		if ( pos == strParentFolder.npos )
 		{
-			MessageBox(m_hMainDlg, GetMessage(TEXT("CANNOT_FIND_PARENT_DIRECTORY")), TEXT("ZViewer"), MB_OK);
+			MessageBox(TEXT("CANNOT_FIND_PARENT_DIRECTORY"));
 			return false;
 		}
 
@@ -647,7 +653,7 @@ void ZMain::NextFolder()
 		if ( (iFoundIndex + 1) >= (int)vFolders.size() )
 		{
 			// 마지막 폴더이다.
-			MessageBox(m_hMainDlg, GetMessage(TEXT("LAST_DIRECTORY")), TEXT("ZViewer"), MB_OK);
+			MessageBox(TEXT("LAST_DIRECTORY"));
 			return;
 		}
 		else
@@ -682,7 +688,7 @@ void ZMain::PrevFolder()
 		if ( (iFoundIndex-1 < 0 ) )
 		{
 			// 마지막 폴더이다.
-			MessageBox(m_hMainDlg, GetMessage(TEXT("FIRST_FOLDER")), TEXT("ZViewer"), MB_OK);
+			MessageBox(TEXT("FIRST_FOLDER"));
 			return;
 		}
 		else
@@ -741,7 +747,7 @@ void ZMain::OpenFolder(const tstring & strFolder)
 	{
 		TCHAR msg[256];
 		StringCchPrintf(msg, sizeof(msg), GetMessage(TEXT("THIS_DIRECTORY_HAS_NO_IMAGE")), strFolder.c_str());
-		MessageBox(m_hMainDlg, msg, TEXT("ZViewer"), MB_OK);
+		::MessageBox(m_hMainDlg, msg, TEXT("ZViewer"), MB_OK);
 		return;
 	}
 	else
@@ -1181,7 +1187,7 @@ void ZMain::LoadCurrent()
 			if ( !m_currentImage.LoadFromFile(strErrorFilename) )
 			{
 				// 에러 때 표시하는 파일을 읽어들이지 못 했으면
-				MessageBox(m_hMainDlg, TEXT("Can't load Error Image file."), TEXT("ZViewer"), MB_OK);
+				MessageBox(TEXT("CANNOT_LOAD_ERROR_IMAGE_FILE"));
 			}
 		}
 		else
@@ -1461,7 +1467,7 @@ void ZMain::DeleteThisFile()
 	TCHAR szDeleteMsg[256];
 
 	StringCchPrintf(szDeleteMsg, sizeof(szDeleteMsg), GetMessage(TEXT("DELETE_THIS_FILE")), GetFileNameFromFullFileName(m_strCurrentFilename).c_str());
-	int iRet = MessageBox(m_hMainDlg, szDeleteMsg, TEXT("ZViewer"), MB_YESNO);
+	int iRet = ::MessageBox(m_hMainDlg, szDeleteMsg, TEXT("ZViewer"), MB_YESNO);
 
 	if ( iRet == IDYES )
 	{
@@ -1471,7 +1477,7 @@ void ZMain::DeleteThisFile()
 		}
 		else
 		{
-			MessageBox(m_hMainDlg, GetMessage(TEXT("CANNOT_DELETE_THIS_FILE")), TEXT("ZViewer"), MB_OK);
+			MessageBox(TEXT("CANNOT_DELETE_THIS_FILE"));
 		}
 	}
 }
@@ -1502,7 +1508,7 @@ void ZMain::MoveThisFile()
 	// 옮겨갈 폴더에 같은 파일이 있는지 확인한다.
 	if ( 0 != _taccess(aDlg.GetMoveToFolder().c_str(), 00) )
 	{
-		MessageBox(m_hMainDlg, GetMessage(TEXT("WRONG_DIRECTORY_NAME")), TEXT("ZViewer"), MB_OK);
+		MessageBox(TEXT("WRONG_DIRECTORY_NAME"));
 		return;
 	}
 
@@ -1510,13 +1516,16 @@ void ZMain::MoveThisFile()
 	if ( 0 == _taccess(strToFileName.c_str(), 00) )
 	{
 		// 이미 존재하면
-		if ( IDNO == MessageBox(m_hMainDlg, GetMessage(TEXT("ASK_OVERWRITE_FILE")), TEXT("ZViewer"), MB_YESNO) )
+		if ( IDNO == MessageBox(TEXT("ASK_OVERWRITE_FILE"), MB_YESNO) )
 		{
 			return;
 		}
 	}
 	
-	MoveFileEx(m_strCurrentFilename.c_str(), strToFileName.c_str(), MOVEFILE_REPLACE_EXISTING);
+	if ( FALSE == MoveFileEx(m_strCurrentFilename.c_str(), strToFileName.c_str(), MOVEFILE_REPLACE_EXISTING) )
+	{
+		MessageBox(TEXT("CANNOT_MOVE_FILE"));
+	}
 	_ProcAfterRemoveThisFile();
 }
 

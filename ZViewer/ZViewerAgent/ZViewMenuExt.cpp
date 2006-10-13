@@ -12,7 +12,7 @@
 
 #include "stdafx.h"
 #include "ZViewMenuExt.h"
-#include "MessageManager.h"
+#include "../commonSrc/MessageManager.h"
 #include <shlobj.h>
 
 // CZViewMenuExt

@@ -32,7 +32,6 @@
 #include <shlobj.h>
 #include <io.h>
 
-
 #include "FreeImagePlus.h"
 
-#include "../lib/CommonDefine.h"
+#include "CommonDefine.h"

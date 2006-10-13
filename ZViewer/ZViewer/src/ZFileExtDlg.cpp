@@ -15,7 +15,7 @@
 #include "ZResourceManager.h"
 #include <ShlObj.h>
 
-#include "../lib/ZFileExtReg.h"
+#include "ZFileExtReg.h"
 
 ZFileExtDlg * pThis = NULL;
 

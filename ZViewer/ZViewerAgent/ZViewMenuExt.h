@@ -15,7 +15,7 @@
 
 
 #include "ZViewerAgent.h"
-#include "../lib/DesktopWallPaper.h"
+#include "../commonSrc/DesktopWallPaper.h"
 
 
 // CZViewMenuExt

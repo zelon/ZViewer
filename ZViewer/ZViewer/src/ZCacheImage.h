@@ -10,8 +10,8 @@
 
 #pragma once
 
-#include "../../lib/ZImage.h"
-#include "../../lib/LockUtil.h"
+#include "../../commonSrc/ZImage.h"
+#include "../../commonSrc/LockUtil.h"
 
 /// 캐시를 어느 방향부터 먼저할 것인지, 우선시할 것인지를 위해...
 /**

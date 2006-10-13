@@ -347,41 +347,51 @@
 		<Filter
 			Name="lib"
 			Filter="">
+		</Filter>
+		<Filter
+			Name="commonSrc"
+			Filter="">
 			<File
-				RelativePath="..\lib\CommonFunc.cpp">
+				RelativePath="..\commonSrc\CommonFunc.cpp">
 			</File>
 			<File
-				RelativePath="..\lib\CommonFunc.h">
+				RelativePath="..\commonSrc\CommonFunc.h">
 			</File>
 			<File
-				RelativePath="..\lib\DesktopWallPaper.cpp">
+				RelativePath="..\commonSrc\DesktopWallPaper.cpp">
 			</File>
 			<File
-				RelativePath="..\lib\DesktopWallPaper.h">
+				RelativePath="..\commonSrc\DesktopWallPaper.h">
 			</File>
 			<File
-				RelativePath="..\lib\FreeImage.h">
+				RelativePath="..\commonSrc\LogManager.cpp">
 			</File>
 			<File
-				RelativePath="..\lib\FreeImagePlus.h">
+				RelativePath="..\commonSrc\LogManager.h">
 			</File>
 			<File
-				RelativePath="..\lib\LogManager.cpp">
+				RelativePath="..\commonSrc\MessageManager.cpp">
 			</File>
 			<File
-				RelativePath="..\lib\LogManager.h">
+				RelativePath="..\commonSrc\MessageManager.h">
 			</File>
 			<File
-				RelativePath="..\lib\UnicodeFile.cpp">
+				RelativePath="..\commonSrc\OptionFile.cpp">
 			</File>
 			<File
-				RelativePath="..\lib\UnicodeFile.h">
+				RelativePath="..\commonSrc\OptionFile.h">
 			</File>
 			<File
-				RelativePath="..\lib\ZImage.cpp">
+				RelativePath="..\commonSrc\UnicodeFile.cpp">
 			</File>
 			<File
-				RelativePath="..\lib\ZImage.h">
+				RelativePath="..\commonSrc\UnicodeFile.h">
+			</File>
+			<File
+				RelativePath="..\commonSrc\ZImage.cpp">
+			</File>
+			<File
+				RelativePath="..\commonSrc\ZImage.h">
 			</File>
 		</Filter>
 		<File

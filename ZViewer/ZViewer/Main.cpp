@@ -43,8 +43,8 @@
 #include "src/ZResourceManager.h"
 #include "src/ZCacheImage.h"
 #include "src/ZOption.h"
-#include "../lib/LogManager.h"
-#include "src/MessageManager.h"
+#include "../commonSrc/LogManager.h"
+#include "../commonSrc/MessageManager.h"
 
 #ifdef _DEBUG
 #include "vld/vld.h"

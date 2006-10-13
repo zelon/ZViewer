@@ -19,7 +19,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="$(SolutionDir)/ZViewer;$(SolutionDir)/ZViewer/res;$(SolutionDir)/lib;"
+				AdditionalIncludeDirectories="$(SolutionDir)/ZViewer;$(SolutionDir)/ZViewer/res;$(SolutionDir)/lib;$(SolutionDir)/commonSrc;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
@@ -69,7 +69,7 @@
 			CharacterSet="1">
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="$(SolutionDir)/ZViewer;$(SolutionDir)/ZViewer/res;$(SolutionDir)/lib;"
+				AdditionalIncludeDirectories="$(SolutionDir)/ZViewer;$(SolutionDir)/ZViewer/res;$(SolutionDir)/lib;$(SolutionDir)/commonSrc;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="3"
@@ -259,28 +259,10 @@
 			Name="src"
 			Filter="">
 			<File
-				RelativePath=".\src\MessageManager.cpp">
-			</File>
-			<File
-				RelativePath=".\src\MessageManager.h">
-			</File>
-			<File
 				RelativePath=".\src\MoveToDlg.cpp">
 			</File>
 			<File
 				RelativePath=".\src\MoveToDlg.h">
-			</File>
-			<File
-				RelativePath=".\src\OptionFile.cpp">
-			</File>
-			<File
-				RelativePath=".\src\OptionFile.h">
-			</File>
-			<File
-				RelativePath=".\src\SaveAs.cpp">
-			</File>
-			<File
-				RelativePath=".\src\SaveAs.h">
 			</File>
 			<File
 				RelativePath=".\src\ShortTimeMessage.cpp">
@@ -299,6 +281,12 @@
 			</File>
 			<File
 				RelativePath=".\src\ZFileExtDlg.h">
+			</File>
+			<File
+				RelativePath=".\src\ZFileExtReg.cpp">
+			</File>
+			<File
+				RelativePath=".\src\ZFileExtReg.h">
 			</File>
 			<File
 				RelativePath=".\src\ZHistory.cpp">
@@ -328,48 +316,6 @@
 		<Filter
 			Name="lib"
 			Filter="">
-			<File
-				RelativePath="..\lib\CommonDefine.h">
-			</File>
-			<File
-				RelativePath="..\lib\CommonFunc.cpp">
-			</File>
-			<File
-				RelativePath="..\lib\CommonFunc.h">
-			</File>
-			<File
-				RelativePath="..\lib\DesktopWallPaper.cpp">
-			</File>
-			<File
-				RelativePath="..\lib\DesktopWallPaper.h">
-			</File>
-			<File
-				RelativePath="..\lib\LockUtil.h">
-			</File>
-			<File
-				RelativePath="..\lib\LogManager.cpp">
-			</File>
-			<File
-				RelativePath="..\lib\LogManager.h">
-			</File>
-			<File
-				RelativePath="..\lib\UnicodeFile.cpp">
-			</File>
-			<File
-				RelativePath="..\lib\UnicodeFile.h">
-			</File>
-			<File
-				RelativePath=".\lib\ZFileExtReg.cpp">
-			</File>
-			<File
-				RelativePath=".\lib\ZFileExtReg.h">
-			</File>
-			<File
-				RelativePath="..\lib\ZImage.cpp">
-			</File>
-			<File
-				RelativePath="..\lib\ZImage.h">
-			</File>
 			<Filter
 				Name="vld"
 				Filter="">
@@ -380,6 +326,64 @@
 					RelativePath="..\lib\vld\vldapi.h">
 				</File>
 			</Filter>
+		</Filter>
+		<Filter
+			Name="commonSrc"
+			Filter="">
+			<File
+				RelativePath="..\commonSrc\CommonDefine.h">
+			</File>
+			<File
+				RelativePath="..\commonSrc\CommonFunc.cpp">
+			</File>
+			<File
+				RelativePath="..\commonSrc\CommonFunc.h">
+			</File>
+			<File
+				RelativePath="..\commonSrc\DesktopWallPaper.cpp">
+			</File>
+			<File
+				RelativePath="..\commonSrc\DesktopWallPaper.h">
+			</File>
+			<File
+				RelativePath="..\commonSrc\LockUtil.h">
+			</File>
+			<File
+				RelativePath="..\commonSrc\LogManager.cpp">
+			</File>
+			<File
+				RelativePath="..\commonSrc\LogManager.h">
+			</File>
+			<File
+				RelativePath="..\commonSrc\MessageManager.cpp">
+			</File>
+			<File
+				RelativePath="..\commonSrc\MessageManager.h">
+			</File>
+			<File
+				RelativePath="..\commonSrc\OptionFile.cpp">
+			</File>
+			<File
+				RelativePath="..\commonSrc\OptionFile.h">
+			</File>
+			<File
+				RelativePath="..\commonSrc\SaveAs.cpp">
+			</File>
+			<File
+				RelativePath="..\commonSrc\SaveAs.h">
+			</File>
+			<File
+				RelativePath="..\commonSrc\UnicodeFile.cpp">
+			</File>
+			<File
+				RelativePath="..\commonSrc\UnicodeFile.h">
+			</File>
+			<File
+				RelativePath="..\commonSrc\ZImage.cpp">
+			</File>
+			<File
+				RelativePath="..\commonSrc\ZImage.h">
+			</File>
 		</Filter>
 	</Files>
 	<Globals>
