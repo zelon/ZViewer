@@ -1502,6 +1502,13 @@ void ZMain::MoveThisFile()
 
 	tstring filename = GetFileNameFromFullFileName(m_strCurrentFilename);
 	tstring strToFileName = aDlg.GetMoveToFolder();
+	
+	if ( strToFileName.size() <= 2 )
+	{
+		MessageBox(TEXT("MOVE_DESTINATION_IS_TOO_SHORT"));
+		return;
+	}
+
 	strToFileName += TEXT("\\");
 	strToFileName += filename;
 
@@ -1522,7 +1529,7 @@ void ZMain::MoveThisFile()
 		}
 	}
 	
-	if ( FALSE == MoveFileEx(m_strCurrentFilename.c_str(), strToFileName.c_str(), MOVEFILE_REPLACE_EXISTING) )
+	if ( FALSE == MoveFileEx(m_strCurrentFilename.c_str(), strToFileName.c_str(), MOVEFILE_COPY_ALLOWED | MOVEFILE_REPLACE_EXISTING) )
 	{
 		MessageBox(TEXT("CANNOT_MOVE_FILE"));
 	}
