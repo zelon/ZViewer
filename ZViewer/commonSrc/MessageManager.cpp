@@ -69,6 +69,7 @@ const tstring & CMessageManager::GetMessage(const tstring & key) const
 	{
 		_ASSERTE(false);
 		DebugPrintf(TEXT("Can't find message from messagemap"));
+		m_errorMSg = key;
 		return m_errorMSg;
 	}
 

@@ -45,7 +45,7 @@ protected:
 
 	iniMap m_messageMap;
 
-	tstring m_errorMSg;
+	mutable tstring m_errorMSg;
 };
 
 inline const TCHAR * GetMessage(const TCHAR * key)
