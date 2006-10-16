@@ -149,7 +149,7 @@ void ZMain::SaveFileDialog()
 
 		if ( false == m_currentImage.SaveToFile(strSaveFilename, 0) )
 		{
-			MessageBox(TEXT("UNSUPPORTED_FILE_TYPE"));
+			MessageBox(TEXT("CANNOT_SAVE_AS_FILE"));
 		}
 	}
 }
