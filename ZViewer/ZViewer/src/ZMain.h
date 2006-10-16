@@ -137,11 +137,6 @@ public:
 	/// 현재 파일을 이동한다.
 	void MoveThisFile();
 
-	const tstring & GetProgramFolder() const	// 프로그램 실행 파일이 있는 폴더를 가져온다.
-	{
-		return m_strProgramFolder;
-	}
-
 	void SetInstance(HINSTANCE hInstance) { m_hMainInstance = hInstance; }
 	HINSTANCE GetHInstance() const { return m_hMainInstance; }
 	void OnChangeCurrentSize(int iWidth, int iHeight);

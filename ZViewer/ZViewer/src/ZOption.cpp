@@ -30,7 +30,7 @@ ZOption::ZOption()
 	TCHAR buffer[256];
 	if ( S_OK != SHGetFolderPath(NULL, CSIDL_LOCAL_APPDATA, NULL, SHGFP_TYPE_CURRENT, buffer) )
 	{
-		m_strOptionFilename = ZMain::GetInstance().GetProgramFolder();
+		m_strOptionFilename = GetProgramFolder();
 	}
 	else
 	{
