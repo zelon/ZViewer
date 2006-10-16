@@ -13,6 +13,7 @@
 #include "stdafx.h"
 #include "ZViewMenuExt.h"
 #include "../commonSrc/MessageManager.h"
+#include "../commonSrc/SaveAs.h"
 #include <shlobj.h>
 
 // CZViewMenuExt
@@ -39,9 +40,43 @@ void CZViewMenuExt::MsgBox(const tstring & strMsg)
 	MessageBox(HWND_DESKTOP, strMsg.c_str(), TEXT("ZViewerAgent"), MB_OK);
 }
 
+
+/// 다른 이름으로 저장한다.
+void CZViewMenuExt::_SaveAS()
+{
+	CSaveAs::getInstance().setParentHWND(HWND_DESKTOP);
+
+	TCHAR bufferDir[MAX_PATH] = { 0 };
+	GetCurrentDirectory(MAX_PATH, bufferDir);
+
+	CSaveAs::getInstance().setDefaultSaveFilename(bufferDir, m_szFile);
+
+	if ( CSaveAs::getInstance().showDialog() )
+	{
+		ZImage tempImage;
+		if ( !tempImage.LoadFromFile(m_szFile) )
+		{
+			MessageBox(HWND_DESKTOP, GetMessage(TEXT("CANNOT_LOAD_IMAGE_FILE")), TEXT("ZViewer"), MB_OK);
+			return;
+		}
+
+		tstring strSaveFileName = CSaveAs::getInstance().getSaveFileName();
+
+		if ( false == tempImage.SaveToFile(strSaveFileName, 0) )
+		{
+			::MessageBox(HWND_DESKTOP, GetMessage(TEXT("CANNOT_SAVE_AS_FILE")), TEXT("ZViewer"), MB_OK);
+		}
+	}
+}
+
 STDMETHODIMP CZViewMenuExt::Initialize (LPCITEMIDLIST pidlFolder, LPDATAOBJECT  pDO, HKEY hkeyProgID )
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
+
+	if ( GetSystemDefaultLangID() == 0x0412 )
+	{
+		CMessageManager::getInstance().SetLanguage(eLanguage_KOREAN);
+	}
 
 	COleDataObject dataobj;
 	HGLOBAL hglobal;
@@ -67,10 +102,10 @@ STDMETHODIMP CZViewMenuExt::Initialize (LPCITEMIDLIST pidlFolder, LPDATAOBJECT  
 	/// 만약 Shift 키를 누르고 메뉴를 띄운 것이면 이미지 미리보기를 보여주지 않는다.
 	if ( GetKeyState(VK_LSHIFT) >= 0 )
 	{
-		// Get the name of the first selected file.
-		if ( DragQueryFile ( hdrop, 0, m_szFile, MAX_PATH ))
+		/// Get the name of the first selected file.
+		if ( DragQueryFile( hdrop, 0, m_szFile, MAX_PATH ) )
 		{
-			// Is it's extension is valid 'Image File'
+			/// Is it's extension is valid 'Image File'
 			if ( ZImage::IsValidImageFileExt(m_szFile) )
 			{
 				if ( m_originalImage.LoadFromFile(m_szFile) )
@@ -83,7 +118,7 @@ STDMETHODIMP CZViewMenuExt::Initialize (LPCITEMIDLIST pidlFolder, LPDATAOBJECT  
 						m_b8bit = true;
 					}
 				}
-				else
+				else /// 이미지 파일을 읽을 수 없었다.
 				{
 					//	MsgBox("Here2");
 				}
@@ -134,7 +169,7 @@ STDMETHODIMP CZViewMenuExt::QueryContextMenu(HMENU hmenu, UINT uIndex, UINT uidC
 	}
 
 	// 이미지 파일에 대한 정보를 수집해놓는다.
-	TCHAR szImageInfo[256];
+	TCHAR szImageInfo[256] = { 0 };
 	StringCchPrintf(szImageInfo, sizeof(szImageInfo), TEXT("%dx%d %dbpp"), m_originalImage.GetWidth(), m_originalImage.GetHeight(), m_originalImage.GetBPP());
 
 	// Store the menu item's ID so we can check against it later when
@@ -158,6 +193,7 @@ STDMETHODIMP CZViewMenuExt::QueryContextMenu(HMENU hmenu, UINT uIndex, UINT uidC
 
 	InsertMenuItem ( hmenu, uIndex, TRUE, &mii );
 	
+	/// 하위 메뉴를 만든다.
 	HMENU hSubMenu = CreatePopupMenu();
 	{
 		InsertMenu( hSubMenu, 0, MF_BYPOSITION | MF_STRING, uID++, TEXT("View in ZViewer"));
@@ -167,6 +203,8 @@ STDMETHODIMP CZViewMenuExt::QueryContextMenu(HMENU hmenu, UINT uIndex, UINT uidC
 		InsertMenu( hSubMenu, 4, MF_BYPOSITION | MF_STRING, uID++, TEXT("DesktopWallpaper TILE"));
 		InsertMenu( hSubMenu, 5, MF_SEPARATOR, NULL, NULL);
 		InsertMenu( hSubMenu, 6, MF_BYPOSITION | MF_STRING, uID++, TEXT("DesktopWallpaper CLEAR"));
+		InsertMenu( hSubMenu, 7, MF_SEPARATOR, NULL, NULL);
+		InsertMenu( hSubMenu, 8, MF_BYPOSITION | MF_STRING, uID++, TEXT("Save as..."));
 
 		ZeroMemory(&mii, sizeof(MENUITEMINFO));
 		mii.cbSize = sizeof(MENUITEMINFO);
@@ -184,6 +222,7 @@ STDMETHODIMP CZViewMenuExt::QueryContextMenu(HMENU hmenu, UINT uIndex, UINT uidC
     return MAKE_HRESULT ( SEVERITY_SUCCESS, FACILITY_NULL, uID - uidCmdFirst );
 }
 
+/// mouseover 한 메뉴에 따라서, 이 함수에서 얻은 문자열을 탐색기의 '상태표시줄' 에 보여준다.
 STDMETHODIMP CZViewMenuExt::GetCommandString (UINT uCmd, UINT uFlags, UINT* puReserved, LPSTR pszName, UINT cchMax)
 {
 	// 여기서 uCmd 는 메뉴에 넣은 순서대로 0 부터 순서대로 온다. 단, 선택할 수 없는 메뉴는 무시한 순서다.
@@ -216,6 +255,13 @@ STDMETHODIMP CZViewMenuExt::GetCommandString (UINT uCmd, UINT uFlags, UINT* puRe
             // We need to cast pszName to a Unicode string, and then use the
             // Unicode string copy API.
             lstrcpynW ( (LPWSTR) pszName, T2CW(szHelpString), cchMax );
+
+			/* 아래 코드를 살펴보면 제대로 구성할 수 있다.
+			TCHAR buffer[256];
+            StringCchPrintf( buffer, sizeof(buffer), TEXT("uCmd(%d)"), uCmd);
+
+			lstrcpynW ( (LPWSTR) pszName, T2CW(buffer), cchMax );
+			*/
 		}
         else
 		{
@@ -227,7 +273,8 @@ STDMETHODIMP CZViewMenuExt::GetCommandString (UINT uCmd, UINT uFlags, UINT* puRe
     return S_OK;
 }
 
-STDMETHODIMP CZViewMenuExt::InvokeCommand ( LPCMINVOKECOMMANDINFO pInfo )	// 그림 및 메뉴를 클릭했을 때
+/// 그림 및 메뉴를 클릭했을 때 어떤 명령을 수행할지를 결정해서 수행한다.
+STDMETHODIMP CZViewMenuExt::InvokeCommand( LPCMINVOKECOMMANDINFO pInfo )
 {
     // If lpVerb really points to a string, ignore this function call and bail out.
     if ( 0 != HIWORD( pInfo->lpVerb ))
@@ -271,6 +318,10 @@ STDMETHODIMP CZViewMenuExt::InvokeCommand ( LPCMINVOKECOMMANDINFO pInfo )	// 그�
 	case 5:
 		// clear
 		CDesktopWallPaper::ClearDesktopWallPaper();
+		break;
+
+	case 6:
+		_SaveAS();
 		break;
 
 	default:
@@ -448,26 +499,12 @@ STDMETHODIMP CZViewMenuExt::OnDrawItem(DRAWITEMSTRUCT * pdis, LRESULT * pResult 
     return S_OK;
 }
 
+/// 현재의 dll 이 있는 폴더의 ZViewer 를 실행한다.
 void CZViewMenuExt::ExecZViewer()
 {
 	TCHAR command[FILENAME_MAX] = { 0 };
-	TCHAR szGetFileName[FILENAME_MAX] = { 0 };
 
-#ifdef _DEBUG
-	DWORD ret = GetModuleFileName(GetModuleHandle(TEXT("ZViewerAgentD.dll")), szGetFileName, FILENAME_MAX);
-#else
-	DWORD ret = GetModuleFileName(GetModuleHandle(TEXT("ZViewerAgent.dll")), szGetFileName, FILENAME_MAX);
-#endif
-	if ( ret == 0 )
-	{
-		_ASSERTE(!"Can't get module folder");
-	}
-	TCHAR szDrive[_MAX_DRIVE] = { 0 };
-	TCHAR szDir[_MAX_DIR] = { 0 };
-	_tsplitpath(szGetFileName, szDrive, szDir, 0, 0);
-
-	tstring strProgramFolder = szDrive;
-	strProgramFolder += szDir;
+	tstring strProgramFolder = GetProgramFolder();
 
 	StringCchPrintf(command, sizeof(command), TEXT("%s\\ZViewer.exe %s"), strProgramFolder.c_str(), m_szFile);
 
@@ -504,7 +541,7 @@ void CZViewMenuExt::SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyl
 		return;
 	}
 
-	if ( FALSE == tempImage.SaveToFile(strSaveFileName, BMP_DEFAULT) )
+	if ( false == tempImage.SaveToFile(strSaveFileName, BMP_DEFAULT) )
 	{
 		_ASSERTE(false);
 		return;

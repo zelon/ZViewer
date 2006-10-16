@@ -382,6 +382,12 @@
 				RelativePath="..\commonSrc\OptionFile.h">
 			</File>
 			<File
+				RelativePath="..\commonSrc\SaveAs.cpp">
+			</File>
+			<File
+				RelativePath="..\commonSrc\SaveAs.h">
+			</File>
+			<File
 				RelativePath="..\commonSrc\UnicodeFile.cpp">
 			</File>
 			<File

@@ -56,7 +56,11 @@ public:
 
     // IContextMenu
     STDMETHOD(QueryContextMenu)(HMENU, UINT, UINT, UINT, UINT);
+
+	/// 그림 및 메뉴를 클릭했을 때 어떤 명령을 수행할지를 결정해서 수행한다.
     STDMETHOD(InvokeCommand)(LPCMINVOKECOMMANDINFO);
+
+	/// mouseover 한 메뉴에 따라서, 이 함수에서 얻은 문자열을 탐색기의 '상태표시줄' 에 보여준다.
     STDMETHOD(GetCommandString)(UINT_PTR, UINT, UINT*, LPSTR, UINT);
 
     // IContextMenu2
@@ -70,11 +74,14 @@ public:
 
 protected:
 
-	/// ZViewer 를 실행시킨다.
+	/// 현재의 dll 이 있는 폴더의 ZViewer 를 실행한다.
 	void ExecZViewer();
 
 	/// 바탕화면 파일을 지정한다.
 	void SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyle style);
+
+	/// 다른 이름으로 저장한다.
+	void _SaveAS();
 
 	void MsgBox(const tstring & strMsg);		// for debugging messagebox
     TCHAR   m_szFile[MAX_PATH];
