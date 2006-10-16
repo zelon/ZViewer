@@ -23,18 +23,6 @@ const LONG CZViewMenuExt::m_l3DBorderWidth    = 1;
 const LONG CZViewMenuExt::m_lMenuItemSpacing  = 4;
 const LONG CZViewMenuExt::m_lTotalBorderSpace = 2*(m_lMenuItemSpacing+m_l3DBorderWidth);
 
-enum
-{
-	eMENU_ShowZViewer = 0,
-	eMENU_SetBG_CENTER = 1,
-	eMENU_SetBG_STRETCH = 2,
-	eMENU_SetBG_TILE = 3,
-	eMENU_SetBG_CLEAR = 4,
-	eMENU_MAX
-};
-
-
-
 void CZViewMenuExt::MsgBox(const tstring & strMsg)
 {
 	MessageBox(HWND_DESKTOP, strMsg.c_str(), TEXT("ZViewerAgent"), MB_OK);
@@ -170,7 +158,7 @@ STDMETHODIMP CZViewMenuExt::QueryContextMenu(HMENU hmenu, UINT uIndex, UINT uidC
 
 	// 이미지 파일에 대한 정보를 수집해놓는다.
 	TCHAR szImageInfo[256] = { 0 };
-	StringCchPrintf(szImageInfo, sizeof(szImageInfo), TEXT("%dx%d %dbpp"), m_originalImage.GetWidth(), m_originalImage.GetHeight(), m_originalImage.GetBPP());
+	StringCchPrintf(szImageInfo, sizeof(szImageInfo), TEXT("ZViewer %dx%d %dbpp"), m_originalImage.GetWidth(), m_originalImage.GetHeight(), m_originalImage.GetBPP());
 
 	// Store the menu item's ID so we can check against it later when
 	// WM_MEASUREITEM/WM_DRAWITEM are sent.
@@ -196,15 +184,15 @@ STDMETHODIMP CZViewMenuExt::QueryContextMenu(HMENU hmenu, UINT uIndex, UINT uidC
 	/// 하위 메뉴를 만든다.
 	HMENU hSubMenu = CreatePopupMenu();
 	{
-		InsertMenu( hSubMenu, 0, MF_BYPOSITION | MF_STRING, uID++, TEXT("View in ZViewer"));
+		InsertMenu( hSubMenu, 0, MF_BYPOSITION | MF_STRING, uID++, GetMessage(TEXT("VIEW_IN_ZVIEWER")));
 		InsertMenu( hSubMenu, 1, MF_SEPARATOR, NULL, NULL);
-		InsertMenu( hSubMenu, 2, MF_BYPOSITION | MF_STRING, uID++, TEXT("DesktopWallpaper CENTER"));
-		InsertMenu( hSubMenu, 3, MF_BYPOSITION | MF_STRING, uID++, TEXT("DesktopWallpaper STRETCH"));
-		InsertMenu( hSubMenu, 4, MF_BYPOSITION | MF_STRING, uID++, TEXT("DesktopWallpaper TILE"));
+		InsertMenu( hSubMenu, 2, MF_BYPOSITION | MF_STRING, uID++, GetMessage(TEXT("DESKTOP_WALLPAPER_CENTER")));
+		InsertMenu( hSubMenu, 3, MF_BYPOSITION | MF_STRING, uID++, GetMessage(TEXT("DESKTOP_WALLPAPER_STRETCH")));
+		InsertMenu( hSubMenu, 4, MF_BYPOSITION | MF_STRING, uID++, GetMessage(TEXT("DESKTOP_WALLPAPER_TILE")));
 		InsertMenu( hSubMenu, 5, MF_SEPARATOR, NULL, NULL);
-		InsertMenu( hSubMenu, 6, MF_BYPOSITION | MF_STRING, uID++, TEXT("DesktopWallpaper CLEAR"));
+		InsertMenu( hSubMenu, 6, MF_BYPOSITION | MF_STRING, uID++, GetMessage(TEXT("DESKTOP_WALLPAPER_CLEAR")));
 		InsertMenu( hSubMenu, 7, MF_SEPARATOR, NULL, NULL);
-		InsertMenu( hSubMenu, 8, MF_BYPOSITION | MF_STRING, uID++, TEXT("Save as..."));
+		InsertMenu( hSubMenu, 8, MF_BYPOSITION | MF_STRING, uID++, GetMessage(TEXT("ZVIEWERAGENT_SAVE_AS")));
 
 		ZeroMemory(&mii, sizeof(MENUITEMINFO));
 		mii.cbSize = sizeof(MENUITEMINFO);
