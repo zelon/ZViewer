@@ -752,10 +752,10 @@ int CALLBACK AboutWndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 			StringCchPrintf(szTemp, sizeof(szTemp), TEXT("CachedMemory : %sKB, Num of Cached Image : %d"), szOUT, ZCacheImage::GetInstance().GetNumOfCacheImage());
 			SetDlgItemText(hWnd, IDC_STATIC_CACHE_MEMORY, szTemp);
 
-			StringCchPrintf(szTemp, sizeof(szTemp), TEXT("ProgramPath : %s"), ZMain::GetInstance().GetProgramFolder().c_str());
+			StringCchPrintf(szTemp, sizeof(szTemp), TEXT("ProgramPath : %s"), GetProgramFolder().c_str());
 			SetDlgItemText(hWnd, IDC_STATIC_PROGRAM_PATH, szTemp);
 
-			StringCchPrintf(szTemp, sizeof(szTemp), TEXT("Library Version : %s"), ZImage::GetLibraryVersion());
+			StringCchPrintf(szTemp, sizeof(szTemp), TEXT("Library Version : %s"), ZImage::GetLibraryVersion().c_str());
 			SetDlgItemText(hWnd, IDC_STATIC_LIBRARY_VERSION, szTemp);
 		}
 		return TRUE;
