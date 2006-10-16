@@ -213,7 +213,7 @@ BEGIN
     LTEXT           "Homepage : http://www.wimy.com",IDC_STATIC,129,33,113,8
     LTEXT           "김진욱(zelon) 이 만듦",IDC_STATIC,68,20,75,8
     LTEXT           "ZViewer version : ",IDC_STATIC,7,7,58,8
-    LTEXT           "VERSION",IDC_STATIC_VERSION,69,7,30,8
+    LTEXT           "VERSION",IDC_STATIC_VERSION,69,7,139,8
     LTEXT           "캐시 적중률 : ",IDC_STATIC_HITRATE,7,50,112,8
     LTEXT           "캐시 메모리량 :",IDC_STATIC_CACHE_MEMORY,7,63,235,8
     LTEXT           "프로그램 경로 :",IDC_STATIC_PROGRAM_PATH,7,79,235,8
