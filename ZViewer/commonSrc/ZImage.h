@@ -21,9 +21,13 @@ public:
 	static bool StartupLibrary(){ return true; }
 	static bool CleanupLibrary(){ return true; }
 	static bool IsValidImageFileExt(const TCHAR * szFilename);
-	static const char * GetLibraryVersion()
+	static const tstring GetLibraryVersion()
 	{
-		return FreeImage_GetVersion();
+#ifdef _UNICODE
+		return tstring(getWStringFromString(std::string(FreeImage_GetVersion())));
+#else
+		return tstring(FreeImage_GetVersion());
+#endif
 	}
 
 	void clear()
@@ -80,13 +84,12 @@ public:
 	bool SaveToFile(const tstring & strFilename, int iFlag)
 	{
 #ifdef _UNICODE
-		char buffer[256];
+		char buffer[256] = { 0 };
 		WideCharToMultiByte(CP_THREAD_ACP, 0, strFilename.c_str(), (int)strFilename.size(), buffer, 256, NULL, NULL);
 		return ( TRUE == m_image.save(buffer, iFlag));
 #else
 		return ( TRUE == m_image.save(strFilename.c_str(), iFlag));
 #endif
-
 	}
 
 	void Rotate(double dAngle) { m_image.rotate(dAngle); }
