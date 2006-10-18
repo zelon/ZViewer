@@ -58,7 +58,7 @@ bool SetRegistryValue(HKEY hOpenKey, const tstring & strKey,LPCTSTR szValue, con
 		NULL, REG_OPTION_NON_VOLATILE, KEY_SET_VALUE, NULL, &hTempKey, &dwDisposition) )
 	{
 		// 마지막 \0 까지 포함해야한다던데;;
-		DWORD	dwBufferLength = (DWORD)strData.size() + 1;
+		DWORD	dwBufferLength = (DWORD)(strData.size() + 1) * sizeof(TCHAR);
 
 		if( ERROR_SUCCESS == ::RegSetValueEx(hTempKey, (LPTSTR)szValue,
 			NULL, REG_SZ, (const BYTE *)strData.c_str(), dwBufferLength) )
