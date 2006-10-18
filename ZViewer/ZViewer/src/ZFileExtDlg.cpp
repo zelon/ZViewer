@@ -72,7 +72,7 @@ void ZFileExtDlg::ExtMapInit()
 	_AddExtSet(0, TEXT("tif"));
 	_AddExtSet(0, TEXT("tiff"));
 	_AddExtSet(0, TEXT("cut"));
-	_AddExtSet(0, TEXT("ico"));
+	_AddExtSet(6, TEXT("ico"));
 	_AddExtSet(0, TEXT("hdr"));
 	_AddExtSet(0, TEXT("jng"));
 	_AddExtSet(0, TEXT("koa"));
@@ -132,24 +132,7 @@ void ZFileExtDlg::SaveExtEnv()
 {
 	std::vector < ExtSetting >::iterator it, endit = m_extConnect.end();
 
-	tstring strProgramFolder;
-
-	{
-		TCHAR szGetFileName[FILENAME_MAX] = { 0 };
-		DWORD ret = GetModuleFileName(GetModuleHandle(NULL), szGetFileName, FILENAME_MAX);
-
-		if ( ret == 0 )
-		{
-			_ASSERTE(!"Can't get module folder");
-			return;
-		}
-		TCHAR szDrive[_MAX_DRIVE] = { 0 };
-		TCHAR szDir[_MAX_DIR] = { 0 };
-		_tsplitpath(szGetFileName, szDrive, szDir, 0, 0);
-
-		strProgramFolder = szDrive;
-		strProgramFolder += szDir;
-	}
+	tstring strProgramFolder(GetProgramFolder());
 
 	tstring strIconDll = strProgramFolder;
 	strIconDll += TEXT("ZViewerIcons.dll");
@@ -158,11 +141,14 @@ void ZFileExtDlg::SaveExtEnv()
 	{
 		const ExtSetting & extset = *it;
 
-		SetExtWithProgram(TEXT("ZViewer"), extset.m_strExt, 
+		if ( false == SetExtWithProgram(TEXT("ZViewer"), extset.m_strExt, 
 			TEXT(""),	/// 프로그램 Full Path. 비워두면 현재 프로그램이다.
 			strIconDll.c_str(),	/// 아이콘 프로그램
 			extset.m_numIconIndex	/// 아이콘 index
-		);
+		) )
+		{
+			_ASSERTE(false);
+		}
 	}
 
 	/// explorer 의 아이콘을 update 시킨다.
@@ -174,10 +160,10 @@ bool ZFileExtDlg::SetExtWithProgram(const tstring & strProgramName, const tstrin
 	ZFileExtReg fileExtReg;
 
 
-	if ( strFullProgramPath.size() == 0 )
+	if ( strFullProgramPath.empty() )
 	{
 		// get full file path to program executable file
-		TCHAR szProgPath[MAX_PATH];
+		TCHAR szProgPath[MAX_PATH] = { 0 };
 		::GetModuleFileName(NULL, szProgPath, sizeof(szProgPath));
 
 		strFullProgramPath = szProgPath;
@@ -218,7 +204,7 @@ bool ZFileExtDlg::SetExtWithProgram(const tstring & strProgramName, const tstrin
 		strTempText = strIcon;
 		strTempText += TEXT(",");
 
-		TCHAR szTemp[256];
+		TCHAR szTemp[256] = { 0 };
 		StringCchPrintf(szTemp, sizeof(szTemp), TEXT("%d"), iIconIndex);
 		strTempText += szTemp;
 	}

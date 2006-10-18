@@ -1,5 +1,7 @@
-은봄
+은폰트 중 extra - 은봄 1.0.1 ( http://kldp.net/frs/?group_id=300&release_id=863 )
 
 32x32 - 12
 64 - 24
 96 - 36
+
+ 로 한 후 어색한 픽셀을 다듬음

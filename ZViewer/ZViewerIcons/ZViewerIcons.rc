@@ -60,6 +60,7 @@ IDI_ICON_JPG            ICON                    "ico00002.ico"
 IDI_ICON_PNG            ICON                    "ico00003.ico"
 IDI_ICON_PSD            ICON                    "ico00004.ico"
 IDI_ICON_GIF            ICON                    "ico00005.ico"
+IDI_ICON_ICO            ICON                    "ext_ico.ico"
 #endif    // ÇÑ±¹¾î resources
 /////////////////////////////////////////////////////////////////////////////
 
