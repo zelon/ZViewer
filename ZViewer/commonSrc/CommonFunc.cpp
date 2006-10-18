@@ -171,9 +171,9 @@ tstring toString(int i)
 	return tstring(szTemp);
 }
 
+/// 폴더를 선택하는 다이얼로그를 띄운다.
 bool SelectFolder(HWND hWnd, TCHAR * szFolder)
 {
-	//LPMALLOC pMalloc;
 	LPITEMIDLIST pidl;
 	BROWSEINFO bi;
 
@@ -194,19 +194,10 @@ bool SelectFolder(HWND hWnd, TCHAR * szFolder)
 
 	SHGetPathFromIDList(pidl, szFolder);
 
-	/*
-	if ( SHGetMalloc(&pMalloc) != NOERROR )
-	{
-		return false;
-	}
-
-	pMalloc->Free(pidl);
-	pMalloc->Release();
-	*/
-
 	return true;
 }
 
+/// 드라이브와 폴더명과 파일명으로 이루어진 문자열을 주면, 드라이브와 폴더명까지만 반환한다.
 tstring GetFolderNameFromFullFileName(const tstring & strFullFilename)
 {
 	TCHAR szDrive[_MAX_DRIVE] = { 0 };
@@ -219,6 +210,7 @@ tstring GetFolderNameFromFullFileName(const tstring & strFullFilename)
 	return strFolder;
 }
 
+/// 드라이브와 폴더명과 파일명으로 된 문자열을 주면, 파일명만 준다.
 tstring GetFileNameFromFullFileName(const tstring & strFullFilename)
 {
 	TCHAR szFileName[MAX_PATH] = { 0 };
@@ -231,7 +223,7 @@ tstring GetFileNameFromFullFileName(const tstring & strFullFilename)
 	return strFilename;
 }
 
-
+/// 현재 실행 중인 OS 의 버젼을 반환한다.
 eOSKind getOSVersion()
 {
 	const int BUFSIZE = 1024;

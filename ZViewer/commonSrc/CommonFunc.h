@@ -82,13 +82,19 @@ RECT GetResizedRectForBigToSmall(const RECT & MaximumSize, const RECT & original
 /// 최대 크기를 넘지 않는 적당한 리사이즈 크기를 돌려준다.
 RECT GetResizedRectForSmallToBig(const RECT & MaximumSize, const RECT & originalSize);
 
+/// int 를 tstring type 으로 돌려준다.
 tstring toString(int i);
 
+/// 폴더를 선택하는 다이얼로그를 띄운다.
 bool SelectFolder(HWND hWnd, TCHAR * szFolder);
 
+/// 드라이브와 폴더명과 파일명으로 이루어진 문자열을 주면, 드라이브와 폴더명까지만 반환한다.
 tstring GetFolderNameFromFullFileName(const tstring & strFullFilename);
+
+/// 드라이브와 폴더명과 파일명으로 된 문자열을 주면, 파일명만 준다.
 tstring GetFileNameFromFullFileName(const tstring & strFullFilename);
 
+/// 현재 실행 중인 OS 의 버젼을 반환한다.
 eOSKind getOSVersion();
 
 /// string 을 wstring 으로 변환

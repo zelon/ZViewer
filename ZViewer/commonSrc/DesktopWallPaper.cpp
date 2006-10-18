@@ -12,6 +12,7 @@
 #include "DesktopWallPaper.h"
 #include "CommonFunc.h"
 
+/// 실제로 바탕화면을 바꾼다.
 void CDesktopWallPaper::SetDesktopWallPaper(const tstring & strBitmapFileName, eDesktopWallPaperStyle style)
 {
 	tstring strStyle = TEXT("0");
@@ -50,10 +51,9 @@ void CDesktopWallPaper::SetDesktopWallPaper(const tstring & strBitmapFileName, e
 	{
 		_ASSERTE(false);
 	}
-
 }
 
-/// 바탕화면 이미지를 없앤다.
+/// 바탕화면의 배경화면을 지운다.
 void CDesktopWallPaper::ClearDesktopWallPaper()
 {
 	CDesktopWallPaper::SetDesktopWallPaper(TEXT(""), eDesktopWallPaperStyle_CENTER);
