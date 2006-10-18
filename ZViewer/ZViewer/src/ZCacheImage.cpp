@@ -26,7 +26,6 @@ ZCacheImage::ZCacheImage()
 ,	m_iLogCacheHit(0)
 ,	m_iLogCacheMiss(0)
 ,	m_lCacheSize(0)
-,	m_iMaximumCacheMemoryMB(50)
 ,	m_numImageVectorSize(0)
 ,	m_lastActionDirection(eLastActionDirection_FORWARD)
 {
@@ -153,7 +152,7 @@ int ZCacheImage::_GetFarthestIndexFromCurrentIndex()
 bool ZCacheImage::_CacheIndex(int iIndex)
 {
 	// 최대 캐시 크기를 넘었으면 더 이상 캐시하지 않는다.
-	if ( (m_lCacheSize / 1024 / 1024) > m_iMaximumCacheMemoryMB )
+	if ( (m_lCacheSize / 1024 / 1024) > ZOption::GetInstance().GetMaxCacheMemoryMB() )
 	{
 		return false;
 	}
@@ -259,7 +258,7 @@ bool ZCacheImage::_CacheIndex(int iIndex)
 			}
 
 			// 읽은 이미지를 넣을 공간이 없으면
-			if ( (m_lCacheSize + cacheReayImage.GetImageSize()) / 1024 / 1024 > m_iMaximumCacheMemoryMB )
+			if ( (m_lCacheSize + cacheReayImage.GetImageSize()) / 1024 / 1024 > ZOption::GetInstance().GetMaxCacheMemoryMB() )
 			{
 				int iTemp = 100;
 				int iFarthestIndex = -1;
@@ -325,7 +324,7 @@ bool ZCacheImage::_CacheIndex(int iIndex)
 					}
 
 					// 이제 어느 정도 용량을 확보했으니 다시 이 이미지를 넣을 수 있는 지 캐시를 체크한다.
-					if ( (m_lCacheSize + cacheReayImage.GetImageSize()) / 1024 / 1024 <= m_iMaximumCacheMemoryMB )
+					if ( (m_lCacheSize + cacheReayImage.GetImageSize()) / 1024 / 1024 <= ZOption::GetInstance().GetMaxCacheMemoryMB() )
 					{
 						AddCacheData(strFileName, cacheReayImage);
 						return true;
@@ -456,7 +455,7 @@ void ZCacheImage::AddCacheData(const tstring & strFilename, ZImage & image)
 	if ( m_cacheData.count(strFilename) > 0) return;
 
 	/// 용량을 체크해서 이 이미지를 캐시했을 때 제한을 넘어섰으면 캐시하지 않는다.
-	if ( (m_lCacheSize + image.GetImageSize()) /1024/1024 > m_iMaximumCacheMemoryMB ) return;
+	if ( (m_lCacheSize + image.GetImageSize()) /1024/1024 > ZOption::GetInstance().GetMaxCacheMemoryMB() ) return;
 
 	DebugPrintf(TEXT("%s added to cache"), strFilename.c_str());
 

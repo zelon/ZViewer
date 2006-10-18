@@ -29,6 +29,9 @@ public:
 	}
 	void SetFullScreen(bool bFullScreen) { m_bFullScreen = bFullScreen; }
 
+	int GetMaxCacheMemoryMB() const { return m_iMaximumCacheMemoryMB; }
+	void SetMaxCacheMemoryMB(const int iMB) { m_iMaximumCacheMemoryMB = iMB; }
+
 	//-----------------------------------------------------------
 	// 아래는 프로그램 구동 후에 임시로 쓰이는 옵션들. 파일에 저장하지 않는다.
 
@@ -61,11 +64,8 @@ private:
 	//----------------------------------------------------------
 	// 아래는 지속적으로 저장되는 옵션들. 파일에 저장한다.
 
-	/// 최대 캐시되는 메모리
-	int m_iMaximumCacheMemory;
-
-	/// 최대 캐시되는 그림 파일
-	int m_iMaximumCacheFileNum;
+	/// 캐시되는 최대 메모리량
+	int m_iMaximumCacheMemoryMB;
 
 	tstring m_strOptionFilename;
 

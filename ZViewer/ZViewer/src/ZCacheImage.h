@@ -105,9 +105,6 @@ private:
 
 	CLockObj m_cacheLock;
 
-	/// 최대 캐시 용량
-	const int m_iMaximumCacheMemoryMB;
-
 	/// threadfunc 를 계속 실행시킬 것인가. 프로그램이 끝날 때 false 로 해줘야함
 	bool m_bGoOn;
 

@@ -39,13 +39,11 @@ ZOption::ZOption()
 
 	m_strOptionFilename += TEXT("\\zviewer.ini");
 	m_bOptionChanged = false;
-	m_iMaxCacheImageNum = 50;
 
-#ifdef _DEBUG
-	m_iMaxCacheImageNum = 10;
-#endif
+	/// 기본적인 옵션은 설정해둔다.
 	SetDefaultOption();
 
+	/// 기본적인 옵션에서 파일에서 불러온 설정을 덮어씌운다.
 	LoadFromFile();
 }
 
@@ -54,6 +52,13 @@ void ZOption::SetDefaultOption()
 	m_bFullScreen = false;
 	m_bBigToSmallStretchImage = false;
 	m_bSmallToBigStretchImage = false;
+	m_iMaximumCacheMemoryMB = 50;
+
+	m_iMaxCacheImageNum = 50;
+
+#ifdef _DEBUG
+	m_iMaxCacheImageNum = 10;
+#endif
 }
 
 void ZOption::LoadFromFile()
@@ -61,6 +66,9 @@ void ZOption::LoadFromFile()
 	iniMap data;
 
 	COptionFile::LoadFromFile(m_strOptionFilename, data);
+
+	m_iMaximumCacheMemoryMB = _tstoi(data[TEXT("maximumcachememory")].c_str());
+	m_iMaxCacheImageNum = _tstoi(data[TEXT("maximumcachefilenum")].c_str());
 }
 
 void ZOption::SaveToFile()
@@ -72,10 +80,9 @@ void ZOption::SaveToFile()
 	// 저장해야하는 옵션 중 변경된 것이 있으면
 	if ( m_bOptionChanged )
 	{
-		data[TEXT("maximumcachememory")] = toString(m_iMaximumCacheMemory);
-		data[TEXT("maximumcachefilenum")] = toString(m_iMaximumCacheFileNum);
+		data[TEXT("maximumcachememory")] = toString(m_iMaximumCacheMemoryMB);
+		data[TEXT("maximumcachefilenum")] = toString(m_iMaxCacheImageNum);
 	}
 
 	COptionFile::SaveToFile(m_strOptionFilename, data);
 }
-
