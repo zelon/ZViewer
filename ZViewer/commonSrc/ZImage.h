@@ -35,16 +35,16 @@ public:
 		m_image.clear();
 	}
 
-	WORD GetWidth() { return m_image.getWidth(); }
-	WORD GetHeight() { return m_image.getHeight(); }
+	WORD GetWidth() const { return m_image.getWidth(); }
+	WORD GetHeight() const { return m_image.getHeight(); }
 
-	WORD GetOriginalWidth() { return m_originalWidth; }
-	WORD GetOriginalHeight() { return m_originalHeight; }
+	WORD GetOriginalWidth() const { return m_originalWidth; }
+	WORD GetOriginalHeight() const { return m_originalHeight; }
 
-	WORD GetBPP() { return m_image.getBitsPerPixel(); }
+	WORD GetBPP() const { return m_image.getBitsPerPixel(); }
 	BYTE * GetData() { return m_image.accessPixels(); }
 	BITMAPINFO * GetBitmapInfo() { return m_image.getInfo(); }
-	bool IsValid() { return (m_image.isValid() == TRUE); }
+	bool IsValid() const { return (m_image.isValid() == TRUE); }
 	bool LoadFromFile(const tstring & strFilename)
 	{
 		//DebugPrintf("LoadFromFile : %s", strFilename.c_str());
@@ -81,7 +81,7 @@ public:
 		return false;
 	}
 
-	bool SaveToFile(const tstring & strFilename, int iFlag)
+	bool SaveToFile(const tstring & strFilename, int iFlag) const
 	{
 #ifdef _UNICODE
 		char buffer[256] = { 0 };
@@ -101,17 +101,17 @@ public:
 
 	bool ConvertTo32Bit() { return ( TRUE == m_image.convertTo32Bits() ); }
 
-	long GetImageSize()
+	long GetImageSize() const
 	{
 		return m_image.getImageSize();
 	}
 
-	long GetOriginalImageSize()
+	long GetOriginalImageSize() const
 	{
 		return m_originalSize;
 	}
 
-	bool isTransparent()
+	bool isTransparent() const
 	{
 		return (m_image.isTransparent() == TRUE);
 	}
@@ -122,7 +122,7 @@ public:
 	}
 
 private:
-	fipWinImage m_image;
+	mutable fipWinImage m_image;
 
 	/// Image's original width - before resizing
 	WORD m_originalWidth;
