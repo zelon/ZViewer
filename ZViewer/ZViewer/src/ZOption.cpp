@@ -63,16 +63,19 @@ void ZOption::SetDefaultOption()
 
 void ZOption::LoadFromFile()
 {
+	/*
 	iniMap data;
 
 	COptionFile::LoadFromFile(m_strOptionFilename, data);
 
 	m_iMaximumCacheMemoryMB = _tstoi(data[TEXT("maximumcachememory")].c_str());
 	m_iMaxCacheImageNum = _tstoi(data[TEXT("maximumcachefilenum")].c_str());
+	*/
 }
 
 void ZOption::SaveToFile()
 {
+	/*
 	iniMap data;
 
 	m_bOptionChanged = true;
@@ -85,4 +88,5 @@ void ZOption::SaveToFile()
 	}
 
 	COptionFile::SaveToFile(m_strOptionFilename, data);
+	*/
 }
