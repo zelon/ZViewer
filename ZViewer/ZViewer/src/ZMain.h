@@ -137,6 +137,9 @@ public:
 	/// 현재 파일을 이동한다.
 	void MoveThisFile();
 
+	/// 현재 파일을 복사한다.
+	void CopyThisFile();
+
 	void SetInstance(HINSTANCE hInstance) { m_hMainInstance = hInstance; }
 	HINSTANCE GetHInstance() const { return m_hMainInstance; }
 	void OnChangeCurrentSize(int iWidth, int iHeight);

@@ -1536,6 +1536,61 @@ void ZMain::MoveThisFile()
 	_ProcAfterRemoveThisFile();
 }
 
+
+/// 현재 파일을 복사한다.
+void ZMain::CopyThisFile()
+{
+	/// 현재 보고 있는 파일이 없으면 바로 리턴한다.
+	if ( m_strCurrentFilename.empty() )
+	{
+		return;
+	}
+
+	CMoveToDlg aDlg;
+
+	if ( !aDlg.DoModal() )
+	{
+		return;
+	}
+
+	tstring strFolder = aDlg.GetMoveToFolder();
+
+	tstring filename = GetFileNameFromFullFileName(m_strCurrentFilename);
+	tstring strToFileName = aDlg.GetMoveToFolder();
+
+	if ( strToFileName.size() <= 2 )
+	{
+		MessageBox(TEXT("MOVE_DESTINATION_IS_TOO_SHORT"));
+		return;
+	}
+
+	strToFileName += TEXT("\\");
+	strToFileName += filename;
+
+	// 옮겨갈 폴더에 같은 파일이 있는지 확인한다.
+	if ( 0 != _taccess(aDlg.GetMoveToFolder().c_str(), 00) )
+	{
+		MessageBox(TEXT("WRONG_DIRECTORY_NAME"));
+		return;
+	}
+
+	// 같은 파일이 존재하는지 확인한다.
+	if ( 0 == _taccess(strToFileName.c_str(), 00) )
+	{
+		// 이미 존재하면
+		if ( IDNO == MessageBox(TEXT("ASK_OVERWRITE_FILE"), MB_YESNO) )
+		{
+			return;
+		}
+	}
+
+	if ( FALSE == CopyFile(m_strCurrentFilename.c_str(), strToFileName.c_str(), FALSE) )
+	{
+		MessageBox(TEXT("CANNOT_COPY_FILE"));
+	}
+}
+
+
 void ZMain::Rotate(bool bClockWise)
 {
 	if ( m_currentImage.IsValid() )
