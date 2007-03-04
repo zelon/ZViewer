@@ -11,11 +11,11 @@
 #pragma once
 
 /// 파일 이동을 할 때 보여주는 다이얼로그를 위한 클래스
-class CMoveToDlg
+class CSelectToFolderDlg
 {
 public:
-	CMoveToDlg();
-	~CMoveToDlg();
+	CSelectToFolderDlg();
+	~CSelectToFolderDlg();
 
 	/// 다이얼로그를 화면에 띄운다.
 	bool DoModal();

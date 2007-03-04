@@ -13,7 +13,7 @@
 #include "src/ZFileExtDlg.h"
 #include "src/ZResourceManager.h"
 #include "../commonSrc/DesktopWallPaper.h"
-#include "src/MoveToDlg.h"
+#include "src/SelectToFolderDlg.h"
 #include "../commonSrc/SaveAs.h"
 #include "src/ZOption.h"
 #include "MessageManager.h"
@@ -1491,7 +1491,7 @@ void ZMain::MoveThisFile()
 		return;
 	}
 
-	CMoveToDlg aDlg;
+	CSelectToFolderDlg aDlg;
 	
 	if ( !aDlg.DoModal() )
 	{
@@ -1546,7 +1546,7 @@ void ZMain::CopyThisFile()
 		return;
 	}
 
-	CMoveToDlg aDlg;
+	CSelectToFolderDlg aDlg;
 
 	if ( !aDlg.DoModal() )
 	{

@@ -260,10 +260,22 @@
 			Name="src"
 			Filter="">
 			<File
-				RelativePath=".\src\MoveToDlg.cpp">
+				RelativePath=".\src\AboutWindow.cpp">
 			</File>
 			<File
-				RelativePath=".\src\MoveToDlg.h">
+				RelativePath=".\src\AboutWindow.h">
+			</File>
+			<File
+				RelativePath=".\src\MainWindow.cpp">
+			</File>
+			<File
+				RelativePath=".\src\MainWindow.h">
+			</File>
+			<File
+				RelativePath=".\src\SelectToFolderDlg.cpp">
+			</File>
+			<File
+				RelativePath=".\src\SelectToFolderDlg.h">
 			</File>
 			<File
 				RelativePath=".\src\ShortTimeMessage.cpp">
@@ -385,6 +397,16 @@
 			<File
 				RelativePath="..\commonSrc\ZImage.h">
 			</File>
+			<Filter
+				Name="windowLib"
+				Filter="">
+				<File
+					RelativePath="..\commonSrc\windowLib\ZWindow.cpp">
+				</File>
+				<File
+					RelativePath="..\commonSrc\windowLib\ZWindow.h">
+				</File>
+			</Filter>
 		</Filter>
 	</Files>
 	<Globals>

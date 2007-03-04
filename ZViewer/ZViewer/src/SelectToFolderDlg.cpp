@@ -9,24 +9,24 @@
 *********************************************************************/
 
 #include "stdafx.h"
-#include "MoveToDlg.h"
+#include "SelectToFolderDlg.h"
 
 #include "resource.h"
 #include "ZResourceManager.h"
 #include "ZMain.h"
 
-CMoveToDlg * pThis = NULL;
+CSelectToFolderDlg * pThis = NULL;
 
-CMoveToDlg::CMoveToDlg()
+CSelectToFolderDlg::CSelectToFolderDlg()
 {
 	pThis = this;
 }
 
-CMoveToDlg::~CMoveToDlg()
+CSelectToFolderDlg::~CSelectToFolderDlg()
 {
 }
 
-bool CMoveToDlg::DoModal()
+bool CSelectToFolderDlg::DoModal()
 {
 	if ( IDOK == DialogBox(ZResourceManager::GetInstance().GetHInstance(), MAKEINTRESOURCE(IDD_MOVE_DIALOG), ZMain::GetInstance().GetHWND(), MoveToDlgPrc) )
 	{
@@ -35,12 +35,12 @@ bool CMoveToDlg::DoModal()
 	return false;
 }
 
-void CMoveToDlg::OnBrowserButton()
+void CSelectToFolderDlg::OnBrowserButton()
 {
 
 }
 
-int CALLBACK CMoveToDlg::MoveToDlgPrc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
+int CALLBACK CSelectToFolderDlg::MoveToDlgPrc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 {
 	static tstring strLastFolder = TEXT("");
 
@@ -99,7 +99,7 @@ int CALLBACK CMoveToDlg::MoveToDlgPrc(HWND hWnd,UINT iMessage,WPARAM wParam,LPAR
 	return FALSE;
 }
 
-void CMoveToDlg::SetFolder(const tstring & strFolder)
+void CSelectToFolderDlg::SetFolder(const tstring & strFolder)
 {
 	m_strMoveToFolder = strFolder;
 
