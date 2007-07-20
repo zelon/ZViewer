@@ -820,7 +820,18 @@ public:
 	*/
 	BOOL getMetadata(FREE_IMAGE_MDMODEL model, const char *key, fipTag& tag) const;
 	/**
-	Attach a new FreeImage tag to the dib
+	Attach a new FreeImage tag to the dib.<br>
+	<b>Sample use</b> : <br>
+	<pre>
+	fipImage image;
+	// ...
+	fipTag tag;
+	tag.setKeyValue("Caption/Abstract", "my caption");
+	image.setMetadata(FIMD_IPTC, tag.getKey(), tag);
+	tag.setKeyValue("Keywords", "FreeImage;Library;Images;Compression");
+	image.setMetadata(FIMD_IPTC, tag.getKey(), tag);
+	</pre>
+
 	@param model Metadata model used to store the tag
 	@param key Tag field name 
 	@param tag Tag to be attached
@@ -1053,6 +1064,14 @@ public :
 	*/
 	FREE_IMAGE_FORMAT getFileType() const;
 
+	/**
+	Returns a pointer to the FIMEMORY data. Used for direct access from FREEIMAGE functions 
+	or from your own low level C functions.
+	*/
+	operator FIMEMORY*() { 
+		return _hmem; 
+	}
+
 	/**@name Memory IO routines */
 	//@{	
 	/**
@@ -1158,6 +1177,15 @@ public:
 	@see FreeImage_OpenMultiBitmap
 	*/
 	BOOL open(const char* lpszPathName, BOOL create_new, BOOL read_only, int flags = 0);
+
+	/**
+	Open a multi-page memory stream as read only. 
+	@param memIO Memory stream. The memory stream MUST BE a wrapped user buffer. 
+	@param flags Load flags. The signification of this flag depends on the image to be loaded.
+	@return Returns TRUE if successful, returns FALSE otherwise
+	@see FreeImage_LoadMultiBitmapFromMemory
+	*/
+	BOOL open(fipMemoryIO& memIO, int flags = 0);
 
 	/**
 	Close a file stream
@@ -1268,6 +1296,16 @@ public:
 	@see FreeImage_DeleteTag
 	*/
 	~fipTag();
+	/**
+	Construct a FIDT_ASCII tag (ASCII string).<br>
+	This method is useful to store comments or IPTC tags. 
+	@param name Field name
+	@param value Field value
+	@return Returns TRUE if successful, returns FALSE otherwise
+	@see FreeImage_CreateTag
+	*/
+	BOOL setKeyValue(const char *key, const char *value);
+
 	//@}
 
 	/**@name Copying */
@@ -1426,6 +1464,9 @@ protected:
 	FIMETADATA *_mdhandle;
 
 public:
+	/// Returns TRUE if the search handle is allocated, FALSE otherwise
+	BOOL isValid() const;
+
 	/// Constructor
 	fipMetadataFind();
 	/**
