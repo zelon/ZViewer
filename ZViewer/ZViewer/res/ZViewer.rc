@@ -67,7 +67,7 @@ BEGIN
     END
     POPUP "&View"
     BEGIN
-        MENUITEM "&FullScreen\tAlt+Enter",      ID_VIEW_FULLSCREEN
+        MENUITEM "&FullScreen\tAlt+Enter, Enter", ID_VIEW_FULLSCREEN
         MENUITEM "RightTop First Draw",         ID_VIEW_RIGHTTOPFIRSTDRAW
         MENUITEM SEPARATOR
         MENUITEM "BigToScreenStretch",          ID_VIEW_BIGTOSCREENSTRETCH
@@ -116,7 +116,7 @@ BEGIN
         MENUITEM "First\tHome",                 ID_MOVE_FIRSTIMAGE
         MENUITEM "Last\tEnd",                   ID_MOVE_LASTIMAGE
         MENUITEM SEPARATOR
-        MENUITEM "FullScreen\tAlt+Enter",       ID_VIEW_FULLSCREEN
+        MENUITEM "FullScreen\tAlt+Enter,Enter", ID_VIEW_FULLSCREEN
         MENUITEM "RightTop First Draw",         ID_VIEW_RIGHTTOPFIRSTDRAW
         MENUITEM SEPARATOR
         MENUITEM "BigToScreenStretch",          ID_POPUPMENU_BIGTOSCREENSTRETCH
@@ -124,7 +124,7 @@ BEGIN
         MENUITEM "SmallToScreenStretch",        ID_POPUPMENU_SMALLTOSCREENSTRETCH
 
         MENUITEM SEPARATOR
-        MENUITEM "DeleteThisFile",              ID_DELETETHISFILE
+        MENUITEM "DeleteThisFile\tDelete",      ID_DELETETHISFILE
         MENUITEM SEPARATOR
         POPUP "Set DesktopWallPaper"
         BEGIN
@@ -165,6 +165,7 @@ BEGIN
     VK_RIGHT,       ID_ACCELERATOR_RIGHT,   VIRTKEY, NOINVERT
     VK_UP,          ID_ACCELERATOR_UP,      VIRTKEY, NOINVERT
     VK_DELETE,      ID_DELETETHISFILE,      VIRTKEY, NOINVERT
+    "C",            ID_FILE_COPYTO,         VIRTKEY, ALT, NOINVERT
     "M",            ID_FILE_MOVETO,         VIRTKEY, ALT, NOINVERT
     VK_F5,          ID_FILE_RESCAN_FOLDER,  VIRTKEY, NOINVERT
     "S",            ID_FILE_SAVE_AS_NEW_EXT, VIRTKEY, CONTROL, NOINVERT
@@ -187,7 +188,7 @@ BEGIN
     VK_RETURN,      ID_VIEW_FULLSCREEN,     VIRTKEY, ALT, NOINVERT
     "]",            ID_VIEW_ROTATECLOCKWISE, ASCII, NOINVERT
     "[",            ID_VIEW_ROTATECOUNTERCLOCKWISE, ASCII, NOINVERT
-    "C",            ID_FILE_COPYTO,         VIRTKEY, ALT, NOINVERT
+    VK_RETURN,      ID_VIEW_FULLSCREEN,     VIRTKEY, NOINVERT
 END
 
 
