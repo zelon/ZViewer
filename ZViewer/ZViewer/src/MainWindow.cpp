@@ -84,6 +84,7 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 				ZMain::GetInstance().OnDrag(5000, 5000);
 				break;
 
+/// 디버그 모드에서만 작동하는 단축키들
 #ifdef _DEBUG
 			case '`':
 				ZCacheImage::GetInstance().debugShowCacheInfo();
