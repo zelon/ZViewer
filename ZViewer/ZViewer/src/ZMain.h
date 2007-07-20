@@ -198,7 +198,10 @@ private:
 	// 현재 파일이 지워졌을 때 후의 처리. 파일 삭제, 이동 후에 불리는 함수이다.
 	void _ProcAfterRemoveThisFile();
 
+	/// 메뉴, 상태 표시줄등을 보여준다.
 	void FormShow();
+
+	/// 메뉴, 상태 표시줄등을 숨긴다.
 	void FormHide();
 
 	tstring m_strInitArg;			///< 프로그램 시작 인자.
