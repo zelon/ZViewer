@@ -24,7 +24,7 @@ ZOption & ZOption::GetInstance()
 
 ZOption::ZOption()
 {
-	m_bLoopImages = true;
+	m_bLoopImages = false;
 	m_bUseCache = true;
 	
 	TCHAR buffer[256];
