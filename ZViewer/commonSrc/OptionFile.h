@@ -22,7 +22,7 @@ public:
 	~COptionFile();
 
 	/// 데이터 파일을 읽어들여서 맵을 구성한다.
-	static void LoadFromFile(const tstring & strFilename, iniMap & settings);
+	static bool LoadFromFile(const tstring & strFilename, iniMap & settings);
 
 	/// 맵 내용을 데이터 파일에 쓴다.
 	static void SaveToFile(const tstring & strFilename, const iniMap & settings);

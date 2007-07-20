@@ -78,7 +78,7 @@ void ZCacheImage::SetImageVector(const std::vector < FileData > & v)
 
 void ZCacheImage::StartThread()
 {
-	if ( ZOption::GetInstance().m_bUseCache )
+	if ( ZOption::GetInstance().IsUseCache() )
 	{
 		DWORD dwThreadID;
 		m_hThread = CreateThread(0, 0, ThreadFuncProxy, this, 0, &dwThreadID);
@@ -204,7 +204,7 @@ bool ZCacheImage::_CacheIndex(int iIndex)
 			*/
 
 
-			if ( ZOption::GetInstance().m_bBigToSmallStretchImage )
+			if ( ZOption::GetInstance().IsBigToSmallStretchImage() )
 			{
 				RECT screenRect;
 				ZMain::GetInstance().getCurrentScreenRect(screenRect);
@@ -225,7 +225,7 @@ bool ZCacheImage::_CacheIndex(int iIndex)
 				}
 			}
 
-			if ( ZOption::GetInstance().m_bSmallToBigStretchImage )
+			if ( ZOption::GetInstance().IsSmallToBigStretchImage() )
 			{
 				RECT screenRect;
 				ZMain::GetInstance().getCurrentScreenRect(screenRect);
@@ -413,7 +413,7 @@ void ZCacheImage::ThreadFunc()
 
 bool ZCacheImage::hasCachedData(const tstring & strFilename, int iIndex)
 {
-	if ( false == ZOption::GetInstance().m_bUseCache ) return false;
+	if ( false == ZOption::GetInstance().IsUseCache() ) return false;
 
 	// index 를 체크한다.
 	m_iCurrentIndex = iIndex;
@@ -481,7 +481,6 @@ void ZCacheImage::debugShowCacheInfo()
 	RECT rt;
 	ZMain::GetInstance().getCurrentScreenRect(rt);
 	DebugPrintf(TEXT("CurrentScreenSize : %d, %d"), rt.right, rt.bottom);
-
 
 	std::map < tstring, ZImage >::iterator it;
 

@@ -17,13 +17,12 @@
 using namespace std;
 
 /// 데이터 파일을 읽어들여서 맵을 구성한다.
-void COptionFile::LoadFromFile(const tstring & strFilename, iniMap & settings)
+bool COptionFile::LoadFromFile(const tstring & strFilename, iniMap & settings)
 {
 	CUnicodeFile file;
 	if ( false == file.open(strFilename, CUnicodeFile::eFileOpenMode_READ) )
 	{
-		_ASSERTE(false);
-		return;
+		return false;
 	}
 
 	tstring aLine;
@@ -57,6 +56,7 @@ void COptionFile::LoadFromFile(const tstring & strFilename, iniMap & settings)
 
 		settings[strKey] = strValue;
 	}
+	return true;
 }
 
 /// 맵 내용을 데이터 파일에 쓴다.

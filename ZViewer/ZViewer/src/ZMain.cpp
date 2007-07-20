@@ -178,7 +178,7 @@ void ZMain::OnInit()
 /// 여러 컨트롤들을 초기화시켜준다.
 void ZMain::_InitControls()
 {
-	CheckMenuItem(m_hMainMenu, ID_OPTION_VIEWLOOP, ZOption::GetInstance().m_bLoopImages ? MF_CHECKED : MF_UNCHECKED);
+	CheckMenuItem(m_hMainMenu, ID_OPTION_VIEWLOOP, ZOption::GetInstance().IsLoopImages() ? MF_CHECKED : MF_UNCHECKED);
 }
 
 
@@ -248,7 +248,7 @@ void ZMain::Draw(bool bEraseBg)
 
 		/// 그림이 화면보다 크면...
 
-		if ( ZOption::GetInstance().m_bBigToSmallStretchImage )
+		if ( ZOption::GetInstance().IsBigToSmallStretchImage() )
 		{
 			/// 큰 그림을 축소시켜서 그린다.
 
@@ -354,7 +354,7 @@ void ZMain::Draw(bool bEraseBg)
 	else	/// image is smaller than screen
 	{
 		if ( currentImageWidth < currentScreenRect.right && currentImageHeight < currentScreenRect.bottom 
-			&& ZOption::GetInstance().m_bSmallToBigStretchImage ) ///< if option is on
+			&& ZOption::GetInstance().IsSmallToBigStretchImage() ) ///< if option is on
 		{
 			DebugPrintf(TEXT("!!!!!!!!!!!! stretching on draw..."));
 
@@ -800,7 +800,7 @@ bool ZMain::MoveIndex(int iIndex)
 
 	if ( iIndex < 0 )
 	{
-		if ( ZOption::GetInstance().m_bLoopImages )
+		if ( ZOption::GetInstance().IsLoopImages() )
 		{
 			iIndex = (int)(m_vFile.size() - ((-1*iIndex) % m_vFile.size()));
 		}
@@ -812,7 +812,7 @@ bool ZMain::MoveIndex(int iIndex)
 
 	if ( iIndex >= (int)m_vFile.size() )
 	{
-		if ( ZOption::GetInstance().m_bLoopImages )
+		if ( ZOption::GetInstance().IsLoopImages() )
 		{
 			iIndex = (int)( iIndex % m_vFile.size() );
 		}
@@ -990,10 +990,10 @@ void ZMain::ToggleFullScreen()
 
 void ZMain::ToggleSmallToScreenStretch()
 {
-	ZOption::GetInstance().m_bSmallToBigStretchImage = ! ZOption::GetInstance().m_bSmallToBigStretchImage;
+	ZOption::GetInstance().ToggleSmallToBigStretchImage();
 
-	CheckMenuItem(m_hMainMenu, ID_VIEW_SMALLTOSCREENSTRETCH, ZOption::GetInstance().m_bSmallToBigStretchImage ? MF_CHECKED : MF_UNCHECKED);
-	CheckMenuItem(m_hPopupMenu, ID_POPUPMENU_SMALLTOSCREENSTRETCH, ZOption::GetInstance().m_bSmallToBigStretchImage ? MF_CHECKED : MF_UNCHECKED);
+	CheckMenuItem(m_hMainMenu, ID_VIEW_SMALLTOSCREENSTRETCH, ZOption::GetInstance().IsSmallToBigStretchImage() ? MF_CHECKED : MF_UNCHECKED);
+	CheckMenuItem(m_hPopupMenu, ID_POPUPMENU_SMALLTOSCREENSTRETCH, ZOption::GetInstance().IsSmallToBigStretchImage() ? MF_CHECKED : MF_UNCHECKED);
 
 	ZCacheImage::GetInstance().clearCache();
 	ZCacheImage::GetInstance().setCacheEvent();
@@ -1005,10 +1005,10 @@ void ZMain::ToggleSmallToScreenStretch()
 
 void ZMain::ToggleBigToScreenStretch()
 {
-	ZOption::GetInstance().m_bBigToSmallStretchImage = !ZOption::GetInstance().m_bBigToSmallStretchImage;
+	ZOption::GetInstance().ToggleBigToSmallStretchImage();
 
-	CheckMenuItem(m_hMainMenu, ID_VIEW_BIGTOSCREENSTRETCH , ZOption::GetInstance().m_bBigToSmallStretchImage ? MF_CHECKED : MF_UNCHECKED);
-	CheckMenuItem(m_hPopupMenu, ID_POPUPMENU_BIGTOSCREENSTRETCH, ZOption::GetInstance().m_bBigToSmallStretchImage ? MF_CHECKED : MF_UNCHECKED);
+	CheckMenuItem(m_hMainMenu, ID_VIEW_BIGTOSCREENSTRETCH , ZOption::GetInstance().IsBigToSmallStretchImage() ? MF_CHECKED : MF_UNCHECKED);
+	CheckMenuItem(m_hPopupMenu, ID_POPUPMENU_BIGTOSCREENSTRETCH, ZOption::GetInstance().IsBigToSmallStretchImage() ? MF_CHECKED : MF_UNCHECKED);
 
 	ZCacheImage::GetInstance().clearCache();
 	ZCacheImage::GetInstance().setCacheEvent();
@@ -1020,9 +1020,9 @@ void ZMain::ToggleBigToScreenStretch()
 
 void ZMain::ToggleLoopImage()
 {
-	ZOption::GetInstance().m_bLoopImages = !(ZOption::GetInstance().m_bLoopImages);
+	ZOption::GetInstance().ToggleLoopImages();
 
-	CheckMenuItem(m_hMainMenu, ID_OPTION_VIEWLOOP, ZOption::GetInstance().m_bLoopImages ? MF_CHECKED : MF_UNCHECKED);
+	CheckMenuItem(m_hMainMenu, ID_OPTION_VIEWLOOP, ZOption::GetInstance().IsLoopImages() ? MF_CHECKED : MF_UNCHECKED);
 }
 
 void ZMain::SetStatusBarText()
@@ -1220,7 +1220,7 @@ void ZMain::OnDrag(int x, int y)
 {
 	if ( !m_currentImage.IsValid()) return;
 
-	if ( ZOption::GetInstance().m_bBigToSmallStretchImage )
+	if ( ZOption::GetInstance().IsBigToSmallStretchImage() )
 	{
 		/// 큰 그림을 화면에 맞게 스트레칭할 때는 드래그는 하지 않아도 된다.
 		return;
@@ -1658,7 +1658,7 @@ void ZMain::OnWindowResized()
 
 	OnChangeCurrentSize(rt.right, rt.bottom);
 
-	if ( ZOption::GetInstance().m_bBigToSmallStretchImage || ZOption::GetInstance().m_bSmallToBigStretchImage )
+	if ( ZOption::GetInstance().IsBigToSmallStretchImage() || ZOption::GetInstance().IsSmallToBigStretchImage() )
 	{
 		ZCacheImage::GetInstance().clearCache();
 		ZCacheImage::GetInstance().setCacheEvent();

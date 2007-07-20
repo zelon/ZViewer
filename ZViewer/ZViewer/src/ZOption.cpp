@@ -10,8 +10,6 @@
 
 #include "stdafx.h"
 #include "ZOption.h"
-#include "OptionFile.h"
-#include "CommonFunc.h"
 #include "ZMain.h"
 
 
@@ -24,9 +22,6 @@ ZOption & ZOption::GetInstance()
 
 ZOption::ZOption()
 {
-	m_bLoopImages = false;
-	m_bUseCache = true;
-	
 	TCHAR buffer[256];
 	if ( S_OK != SHGetFolderPath(NULL, CSIDL_LOCAL_APPDATA, NULL, SHGFP_TYPE_CURRENT, buffer) )
 	{
@@ -43,12 +38,28 @@ ZOption::ZOption()
 	/// 기본적인 옵션은 설정해둔다.
 	SetDefaultOption();
 
+	SetSaveOptions();
+
 	/// 기본적인 옵션에서 파일에서 불러온 설정을 덮어씌운다.
 	LoadFromFile();
 }
 
+void ZOption::SetSaveOptions()
+{
+	_InsertSaveOptionSetting(L"maximumcachememoryMB", &m_iMaximumCacheMemoryMB);
+	_InsertSaveOptionSetting(L"maximumcachefilenum", &m_iMaxCacheImageNum);
+
+	_InsertSaveOptionSetting(L"use_cache", &m_bUseCache);
+	_InsertSaveOptionSetting(L"loop_view", &m_bLoopImages);
+
+	_InsertSaveOptionSetting(L"stretch_small_to_big", &m_bSmallToBigStretchImage);
+	_InsertSaveOptionSetting(L"stretch_big_to_small", &m_bBigToSmallStretchImage);
+}
+
 void ZOption::SetDefaultOption()
 {
+	m_bLoopImages = false;
+	m_bUseCache = true;
 	m_bFullScreen = false;
 	m_bBigToSmallStretchImage = false;
 	m_bSmallToBigStretchImage = false;
@@ -63,19 +74,23 @@ void ZOption::SetDefaultOption()
 
 void ZOption::LoadFromFile()
 {
-	/*
 	iniMap data;
 
-	COptionFile::LoadFromFile(m_strOptionFilename, data);
-
-	m_iMaximumCacheMemoryMB = _tstoi(data[TEXT("maximumcachememory")].c_str());
-	m_iMaxCacheImageNum = _tstoi(data[TEXT("maximumcachefilenum")].c_str());
-	*/
+	/// 파일로부터 설정 불러오기가 성공했을 때만 설정을 한다.
+	if ( COptionFile::LoadFromFile(m_strOptionFilename, data) )
+	{
+		for ( size_t i=0; i<m_saveOptions.size(); ++i )
+		{
+			if ( data.count(m_saveOptions[i].getString()) > 0)
+			{
+				m_saveOptions[i].InsertMapToValue(data);
+			}
+		}
+	}
 }
 
 void ZOption::SaveToFile()
 {
-	/*
 	iniMap data;
 
 	m_bOptionChanged = true;
@@ -83,10 +98,10 @@ void ZOption::SaveToFile()
 	// 저장해야하는 옵션 중 변경된 것이 있으면
 	if ( m_bOptionChanged )
 	{
-		data[TEXT("maximumcachememory")] = toString(m_iMaximumCacheMemoryMB);
-		data[TEXT("maximumcachefilenum")] = toString(m_iMaxCacheImageNum);
+		for ( size_t i=0; i<m_saveOptions.size(); ++i )
+		{
+			m_saveOptions[i].InsertValueToMap(data);
+		}
+		COptionFile::SaveToFile(m_strOptionFilename, data);
 	}
-
-	COptionFile::SaveToFile(m_strOptionFilename, data);
-	*/
 }
