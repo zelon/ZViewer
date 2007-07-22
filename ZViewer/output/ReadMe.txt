@@ -22,12 +22,14 @@
 -- version history --
 
  * v0.6
-  * freeimage library 3.9.1 로 업데이트
+  * freeimage library 3.9.3 로 업데이트
   * 마지막 그림 파일에서 Next 했을 때 처음 그림 파일, 그 반대로의 동작도 옵션으로 설정가능
   * 내부적으로 유니코드 지원
   * 다른 드라이브의 폴더로 파일이 이동되지 않던 버그 수정
   * ZViewerAgent 에서 다른 형태의 파일로 저장하기
   * ZViewerAgent 의 메뉴도 국제화 - 기존의 한글화되지 않았던 것 수정
+  * 환경설정 파일 추가. 몇몇 옵션을 파일로 저장하고 불러오는 기능 추가.
+  * Enter 눌러도 FullScreen 동작하게 변경(기존의 Alt+Enter 도 여전히 동작함)
 
  * v0.5.1(2006. 04. 18)
   * freeimage library 3.8.0 으로 업데이트
