@@ -11,7 +11,7 @@
 #pragma once
 
 #include <strsafe.h>
-#include "../lib/FreeImagePlus.h"
+#include "freeimage/FreeImagePlus.h"
 #include "CommonFunc.h"
 
 /// FreeImagePlus 의 클래스인 fipWinImage 를 래핑하여 함수 등을 쓰기 쉽게 하는 클래스

@@ -32,6 +32,6 @@
 #include <shlobj.h>
 #include <io.h>
 
-#include "FreeImagePlus.h"
+#include "freeimage/FreeImagePlus.h"
 
 #include "CommonDefine.h"

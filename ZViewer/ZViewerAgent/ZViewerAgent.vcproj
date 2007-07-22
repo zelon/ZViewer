@@ -23,6 +23,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
+				AdditionalIncludeDirectories="$(SolutionDir)/lib"
 				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG;_USRDLL;_ATL_NO_UUIDOF"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
@@ -37,7 +38,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				IgnoreImportLibrary="TRUE"
-				AdditionalDependencies="$(SolutionDir)/lib/FreeImage.lib $(SolutionDir)/lib/FreeImagePlus.lib"
+				AdditionalDependencies="$(SolutionDir)/lib/freeimage/FreeImage.lib $(SolutionDir)/lib/freeimage/FreeImagePlus.lib"
 				OutputFile="$(OutDir)/ZViewerAgentD.dll"
 				LinkIncremental="2"
 				ModuleDefinitionFile=".\ZViewerAgent.def"
@@ -92,7 +93,7 @@
 			CharacterSet="1">
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="$(SolutionDir)/lib/Devil/include"
+				AdditionalIncludeDirectories="$(SolutionDir)/lib"
 				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG;_USRDLL;_ATL_NO_UUIDOF"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="3"
@@ -105,7 +106,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				IgnoreImportLibrary="TRUE"
-				AdditionalDependencies="$(SolutionDir)/lib/FreeImage.lib  $(SolutionDir)/lib/FreeImagePlus.lib"
+				AdditionalDependencies="$(SolutionDir)/lib/freeimage/FreeImage.lib  $(SolutionDir)/lib/freeimage/FreeImagePlus.lib"
 				OutputFile="$(OutDir)/ZViewerAgent.dll"
 				LinkIncremental="1"
 				ModuleDefinitionFile=".\ZViewerAgent.def"
@@ -347,6 +348,16 @@
 		<Filter
 			Name="lib"
 			Filter="">
+			<Filter
+				Name="freeimage"
+				Filter="">
+				<File
+					RelativePath="..\lib\freeimage\FreeImage.h">
+				</File>
+				<File
+					RelativePath="..\lib\freeimage\FreeImagePlus.h">
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="commonSrc"
