@@ -22,7 +22,8 @@
 -- version history --
 
  * v0.6
-  * freeimage library 3.9.3 로 업데이트
+  * freeimage library 3.10.0 로 업데이트
+  * jpeg2000 지원(jp2, j2k)
   * 마지막 그림 파일에서 Next 했을 때 처음 그림 파일, 그 반대로의 동작도 옵션으로 설정가능
   * 내부적으로 유니코드 지원
   * 다른 드라이브의 폴더로 파일이 이동되지 않던 버그 수정
