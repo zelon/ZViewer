@@ -61,6 +61,8 @@ void ZFileExtDlg::ExtMapInit()
 	_AddExtSet(2, TEXT("jpg"));
 	_AddExtSet(2, TEXT("jpeg"));
 	_AddExtSet(2, TEXT("jpe"));
+	_AddExtSet(2, TEXT("jp2"));
+	_AddExtSet(2, TEXT("j2k"));
 	_AddExtSet(3, TEXT("png"));
 	_AddExtSet(4, TEXT("psd"));
 	_AddExtSet(5, TEXT("gif"));
