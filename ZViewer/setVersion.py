@@ -4,7 +4,7 @@ import os
 def commonDefineVersionUp(major, minor, patch, postfix):
 	print ("CommonDefine.h file update...")
 
-	filename = r"lib\CommonDefine.h"
+	filename = r"commonSrc\CommonDefine.h"
 	if False == os.access(filename, os.F_OK):
 		print ("no exist of " + filename)
 		return False
@@ -119,36 +119,40 @@ def nsisVersionUp(major, minor, patch, postfix):
 
 def doVersionUp():
 
+	print("Major is A of A.B.Cxxx");
 	print("Enter Major : "),
 	vMajor = input()
 
+	print("\nMajor is B of A.B.Cxxx");
 	print("Enter Minor : "),
 	vMinor = input()
 
+	print("\nMajor is C of A.B.Cxxx");
 	print("Enter patch : "),
 	vPatch = input()
 
+	print("\nMajor is xxx of A.B.Cxxx");
 	print("Enter postfix : "),
 	vPostfix = raw_input()
 
 	# version up ZViewerAgent\ZViewerAgent.rc
 	if False == zviewerRcVersionUp(vMajor, vMinor, vPatch):
-		print ("Error on zviewerRcVersionUp!!!!!!!!!!")
+		print ("!!! Error on zviewerRcVersionUp!!!!!!!!!!")
 		return
 
 	# version up ZViewer/res/ZViewer.rc
 	if False == zviewerAgentRcVersionUp(vMajor, vMinor, vPatch):
-		print ("Error on zviewerAgentRcVersionUp!!!!!!!!!!")
+		print ("!!! Error on zviewerAgentRcVersionUp!!!!!!!!!!")
 		return
 
 	# version up output/ZViewer.nsi
 	if False == nsisVersionUp(vMajor, vMinor, vPatch, vPostfix):
-		print ("Error on nsisVersionUp!!!!!!!!!!")
+		print ("!!! Error on nsisVersionUp!!!!!!!!!!")
 		return
 
-	# version up ZViewer/CommonDefin.h
+	# version up commonSrc/CommonDefin.h
 	if False == commonDefineVersionUp(vMajor, vMinor, vPatch, vPostfix):
-		print ("Error on commonDefineVersionUp!!!!!!!!!!")
+		print ("!!! Error on commonDefineVersionUp!!!!!!!!!!")
 		return
 
 	print("version update completed")
