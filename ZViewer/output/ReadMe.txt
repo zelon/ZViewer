@@ -1,10 +1,11 @@
 
  *. 라이센스는 GPL(License.txt 참조)입니다. 
+ *. ZViewer 의 홈페이지는 http://zviewer.wimy.com 입니다.
  *. 모두(개인, 기업, 관공서 등등)에게 무료이며 최신 버젼 및 프로그램 소스는 http://kldp.net/projects/zviewer/ 에서 구할 수 있습니다.
 
 -- 주요 기능 --
 
- * 지원하는 확장자 : bmp, jpg, png, tif, psd, gif, dds, tga, pcx, xpm, xbm, cut, ico, hdr, jng, koa, mng, pcd, ras
+ * 지원하는 이미지 파일 : bmp, jpg, jpeg2000, png, tif, psd, gif, dds, tga, pcx, xpm, xbm, cut, ico, hdr, jng, koa, mng, pcd, ras
  * 이미지를 캐시해두어 빨리 볼 수 있게 함. 50메가 캐시 메모리 제한.
  * 파일 이동, 삭제 기능
  * 실수로 Home, Last 등을 눌러 처음, 마지막 파일로 갔을 때 Backspace 키를 이용한 이전 위치로 돌아가기
