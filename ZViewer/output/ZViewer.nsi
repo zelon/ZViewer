@@ -4,19 +4,19 @@
 !define PRODUCT_NAME "ZViewer"
 !define PRODUCT_VERSION "0.6.0alpha"
 !define PRODUCT_PUBLISHER "RhLab"
-!define PRODUCT_WEB_SITE "http://www.wimy.com"
+!define PRODUCT_WEB_SITE "http://zviewer.wimy.com"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 !define PRODUCT_UNINST_ROOT_KEY "HKLM"
 
-SetCompressor bzip2
+SetCompressor /SOLID lzma
 
 ; MUI 1.67 compatible ------
 !include "MUI.nsh"
 
 ; MUI Settings
 !define MUI_ABORTWARNING
-!define MUI_ICON "${NSISDIR}\Contrib\Graphics\Icons\modern-install.ico"
-!define MUI_UNICON "${NSISDIR}\Contrib\Graphics\Icons\modern-uninstall.ico"
+!define MUI_ICON "${NSISDIR}\Contrib\Graphics\Icons\orange-install.ico"
+!define MUI_UNICON "${NSISDIR}\Contrib\Graphics\Icons\orange-uninstall.ico"
 
 ; Language Selection Dialog Settings
 !define MUI_LANGDLL_REGISTRY_ROOT "${PRODUCT_UNINST_ROOT_KEY}"
@@ -91,6 +91,8 @@ ZViewerCopyDll:
 ; Language Files 
   SetOutPath "$INSTDIR\language"
   File "language\korean.dll"
+  File "language\korean.txt"
+  File "language\english.txt"
 
 ; Register DLL
   SetOutPath "$INSTDIR" ; RegDll 을 하기 위해서는 그 폴더로 가야한다.
