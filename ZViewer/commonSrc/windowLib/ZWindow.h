@@ -15,7 +15,7 @@ class ZWindow
 {
 public:
 	ZWindow();
-	~ZWindow();
+	virtual ~ZWindow();
 
 	virtual void SetWndProc() = 0;
 
