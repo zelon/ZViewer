@@ -60,6 +60,11 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 		{
 			switch ( wParam )
 			{
+			case 'f':
+			case 'F':
+				ZMain::GetInstance().ToggleFullScreen();
+				break;
+
 			case 'A':
 			case 'a':
 			case '7':
