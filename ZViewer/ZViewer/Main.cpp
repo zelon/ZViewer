@@ -123,7 +123,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance ,LPTSTR lpszC
 	//MessageBox(HWND_DESKTOP, strInitArg.c_str(), "sf", MB_OK);
 
 #ifdef _DEBUG
-	strInitArg = TEXT("Z:\\(__개인자료__)\\긁어모은 사진들\\19028-1.jpg");
+	strInitArg = TEXT("..\\SampleImages\\zviewer_jpg.jpg");
 	//strInitArg = "C:\\A.bmp";
 #endif
 	ZImage::StartupLibrary();
