@@ -178,7 +178,7 @@ void ZMain::OnInit()
 /// 여러 컨트롤들을 초기화시켜준다.
 void ZMain::_InitControls()
 {
-	CheckMenuItem(m_hMainMenu, ID_OPTION_VIEWLOOP, ZOption::GetInstance().IsLoopImages() ? MF_CHECKED : MF_UNCHECKED);
+	SetCheckMenus();
 }
 
 
@@ -980,8 +980,7 @@ void ZMain::ToggleFullScreen()
 		//m_iRestoreX = 
 	}
 
-	CheckMenuItem(m_hMainMenu, ID_VIEW_FULLSCREEN, ZOption::GetInstance().IsFullScreen() ? MF_CHECKED : MF_UNCHECKED);
-	CheckMenuItem(m_hPopupMenu, ID_VIEW_FULLSCREEN, ZOption::GetInstance().IsFullScreen() ? MF_CHECKED : MF_UNCHECKED);
+	SetCheckMenus();
 
 	m_iShowingX = 0;
 	m_iShowingY = 0;
@@ -992,8 +991,7 @@ void ZMain::ToggleSmallToScreenStretch()
 {
 	ZOption::GetInstance().ToggleSmallToBigStretchImage();
 
-	CheckMenuItem(m_hMainMenu, ID_VIEW_SMALLTOSCREENSTRETCH, ZOption::GetInstance().IsSmallToBigStretchImage() ? MF_CHECKED : MF_UNCHECKED);
-	CheckMenuItem(m_hPopupMenu, ID_POPUPMENU_SMALLTOSCREENSTRETCH, ZOption::GetInstance().IsSmallToBigStretchImage() ? MF_CHECKED : MF_UNCHECKED);
+	SetCheckMenus();	
 
 	ZCacheImage::GetInstance().clearCache();
 	ZCacheImage::GetInstance().setCacheEvent();
@@ -1007,8 +1005,7 @@ void ZMain::ToggleBigToScreenStretch()
 {
 	ZOption::GetInstance().ToggleBigToSmallStretchImage();
 
-	CheckMenuItem(m_hMainMenu, ID_VIEW_BIGTOSCREENSTRETCH , ZOption::GetInstance().IsBigToSmallStretchImage() ? MF_CHECKED : MF_UNCHECKED);
-	CheckMenuItem(m_hPopupMenu, ID_POPUPMENU_BIGTOSCREENSTRETCH, ZOption::GetInstance().IsBigToSmallStretchImage() ? MF_CHECKED : MF_UNCHECKED);
+	SetCheckMenus();
 
 	ZCacheImage::GetInstance().clearCache();
 	ZCacheImage::GetInstance().setCacheEvent();
@@ -1022,7 +1019,7 @@ void ZMain::ToggleLoopImage()
 {
 	ZOption::GetInstance().ToggleLoopImages();
 
-	CheckMenuItem(m_hMainMenu, ID_OPTION_VIEWLOOP, ZOption::GetInstance().IsLoopImages() ? MF_CHECKED : MF_UNCHECKED);
+	SetCheckMenus();
 }
 
 void ZMain::SetStatusBarText()
@@ -1447,8 +1444,7 @@ void ZMain::OnRightTopFirstDraw()
 {
 	ZOption::GetInstance().m_bRightTopFirstDraw = !ZOption::GetInstance().m_bRightTopFirstDraw;
 
-	CheckMenuItem(m_hMainMenu, ID_VIEW_RIGHTTOPFIRSTDRAW, ZOption::GetInstance().m_bRightTopFirstDraw ? MF_CHECKED : MF_UNCHECKED);
-	CheckMenuItem(m_hPopupMenu, ID_VIEW_RIGHTTOPFIRSTDRAW, ZOption::GetInstance().m_bRightTopFirstDraw ? MF_CHECKED : MF_UNCHECKED);
+	SetCheckMenus();
 }
 
 void ZMain::ShowFileExtDlg()
@@ -1685,4 +1681,19 @@ void ZMain::CreateStatusBar()
 		1860,	/// 파일명표시
 	};
 	SendMessage(m_hStatusBar, SB_SETPARTS, 7, (LPARAM)SBPart);
+}
+
+/// 메뉴 중 체크표시 되는 것을 확인하여 설정해준다.
+void ZMain::SetCheckMenus()
+{
+	CheckMenuItem(m_hMainMenu, ID_OPTION_VIEWLOOP, ZOption::GetInstance().IsLoopImages() ? MF_CHECKED : MF_UNCHECKED);
+	CheckMenuItem(m_hMainMenu, ID_VIEW_FULLSCREEN, ZOption::GetInstance().IsFullScreen() ? MF_CHECKED : MF_UNCHECKED);
+	CheckMenuItem(m_hMainMenu, ID_VIEW_SMALLTOSCREENSTRETCH, ZOption::GetInstance().IsSmallToBigStretchImage() ? MF_CHECKED : MF_UNCHECKED);
+	CheckMenuItem(m_hMainMenu, ID_VIEW_BIGTOSCREENSTRETCH , ZOption::GetInstance().IsBigToSmallStretchImage() ? MF_CHECKED : MF_UNCHECKED);
+	CheckMenuItem(m_hMainMenu, ID_VIEW_RIGHTTOPFIRSTDRAW, ZOption::GetInstance().m_bRightTopFirstDraw ? MF_CHECKED : MF_UNCHECKED);
+
+	CheckMenuItem(m_hPopupMenu, ID_VIEW_RIGHTTOPFIRSTDRAW, ZOption::GetInstance().m_bRightTopFirstDraw ? MF_CHECKED : MF_UNCHECKED);
+	CheckMenuItem(m_hPopupMenu, ID_VIEW_FULLSCREEN, ZOption::GetInstance().IsFullScreen() ? MF_CHECKED : MF_UNCHECKED);
+	CheckMenuItem(m_hPopupMenu, ID_POPUPMENU_SMALLTOSCREENSTRETCH, ZOption::GetInstance().IsSmallToBigStretchImage() ? MF_CHECKED : MF_UNCHECKED);
+	CheckMenuItem(m_hPopupMenu, ID_POPUPMENU_BIGTOSCREENSTRETCH, ZOption::GetInstance().IsBigToSmallStretchImage() ? MF_CHECKED : MF_UNCHECKED);
 }

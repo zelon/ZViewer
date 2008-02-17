@@ -176,6 +176,9 @@ public:
 	/// 상태 표시 윈도우를 만든다.
 	void CreateStatusBar();
 
+	/// 메뉴 중 체크표시 되는 것을 확인하여 설정해준다.
+	void SetCheckMenus();
+
 private:
 
 	/// 현재 이미지를 드래그할 수 있어서, 손모양의 커서인가
