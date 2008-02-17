@@ -213,7 +213,8 @@ CAPTION "ZViewer About"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
     DEFPUSHBUTTON   "Close",IDOK,192,108,50,14
-    LTEXT           "Homepage : http://www.wimy.com",IDC_STATIC,129,33,113,8
+    LTEXT           "Homepage : http://zviewer.wimy.com",IDC_STATIC,129,33,
+                    122,8
     LTEXT           "±èÁø¿í(zelon) ÀÌ ¸¸µê",IDC_STATIC,68,20,75,8
     LTEXT           "ZViewer version : ",IDC_STATIC,7,7,58,8
     LTEXT           "VERSION",IDC_STATIC_VERSION,69,7,139,8
