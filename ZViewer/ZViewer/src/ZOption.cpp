@@ -42,6 +42,9 @@ ZOption::ZOption()
 
 	/// 기본적인 옵션에서 파일에서 불러온 설정을 덮어씌운다.
 	LoadFromFile();
+
+	/// 불러온 최종 옵션을 점검하여 메뉴 중 체크표시할 것들을 표시한다.
+	ZMain::GetInstance().SetCheckMenus();
 }
 
 void ZOption::SetSaveOptions()
@@ -56,6 +59,7 @@ void ZOption::SetSaveOptions()
 	_InsertSaveOptionSetting(L"stretch_big_to_small", &m_bBigToSmallStretchImage);
 }
 
+/// 기본적인 옵션을 설정해둔다.
 void ZOption::SetDefaultOption()
 {
 	m_bLoopImages = false;
