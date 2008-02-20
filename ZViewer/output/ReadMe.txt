@@ -22,7 +22,7 @@
 
 -- version history --
 
- * v0.6
+ * v0.6.0(2008. 2. 20)
   * freeimage library 3.10.0 로 업데이트
   * jpeg2000 지원(jp2, j2k)
   * 마지막 그림 파일에서 Next 했을 때 처음 그림 파일, 그 반대로의 동작도 옵션으로 설정가능
