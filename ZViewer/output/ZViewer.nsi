@@ -35,12 +35,22 @@ SetCompressor /SOLID lzma
 ; Finish page
 !insertmacro MUI_PAGE_FINISH
 
+; start of languages ----------
+;!insertmacro MUI_LANGUAGE "English"
+
+;!insertmacro MUI_LANGUAGE "Korean"
+
+; end of languages ----------
+
 ; Uninstaller pages
 !insertmacro MUI_UNPAGE_INSTFILES
 
 ; Language files
 !insertmacro MUI_LANGUAGE "English"
+!include ".\language\english.nsh"
+
 !insertmacro MUI_LANGUAGE "Korean"
+!include ".\language\korean.nsh"
 
 ; Reserve files
 !insertmacro MUI_RESERVEFILE_INSTALLOPTIONS
@@ -69,7 +79,7 @@ ZViewerDllCheck:
   IfErrors ZViewerNeedUninstallAndReboot ZViewerCopyDll
 
 ZViewerNeedUninstallAndReboot:
-  MessageBox MB_OK "To install new dll, the installer will kill explorer."
+  MessageBox MB_OK $(RestartExplorer)
   KillProcDLL::KillProc "explorer.exe"
 
 ; explorer 가 바로 죽어도 dll 을 복사하는 속도가 더 빠를 수 있으므로 잠시 대기
