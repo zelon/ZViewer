@@ -72,6 +72,18 @@ void ZMain::_releaseBufferDC()
 /// Timer 를 받았을 때
 void ZMain::onTimer()
 {
+	if ( ZOption::GetInstance().m_bSlideMode )
+	{/// check slidemode
+		DWORD dwNow = GetTickCount();
+
+		if ( dwNow - ZOption::GetInstance().m_dwLastSlidedTime > ZOption::GetInstance().m_iSlideModePeriodMiliSeconds )
+		{
+			NextImage();
+			Draw();
+			ZOption::GetInstance().m_dwLastSlidedTime = dwNow;
+		}
+	}
+
 	if ( ZCacheImage::GetInstance().isCachingNow() )
 	{
 		//DebugPrintf("now cache status...");
@@ -812,7 +824,7 @@ bool ZMain::MoveIndex(int iIndex)
 
 	if ( iIndex >= (int)m_vFile.size() )
 	{
-		if ( ZOption::GetInstance().IsLoopImages() )
+		if ( ZOption::GetInstance().IsLoopImages() || ZOption::GetInstance().m_bSlideMode )
 		{
 			iIndex = (int)( iIndex % m_vFile.size() );
 		}
@@ -1696,4 +1708,10 @@ void ZMain::SetCheckMenus()
 	CheckMenuItem(m_hPopupMenu, ID_VIEW_FULLSCREEN, ZOption::GetInstance().IsFullScreen() ? MF_CHECKED : MF_UNCHECKED);
 	CheckMenuItem(m_hPopupMenu, ID_POPUPMENU_SMALLTOSCREENSTRETCH, ZOption::GetInstance().IsSmallToBigStretchImage() ? MF_CHECKED : MF_UNCHECKED);
 	CheckMenuItem(m_hPopupMenu, ID_POPUPMENU_BIGTOSCREENSTRETCH, ZOption::GetInstance().IsBigToSmallStretchImage() ? MF_CHECKED : MF_UNCHECKED);
+}
+
+void ZMain::StartSlideMode()
+{
+	ZOption::GetInstance().m_bSlideMode = true;
+	ZOption::GetInstance().m_dwLastSlidedTime = GetTickCount();
 }

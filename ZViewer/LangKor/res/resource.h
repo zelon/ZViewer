@@ -70,14 +70,15 @@
 #define ID_SHOW_CACHED_FILENAME         40081
 #define ID_FILE_SAVE_AS_NEW_EXT         40084
 #define ID_OPTION_VIEWLOOP              40085
-#define ID_FILE_COPYTO                  40087
+#define ID_FILE_COPYTO                  40086
+#define ID_START_SLIDESHOW              40088
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        115
-#define _APS_NEXT_COMMAND_VALUE         40088
+#define _APS_NEXT_COMMAND_VALUE         40089
 #define _APS_NEXT_CONTROL_VALUE         1014
 #define _APS_NEXT_SYMED_VALUE           101
 #endif

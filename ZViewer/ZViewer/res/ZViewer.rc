@@ -138,6 +138,7 @@ BEGIN
             MENUITEM "Clear",                       ID_SETDESKTOPWALLPAPER_CLEAR
 
         END
+        MENUITEM "Start SlideShow",             ID_START_SLIDESHOW
         MENUITEM "E&xit",                       ID_MAINMENU_FILE_EXIT
     END
 END

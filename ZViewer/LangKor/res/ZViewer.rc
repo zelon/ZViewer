@@ -139,6 +139,7 @@ BEGIN
             MENUITEM "지우기",                      ID_SETDESKTOPWALLPAPER_CLEAR
 
         END
+        MENUITEM "연속보기 시작",               ID_START_SLIDESHOW
         MENUITEM "종료(&X)",                    ID_MAINMENU_FILE_EXIT
     END
 END

@@ -60,6 +60,11 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 		{
 			switch ( wParam )
 			{
+			case 'g':
+			case 'G':
+				ZMain::GetInstance().StartSlideMode();
+				break;
+
 			case 'f':
 			case 'F':
 				ZMain::GetInstance().ToggleFullScreen();
@@ -302,6 +307,8 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 
 	case WM_COMMAND:
 		{
+			if ( ZOption::GetInstance().m_bSlideMode ) ZOption::GetInstance().m_bSlideMode = false;
+
 			int wMid = LOWORD(wParam);
 			int wmEvent = HIWORD(wParam);
 
@@ -317,6 +324,10 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 			{
 				/////////////////////////////////////////////
 				// Main Menu
+
+			case ID_START_SLIDESHOW:
+				ZMain::GetInstance().StartSlideMode();
+				break;
 
 			case ID_SHOW_CACHED_FILENAME:
 				ZCacheImage::GetInstance().ShowCachedImageToOutputWindow();

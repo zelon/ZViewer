@@ -71,6 +71,14 @@ public:
 	/// 최대 캐시할 이미지 갯수. 여기서 절반반큼 왼쪽, 오른쪽으로 간다.
 	int m_iMaxCacheImageNum;
 
+	/// 슬라이드 모드인가
+	bool m_bSlideMode;
+
+	/// 슬라이드 모드의 시간(mili seconds)
+	int m_iSlideModePeriodMiliSeconds;
+
+	DWORD m_dwLastSlidedTime;
+
 protected:
 	/// 전체 화면 모드인가.m_bOptionChanged(false)
 	bool m_bFullScreen;

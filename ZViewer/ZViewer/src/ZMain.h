@@ -30,6 +30,8 @@ public:
 	static ZMain & GetInstance();
 	~ZMain(void);
 
+	void StartSlideMode();
+
 	/// Timer 를 받았을 때
 	void onTimer();
 
