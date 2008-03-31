@@ -79,8 +79,11 @@ public:
 
 	DWORD m_dwLastSlidedTime;
 
+	/// Always on Top window
+	bool m_bAlwaysOnTop;
 protected:
-	/// 전체 화면 모드인가.m_bOptionChanged(false)
+
+	/// Is Full screen mode?
 	bool m_bFullScreen;
 
 private:

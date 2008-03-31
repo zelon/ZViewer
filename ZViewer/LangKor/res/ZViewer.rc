@@ -98,6 +98,7 @@ BEGIN
             MENUITEM "파일크기 - 큰파일이 먼저",    ID_SORT_FILESIZE
             MENUITEM "파일날짜 - 최근파일이 먼저",  ID_SORT_FILEDATE
         END
+        MENUITEM "항상 위에",                   ID_VIEW_ALWAYSONTOP
     END
     POPUP "옵션(&O)"
     BEGIN

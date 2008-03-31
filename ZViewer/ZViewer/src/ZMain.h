@@ -122,6 +122,8 @@ public:
 	/// Cache status 를 상태 표시줄에 표시한다.
 	void showCacheStatus();
 
+	void ToggleAlwaysOnTop();
+
 	/// 전체화면 모드를 토글한다.
 	void ToggleFullScreen();
 

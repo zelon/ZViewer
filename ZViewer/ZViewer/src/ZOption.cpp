@@ -62,6 +62,7 @@ void ZOption::SetSaveOptions()
 /// 기본적인 옵션을 설정해둔다.
 void ZOption::SetDefaultOption()
 {
+	m_bAlwaysOnTop = false;
 	m_bSlideMode = false;
 	m_iSlideModePeriodMiliSeconds = 5000;	///< Default slide mode period is 5 seconds
 	m_bLoopImages = false;

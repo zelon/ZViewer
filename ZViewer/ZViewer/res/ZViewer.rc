@@ -97,6 +97,7 @@ BEGIN
             MENUITEM "FileSize - Big is first",     ID_SORT_FILESIZE
             MENUITEM "FileDate - New is first",     ID_SORT_FILEDATE
         END
+        MENUITEM "Always on Top",               ID_VIEW_ALWAYSONTOP
     END
     POPUP "Option"
     BEGIN

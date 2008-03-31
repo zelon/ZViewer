@@ -325,6 +325,9 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 				/////////////////////////////////////////////
 				// Main Menu
 
+			case ID_VIEW_ALWAYSONTOP:
+				ZMain::GetInstance().ToggleAlwaysOnTop();
+				break;
 			case ID_START_SLIDESHOW:
 				ZMain::GetInstance().StartSlideMode();
 				break;
