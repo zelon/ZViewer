@@ -75,7 +75,7 @@ public:
 	bool m_bSlideMode;
 
 	/// 슬라이드 모드의 시간(mili seconds)
-	int m_iSlideModePeriodMiliSeconds;
+	DWORD m_iSlideModePeriodMiliSeconds;
 
 	DWORD m_dwLastSlidedTime;
 
