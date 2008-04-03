@@ -49,7 +49,7 @@ public:
 	{
 		//DebugPrintf("LoadFromFile : %s", strFilename.c_str());
 
-		char buffer[256] = {0};
+		char buffer[FILENAME_MAX] = {0};
 
 #ifdef _UNICODE
 		if ( 0 == WideCharToMultiByte(CP_THREAD_ACP, 0, strFilename.c_str(), (int)strFilename.size(), buffer, 256, NULL, NULL) )
@@ -59,7 +59,7 @@ public:
 			return false;
 		}
 #else
-		StringCchPrintf(buffer, sizeof(buffer), strFilename.c_str());
+		StringCchPrintf(buffer, FILENAME_MAX, strFilename.c_str());
 #endif
 
 		try

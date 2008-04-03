@@ -493,10 +493,10 @@ void ZMain::FindFile(const TCHAR * path, std::vector< FileData > & foundStorage,
 	HANDLE hSrch;
 	WIN32_FIND_DATA wfd;
 
-	TCHAR fname[_MAX_FNAME] = { 0 };
 	BOOL bResult=TRUE;
 	TCHAR drive[_MAX_DRIVE] = { 0 };
 	TCHAR dir[_MAX_DIR] = { 0 };
+	TCHAR fname[_MAX_FNAME] = { 0 };
 	TCHAR newpath[MAX_PATH] = { 0 };
 
 	hSrch=FindFirstFile(path,&wfd);
@@ -507,13 +507,13 @@ void ZMain::FindFile(const TCHAR * path, std::vector< FileData > & foundStorage,
 		{
 			if (wfd.cFileName[0]!='.' && bFindRecursive == true)
 			{
-				StringCchPrintf(newpath, sizeof(newpath), TEXT("%s%s%s\\*.*"),drive,dir,wfd.cFileName);
+				StringCchPrintf(newpath, MAX_PATH, L"%s%s%s\\*.*",drive,dir,wfd.cFileName);
 				FindFile(newpath, foundStorage, bFindRecursive);
 			}
 		}
 		else
 		{
-			StringCchPrintf(fname, sizeof(fname), TEXT("%s%s%s"),drive,dir,wfd.cFileName);
+			StringCchPrintf(fname, _MAX_FNAME, L"%s%s%s",drive,dir,wfd.cFileName);
 
 			if ( ZImage::IsValidImageFileExt(wfd.cFileName) )
 			{
@@ -548,13 +548,13 @@ void ZMain::FindFolders(const TCHAR *path, std::vector<tstring> & foundStorage, 
 		{
 			if (wfd.cFileName[0]!='.' )
 			{
-				StringCchPrintf(fname, sizeof(fname), TEXT("%s%s%s"),drive,dir,wfd.cFileName);
+				StringCchPrintf(fname, MAX_PATH, L"%s%s%s",drive,dir,wfd.cFileName);
 
 				foundStorage.push_back(fname);
 
 				if ( bFindRecursive == true )
 				{
-					StringCchPrintf(newpath, sizeof(newpath), TEXT("%s%s%s\\*.*"),drive,dir,wfd.cFileName);
+					StringCchPrintf(newpath, MAX_PATH, L"%s%s%s\\*.*",drive,dir,wfd.cFileName);
 					FindFolders(newpath, foundStorage, bFindRecursive);
 				}
 			}
@@ -757,8 +757,8 @@ void ZMain::OpenFolder(const tstring & strFolder)
 
 	if ( vFiles.size() == 0 )
 	{
-		TCHAR msg[256];
-		StringCchPrintf(msg, sizeof(msg), GetMessage(TEXT("THIS_DIRECTORY_HAS_NO_IMAGE")), strFolder.c_str());
+		TCHAR msg[COMMON_BUFFER_SIZE];
+		StringCchPrintf(msg, COMMON_BUFFER_SIZE, GetMessage(TEXT("THIS_DIRECTORY_HAS_NO_IMAGE")), strFolder.c_str());
 		::MessageBox(m_hMainDlg, msg, TEXT("ZViewer"), MB_OK);
 		return;
 	}
@@ -1036,32 +1036,32 @@ void ZMain::ToggleLoopImage()
 
 void ZMain::SetStatusBarText()
 {
-	TCHAR szTemp[256];
+	TCHAR szTemp[COMMON_BUFFER_SIZE];
 
 	if ( m_vFile.size() == 0 || m_strCurrentFilename.empty() ) // 보고 있는 파일이 없으면
 	{
 		// File Index
-		StringCchPrintf(szTemp, sizeof(szTemp), TEXT("No File"));
+		StringCchPrintf(szTemp, COMMON_BUFFER_SIZE, TEXT("No File"));
 		SendMessage(m_hStatusBar, SB_SETTEXT, 0, (LPARAM)szTemp);
 
 		// 해상도 정보
-		StringCchPrintf(szTemp, sizeof(szTemp), TEXT(""));
+		StringCchPrintf(szTemp, COMMON_BUFFER_SIZE, TEXT(""));
 		SendMessage(m_hStatusBar, SB_SETTEXT, 1, (LPARAM)szTemp);
 
 		// 이미지 사이즈
-		StringCchPrintf(szTemp, sizeof(szTemp), TEXT(""));
+		StringCchPrintf(szTemp, COMMON_BUFFER_SIZE, TEXT(""));
 		SendMessage(m_hStatusBar, SB_SETTEXT, 2, (LPARAM)szTemp);
 
 		// 임시로 http://wimy.com
-		StringCchPrintf(szTemp, sizeof(szTemp), TEXT("http://wimy.com"));
+		StringCchPrintf(szTemp, COMMON_BUFFER_SIZE, TEXT("http://wimy.com"));
 		SendMessage(m_hStatusBar, SB_SETTEXT, 3, (LPARAM)szTemp);
 
 		// 로딩시간
-		StringCchPrintf(szTemp, sizeof(szTemp), TEXT(""));
+		StringCchPrintf(szTemp, COMMON_BUFFER_SIZE, TEXT(""));
 		SendMessage(m_hStatusBar, SB_SETTEXT, 4, (LPARAM)szTemp);
 
 		// 파일명
-		StringCchPrintf(szTemp, sizeof(szTemp), TEXT("No File"));
+		StringCchPrintf(szTemp, COMMON_BUFFER_SIZE, TEXT("No File"));
 
 		showCacheStatus(); ///< 5
 
@@ -1070,11 +1070,11 @@ void ZMain::SetStatusBarText()
 	else
 	{
 		// File Index
-		StringCchPrintf(szTemp, sizeof(szTemp), TEXT("%d/%d"), m_iCurretFileIndex+1, m_vFile.size());
+		StringCchPrintf(szTemp, COMMON_BUFFER_SIZE, TEXT("%d/%d"), m_iCurretFileIndex+1, m_vFile.size());
 		SendMessage(m_hStatusBar, SB_SETTEXT, 0, (LPARAM)szTemp);
 
 		// 해상도 정보
-		StringCchPrintf(szTemp, sizeof(szTemp), TEXT("%dx%dx%dbpp"), m_currentImage.GetOriginalWidth(), m_currentImage.GetOriginalHeight(), m_currentImage.GetBPP());
+		StringCchPrintf(szTemp, COMMON_BUFFER_SIZE, TEXT("%dx%dx%dbpp"), m_currentImage.GetOriginalWidth(), m_currentImage.GetOriginalHeight(), m_currentImage.GetBPP());
 		SendMessage(m_hStatusBar, SB_SETTEXT, 1, (LPARAM)szTemp);
 
 		// image size
@@ -1084,31 +1084,31 @@ void ZMain::SetStatusBarText()
 		{
 			if ( imageSize/1024 > 1024 )
 			{
-				StringCchPrintf(szTemp, sizeof(szTemp), TEXT("%.2fMByte"), imageSize/1024/1024.0f);
+				StringCchPrintf(szTemp, COMMON_BUFFER_SIZE, TEXT("%.2fMByte"), imageSize/1024/1024.0f);
 			}
 			else
 			{
-				StringCchPrintf(szTemp, sizeof(szTemp), TEXT("%dKByte"), imageSize/1024);
+				StringCchPrintf(szTemp, COMMON_BUFFER_SIZE, TEXT("%dKByte"), imageSize/1024);
 			}
 		}
 		else
 		{
-			StringCchPrintf(szTemp, sizeof(szTemp), TEXT("%dByte"), imageSize);
+			StringCchPrintf(szTemp, COMMON_BUFFER_SIZE, TEXT("%dByte"), imageSize);
 		}
 		SendMessage(m_hStatusBar, SB_SETTEXT, 2, (LPARAM)szTemp);
 
 		// 임시로 http://wimy.com
-		StringCchPrintf(szTemp, sizeof(szTemp), TEXT("http://wimy.com"));
+		StringCchPrintf(szTemp, COMMON_BUFFER_SIZE, TEXT("http://wimy.com"));
 		SendMessage(m_hStatusBar, SB_SETTEXT, 3, (LPARAM)szTemp);
 
 		// 로딩시간
 		if ( m_bLastCacheHit )
 		{
-			StringCchPrintf(szTemp, sizeof(szTemp), TEXT("%.3fsec [C]"), (float)(m_dwLoadingTime / 1000.0));
+			StringCchPrintf(szTemp, COMMON_BUFFER_SIZE, TEXT("%.3fsec [C]"), (float)(m_dwLoadingTime / 1000.0));
 		}
 		else
 		{
-			StringCchPrintf(szTemp, sizeof(szTemp), TEXT("%.3fsec [N]"), (float)(m_dwLoadingTime / 1000.0));
+			StringCchPrintf(szTemp, COMMON_BUFFER_SIZE, TEXT("%.3fsec [N]"), (float)(m_dwLoadingTime / 1000.0));
 		}
 		SendMessage(m_hStatusBar, SB_SETTEXT, 4, (LPARAM)szTemp);
 
@@ -1118,7 +1118,7 @@ void ZMain::SetStatusBarText()
 
 		showCacheStatus(); ///< 5
 
-		StringCchPrintf(szTemp, sizeof(szTemp), TEXT("%s%s"), szFilename, szFileExt);
+		StringCchPrintf(szTemp, COMMON_BUFFER_SIZE, TEXT("%s%s"), szFilename, szFileExt);
 		SendMessage(m_hStatusBar, SB_SETTEXT, 6, (LPARAM)szTemp);
 	}
 }
@@ -1129,7 +1129,7 @@ void ZMain::SetTitle()
 
 	if ( m_strCurrentFilename.empty() )	// 현재보고 있는 파일명이 없으면
 	{
-		StringCchPrintf(szTemp, sizeof(szTemp), TEXT("ZViewer v%s"), g_strVersion.c_str());
+		StringCchPrintf(szTemp, MAX_PATH+256, TEXT("ZViewer v%s"), g_strVersion.c_str());
 	}
 	else // 현재보고 있는 파일명이 있으면
 	{
@@ -1137,7 +1137,7 @@ void ZMain::SetTitle()
 		TCHAR szFileExt[MAX_PATH] = { 0 };
 		_tsplitpath(m_strCurrentFilename.c_str(), NULL, NULL, szFileName, szFileExt);
 
-		StringCchPrintf(szTemp, sizeof(szTemp), TEXT("%s%s - %s"), szFileName, szFileExt, m_strCurrentFilename.c_str());
+		StringCchPrintf(szTemp, MAX_PATH+256, TEXT("%s%s - %s"), szFileName, szFileExt, m_strCurrentFilename.c_str());
 	}
 	SetWindowText(m_hMainDlg, szTemp);
 }
@@ -1472,9 +1472,9 @@ void ZMain::DeleteThisFile()
 		return;
 	}
 
-	TCHAR szDeleteMsg[256];
+	TCHAR szDeleteMsg[COMMON_BUFFER_SIZE];
 
-	StringCchPrintf(szDeleteMsg, sizeof(szDeleteMsg), GetMessage(TEXT("DELETE_THIS_FILE")), GetFileNameFromFullFileName(m_strCurrentFilename).c_str());
+	StringCchPrintf(szDeleteMsg, COMMON_BUFFER_SIZE, GetMessage(TEXT("DELETE_THIS_FILE")), GetFileNameFromFullFileName(m_strCurrentFilename).c_str());
 	int iRet = ::MessageBox(m_hMainDlg, szDeleteMsg, TEXT("ZViewer"), MB_YESNO);
 
 	if ( iRet == IDYES )

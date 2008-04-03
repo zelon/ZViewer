@@ -72,7 +72,7 @@ bool CSaveAs::showDialog()
 	ZeroMemory(&m_ofn, sizeof(m_ofn));
 	m_ofn.lStructSize = sizeof(m_ofn);
 	m_ofn.hwndOwner = m_hParent;
-	StringCchPrintf(m_szFilenamebuf, sizeof(m_szFilenamebuf), m_strSaveFileName.c_str());
+	StringCchPrintf(m_szFilenamebuf, FILENAME_MAX, m_strSaveFileName.c_str());
 	m_ofn.lpstrFile = m_szFilenamebuf;
 	//
 	// Set lpstrFile[0] to '\0' so that GetOpenFileName does not 

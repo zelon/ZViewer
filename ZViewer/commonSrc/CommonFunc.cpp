@@ -165,8 +165,9 @@ RECT GetResizedRectForSmallToBig(const RECT & MaximumSize, const RECT & original
 
 tstring toString(int i)
 {
-	TCHAR szTemp[20];
-	StringCchPrintf(szTemp, sizeof(szTemp), TEXT("%d"), i);
+	const int szSize = 20;
+	TCHAR szTemp[szSize];
+	StringCchPrintf(szTemp, szSize, TEXT("%d"), i);
 
 	return tstring(szTemp);
 }

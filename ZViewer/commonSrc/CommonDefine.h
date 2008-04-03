@@ -15,6 +15,9 @@
 
 #define STATUSBAR_HEIGHT		20
 
+/// 일반적으로 대충쓰는 버퍼의 크기
+const int COMMON_BUFFER_SIZE = 512;
+
 #ifdef _UNICODE
 typedef std::wstring tstring;
 #else

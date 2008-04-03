@@ -11,6 +11,7 @@
 
 #include "StdAfx.h"
 #include ".\logmanager.h"
+#include "CommonFunc.h"
 
 #include <strsafe.h>
 #include <tchar.h>
@@ -31,9 +32,7 @@ CLogManager::CLogManager(void)
 	{
 		DWORD errorCode = GetLastError();
 
-		TCHAR temp[20];
-		StringCchPrintf(temp, sizeof(temp), TEXT("%d"), errorCode);
-		MessageBox(NULL, temp, TEXT("Error"), MB_OK);
+		MessageBox(NULL, toString(errorCode).c_str(), TEXT("Error"), MB_OK);
 
 		MessageBox(NULL, TEXT("AllocConsole Error!!!"), TEXT("Error") , MB_OK);
 	}

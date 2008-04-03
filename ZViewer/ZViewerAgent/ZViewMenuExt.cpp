@@ -157,8 +157,8 @@ STDMETHODIMP CZViewMenuExt::QueryContextMenu(HMENU hmenu, UINT uIndex, UINT uidC
 	}
 
 	// 이미지 파일에 대한 정보를 수집해놓는다.
-	TCHAR szImageInfo[256] = { 0 };
-	StringCchPrintf(szImageInfo, sizeof(szImageInfo), TEXT("ZViewer %dx%d %dbpp"), m_originalImage.GetWidth(), m_originalImage.GetHeight(), m_originalImage.GetBPP());
+	TCHAR szImageInfo[COMMON_BUFFER_SIZE] = { 0 };
+	StringCchPrintf(szImageInfo, COMMON_BUFFER_SIZE, TEXT("ZViewer %dx%d %dbpp"), m_originalImage.GetWidth(), m_originalImage.GetHeight(), m_originalImage.GetBPP());
 
 	// Store the menu item's ID so we can check against it later when
 	// WM_MEASUREITEM/WM_DRAWITEM are sent.
@@ -216,8 +216,8 @@ STDMETHODIMP CZViewMenuExt::GetCommandString (UINT uCmd, UINT uFlags, UINT* puRe
 	// 여기서 uCmd 는 메뉴에 넣은 순서대로 0 부터 순서대로 온다. 단, 선택할 수 없는 메뉴는 무시한 순서다.
 
 #ifdef _DEBUG
-	TCHAR szTemp[256];
-	StringCchPrintf(szTemp, sizeof(szTemp), TEXT("ucmd(%d), uFlags(%d), pszName(%s), cchMax(%d)"), uCmd, uFlags, pszName, cchMax);
+	TCHAR szTemp[COMMON_BUFFER_SIZE];
+	StringCchPrintf(szTemp, COMMON_BUFFER_SIZE, TEXT("ucmd(%d), uFlags(%d), pszName(%s), cchMax(%d)"), uCmd, uFlags, pszName, cchMax);
 	OutputDebugString(szTemp);
 	OutputDebugString(TEXT("\r\n"));
 #endif
@@ -494,7 +494,7 @@ void CZViewMenuExt::ExecZViewer()
 
 	tstring strProgramFolder = GetProgramFolder();
 
-	StringCchPrintf(command, sizeof(command), TEXT("%s\\ZViewer.exe %s"), strProgramFolder.c_str(), m_szFile);
+	StringCchPrintf(command, FILENAME_MAX, TEXT("%s\\ZViewer.exe %s"), strProgramFolder.c_str(), m_szFile);
 
 	STARTUPINFO si;
 	PROCESS_INFORMATION pi;
