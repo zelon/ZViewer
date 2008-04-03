@@ -15,15 +15,15 @@ bool ZImage::IsValidImageFileExt(const TCHAR * szFilename)
 {
 	TCHAR szExt[MAX_PATH];
 
-	_tsplitpath(szFilename, NULL, NULL, NULL, szExt);
+	_wsplitpath_s(szFilename, NULL,0, NULL,0 , NULL,0 , szExt,MAX_PATH);
 
 	if ( _tcslen(szExt) < 2 ) return false;
 
 	TCHAR szLowerExt[MAX_PATH];
 
-	_tcsncpy(szLowerExt, szExt, min(_tcslen(szExt)+1, MAX_PATH));
+	_tcsncpy_s(szLowerExt, szExt, min(_tcslen(szExt)+1, MAX_PATH));
 
-	_tcslwr(szLowerExt);
+	_tcslwr_s(szLowerExt);
 
 	const TCHAR * szExtOnly = szLowerExt + 1;
 

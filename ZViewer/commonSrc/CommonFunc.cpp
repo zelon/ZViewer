@@ -36,8 +36,8 @@ void DebugPrintf( const TCHAR *fmt, ... )
 
 const tstring GetOnlyFileName(const tstring & strFullFileName)
 {
-	TCHAR szFile[MAX_PATH] = { 0 };
-	_tsplitpath(strFullFileName.c_str(), 0, 0, szFile, 0);
+	TCHAR szFile[FILENAME_MAX] = { 0 };
+	_wsplitpath_s(strFullFileName.c_str(), NULL,0 , NULL, 0, szFile,FILENAME_MAX, NULL, 0);
 
 	return szFile;
 }
@@ -203,7 +203,7 @@ tstring GetFolderNameFromFullFileName(const tstring & strFullFilename)
 {
 	TCHAR szDrive[_MAX_DRIVE] = { 0 };
 	TCHAR szDir[_MAX_DIR] = { 0 };
-	_tsplitpath(strFullFilename.c_str(), szDrive, szDir, 0, 0);
+	_tsplitpath_s(strFullFilename.c_str(), szDrive,_MAX_DRIVE, szDir,_MAX_DIR, NULL,0, NULL,0);
 
 	tstring strFolder = szDrive;
 	strFolder += szDir;
@@ -214,9 +214,9 @@ tstring GetFolderNameFromFullFileName(const tstring & strFullFilename)
 /// 드라이브와 폴더명과 파일명으로 된 문자열을 주면, 파일명만 준다.
 tstring GetFileNameFromFullFileName(const tstring & strFullFilename)
 {
-	TCHAR szFileName[MAX_PATH] = { 0 };
+	TCHAR szFileName[FILENAME_MAX] = { 0 };
 	TCHAR szFileExt[MAX_PATH] = { 0 };
-	_tsplitpath(strFullFilename.c_str(), 0, 0, szFileName, szFileExt);
+	_tsplitpath_s(strFullFilename.c_str(), NULL,0, NULL,0, szFileName,FILENAME_MAX, szFileExt,MAX_PATH);
 
 	tstring strFilename = szFileName;
 	strFilename += szFileExt;
@@ -446,7 +446,7 @@ tstring GetProgramFolder()
 	}
 	TCHAR szDrive[_MAX_DRIVE] = { 0 };
 	TCHAR szDir[_MAX_DIR] = { 0 };
-	_tsplitpath(szGetFileName, szDrive, szDir, 0, 0);
+	_tsplitpath_s(szGetFileName, szDrive,_MAX_DRIVE, szDir,_MAX_DIR, NULL,0, NULL,0);
 
 	retString = szDrive;
 	retString += szDir;

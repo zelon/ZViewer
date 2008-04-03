@@ -502,7 +502,7 @@ void ZMain::FindFile(const TCHAR * path, std::vector< FileData > & foundStorage,
 	hSrch=FindFirstFile(path,&wfd);
 	while (bResult)
 	{
-		_tsplitpath(path,drive,dir,NULL,NULL);
+		_tsplitpath_s(path, drive,_MAX_DRIVE ,dir,_MAX_DIR, NULL,0 ,NULL,0);
 		if (wfd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
 		{
 			if (wfd.cFileName[0]!='.' && bFindRecursive == true)
@@ -537,13 +537,13 @@ void ZMain::FindFolders(const TCHAR *path, std::vector<tstring> & foundStorage, 
 	TCHAR fname[MAX_PATH] = { 0 };
 	BOOL bResult=TRUE;
 	TCHAR drive[_MAX_DRIVE] = { 0 };
-	TCHAR dir[MAX_PATH] = { 0 };
+	TCHAR dir[_MAX_DIR] = { 0 };
 	TCHAR newpath[MAX_PATH] = { 0 };
 
 	hSrch=FindFirstFile(path,&wfd);
 	while (bResult)
 	{
-		_tsplitpath(path,drive,dir,NULL,NULL);
+		_tsplitpath_s(path, drive,_MAX_DRIVE, dir,_MAX_DIR, NULL,0, NULL,0);
 		if (wfd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
 		{
 			if (wfd.cFileName[0]!='.' )
@@ -1114,7 +1114,7 @@ void ZMain::SetStatusBarText()
 
 		// 파일명
 		TCHAR szFilename[MAX_PATH], szFileExt[MAX_PATH];
-		_tsplitpath(m_strCurrentFilename.c_str(), NULL, NULL, szFilename, szFileExt);
+		_tsplitpath_s(m_strCurrentFilename.c_str(), NULL,0, NULL,0, szFilename,MAX_PATH, szFileExt,MAX_PATH);
 
 		showCacheStatus(); ///< 5
 
@@ -1133,9 +1133,9 @@ void ZMain::SetTitle()
 	}
 	else // 현재보고 있는 파일명이 있으면
 	{
-		TCHAR szFileName[MAX_PATH] = { 0 };
+		TCHAR szFileName[FILENAME_MAX] = { 0 };
 		TCHAR szFileExt[MAX_PATH] = { 0 };
-		_tsplitpath(m_strCurrentFilename.c_str(), NULL, NULL, szFileName, szFileExt);
+		_tsplitpath_s(m_strCurrentFilename.c_str(), NULL,0, NULL,0, szFileName,FILENAME_MAX, szFileExt,MAX_PATH);
 
 		StringCchPrintf(szTemp, MAX_PATH+256, TEXT("%s%s - %s"), szFileName, szFileExt, m_strCurrentFilename.c_str());
 	}
@@ -1632,8 +1632,8 @@ void ZMain::SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyle style)
 		return;
 	}
 
-	TCHAR szFileName[MAX_PATH] = { 0 };
-	_tsplitpath(m_vFile[m_iCurretFileIndex].m_strFileName.c_str(), 0, 0, szFileName, 0);
+	TCHAR szFileName[FILENAME_MAX] = { 0 };
+	_tsplitpath_s(m_vFile[m_iCurretFileIndex].m_strFileName.c_str(), NULL,0, NULL,0, szFileName,FILENAME_MAX, NULL,0);
 
 	tstring strSaveFileName = szSystemFolder;
 	strSaveFileName += TEXT("\\zviewer_bg_");
