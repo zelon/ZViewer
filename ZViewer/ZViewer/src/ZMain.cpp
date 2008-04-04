@@ -1724,10 +1724,11 @@ void ZMain::ToggleAlwaysOnTop()
 
 	if ( ZOption::GetInstance().m_bAlwaysOnTop )
 	{
-		
+		SetWindowPos(m_hMainDlg, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
 	}
 	else
 	{
+		SetWindowPos(m_hMainDlg, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
 
 	}
 	SetCheckMenus();
