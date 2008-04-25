@@ -26,6 +26,8 @@ enum
 	ARROW_MOVEMENT_LENGTH = 100		///< 화면보다 큰 그림을 볼 때, 방향키를 눌렀을 때 움직이는 정도
 };
 
+bool m_bCapture = false;
+
 
 HMENU g_hPopupMenu;
 
@@ -50,7 +52,6 @@ void CMainWindow::SetWndProc()
 
 int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 {
-	static bool m_bCapture = false;
 	static int lastX;
 	static int lastY;
 
@@ -167,6 +168,8 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 
 			lastX = LOWORD(lParam);
 			lastY = HIWORD(lParam);
+
+			HandCursorProc();
 		}
 		break;
 
@@ -174,6 +177,7 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 		{
 			m_bCapture = false;
 			ReleaseCapture();
+			HandCursorProc();
 		}
 		break;
 
@@ -189,7 +193,11 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 				ZMain::GetInstance().OnDrag(-diffX, -diffY);
 				lastX = x;
 				lastY = y;
+
+				HandCursorProc();
 			}
+
+
 		}
 		break;
 
@@ -232,26 +240,9 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 			GetCursorPos(&pt);
 			ScreenToClient(hWnd, &pt);
 
-			if ( PtInRect(&rt, pt) )
+			//if ( PtInRect(&rt, pt) )
 			{
-				if ( ZMain::GetInstance().IsHandCursor() )
-				{
-					if ( HIWORD(lParam) == 513 )	// 마우스 왼쪽 버튼을 누르고 있으면
-					{
-						SetCursor(LoadCursor(ZMain::GetInstance().GetHInstance(), MAKEINTRESOURCE(IDC_MOVE_HAND_CAPTURE_CURSOR)));
-					}
-					else
-					{
-						SetCursor(LoadCursor(ZMain::GetInstance().GetHInstance(), MAKEINTRESOURCE(IDC_MOVE_HAND_CURSOR)));
-					}
-
-					//DebugPrintf("LoadWait");
-				}
-				else
-				{
-					SetCursor(LoadCursor(NULL, IDC_ARROW));
-					//DebugPrintf("LoadArrow");
-				}
+				HandCursorProc();
 				return 0;
 			}
 
@@ -556,4 +547,26 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 	}
 	return (int)(DefWindowProc(hWnd,iMessage,wParam,lParam));
 
+}
+
+void HandCursorProc()
+{
+	if ( ZMain::GetInstance().IsHandCursor() )
+	{
+		if ( m_bCapture )	// 마우스 왼쪽 버튼을 누르고 있으면
+		{
+			SetCursor(LoadCursor(ZMain::GetInstance().GetHInstance(), MAKEINTRESOURCE(IDC_MOVE_HAND_CAPTURE_CURSOR)));
+		}
+		else
+		{
+			SetCursor(LoadCursor(ZMain::GetInstance().GetHInstance(), MAKEINTRESOURCE(IDC_MOVE_HAND_CURSOR)));
+		}
+
+		//DebugPrintf("LoadWait");
+	}
+	else
+	{
+		SetCursor(LoadCursor(NULL, IDC_ARROW));
+		//DebugPrintf("LoadArrow");
+	}
 }

@@ -13,6 +13,9 @@
 
 #include "../commonSrc/windowLib/ZWindow.h"
 
+void HandCursorProc();
+
+
 class CMainWindow : public ZWindow
 {
 public:
