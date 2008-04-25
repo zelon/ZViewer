@@ -25,7 +25,7 @@ void DebugPrintf( const TCHAR *fmt, ... )
 	int len;
 
 	va_start( v, fmt );
-	len = StringCbVPrintf( buf, sizeof(buf) , fmt, v );
+	len = StringCbVPrintf( buf, sizeof(buf) / sizeof(TCHAR), fmt, v );
 	va_end( v );
 
 	OutputDebugString( buf );

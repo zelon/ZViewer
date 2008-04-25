@@ -246,7 +246,7 @@ STDMETHODIMP CZViewMenuExt::GetCommandString (UINT uCmd, UINT uFlags, UINT* puRe
 
 			/* 아래 코드를 살펴보면 제대로 구성할 수 있다.
 			TCHAR buffer[256];
-            StringCchPrintf( buffer, sizeof(buffer), TEXT("uCmd(%d)"), uCmd);
+            StringCchPrintf( buffer, sizeof(buffer) / sizeof(TCHAR), TEXT("uCmd(%d)"), uCmd);
 
 			lstrcpynW ( (LPWSTR) pszName, T2CW(buffer), cchMax );
 			*/

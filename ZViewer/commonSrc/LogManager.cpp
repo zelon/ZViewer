@@ -62,7 +62,7 @@ void CLogManager::Output(const TCHAR * fmt, ...)
 
 	// 가변 인자 정리
 	va_start(argptr, fmt);
-	iCnt = StringCbVPrintf(cBuf, sizeof(cBuf), fmt, argptr);
+	iCnt = StringCbVPrintf(cBuf, sizeof(cBuf) / sizeof(TCHAR), fmt, argptr);
 	va_end(argptr);
 
 	CLockObjUtil lock(m_logLock);

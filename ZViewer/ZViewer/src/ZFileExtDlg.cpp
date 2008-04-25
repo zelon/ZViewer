@@ -166,7 +166,7 @@ bool ZFileExtDlg::SetExtWithProgram(const tstring & strProgramName, const tstrin
 	{
 		// get full file path to program executable file
 		TCHAR szProgPath[MAX_PATH] = { 0 };
-		::GetModuleFileName(NULL, szProgPath, sizeof(szProgPath));
+		::GetModuleFileName(NULL, szProgPath, sizeof(szProgPath) / sizeof(TCHAR));
 
 		strFullProgramPath = szProgPath;
 	}

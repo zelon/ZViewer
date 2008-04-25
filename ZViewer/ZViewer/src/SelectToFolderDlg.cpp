@@ -64,7 +64,7 @@ int CALLBACK CSelectToFolderDlg::MoveToDlgPrc(HWND hWnd,UINT iMessage,WPARAM wPa
 			case IDOK:
 				{
 					TCHAR szTemp[MAX_PATH];
-					GetDlgItemText(hWnd, IDC_EDIT_MOVE_TO_FOLDER, szTemp, sizeof(szTemp));
+					GetDlgItemText(hWnd, IDC_EDIT_MOVE_TO_FOLDER, szTemp, sizeof(szTemp) / sizeof(TCHAR) );
 
 					pThis->m_strMoveToFolder = szTemp;
 					strLastFolder = szTemp;
