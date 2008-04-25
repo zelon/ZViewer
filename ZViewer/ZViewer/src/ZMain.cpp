@@ -899,7 +899,6 @@ void ZMain::FormShow()
 void ZMain::showCacheStatus()
 {
 	// 해상도 정보
-	//_snprintf(szTemp, sizeof(szTemp), "");
 	//SendMessage(m_hStatusBar, SB_SETTEXT, 1, (LPARAM)szTemp);
 
 	static bool bLastActionIsCache = false;
