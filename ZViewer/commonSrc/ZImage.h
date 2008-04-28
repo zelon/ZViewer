@@ -11,6 +11,8 @@
 #pragma once
 
 #include <strsafe.h>
+#include <cassert>
+
 #include "freeimage/FreeImagePlus.h"
 #include "CommonFunc.h"
 

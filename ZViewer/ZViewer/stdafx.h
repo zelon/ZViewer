@@ -28,6 +28,7 @@
 #include <algorithm>
 #include <tchar.h>
 #include <strsafe.h>
+#include <cassert>
 
 #include <shlobj.h>
 #include <io.h>
