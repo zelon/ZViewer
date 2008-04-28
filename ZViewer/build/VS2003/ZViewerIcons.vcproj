@@ -12,7 +12,7 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="../output"
+			OutputDirectory="../../output"
 			IntermediateDirectory="Debug"
 			ConfigurationType="2"
 			CharacterSet="2">
@@ -62,7 +62,7 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="../output"
+			OutputDirectory="../../output"
 			IntermediateDirectory="Release"
 			ConfigurationType="2"
 			CharacterSet="2">
@@ -116,7 +116,7 @@
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}">
 			<File
-				RelativePath="..\ZViewerIcons\stdafx.cpp">
+				RelativePath="..\..\ZViewerIcons\stdafx.cpp">
 				<FileConfiguration
 					Name="Debug|Win32">
 					<Tool
@@ -131,7 +131,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\ZViewerIcons\ZViewerIcons.cpp">
+				RelativePath="..\..\ZViewerIcons\ZViewerIcons.cpp">
 			</File>
 		</Filter>
 		<Filter
@@ -139,10 +139,10 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
 			<File
-				RelativePath="..\ZViewerIcons\resource.h">
+				RelativePath="..\..\ZViewerIcons\resource.h">
 			</File>
 			<File
-				RelativePath="..\ZViewerIcons\stdafx.h">
+				RelativePath="..\..\ZViewerIcons\stdafx.h">
 			</File>
 		</Filter>
 		<Filter
@@ -150,28 +150,28 @@
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx"
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}">
 			<File
-				RelativePath="..\ZViewerIcons\ext_ico.ico">
+				RelativePath="..\..\ZViewerIcons\ext_ico.ico">
 			</File>
 			<File
-				RelativePath="..\ZViewerIcons\ico00001.ico">
+				RelativePath="..\..\ZViewerIcons\ico00001.ico">
 			</File>
 			<File
-				RelativePath="..\ZViewerIcons\ico00002.ico">
+				RelativePath="..\..\ZViewerIcons\ico00002.ico">
 			</File>
 			<File
-				RelativePath="..\ZViewerIcons\ico00003.ico">
+				RelativePath="..\..\ZViewerIcons\ico00003.ico">
 			</File>
 			<File
-				RelativePath="..\ZViewerIcons\ico00004.ico">
+				RelativePath="..\..\ZViewerIcons\ico00004.ico">
 			</File>
 			<File
-				RelativePath="..\ZViewerIcons\ico00005.ico">
+				RelativePath="..\..\ZViewerIcons\ico00005.ico">
 			</File>
 			<File
-				RelativePath="..\ZViewerIcons\icon1.ico">
+				RelativePath="..\..\ZViewerIcons\icon1.ico">
 			</File>
 			<File
-				RelativePath="..\ZViewerIcons\ZViewerIcons.rc">
+				RelativePath="..\..\ZViewerIcons\ZViewerIcons.rc">
 			</File>
 		</Filter>
 		<File

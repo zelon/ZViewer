@@ -19,7 +19,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="$(SolutionDir)/ZViewer;$(SolutionDir)/ZViewer/res;$(SolutionDir)/lib;$(SolutionDir)/commonSrc;"
+				AdditionalIncludeDirectories="$(SolutionDir)/../../ZViewer;$(SolutionDir)/../../ZViewer/res;$(SolutionDir)/../../lib;$(SolutionDir)/../../commonSrc;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
@@ -69,7 +69,7 @@
 			CharacterSet="1">
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="$(SolutionDir)/ZViewer;$(SolutionDir)/ZViewer/res;$(SolutionDir)/lib;$(SolutionDir)/commonSrc;"
+				AdditionalIncludeDirectories="$(SolutionDir)/../../ZViewer;$(SolutionDir)/../../ZViewer/res;$(SolutionDir)/../../lib;$(SolutionDir)/../../commonSrc;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="3"
@@ -151,7 +151,7 @@
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="$(SolutionDir)/lib"
+				AdditionalIncludeDirectories="$(SolutionDir)/../../lib"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="1"
@@ -201,10 +201,10 @@
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}">
 			<File
-				RelativePath="..\ZViewer\Main.cpp">
+				RelativePath="..\..\ZViewer\Main.cpp">
 			</File>
 			<File
-				RelativePath="..\ZViewer\stdafx.cpp">
+				RelativePath="..\..\ZViewer\stdafx.cpp">
 				<FileConfiguration
 					Name="Debug|Win32">
 					<Tool
@@ -230,7 +230,7 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
 			<File
-				RelativePath="..\ZViewer\stdafx.h">
+				RelativePath="..\..\ZViewer\stdafx.h">
 			</File>
 		</Filter>
 		<Filter
@@ -238,92 +238,92 @@
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx"
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}">
 			<File
-				RelativePath="..\ZViewer\res\MoveHand.cur">
+				RelativePath="..\..\ZViewer\res\MoveHand.cur">
 			</File>
 			<File
-				RelativePath="..\ZViewer\res\MoveHandHold.cur">
+				RelativePath="..\..\ZViewer\res\MoveHandHold.cur">
 			</File>
 			<File
-				RelativePath="..\ZViewer\res\MoveHold.cur">
+				RelativePath="..\..\ZViewer\res\MoveHold.cur">
 			</File>
 			<File
-				RelativePath="..\ZViewer\res\resource.h">
+				RelativePath="..\..\ZViewer\res\resource.h">
 			</File>
 			<File
-				RelativePath="..\ZViewer\res\ZViewer.ico">
+				RelativePath="..\..\ZViewer\res\ZViewer.ico">
 			</File>
 			<File
-				RelativePath="..\ZViewer\res\ZViewer.rc">
+				RelativePath="..\..\ZViewer\res\ZViewer.rc">
 			</File>
 		</Filter>
 		<Filter
 			Name="src"
 			Filter="">
 			<File
-				RelativePath="..\ZViewer\src\AboutWindow.cpp">
+				RelativePath="..\..\ZViewer\src\AboutWindow.cpp">
 			</File>
 			<File
-				RelativePath="..\ZViewer\src\AboutWindow.h">
+				RelativePath="..\..\ZViewer\src\AboutWindow.h">
 			</File>
 			<File
-				RelativePath="..\ZViewer\src\MainWindow.cpp">
+				RelativePath="..\..\ZViewer\src\MainWindow.cpp">
 			</File>
 			<File
-				RelativePath="..\ZViewer\src\MainWindow.h">
+				RelativePath="..\..\ZViewer\src\MainWindow.h">
 			</File>
 			<File
-				RelativePath="..\ZViewer\src\SelectToFolderDlg.cpp">
+				RelativePath="..\..\ZViewer\src\SelectToFolderDlg.cpp">
 			</File>
 			<File
-				RelativePath="..\ZViewer\src\SelectToFolderDlg.h">
+				RelativePath="..\..\ZViewer\src\SelectToFolderDlg.h">
 			</File>
 			<File
-				RelativePath="..\ZViewer\src\ShortTimeMessage.cpp">
+				RelativePath="..\..\ZViewer\src\ShortTimeMessage.cpp">
 			</File>
 			<File
-				RelativePath="..\ZViewer\src\ShortTimeMessage.h">
+				RelativePath="..\..\ZViewer\src\ShortTimeMessage.h">
 			</File>
 			<File
-				RelativePath="..\ZViewer\src\ZCacheImage.cpp">
+				RelativePath="..\..\ZViewer\src\ZCacheImage.cpp">
 			</File>
 			<File
-				RelativePath="..\ZViewer\src\ZCacheImage.h">
+				RelativePath="..\..\ZViewer\src\ZCacheImage.h">
 			</File>
 			<File
-				RelativePath="..\ZViewer\src\ZFileExtDlg.cpp">
+				RelativePath="..\..\ZViewer\src\ZFileExtDlg.cpp">
 			</File>
 			<File
-				RelativePath="..\ZViewer\src\ZFileExtDlg.h">
+				RelativePath="..\..\ZViewer\src\ZFileExtDlg.h">
 			</File>
 			<File
-				RelativePath="..\ZViewer\src\ZFileExtReg.cpp">
+				RelativePath="..\..\ZViewer\src\ZFileExtReg.cpp">
 			</File>
 			<File
-				RelativePath="..\ZViewer\src\ZFileExtReg.h">
+				RelativePath="..\..\ZViewer\src\ZFileExtReg.h">
 			</File>
 			<File
-				RelativePath="..\ZViewer\src\ZHistory.cpp">
+				RelativePath="..\..\ZViewer\src\ZHistory.cpp">
 			</File>
 			<File
-				RelativePath="..\ZViewer\src\ZHistory.h">
+				RelativePath="..\..\ZViewer\src\ZHistory.h">
 			</File>
 			<File
-				RelativePath="..\ZViewer\src\ZMain.cpp">
+				RelativePath="..\..\ZViewer\src\ZMain.cpp">
 			</File>
 			<File
-				RelativePath="..\ZViewer\src\ZMain.h">
+				RelativePath="..\..\ZViewer\src\ZMain.h">
 			</File>
 			<File
-				RelativePath="..\ZViewer\src\ZOption.cpp">
+				RelativePath="..\..\ZViewer\src\ZOption.cpp">
 			</File>
 			<File
-				RelativePath="..\ZViewer\src\ZOption.h">
+				RelativePath="..\..\ZViewer\src\ZOption.h">
 			</File>
 			<File
-				RelativePath="..\ZViewer\src\ZResourceManager.cpp">
+				RelativePath="..\..\ZViewer\src\ZResourceManager.cpp">
 			</File>
 			<File
-				RelativePath="..\ZViewer\src\ZResourceManager.h">
+				RelativePath="..\..\ZViewer\src\ZResourceManager.h">
 			</File>
 		</Filter>
 		<Filter
@@ -333,20 +333,20 @@
 				Name="vld"
 				Filter="">
 				<File
-					RelativePath="...\ZViewer\lib\vld\vld.h">
+					RelativePath="..\..\lib\vld\vld.h">
 				</File>
 				<File
-					RelativePath="...\ZViewer\lib\vld\vldapi.h">
+					RelativePath="..\..\lib\vld\vldapi.h">
 				</File>
 			</Filter>
 			<Filter
 				Name="freeimage"
 				Filter="">
 				<File
-					RelativePath="...\ZViewer\lib\freeimage\FreeImage.h">
+					RelativePath="..\..\lib\freeimage\FreeImage.h">
 				</File>
 				<File
-					RelativePath="...\ZViewer\lib\freeimage\FreeImagePlus.h">
+					RelativePath="..\..\lib\freeimage\FreeImagePlus.h">
 				</File>
 			</Filter>
 		</Filter>
@@ -354,73 +354,73 @@
 			Name="commonSrc"
 			Filter="">
 			<File
-				RelativePath="...\ZViewer\commonSrc\CommonDefine.h">
+				RelativePath="..\..\commonSrc\CommonDefine.h">
 			</File>
 			<File
-				RelativePath="...\ZViewer\commonSrc\CommonFunc.cpp">
+				RelativePath="..\..\commonSrc\CommonFunc.cpp">
 			</File>
 			<File
-				RelativePath="...\ZViewer\commonSrc\CommonFunc.h">
+				RelativePath="..\..\commonSrc\CommonFunc.h">
 			</File>
 			<File
-				RelativePath="...\ZViewer\commonSrc\DesktopWallPaper.cpp">
+				RelativePath="..\..\commonSrc\DesktopWallPaper.cpp">
 			</File>
 			<File
-				RelativePath="...\ZViewer\commonSrc\DesktopWallPaper.h">
+				RelativePath="..\..\commonSrc\DesktopWallPaper.h">
 			</File>
 			<File
-				RelativePath="...\ZViewer\commonSrc\LockUtil.h">
+				RelativePath="..\..\commonSrc\LockUtil.h">
 			</File>
 			<File
-				RelativePath="...\ZViewer\commonSrc\LogManager.cpp">
+				RelativePath="..\..\commonSrc\LogManager.cpp">
 			</File>
 			<File
-				RelativePath="...\ZViewer\commonSrc\LogManager.h">
+				RelativePath="..\..\commonSrc\LogManager.h">
 			</File>
 			<File
-				RelativePath="...\ZViewer\commonSrc\MessageManager.cpp">
+				RelativePath="..\..\commonSrc\MessageManager.cpp">
 			</File>
 			<File
-				RelativePath="...\ZViewer\commonSrc\MessageManager.h">
+				RelativePath="..\..\commonSrc\MessageManager.h">
 			</File>
 			<File
-				RelativePath="...\ZViewer\commonSrc\OptionFile.cpp">
+				RelativePath="..\..\commonSrc\OptionFile.cpp">
 			</File>
 			<File
-				RelativePath="...\ZViewer\commonSrc\OptionFile.h">
+				RelativePath="..\..\commonSrc\OptionFile.h">
 			</File>
 			<File
-				RelativePath="...\ZViewer\commonSrc\SaveAs.cpp">
+				RelativePath="..\..\commonSrc\SaveAs.cpp">
 			</File>
 			<File
-				RelativePath="...\ZViewer\commonSrc\SaveAs.h">
+				RelativePath="..\..\commonSrc\SaveAs.h">
 			</File>
 			<File
-				RelativePath="...\ZViewer\commonSrc\StringToValue.cpp">
+				RelativePath="..\..\commonSrc\StringToValue.cpp">
 			</File>
 			<File
-				RelativePath="...\ZViewer\commonSrc\StringToValue.h">
+				RelativePath="..\..\commonSrc\StringToValue.h">
 			</File>
 			<File
-				RelativePath="...\ZViewer\commonSrc\UnicodeFile.cpp">
+				RelativePath="..\..\commonSrc\UnicodeFile.cpp">
 			</File>
 			<File
-				RelativePath="...\ZViewer\commonSrc\UnicodeFile.h">
+				RelativePath="..\..\commonSrc\UnicodeFile.h">
 			</File>
 			<File
-				RelativePath="...\ZViewer\commonSrc\ZImage.cpp">
+				RelativePath="..\..\commonSrc\ZImage.cpp">
 			</File>
 			<File
-				RelativePath="...\ZViewer\commonSrc\ZImage.h">
+				RelativePath="..\..\commonSrc\ZImage.h">
 			</File>
 			<Filter
 				Name="windowLib"
 				Filter="">
 				<File
-					RelativePath="...\ZViewer\commonSrc\windowLib\ZWindow.cpp">
+					RelativePath="..\..\commonSrc\windowLib\ZWindow.cpp">
 				</File>
 				<File
-					RelativePath="...\ZViewer\commonSrc\windowLib\ZWindow.h">
+					RelativePath="..\..\commonSrc\windowLib\ZWindow.h">
 				</File>
 			</Filter>
 		</Filter>
