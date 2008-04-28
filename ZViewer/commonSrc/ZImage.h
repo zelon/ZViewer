@@ -75,7 +75,7 @@ public:
 		catch ( ... )
 		{
 #pragma message("TODO : 이 부분에 exception 이 발생하는 이유를 찾아야함...")
-			_ASSERTE(false);
+			assert(false);
 			return false;
 		}
 		return false;

@@ -73,7 +73,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance ,LPTSTR lpszC
 		}
 		else
 		{
-			_ASSERTE(hLang != NULL);
+			assert(hLang != NULL);
 		}
 	}
 #endif
@@ -165,7 +165,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance ,LPTSTR lpszC
 	{
 		if ( FALSE == FreeLibrary(hLang) )
 		{
-			_ASSERTE(!"Can't free language dll.");
+			assert(!"Can't free language dll.");
 		}
 	}
 
