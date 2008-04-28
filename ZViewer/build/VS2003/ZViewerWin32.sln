@@ -1,0 +1,64 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ZViewerAgent", "ZViewerAgent\ZViewerAgent.vcproj", "{FF216AE6-86AC-49FA-81D4-40A0B41D4C2B}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ZViewer", "ZViewer\ZViewer.vcproj", "{F22C641A-3DB2-41A2-9530-8B39EEC1E4D8}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ZViewerIcons", "ZViewerIcons\ZViewerIcons.vcproj", "{C61FF398-EFA2-4094-B558-58A784FAF364}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LangKor", "LangKor\LangKor.vcproj", "{4DB1B12A-2CAD-40EA-AB47-C13ED1CF0643}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+		ZViewerDebug = ZViewerDebug
+		ZViewerRelease = ZViewerRelease
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{FF216AE6-86AC-49FA-81D4-40A0B41D4C2B}.Debug.ActiveCfg = Debug|Win32
+		{FF216AE6-86AC-49FA-81D4-40A0B41D4C2B}.Debug.Build.0 = Debug|Win32
+		{FF216AE6-86AC-49FA-81D4-40A0B41D4C2B}.Release.ActiveCfg = Release|Win32
+		{FF216AE6-86AC-49FA-81D4-40A0B41D4C2B}.Release.Build.0 = Release|Win32
+		{FF216AE6-86AC-49FA-81D4-40A0B41D4C2B}.ZViewerDebug.ActiveCfg = Debug|Win32
+		{FF216AE6-86AC-49FA-81D4-40A0B41D4C2B}.ZViewerRelease.ActiveCfg = ZViewerRelease|Win32
+		{F22C641A-3DB2-41A2-9530-8B39EEC1E4D8}.Debug.ActiveCfg = Debug|Win32
+		{F22C641A-3DB2-41A2-9530-8B39EEC1E4D8}.Debug.Build.0 = Debug|Win32
+		{F22C641A-3DB2-41A2-9530-8B39EEC1E4D8}.Release.ActiveCfg = Release|Win32
+		{F22C641A-3DB2-41A2-9530-8B39EEC1E4D8}.Release.Build.0 = Release|Win32
+		{F22C641A-3DB2-41A2-9530-8B39EEC1E4D8}.ZViewerDebug.ActiveCfg = Debug|Win32
+		{F22C641A-3DB2-41A2-9530-8B39EEC1E4D8}.ZViewerDebug.Build.0 = Debug|Win32
+		{F22C641A-3DB2-41A2-9530-8B39EEC1E4D8}.ZViewerRelease.ActiveCfg = Release|Win32
+		{F22C641A-3DB2-41A2-9530-8B39EEC1E4D8}.ZViewerRelease.Build.0 = Release|Win32
+		{C61FF398-EFA2-4094-B558-58A784FAF364}.Debug.ActiveCfg = Debug|Win32
+		{C61FF398-EFA2-4094-B558-58A784FAF364}.Debug.Build.0 = Debug|Win32
+		{C61FF398-EFA2-4094-B558-58A784FAF364}.Release.ActiveCfg = Release|Win32
+		{C61FF398-EFA2-4094-B558-58A784FAF364}.Release.Build.0 = Release|Win32
+		{C61FF398-EFA2-4094-B558-58A784FAF364}.ZViewerDebug.ActiveCfg = Debug|Win32
+		{C61FF398-EFA2-4094-B558-58A784FAF364}.ZViewerDebug.Build.0 = Debug|Win32
+		{C61FF398-EFA2-4094-B558-58A784FAF364}.ZViewerRelease.ActiveCfg = Release|Win32
+		{C61FF398-EFA2-4094-B558-58A784FAF364}.ZViewerRelease.Build.0 = Release|Win32
+		{4DB1B12A-2CAD-40EA-AB47-C13ED1CF0643}.Debug.ActiveCfg = Debug|Win32
+		{4DB1B12A-2CAD-40EA-AB47-C13ED1CF0643}.Debug.Build.0 = Debug|Win32
+		{4DB1B12A-2CAD-40EA-AB47-C13ED1CF0643}.Release.ActiveCfg = Release|Win32
+		{4DB1B12A-2CAD-40EA-AB47-C13ED1CF0643}.Release.Build.0 = Release|Win32
+		{4DB1B12A-2CAD-40EA-AB47-C13ED1CF0643}.ZViewerDebug.ActiveCfg = Debug|Win32
+		{4DB1B12A-2CAD-40EA-AB47-C13ED1CF0643}.ZViewerDebug.Build.0 = Debug|Win32
+		{4DB1B12A-2CAD-40EA-AB47-C13ED1CF0643}.ZViewerRelease.ActiveCfg = Release|Win32
+		{4DB1B12A-2CAD-40EA-AB47-C13ED1CF0643}.ZViewerRelease.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+	GlobalSection(DPCodeReviewSolutionGUID) = preSolution
+		DPCodeReviewSolutionGUID = {00000000-0000-0000-0000-000000000000}
+	EndGlobalSection
+EndGlobal
