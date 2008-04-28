@@ -5,8 +5,8 @@
 /* link this file in with the server and any clients */
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* at Wed Jun 15 11:15:08 2005
+ /* File created by MIDL compiler version 6.00.0366 */
+/* at Fri Apr 04 20:21:04 2008
  */
 /* Compiler settings for .\ZViewerAgent.idl:
     Oicf, W1, Zp8, env=Win32 (32b run)
@@ -17,9 +17,6 @@
          DECLSPEC_UUID(), MIDL_INTERFACE()
 */
 //@@MIDL_FILE_HEADING(  )
-
-#if !defined(_M_IA64) && !defined(_M_AMD64)
-
 
 #pragma warning( disable: 4049 )  /* more than 64k source lines */
 
@@ -85,6 +82,4 @@ MIDL_DEFINE_GUID(CLSID, CLSID_ZViewMenuExt,0xB03E70D6,0x2EC9,0x4ECA,0x95,0x7E,0x
 #endif
 
 
-
-#endif /* !defined(_M_IA64) && !defined(_M_AMD64)*/
 

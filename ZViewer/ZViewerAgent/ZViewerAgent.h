@@ -3,8 +3,8 @@
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* at Wed Jun 15 11:15:08 2005
+ /* File created by MIDL compiler version 6.00.0366 */
+/* at Fri Apr 04 20:21:04 2008
  */
 /* Compiler settings for .\ZViewerAgent.idl:
     Oicf, W1, Zp8, env=Win32 (32b run)

@@ -1,254 +1,378 @@
 <?xml version="1.0" encoding="ks_c_5601-1987"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="7.10"
+	Version="8.00"
 	Name="ZViewerAgent"
 	ProjectGUID="{FF216AE6-86AC-49FA-81D4-40A0B41D4C2B}"
 	RootNamespace="ZViewerAgent"
-	Keyword="AtlProj">
+	Keyword="AtlProj"
+	>
 	<Platforms>
 		<Platform
-			Name="Win32"/>
+			Name="Win32"
+		/>
 	</Platforms>
+	<ToolFiles>
+	</ToolFiles>
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
 			OutputDirectory="../output"
 			IntermediateDirectory="../obj/ZViewerAgentD"
 			ConfigurationType="2"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="2"
 			UseOfATL="1"
-			ATLMinimizesCRunTimeLibraryUsage="FALSE"
-			CharacterSet="1">
+			ATLMinimizesCRunTimeLibraryUsage="false"
+			CharacterSet="1"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				PreprocessorDefinitions="_DEBUG"
+				MkTypLibCompatible="false"
+				TargetEnvironment="1"
+				GenerateStublessProxies="true"
+				TypeLibraryName="$(IntDir)/ZViewerAgent.tlb"
+				HeaderFileName="ZViewerAgent.h"
+				DLLDataFileName=""
+				InterfaceIdentifierFileName="ZViewerAgent_i.c"
+				ProxyFileName="ZViewerAgent_p.c"
+			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="$(SolutionDir)/lib"
 				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG;_USRDLL;_ATL_NO_UUIDOF"
-				MinimalRebuild="TRUE"
+				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
-				UsePrecompiledHeader="3"
+				UsePrecompiledHeader="2"
 				ProgramDataBaseFileName="$(OutDir)/ZViewerAgentD.pdb"
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="TRUE"
-				DebugInformationFormat="3"/>
+				Detect64BitPortabilityProblems="true"
+				DebugInformationFormat="3"
+			/>
 			<Tool
-				Name="VCCustomBuildTool"/>
-			<Tool
-				Name="VCLinkerTool"
-				IgnoreImportLibrary="TRUE"
-				AdditionalDependencies="$(SolutionDir)/lib/freeimage/FreeImage.lib $(SolutionDir)/lib/freeimage/FreeImagePlus.lib"
-				OutputFile="$(OutDir)/ZViewerAgentD.dll"
-				LinkIncremental="2"
-				ModuleDefinitionFile=".\ZViewerAgent.def"
-				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile="$(OutDir)/$(ProjectName)D.pdb"
-				SubSystem="2"
-				ImportLibrary="$(OutDir)/ZViewerAgent.lib"
-				TargetMachine="1"/>
-			<Tool
-				Name="VCMIDLTool"
-				PreprocessorDefinitions="_DEBUG"
-				MkTypLibCompatible="FALSE"
-				TargetEnvironment="1"
-				GenerateStublessProxies="TRUE"
-				TypeLibraryName="$(IntDir)/ZViewerAgent.tlb"
-				HeaderFileName="ZViewerAgent.h"
-				DLLDataFileName=""
-				InterfaceIdentifierFileName="ZViewerAgent_i.c"
-				ProxyFileName="ZViewerAgent_p.c"/>
-			<Tool
-				Name="VCPostBuildEventTool"
-				Description="등록하고 있습니다."
-				CommandLine="regsvr32 /s /c &quot;$(TargetPath)&quot;"/>
-			<Tool
-				Name="VCPreBuildEventTool"/>
-			<Tool
-				Name="VCPreLinkEventTool"/>
+				Name="VCManagedResourceCompilerTool"
+			/>
 			<Tool
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="_DEBUG"
 				Culture="1042"
-				AdditionalIncludeDirectories="$(IntDir)"/>
+				AdditionalIncludeDirectories="$(IntDir)"
+			/>
 			<Tool
-				Name="VCWebServiceProxyGeneratorTool"/>
+				Name="VCPreLinkEventTool"
+			/>
 			<Tool
-				Name="VCXMLDataGeneratorTool"/>
+				Name="VCLinkerTool"
+				IgnoreImportLibrary="true"
+				AdditionalDependencies="$(SolutionDir)/lib/freeimage/FreeImage.lib $(SolutionDir)/lib/freeimage/FreeImagePlus.lib"
+				OutputFile="$(OutDir)/ZViewerAgentD.dll"
+				LinkIncremental="2"
+				ModuleDefinitionFile=".\ZViewerAgent.def"
+				GenerateDebugInformation="true"
+				ProgramDatabaseFile="$(OutDir)/$(ProjectName)D.pdb"
+				SubSystem="2"
+				ImportLibrary="$(OutDir)/ZViewerAgent.lib"
+				TargetMachine="1"
+			/>
 			<Tool
-				Name="VCWebDeploymentTool"/>
+				Name="VCALinkTool"
+			/>
 			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
+				Name="VCManifestTool"
+			/>
 			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				Description="등록하고 있습니다."
+				CommandLine="regsvr32 /s /c &quot;$(TargetPath)&quot;"
+			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="$(SolutionDir)/output"
 			IntermediateDirectory="../obj/ZViewerAgent"
 			ConfigurationType="2"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="1"
 			UseOfATL="1"
-			ATLMinimizesCRunTimeLibraryUsage="FALSE"
-			CharacterSet="1">
+			ATLMinimizesCRunTimeLibraryUsage="false"
+			CharacterSet="1"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				PreprocessorDefinitions="NDEBUG"
+				MkTypLibCompatible="false"
+				TargetEnvironment="1"
+				GenerateStublessProxies="true"
+				TypeLibraryName="$(IntDir)/ZViewerAgent.tlb"
+				HeaderFileName="ZViewerAgent.h"
+				DLLDataFileName=""
+				InterfaceIdentifierFileName="ZViewerAgent_i.c"
+				ProxyFileName="ZViewerAgent_p.c"
+			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories="$(SolutionDir)/lib"
 				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG;_USRDLL;_ATL_NO_UUIDOF"
 				RuntimeLibrary="0"
-				UsePrecompiledHeader="3"
+				UsePrecompiledHeader="2"
 				ProgramDataBaseFileName="$(IntDir)/ZViewerAgentCpp.pdb"
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="TRUE"
-				DebugInformationFormat="3"/>
+				Detect64BitPortabilityProblems="true"
+				DebugInformationFormat="3"
+			/>
 			<Tool
-				Name="VCCustomBuildTool"/>
-			<Tool
-				Name="VCLinkerTool"
-				IgnoreImportLibrary="TRUE"
-				AdditionalDependencies="$(SolutionDir)/lib/freeimage/FreeImage.lib  $(SolutionDir)/lib/freeimage/FreeImagePlus.lib"
-				OutputFile="$(OutDir)/ZViewerAgent.dll"
-				LinkIncremental="1"
-				ModuleDefinitionFile=".\ZViewerAgent.def"
-				GenerateDebugInformation="TRUE"
-				SubSystem="2"
-				OptimizeReferences="0"
-				EnableCOMDATFolding="2"
-				ImportLibrary="$(OutDir)/ZViewerAgent.lib"
-				TargetMachine="1"/>
-			<Tool
-				Name="VCMIDLTool"
-				PreprocessorDefinitions="NDEBUG"
-				MkTypLibCompatible="FALSE"
-				TargetEnvironment="1"
-				GenerateStublessProxies="TRUE"
-				TypeLibraryName="$(IntDir)/ZViewerAgent.tlb"
-				HeaderFileName="ZViewerAgent.h"
-				DLLDataFileName=""
-				InterfaceIdentifierFileName="ZViewerAgent_i.c"
-				ProxyFileName="ZViewerAgent_p.c"/>
-			<Tool
-				Name="VCPostBuildEventTool"
-				Description="등록하고 있습니다."
-				CommandLine="regsvr32 /s /c &quot;$(TargetPath)&quot;"/>
-			<Tool
-				Name="VCPreBuildEventTool"/>
-			<Tool
-				Name="VCPreLinkEventTool"/>
+				Name="VCManagedResourceCompilerTool"
+			/>
 			<Tool
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="NDEBUG"
 				Culture="1042"
-				AdditionalIncludeDirectories="$(IntDir)"/>
+				AdditionalIncludeDirectories="$(IntDir)"
+			/>
 			<Tool
-				Name="VCWebServiceProxyGeneratorTool"/>
+				Name="VCPreLinkEventTool"
+			/>
 			<Tool
-				Name="VCXMLDataGeneratorTool"/>
+				Name="VCLinkerTool"
+				IgnoreImportLibrary="true"
+				AdditionalDependencies="$(SolutionDir)/lib/freeimage/FreeImage.lib $(SolutionDir)/lib/freeimage/FreeImagePlus.lib"
+				OutputFile="$(OutDir)/ZViewerAgent.dll"
+				LinkIncremental="1"
+				ModuleDefinitionFile=".\ZViewerAgent.def"
+				GenerateDebugInformation="true"
+				SubSystem="2"
+				OptimizeReferences="0"
+				EnableCOMDATFolding="2"
+				ImportLibrary="$(OutDir)/ZViewerAgent.lib"
+				TargetMachine="1"
+			/>
 			<Tool
-				Name="VCWebDeploymentTool"/>
+				Name="VCALinkTool"
+			/>
 			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
+				Name="VCManifestTool"
+			/>
 			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				Description="등록하고 있습니다."
+				CommandLine="regsvr32 /s /c &quot;$(TargetPath)&quot;"
+			/>
 		</Configuration>
 		<Configuration
 			Name="ZViewerDebug|Win32"
 			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="1">
+			ConfigurationType="1"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
+			>
 			<Tool
-				Name="VCCLCompilerTool"/>
+				Name="VCPreBuildEventTool"
+			/>
 			<Tool
-				Name="VCCustomBuildTool"/>
+				Name="VCCustomBuildTool"
+			/>
 			<Tool
-				Name="VCLinkerTool"/>
+				Name="VCXMLDataGeneratorTool"
+			/>
 			<Tool
-				Name="VCMIDLTool"/>
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCMIDLTool"
+			/>
 			<Tool
-				Name="VCPreBuildEventTool"/>
+				Name="VCCLCompilerTool"
+			/>
 			<Tool
-				Name="VCPreLinkEventTool"/>
+				Name="VCManagedResourceCompilerTool"
+			/>
 			<Tool
-				Name="VCResourceCompilerTool"/>
+				Name="VCResourceCompilerTool"
+			/>
 			<Tool
-				Name="VCWebServiceProxyGeneratorTool"/>
+				Name="VCPreLinkEventTool"
+			/>
 			<Tool
-				Name="VCXMLDataGeneratorTool"/>
+				Name="VCLinkerTool"
+			/>
 			<Tool
-				Name="VCWebDeploymentTool"/>
+				Name="VCALinkTool"
+			/>
 			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
+				Name="VCManifestTool"
+			/>
 			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
 		</Configuration>
 		<Configuration
 			Name="ZViewerRelease|Win32"
 			OutputDirectory="$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="1"
 			UseOfATL="1"
-			ATLMinimizesCRunTimeLibraryUsage="FALSE"
-			CharacterSet="1">
+			ATLMinimizesCRunTimeLibraryUsage="false"
+			CharacterSet="1"
+			>
 			<Tool
-				Name="VCCLCompilerTool"
-				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG;_USRDLL;_ATL_NO_UUIDOF"
-				RuntimeLibrary="0"
-				UsePrecompiledHeader="3"
-				ProgramDataBaseFileName="$(IntDir)/ZViewerAgentCpp.pdb"
-				WarningLevel="3"
-				Detect64BitPortabilityProblems="TRUE"
-				DebugInformationFormat="3"/>
+				Name="VCPreBuildEventTool"
+			/>
 			<Tool
-				Name="VCCustomBuildTool"/>
+				Name="VCCustomBuildTool"
+			/>
 			<Tool
-				Name="VCLinkerTool"
-				IgnoreImportLibrary="TRUE"
-				AdditionalDependencies="$(SolutionDir)/lib/FreeImage.lib $(SolutionDir)/lib/FreeImagePlus.lib"
-				OutputFile="$(OutDir)/ZViewerAgent.dll"
-				LinkIncremental="1"
-				ModuleDefinitionFile=".\ZViewerAgent.def"
-				GenerateDebugInformation="TRUE"
-				SubSystem="2"
-				OptimizeReferences="2"
-				EnableCOMDATFolding="2"
-				ImportLibrary="$(OutDir)/ZViewerAgent.lib"
-				TargetMachine="1"/>
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
 			<Tool
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="NDEBUG"
-				MkTypLibCompatible="FALSE"
+				MkTypLibCompatible="false"
 				TargetEnvironment="1"
-				GenerateStublessProxies="TRUE"
+				GenerateStublessProxies="true"
 				TypeLibraryName="$(IntDir)/ZViewerAgent.tlb"
 				HeaderFileName="ZViewerAgent.h"
 				DLLDataFileName=""
 				InterfaceIdentifierFileName="ZViewerAgent_i.c"
-				ProxyFileName="ZViewerAgent_p.c"/>
+				ProxyFileName="ZViewerAgent_p.c"
+			/>
 			<Tool
-				Name="VCPostBuildEventTool"
-				Description="등록하고 있습니다."
-				CommandLine="regsvr32 /s /c &quot;$(TargetPath)&quot;"/>
+				Name="VCCLCompilerTool"
+				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG;_USRDLL;_ATL_NO_UUIDOF"
+				RuntimeLibrary="0"
+				UsePrecompiledHeader="2"
+				ProgramDataBaseFileName="$(IntDir)/ZViewerAgentCpp.pdb"
+				WarningLevel="3"
+				Detect64BitPortabilityProblems="true"
+				DebugInformationFormat="3"
+			/>
 			<Tool
-				Name="VCPreBuildEventTool"/>
-			<Tool
-				Name="VCPreLinkEventTool"/>
+				Name="VCManagedResourceCompilerTool"
+			/>
 			<Tool
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="NDEBUG"
 				Culture="1042"
-				AdditionalIncludeDirectories="$(IntDir)"/>
+				AdditionalIncludeDirectories="$(IntDir)"
+			/>
 			<Tool
-				Name="VCWebServiceProxyGeneratorTool"/>
+				Name="VCPreLinkEventTool"
+			/>
 			<Tool
-				Name="VCXMLDataGeneratorTool"/>
+				Name="VCLinkerTool"
+				IgnoreImportLibrary="true"
+				AdditionalDependencies="$(SolutionDir)/lib/FreeImage.lib $(SolutionDir)/lib/FreeImagePlus.lib"
+				OutputFile="$(OutDir)/ZViewerAgent.dll"
+				LinkIncremental="1"
+				ModuleDefinitionFile=".\ZViewerAgent.def"
+				GenerateDebugInformation="true"
+				SubSystem="2"
+				OptimizeReferences="2"
+				EnableCOMDATFolding="2"
+				ImportLibrary="$(OutDir)/ZViewerAgent.lib"
+				TargetMachine="1"
+			/>
 			<Tool
-				Name="VCWebDeploymentTool"/>
+				Name="VCALinkTool"
+			/>
 			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
+				Name="VCManifestTool"
+			/>
 			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				Description="등록하고 있습니다."
+				CommandLine="regsvr32 /s /c &quot;$(TargetPath)&quot;"
+			/>
 		</Configuration>
 	</Configurations>
 	<References>
@@ -257,162 +381,209 @@
 		<Filter
 			Name="소스 파일"
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx"
-			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}">
+			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
+			>
 			<File
-				RelativePath=".\stdafx.cpp">
+				RelativePath=".\stdafx.cpp"
+				>
 				<FileConfiguration
-					Name="Debug|Win32">
+					Name="Debug|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="1"/>
+						UsePrecompiledHeader="1"
+					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Release|Win32">
+					Name="Release|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="1"/>
+						UsePrecompiledHeader="1"
+					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="ZViewerRelease|Win32">
+					Name="ZViewerRelease|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="1"/>
+						UsePrecompiledHeader="1"
+					/>
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\ZViewerAgent.cpp">
+				RelativePath=".\ZViewerAgent.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\ZViewerAgent.def">
+				RelativePath=".\ZViewerAgent.def"
+				>
 			</File>
 			<File
-				RelativePath=".\ZViewerAgent.idl">
+				RelativePath=".\ZViewerAgent.idl"
+				>
 			</File>
 			<File
-				RelativePath=".\ZViewMenuExt.cpp">
+				RelativePath=".\ZViewMenuExt.cpp"
+				>
 			</File>
 		</Filter>
 		<Filter
 			Name="헤더 파일"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
-			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
+			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
+			>
 			<File
-				RelativePath=".\Resource.h">
+				RelativePath=".\Resource.h"
+				>
 			</File>
 			<File
-				RelativePath=".\stdafx.h">
+				RelativePath=".\stdafx.h"
+				>
 			</File>
 			<File
-				RelativePath=".\ZViewMenuExt.h">
+				RelativePath=".\ZViewMenuExt.h"
+				>
 			</File>
 		</Filter>
 		<Filter
 			Name="리소스 파일"
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx"
-			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}">
+			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
+			>
 			<File
-				RelativePath=".\ZViewerAgent.rc">
+				RelativePath=".\ZViewerAgent.rc"
+				>
 			</File>
 			<File
-				RelativePath=".\ZViewerAgent.rgs">
+				RelativePath=".\ZViewerAgent.rgs"
+				>
 			</File>
 			<File
-				RelativePath=".\ZViewMenuExt.rgs">
+				RelativePath=".\ZViewMenuExt.rgs"
+				>
 			</File>
 		</Filter>
 		<Filter
 			Name="생성 파일"
-			SourceControlFiles="FALSE">
+			SourceControlFiles="false"
+			>
 			<File
-				RelativePath=".\ZViewerAgent_i.c">
+				RelativePath=".\ZViewerAgent_i.c"
+				>
 				<FileConfiguration
-					Name="Debug|Win32">
+					Name="Debug|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="0"/>
+						UsePrecompiledHeader="0"
+					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Release|Win32">
+					Name="Release|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="0"/>
+						UsePrecompiledHeader="0"
+					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="ZViewerRelease|Win32">
+					Name="ZViewerRelease|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="0"/>
+						UsePrecompiledHeader="0"
+					/>
 				</FileConfiguration>
 			</File>
 		</Filter>
 		<Filter
 			Name="lib"
-			Filter="">
+			>
 			<Filter
 				Name="freeimage"
-				Filter="">
+				>
 				<File
-					RelativePath="..\lib\freeimage\FreeImage.h">
+					RelativePath="..\lib\freeimage\FreeImage.h"
+					>
 				</File>
 				<File
-					RelativePath="..\lib\freeimage\FreeImagePlus.h">
+					RelativePath="..\lib\freeimage\FreeImagePlus.h"
+					>
 				</File>
 			</Filter>
 		</Filter>
 		<Filter
 			Name="commonSrc"
-			Filter="">
+			>
 			<File
-				RelativePath="..\commonSrc\CommonFunc.cpp">
+				RelativePath="..\commonSrc\CommonFunc.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\commonSrc\CommonFunc.h">
+				RelativePath="..\commonSrc\CommonFunc.h"
+				>
 			</File>
 			<File
-				RelativePath="..\commonSrc\DesktopWallPaper.cpp">
+				RelativePath="..\commonSrc\DesktopWallPaper.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\commonSrc\DesktopWallPaper.h">
+				RelativePath="..\commonSrc\DesktopWallPaper.h"
+				>
 			</File>
 			<File
-				RelativePath="..\commonSrc\LogManager.cpp">
+				RelativePath="..\commonSrc\LogManager.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\commonSrc\LogManager.h">
+				RelativePath="..\commonSrc\LogManager.h"
+				>
 			</File>
 			<File
-				RelativePath="..\commonSrc\MessageManager.cpp">
+				RelativePath="..\commonSrc\MessageManager.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\commonSrc\MessageManager.h">
+				RelativePath="..\commonSrc\MessageManager.h"
+				>
 			</File>
 			<File
-				RelativePath="..\commonSrc\OptionFile.cpp">
+				RelativePath="..\commonSrc\OptionFile.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\commonSrc\OptionFile.h">
+				RelativePath="..\commonSrc\OptionFile.h"
+				>
 			</File>
 			<File
-				RelativePath="..\commonSrc\SaveAs.cpp">
+				RelativePath="..\commonSrc\SaveAs.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\commonSrc\SaveAs.h">
+				RelativePath="..\commonSrc\SaveAs.h"
+				>
 			</File>
 			<File
-				RelativePath="..\commonSrc\UnicodeFile.cpp">
+				RelativePath="..\commonSrc\UnicodeFile.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\commonSrc\UnicodeFile.h">
+				RelativePath="..\commonSrc\UnicodeFile.h"
+				>
 			</File>
 			<File
-				RelativePath="..\commonSrc\ZImage.cpp">
+				RelativePath="..\commonSrc\ZImage.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\commonSrc\ZImage.h">
+				RelativePath="..\commonSrc\ZImage.h"
+				>
 			</File>
 		</Filter>
 		<File
-			RelativePath=".\ReadMe.txt">
+			RelativePath=".\ReadMe.txt"
+			>
 		</File>
 	</Files>
 	<Globals>
