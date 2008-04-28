@@ -55,8 +55,8 @@ HWND ZWindow::Create(HINSTANCE hInstance, HWND hParentHWND, int nCmdShow)
 	WndClass.style=CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS;
 	RegisterClass(&WndClass);
 
-	int iWidth = GetSystemMetrics(SM_CXSCREEN) * 0.8;
-	int iHeight = GetSystemMetrics(SM_CYSCREEN) * 0.8;
+	int iWidth = (int)(GetSystemMetrics(SM_CXSCREEN) * 0.8);
+	int iHeight = (int)(GetSystemMetrics(SM_CYSCREEN) * 0.8);
 	int iXPosition = (GetSystemMetrics(SM_CXSCREEN)/2) - (iWidth/2);
 	int iYPosition = (GetSystemMetrics(SM_CYSCREEN)/2) - ( iHeight/2) ;
 
