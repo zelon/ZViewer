@@ -259,7 +259,7 @@
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}">
 			<File
-				RelativePath=".\stdafx.cpp">
+				RelativePath="..\ZViewerAgent\stdafx.cpp">
 				<FileConfiguration
 					Name="Debug|Win32">
 					<Tool
@@ -280,16 +280,16 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\ZViewerAgent.cpp">
+				RelativePath="..\ZViewerAgent\ZViewerAgent.cpp">
 			</File>
 			<File
-				RelativePath=".\ZViewerAgent.def">
+				RelativePath="..\ZViewerAgent\ZViewerAgent.def">
 			</File>
 			<File
-				RelativePath=".\ZViewerAgent.idl">
+				RelativePath="..\ZViewerAgent\ZViewerAgent.idl">
 			</File>
 			<File
-				RelativePath=".\ZViewMenuExt.cpp">
+				RelativePath="..\ZViewerAgent\ZViewMenuExt.cpp">
 			</File>
 		</Filter>
 		<Filter
@@ -297,13 +297,13 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
 			<File
-				RelativePath=".\Resource.h">
+				RelativePath="..\ZViewerAgent\Resource.h">
 			</File>
 			<File
-				RelativePath=".\stdafx.h">
+				RelativePath="..\ZViewerAgent\stdafx.h">
 			</File>
 			<File
-				RelativePath=".\ZViewMenuExt.h">
+				RelativePath="..\ZViewerAgent\ZViewMenuExt.h">
 			</File>
 		</Filter>
 		<Filter
@@ -311,20 +311,20 @@
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx"
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}">
 			<File
-				RelativePath=".\ZViewerAgent.rc">
+				RelativePath="..\ZViewerAgent\ZViewerAgent.rc">
 			</File>
 			<File
-				RelativePath=".\ZViewerAgent.rgs">
+				RelativePath="..\ZViewerAgent\ZViewerAgent.rgs">
 			</File>
 			<File
-				RelativePath=".\ZViewMenuExt.rgs">
+				RelativePath="..\ZViewerAgent\ZViewMenuExt.rgs">
 			</File>
 		</Filter>
 		<Filter
 			Name="생성 파일"
 			SourceControlFiles="FALSE">
 			<File
-				RelativePath=".\ZViewerAgent_i.c">
+				RelativePath="..\ZViewerAgent\ZViewerAgent_i.c">
 				<FileConfiguration
 					Name="Debug|Win32">
 					<Tool
@@ -412,7 +412,7 @@
 			</File>
 		</Filter>
 		<File
-			RelativePath=".\ReadMe.txt">
+			RelativePath="..\ZViewerAgent\ReadMe.txt">
 		</File>
 	</Files>
 	<Globals>

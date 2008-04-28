@@ -116,10 +116,10 @@
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}">
 			<File
-				RelativePath=".\LangKor.cpp">
+				RelativePath="..\LangKor\LangKor.cpp">
 			</File>
 			<File
-				RelativePath=".\stdafx.cpp">
+				RelativePath="..\LangKor\stdafx.cpp">
 				<FileConfiguration
 					Name="Debug|Win32">
 					<Tool
@@ -139,7 +139,7 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
 			<File
-				RelativePath=".\stdafx.h">
+				RelativePath="..\LangKor\stdafx.h">
 			</File>
 		</Filter>
 		<Filter
@@ -147,23 +147,23 @@
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx"
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}">
 			<File
-				RelativePath=".\res\MoveHand.cur">
+				RelativePath="..\LangKor\res\MoveHand.cur">
 			</File>
 			<File
-				RelativePath=".\res\MoveHandHold.cur">
+				RelativePath="..\LangKor\res\MoveHandHold.cur">
 			</File>
 			<File
-				RelativePath=".\res\resource.h">
+				RelativePath="..\LangKor\res\resource.h">
 			</File>
 			<File
-				RelativePath=".\res\ZViewer.ico">
+				RelativePath="..\LangKor\res\ZViewer.ico">
 			</File>
 			<File
-				RelativePath=".\res\ZViewer.rc">
+				RelativePath="..\LangKor\res\ZViewer.rc">
 			</File>
 		</Filter>
 		<File
-			RelativePath=".\ReadMe.txt">
+			RelativePath="..\LangKor\ReadMe.txt">
 		</File>
 	</Files>
 	<Globals>

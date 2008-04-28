@@ -116,7 +116,7 @@
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}">
 			<File
-				RelativePath=".\stdafx.cpp">
+				RelativePath="..\ZViewerIcons\stdafx.cpp">
 				<FileConfiguration
 					Name="Debug|Win32">
 					<Tool
@@ -131,7 +131,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\ZViewerIcons.cpp">
+				RelativePath="..\ZViewerIcons\ZViewerIcons.cpp">
 			</File>
 		</Filter>
 		<Filter
@@ -139,10 +139,10 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
 			<File
-				RelativePath=".\resource.h">
+				RelativePath="..\ZViewerIcons\resource.h">
 			</File>
 			<File
-				RelativePath=".\stdafx.h">
+				RelativePath="..\ZViewerIcons\stdafx.h">
 			</File>
 		</Filter>
 		<Filter
@@ -150,32 +150,32 @@
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx"
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}">
 			<File
-				RelativePath=".\ext_ico.ico">
+				RelativePath="..\ZViewerIcons\ext_ico.ico">
 			</File>
 			<File
-				RelativePath=".\ico00001.ico">
+				RelativePath="..\ZViewerIcons\ico00001.ico">
 			</File>
 			<File
-				RelativePath=".\ico00002.ico">
+				RelativePath="..\ZViewerIcons\ico00002.ico">
 			</File>
 			<File
-				RelativePath=".\ico00003.ico">
+				RelativePath="..\ZViewerIcons\ico00003.ico">
 			</File>
 			<File
-				RelativePath=".\ico00004.ico">
+				RelativePath="..\ZViewerIcons\ico00004.ico">
 			</File>
 			<File
-				RelativePath=".\ico00005.ico">
+				RelativePath="..\ZViewerIcons\ico00005.ico">
 			</File>
 			<File
-				RelativePath=".\icon1.ico">
+				RelativePath="..\ZViewerIcons\icon1.ico">
 			</File>
 			<File
-				RelativePath=".\ZViewerIcons.rc">
+				RelativePath="..\ZViewerIcons\ZViewerIcons.rc">
 			</File>
 		</Filter>
 		<File
-			RelativePath=".\ReadMe.txt">
+			RelativePath="..\ZViewerIcons\ReadMe.txt">
 		</File>
 	</Files>
 	<Globals>

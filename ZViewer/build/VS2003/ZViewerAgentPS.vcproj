@@ -193,17 +193,17 @@ Exit 1
 			Name="생성 파일"
 			SourceControlFiles="FALSE">
 			<File
-				RelativePath=".\dlldata.c">
+				RelativePath="..\ZViewerAgent\dlldata.c">
 			</File>
 			<File
-				RelativePath=".\ZViewerAgent_i.c">
+				RelativePath="..\ZViewerAgent\ZViewerAgent_i.c">
 			</File>
 			<File
-				RelativePath=".\ZViewerAgent_p.c">
+				RelativePath="..\ZViewerAgent\ZViewerAgent_p.c">
 			</File>
 		</Filter>
 		<File
-			RelativePath=".\ZViewerAgentps.def">
+			RelativePath="..\ZViewerAgent\ZViewerAgentps.def">
 		</File>
 	</Files>
 	<Globals>
