@@ -13,7 +13,7 @@
 		<Configuration
 			Name="Debug|Win32"
 			OutputDirectory="$(SolutionDir)/output/language"
-			IntermediateDirectory="Debug"
+			IntermediateDirectory="$(ProjectDir)/obj/LangKor/Debug"
 			ConfigurationType="2"
 			CharacterSet="2">
 			<Tool
@@ -62,7 +62,7 @@
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="$(SolutionDir)/output/language"
-			IntermediateDirectory="Release"
+			IntermediateDirectory="$(ProjectDir)/obj/LangKor/Release"
 			ConfigurationType="2"
 			CharacterSet="2">
 			<Tool

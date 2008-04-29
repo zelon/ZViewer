@@ -13,8 +13,8 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="../output"
-			IntermediateDirectory="../obj/ZViewerAgentD"
+			OutputDirectory="$(ProjectDir)/../../output"
+			IntermediateDirectory="$(ProjectDir)/obj/ZViewerAgent/Debug"
 			ConfigurationType="2"
 			UseOfMFC="2"
 			UseOfATL="1"
@@ -23,7 +23,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="$(SolutionDir)/../../lib"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)&quot;;&quot;$(SolutionDir)/../../lib&quot;"
 				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG;_USRDLL;_ATL_NO_UUIDOF"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
@@ -84,8 +84,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(SolutionDir)/output"
-			IntermediateDirectory="../obj/ZViewerAgent"
+			OutputDirectory="$(ProjectDir)/../../output"
+			IntermediateDirectory="$(ProjectDir)/obj/ZViewerAgent/Release"
 			ConfigurationType="2"
 			UseOfMFC="1"
 			UseOfATL="1"

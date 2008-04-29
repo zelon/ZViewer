@@ -12,8 +12,8 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="../output"
-			IntermediateDirectory="../obj/ZViewerD"
+			OutputDirectory="$(ProjectDir)/../../output"
+			IntermediateDirectory="$(ProjectDir)/obj/ZViewer/Debug"
 			ConfigurationType="1"
 			CharacterSet="1">
 			<Tool
@@ -63,8 +63,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="../output"
-			IntermediateDirectory="../obj/ZViewer"
+			OutputDirectory="$(ProjectDir)/../../output"
+			IntermediateDirectory="$(ProjectDir)/obj/ZViewer/Release"
 			ConfigurationType="1"
 			CharacterSet="1">
 			<Tool
