@@ -502,7 +502,7 @@ void ZMain::FindFile(const TCHAR * path, std::vector< FileData > & foundStorage,
 	hSrch=FindFirstFile(path,&wfd);
 	while (bResult)
 	{
-		_tsplitpath_s(path, drive,_MAX_DRIVE ,dir,_MAX_DIR, NULL,0 ,NULL,0);
+		SplitPath(path, drive,_MAX_DRIVE ,dir,_MAX_DIR, NULL,0 ,NULL,0);
 		if (wfd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
 		{
 			if (wfd.cFileName[0]!='.' && bFindRecursive == true)
@@ -543,7 +543,7 @@ void ZMain::FindFolders(const TCHAR *path, std::vector<tstring> & foundStorage, 
 	hSrch=FindFirstFile(path,&wfd);
 	while (bResult)
 	{
-		_tsplitpath_s(path, drive,_MAX_DRIVE, dir,_MAX_DIR, NULL,0, NULL,0);
+		SplitPath(path, drive,_MAX_DRIVE, dir,_MAX_DIR, NULL,0, NULL,0);
 		if (wfd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
 		{
 			if (wfd.cFileName[0]!='.' )
@@ -1113,7 +1113,7 @@ void ZMain::SetStatusBarText()
 
 		// ÆÄÀÏ¸í
 		TCHAR szFilename[MAX_PATH], szFileExt[MAX_PATH];
-		_tsplitpath_s(m_strCurrentFilename.c_str(), NULL,0, NULL,0, szFilename,MAX_PATH, szFileExt,MAX_PATH);
+		SplitPath(m_strCurrentFilename.c_str(), NULL,0, NULL,0, szFilename,MAX_PATH, szFileExt,MAX_PATH);
 
 		showCacheStatus(); ///< 5
 
@@ -1134,7 +1134,7 @@ void ZMain::SetTitle()
 	{
 		TCHAR szFileName[FILENAME_MAX] = { 0 };
 		TCHAR szFileExt[MAX_PATH] = { 0 };
-		_tsplitpath_s(m_strCurrentFilename.c_str(), NULL,0, NULL,0, szFileName,FILENAME_MAX, szFileExt,MAX_PATH);
+		SplitPath(m_strCurrentFilename.c_str(), NULL,0, NULL,0, szFileName,FILENAME_MAX, szFileExt,MAX_PATH);
 
 		StringCchPrintf(szTemp, MAX_PATH+256, TEXT("%s%s - %s"), szFileName, szFileExt, m_strCurrentFilename.c_str());
 	}
@@ -1632,7 +1632,7 @@ void ZMain::SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyle style)
 	}
 
 	TCHAR szFileName[FILENAME_MAX] = { 0 };
-	_tsplitpath_s(m_vFile[m_iCurretFileIndex].m_strFileName.c_str(), NULL,0, NULL,0, szFileName,FILENAME_MAX, NULL,0);
+	SplitPath(m_vFile[m_iCurretFileIndex].m_strFileName.c_str(), NULL,0, NULL,0, szFileName,FILENAME_MAX, NULL,0);
 
 	tstring strSaveFileName = szSystemFolder;
 	strSaveFileName += TEXT("\\zviewer_bg_");
