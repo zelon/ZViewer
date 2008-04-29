@@ -102,3 +102,15 @@ std::wstring getWStringFromString(const std::string & str);
 
 /// 현재 실행 파일이 있는 폴더를 얻는다.
 tstring GetProgramFolder();
+
+/// 컴파일러 버젼에 맞게 함수 정의
+void SplitPath(const TCHAR * path, TCHAR * drive, size_t driveNumberOfElements, TCHAR * dir, size_t dirNumberOfElements,
+				TCHAR * fname, size_t nameNumberOfElements, TCHAR * ext, size_t extNumberOfElements)
+{
+#if _MSC_VER >= 1400
+	_tsplitpath_s(path, drive, driveNumberOfElements, dir, dirNumberOfElements, fname, nameNumberOfElements, ext, extNumberOfElements);
+#else
+	_tsplitpath(path, drive, dir, fname, ext);
+#endif
+	
+}

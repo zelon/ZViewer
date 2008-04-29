@@ -15,7 +15,7 @@ bool ZImage::IsValidImageFileExt(const TCHAR * szFilename)
 {
 	TCHAR szExt[MAX_PATH];
 
-	_wsplitpath_s(szFilename, NULL,0, NULL,0 , NULL,0 , szExt,MAX_PATH);
+	SplitPath(szFilename, NULL,0, NULL,0 , NULL,0 , szExt,MAX_PATH);
 
 	if ( _tcslen(szExt) < 2 ) return false;
 
