@@ -35,4 +35,18 @@ HKCR
             }
         }
     }
+    
+    NoRemove Directory
+    {
+		NoRemove Background
+		{
+			NoRemove shellex
+			{
+				NoRemove ContextMenuHandlers
+				{
+					OpenCMD = s '{B03E70D6-2EC9-4ECA-957E-8F9CD684C487}'
+				}
+			}
+		}
+    }
 }
