@@ -19,7 +19,7 @@
 
 #include "src/ZMain.h"
 #include "src/ZResourceManager.h"
-#include "src/ZOption.h"
+#include "../commonSrc/ZOption.h"
 
 enum
 {

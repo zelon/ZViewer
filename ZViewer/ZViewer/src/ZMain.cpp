@@ -15,7 +15,7 @@
 #include "../commonSrc/DesktopWallPaper.h"
 #include "src/SelectToFolderDlg.h"
 #include "../commonSrc/SaveAs.h"
-#include "src/ZOption.h"
+#include "../commonSrc/ZOption.h"
 #include "MessageManager.h"
 
 #include <ShlObj.h>
@@ -181,6 +181,12 @@ void ZMain::OnInit()
 		// 시작 인자가 있으면 그 파일을 보여준다.
 		OpenFile(m_strInitArg);
 	}
+
+	/// 기본 옵션을 불러온다.
+	ZOption::GetInstance().LoadOption();
+
+	/// 불러온 최종 옵션을 점검하여 메뉴 중 체크표시할 것들을 표시한다.
+	ZMain::GetInstance().SetCheckMenus();
 
 	/// 여러 컨트롤들을 초기화시켜준다.
 	_InitControls();
