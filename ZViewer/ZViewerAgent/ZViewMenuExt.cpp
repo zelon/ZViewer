@@ -15,6 +15,7 @@
 #include "../commonSrc/MessageManager.h"
 #include "../commonSrc/SaveAs.h"
 #include <shlobj.h>
+#include <sstream>
 
 // CZViewMenuExt
 
@@ -22,6 +23,11 @@ const LONG CZViewMenuExt::m_lMaxThumbnailSize = 128;
 const LONG CZViewMenuExt::m_l3DBorderWidth    = 1;
 const LONG CZViewMenuExt::m_lMenuItemSpacing  = 4;
 const LONG CZViewMenuExt::m_lTotalBorderSpace = 2*(m_lMenuItemSpacing+m_l3DBorderWidth);
+
+bool g_bShowCommdOpenMenu = true;
+
+/// 탐색기의 오른쪽 버튼을 눌렀을 때 미리보기창을 넣을 것인가
+bool g_bPreviewMenuInsert = true;
 
 void CZViewMenuExt::MsgBox(const tstring & strMsg)
 {
@@ -34,10 +40,10 @@ void CZViewMenuExt::_SaveAS()
 {
 	CSaveAs::getInstance().setParentHWND(HWND_DESKTOP);
 
-	TCHAR bufferDir[MAX_PATH] = { 0 };
-	GetCurrentDirectory(MAX_PATH, bufferDir);
+	//TCHAR bufferDir[MAX_PATH] = { 0 };
+	//GetCurrentDirectory(MAX_PATH, bufferDir);
 
-	CSaveAs::getInstance().setDefaultSaveFilename(bufferDir, m_szFile);
+	CSaveAs::getInstance().setDefaultSaveFilename(m_strCurrentDir, m_szFile);
 
 	if ( CSaveAs::getInstance().showDialog() )
 	{
@@ -59,81 +65,110 @@ void CZViewMenuExt::_SaveAS()
 
 STDMETHODIMP CZViewMenuExt::Initialize (LPCITEMIDLIST pidlFolder, LPDATAOBJECT  pDO, HKEY hkeyProgID )
 {
+	g_bPreviewMenuInsert = true;
+	g_bShowCommdOpenMenu = true;
+
+
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
+
+	bool bGetCurrentDirOK = true;
+
+	m_strCurrentDir.reserve(MAX_PATH);
+
+	if ( FALSE == SHGetPathFromIDList(pidlFolder, &(m_strCurrentDir[0])) )
+	{
+		//assert(false);
+		//OutputDebugString(_T("Cannot get current directory\r\n"));
+		//return E_FAIL;
+		bGetCurrentDirOK = false;
+	}
 
 	if ( GetSystemDefaultLangID() == 0x0412 )
 	{
 		CMessageManager::getInstance().SetLanguage(eLanguage_KOREAN);
 	}
 
-	COleDataObject dataobj;
-	HGLOBAL hglobal;
-	HDROP hdrop;
-
-    dataobj.Attach ( pDO, FALSE );      // FALSE = don't release IDataObject interface when destroyed
-
-    // Get the first selected file name.  I'll keep this simple and just check
-    // the first name to see if it's a .BMP.
-    hglobal = dataobj.GetGlobalData ( CF_HDROP );
-
-    if ( NULL == hglobal )
-        return E_INVALIDARG;
-
-    hdrop = (HDROP) GlobalLock ( hglobal );
-
-    if ( NULL == hdrop )
-        return E_INVALIDARG;
-
-	/// 탐색기의 오른쪽 버튼을 눌렀을 때 미리보기창을 넣을 것인가
-	bool bPreviewMenuInsert = false;
-
-	/// 만약 Shift 키를 누르고 메뉴를 띄운 것이면 이미지 미리보기를 보여주지 않는다.
-	if ( GetKeyState(VK_LSHIFT) >= 0 )
+	if ( pDO == NULL )	/// pDO 가 NULL 이면 선택된 파일이 없이 오른쪽 버튼을 누른 상황이다.
 	{
-		/// Get the name of the first selected file.
-		if ( DragQueryFile( hdrop, 0, m_szFile, MAX_PATH ) )
-		{
-			/// Is it's extension is valid 'Image File'
-			if ( ZImage::IsValidImageFileExt(m_szFile) )
-			{
-				if ( m_originalImage.LoadFromFile(m_szFile) )
-				{
-					bPreviewMenuInsert = true;
-					//	MsgBox("Here");
+		g_bPreviewMenuInsert = false;
+	}
+	else
+	{
+		COleDataObject dataobj;
+		HGLOBAL hglobal;
+		HDROP hdrop;
 
-					if ( m_originalImage.GetBPP() == 8 )
-					{
-						m_b8bit = true;
-					}
-				}
-				else /// 이미지 파일을 읽을 수 없었다.
+		dataobj.Attach ( pDO, FALSE );      // FALSE = don't release IDataObject interface when destroyed
+
+		// Get the first selected file name.  I'll keep this simple and just check
+		// the first name to see if it's a .BMP.
+		hglobal = dataobj.GetGlobalData ( CF_HDROP );
+
+		if ( NULL == hglobal )
+			return E_INVALIDARG;
+
+		hdrop = (HDROP) GlobalLock ( hglobal );
+
+		if ( NULL == hdrop )
+			return E_INVALIDARG;
+
+		/// 만약 Shift 키를 누르고 메뉴를 띄운 것이면 이미지 미리보기를 보여주지 않는다.
+		if ( GetKeyState(VK_LSHIFT) < 0 )
+		{
+			g_bPreviewMenuInsert = false;
+			g_bShowCommdOpenMenu = false;
+		}
+		else
+		{
+			/// Get the name of the first selected file.
+			if ( DragQueryFile( hdrop, 0, m_szFile, MAX_PATH ) )
+			{
+				/// 현재 디렉토리 위치를 읽어온다.
+				m_strCurrentDir = GetFolderNameFromFullFileName(m_szFile);
+
+				if ( g_bPreviewMenuInsert )
 				{
-					//	MsgBox("Here2");
+					/// Is it's extension is valid 'Image File', 이미지 라이브러리에서 읽을 수 없는 파일이면 미리보기 메뉴를 비활성화시킨다.
+					if ( ZImage::IsValidImageFileExt(m_szFile) )
+					{
+						if ( m_originalImage.LoadFromFile(m_szFile) )
+						{
+							g_bPreviewMenuInsert = true;
+							//	MsgBox("Here");
+
+							if ( m_originalImage.GetBPP() == 8 )
+							{
+								m_b8bit = true;
+							}
+						}
+						else /// 이미지 파일을 읽을 수 없었다.
+						{
+							g_bPreviewMenuInsert = false;//	MsgBox("Here2");
+						}
+					}
+					else
+					{
+						g_bPreviewMenuInsert = false;
+					}
 				}
 			}
 		}
+
+		GlobalUnlock ( hglobal );
+
+		if ( g_bPreviewMenuInsert || g_bShowCommdOpenMenu ) return S_OK;
+
+		return E_FAIL;
 	}
+	return S_OK;
 
-	GlobalUnlock ( hglobal );
-
-    return ( bPreviewMenuInsert ? S_OK : E_FAIL );
 }
 
-
-STDMETHODIMP CZViewMenuExt::QueryContextMenu(HMENU hmenu, UINT uIndex, UINT uidCmdFirst, UINT uidCmdLast, UINT uFlags )
+bool CanUseOwnerDraw()
 {
-    // If the flags include CMF_DEFAULTONLY then we shouldn't do anything.
-    if ( uFlags & CMF_DEFAULTONLY )
-	{
-        return MAKE_HRESULT ( SEVERITY_SUCCESS, FACILITY_NULL, 0 );
-	}
-
-	bool bUseOwnerDraw = false;
 	HINSTANCE hinstShell;
 
-	UINT uID = uidCmdFirst;
-
-    hinstShell = GetModuleHandle ( _T("shell32") );
+	hinstShell = GetModuleHandle ( _T("shell32") );
 
 	if ( NULL != hinstShell )
 	{
@@ -150,64 +185,113 @@ STDMETHODIMP CZViewMenuExt::QueryContextMenu(HMENU hmenu, UINT uIndex, UINT uidC
 				if ( rInfo.dwMajorVersion > 4 ||
 					rInfo.dwMinorVersion >= 71 )
 				{
-					bUseOwnerDraw = true;
+					return true;
 				}
 			}
 		}
 	}
+	return false;
+}
 
-	// 이미지 파일에 대한 정보를 수집해놓는다.
-	TCHAR szImageInfo[COMMON_BUFFER_SIZE] = { 0 };
-	StringCchPrintf(szImageInfo, COMMON_BUFFER_SIZE, TEXT("ZViewer %dx%d %dbpp"), m_originalImage.GetWidth(), m_originalImage.GetHeight(), m_originalImage.GetBPP());
 
-	// Store the menu item's ID so we can check against it later when
-	// WM_MEASUREITEM/WM_DRAWITEM are sent.
-	m_uOurItemID = uidCmdFirst;
-
-	MENUITEMINFO mii;
-
-    mii.cbSize = sizeof(MENUITEMINFO);
-	mii.fMask  = MIIM_ID | MIIM_TYPE;
-	mii.fType  = bUseOwnerDraw ? MFT_OWNERDRAW : MFT_BITMAP;
-	mii.wID    = uID++;
-
-	if ( !bUseOwnerDraw )
+STDMETHODIMP CZViewMenuExt::QueryContextMenu(HMENU hmenu, UINT uIndex, UINT uidCmdFirst, UINT uidCmdLast, UINT uFlags )
+{
+    // If the flags include CMF_DEFAULTONLY then we shouldn't do anything.
+    if ( uFlags & CMF_DEFAULTONLY )
 	{
-		// NOTE: This will put the full-sized bitmap in the menu, which is
-		// obviously a bit less than optimal.  Compressing the bitmap down
-		// to a thumbnail is left as an exercise.
-		mii.dwTypeData = (LPTSTR) m_bmp.GetSafeHandle();
+        return MAKE_HRESULT ( SEVERITY_SUCCESS, FACILITY_NULL, 0 );
 	}
 
-	InsertMenuItem ( hmenu, uIndex, TRUE, &mii );
-	
-	/// 하위 메뉴를 만든다.
-	HMENU hSubMenu = CreatePopupMenu();
-	{
-		InsertMenu( hSubMenu, 0, MF_BYPOSITION | MF_STRING, uID++, GetMessage(TEXT("VIEW_IN_ZVIEWER")));
-		InsertMenu( hSubMenu, 1, MF_SEPARATOR, NULL, NULL);
-		InsertMenu( hSubMenu, 2, MF_BYPOSITION | MF_STRING, uID++, GetMessage(TEXT("DESKTOP_WALLPAPER_CENTER")));
-		InsertMenu( hSubMenu, 3, MF_BYPOSITION | MF_STRING, uID++, GetMessage(TEXT("DESKTOP_WALLPAPER_STRETCH")));
-		InsertMenu( hSubMenu, 4, MF_BYPOSITION | MF_STRING, uID++, GetMessage(TEXT("DESKTOP_WALLPAPER_TILE")));
-		InsertMenu( hSubMenu, 5, MF_SEPARATOR, NULL, NULL);
-		InsertMenu( hSubMenu, 6, MF_BYPOSITION | MF_STRING, uID++, GetMessage(TEXT("DESKTOP_WALLPAPER_CLEAR")));
-		InsertMenu( hSubMenu, 7, MF_SEPARATOR, NULL, NULL);
-		InsertMenu( hSubMenu, 8, MF_BYPOSITION | MF_STRING, uID++, GetMessage(TEXT("ZVIEWERAGENT_SAVE_AS")));
+	BOOL bResult;
+	DWORD errorCode;
+	bool bUseOwnerDraw = false;
 
-		ZeroMemory(&mii, sizeof(MENUITEMINFO));
+	UINT uID = uidCmdFirst;
+
+	if ( g_bPreviewMenuInsert )
+	{
+		bUseOwnerDraw = CanUseOwnerDraw();
+
+		// 이미지 파일에 대한 정보를 수집해놓는다.
+		TCHAR szImageInfo[COMMON_BUFFER_SIZE] = { 0 };
+		StringCchPrintf(szImageInfo, COMMON_BUFFER_SIZE, TEXT("ZViewer %dx%d %dbpp"), m_originalImage.GetWidth(), m_originalImage.GetHeight(), m_originalImage.GetBPP());
+
+		// Store the menu item's ID so we can check against it later when
+		// WM_MEASUREITEM/WM_DRAWITEM are sent.
+		m_uOurItemID = uID;
+
+		MENUITEMINFO mii;
 		mii.cbSize = sizeof(MENUITEMINFO);
-		mii.fMask  = MIIM_ID | MIIM_TYPE | MIIM_SUBMENU;
+		mii.fMask  = MIIM_ID | MIIM_TYPE;
+		mii.fType  = bUseOwnerDraw ? MFT_OWNERDRAW : MFT_BITMAP;
 		mii.wID    = uID++;
-		mii.dwTypeData = szImageInfo;
+
+		if ( !bUseOwnerDraw )
+		{
+			// NOTE: This will put the full-sized bitmap in the menu, which is
+			// obviously a bit less than optimal.  Compressing the bitmap down
+			// to a thumbnail is left as an exercise.
+			mii.dwTypeData = (LPTSTR) m_bmp.GetSafeHandle();
+		}
+
+		bResult = InsertMenuItem ( hmenu, uIndex, TRUE, &mii );
+		
+		if ( FALSE == bResult )
+		{
+			errorCode = GetLastError();
+			assert(false);
+		}
+
+		/// 하위 메뉴를 만든다.
+		HMENU hSubMenu = CreatePopupMenu();
+		{
+			InsertMenu( hSubMenu, 0, MF_BYPOSITION | MF_STRING, uID++, GetMessage(TEXT("VIEW_IN_ZVIEWER")));
+			InsertMenu( hSubMenu, 1, MF_SEPARATOR, NULL, NULL);
+			InsertMenu( hSubMenu, 2, MF_BYPOSITION | MF_STRING, uID++, GetMessage(TEXT("DESKTOP_WALLPAPER_CENTER")));
+			InsertMenu( hSubMenu, 3, MF_BYPOSITION | MF_STRING, uID++, GetMessage(TEXT("DESKTOP_WALLPAPER_STRETCH")));
+			InsertMenu( hSubMenu, 4, MF_BYPOSITION | MF_STRING, uID++, GetMessage(TEXT("DESKTOP_WALLPAPER_TILE")));
+			InsertMenu( hSubMenu, 5, MF_SEPARATOR, NULL, NULL);
+			InsertMenu( hSubMenu, 6, MF_BYPOSITION | MF_STRING, uID++, GetMessage(TEXT("DESKTOP_WALLPAPER_CLEAR")));
+			InsertMenu( hSubMenu, 7, MF_SEPARATOR, NULL, NULL);
+			InsertMenu( hSubMenu, 8, MF_BYPOSITION | MF_STRING, uID++, GetMessage(TEXT("ZVIEWERAGENT_SAVE_AS")));
+			InsertMenu( hSubMenu, 9, MF_SEPARATOR, NULL, NULL);
+			InsertMenu( hSubMenu, 10, MF_BYPOSITION | MF_STRING, uID++, GetMessage(TEXT("ZVIEWERAGENT_OPEN_COMMAND_WINDOW")));
+		}
+
+		bResult = InsertMenu( hmenu, uIndex, MF_BYPOSITION | MF_POPUP, (UINT_PTR)hSubMenu, szImageInfo);
+
+		if ( FALSE == bResult )
+		{
+			errorCode = GetLastError();
+			assert(false);
+		}
 	}
 
-	InsertMenu( hmenu, 0, MF_BYPOSITION | MF_POPUP, (UINT_PTR)hSubMenu, szImageInfo);
+		///TODO : 왜 아래 메뉴가 제일 처음에 넣으면 안되는지 이유 파악. Preview 랑 같이 왜 안되는지 파악
+	if ( g_bShowCommdOpenMenu && g_bPreviewMenuInsert == false )
+	{
+		BOOL bResult = InsertMenu( hmenu, ++uIndex, MF_BYPOSITION | MF_STRING, uID++, GetMessage(TEXT("ZVIEWERAGENT_OPEN_COMMAND_WINDOW")));
 
+		if ( FALSE == bResult )
+		{
+			errorCode = GetLastError();
+			assert(false);
+		}
+	}
 
-	m_uiMaxMenuID = (uID - uidCmdFirst) - 1;
+	m_uiMaxMenuID = (uID - uidCmdFirst)-1;
 
-    // Tell the shell we added 1 top-level menu item.
-    return MAKE_HRESULT ( SEVERITY_SUCCESS, FACILITY_NULL, uID - uidCmdFirst );
+	int iAddedMenuCount = 0;
+
+//	if ( g_bShowCommdOpenMenu ) ++iAddedMenuCount;
+//	if ( g_bPreviewMenuInsert ) iAddedMenuCount += 6;
+
+	iAddedMenuCount = (uID - uidCmdFirst);
+
+	assert(uID < uidCmdLast);
+
+	// 메뉴에 몇 개의 메뉴를 넣었는지 얘기해준다. 여기의 iAddedMenuCount 값이 이상하면, 명령을 실행했는데 다른 명령이 실행되곤 한다.
+	return MAKE_HRESULT ( SEVERITY_SUCCESS, FACILITY_NULL, iAddedMenuCount );
 }
 
 /// mouseover 한 메뉴에 따라서, 이 함수에서 얻은 문자열을 탐색기의 '상태표시줄' 에 보여준다.
@@ -223,7 +307,7 @@ STDMETHODIMP CZViewMenuExt::GetCommandString (UINT uCmd, UINT uFlags, UINT* puRe
 #endif
 
 	// 메뉴에 넣은 갯수를 넘어서면 안된다.
-	if ( uCmd >= m_uiMaxMenuID )
+	if ( uCmd > m_uiMaxMenuID )
 	{
 		_ASSERTE(false);
 		return E_INVALIDARG;
@@ -261,6 +345,8 @@ STDMETHODIMP CZViewMenuExt::GetCommandString (UINT uCmd, UINT uFlags, UINT* puRe
     return S_OK;
 }
 
+
+
 /// 그림 및 메뉴를 클릭했을 때 어떤 명령을 수행할지를 결정해서 수행한다.
 STDMETHODIMP CZViewMenuExt::InvokeCommand( LPCMINVOKECOMMANDINFO pInfo )
 {
@@ -270,8 +356,10 @@ STDMETHODIMP CZViewMenuExt::InvokeCommand( LPCMINVOKECOMMANDINFO pInfo )
         return E_INVALIDARG;
 	}
 
+	WORD commandID = LOWORD( pInfo->lpVerb );
+
     // 넘어올 수 있는 command 의 값을 체크한다.
-	if ( LOWORD( pInfo->lpVerb ) >= m_uiMaxMenuID)
+	if ( commandID > m_uiMaxMenuID)
 	{
 		_ASSERTE(false);
         return E_INVALIDARG;
@@ -281,43 +369,66 @@ STDMETHODIMP CZViewMenuExt::InvokeCommand( LPCMINVOKECOMMANDINFO pInfo )
 	//ShellExecute ( pInfo->hwnd, _T("open"), m_szFile, NULL, NULL, SW_SHOWNORMAL );
 	//MessageBox(HWND_DESKTOP, "Clisdc1sk!!", "ok", MB_OK);
 
-	switch ( LOWORD( pInfo->lpVerb ) )
+	std::wstringstream debugLog;
+	debugLog << _T("CommandID : ") << commandID << _T("\r\n");
+	OutputDebugString(debugLog.str().c_str());
+
+	if ( g_bPreviewMenuInsert )
 	{
-	case 0:
-	case 1:
-		ExecZViewer();
-		break;
-
-	case 2:
-		// center
-		SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyle_CENTER);
-		break;
-
-	case 3:
-		// stretch
-		SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyle_STRETCH);
-		break;
-
-	case 4:
-		// tile
-		SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyle_TILE);
-		break;
-
-	case 5:
-		// clear
-		CDesktopWallPaper::ClearDesktopWallPaper();
-		break;
-
-	case 6:
-		_SaveAS();
-		break;
-
-	default:
+		switch ( commandID )
 		{
-			/// 처리하지 않은 메뉴이다.
-			_ASSERTE(false);
+		case 0:
+		case 1:
+			ExecZViewer();
+			break;
+		case 2:
+			// center
+			SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyle_CENTER);
+			break;
+
+
+		case 3:
+			// stretch
+			SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyle_STRETCH);
+			break;
+
+		case 4:
+			// tile
+			SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyle_TILE);
+			break;
+
+		case 5:
+			// clear
+			CDesktopWallPaper::ClearDesktopWallPaper();
+			break;
+
+		case 6:
+			_SaveAS();
+			break;
+
+		case 7:
+			OpenCmdWindow();
+			break;
+
+		default:
+			{
+				/// 처리하지 않은 메뉴이다.
+				_ASSERTE(false);
+			}
 		}
 	}
+	else
+	{
+		if ( commandID == 0 )
+		{
+			OpenCmdWindow();
+		}
+		else
+		{
+			assert(false);
+		}
+	}
+
 
     return S_OK;
 }
@@ -535,6 +646,24 @@ void CZViewMenuExt::SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyl
 		return;
 	}
 
-
 	CDesktopWallPaper::SetDesktopWallPaper(strSaveFileName, style);
+}
+
+/// 현재 위치에 CMD 창을 띄운다.
+void CZViewMenuExt::OpenCmdWindow(void)
+{
+	TCHAR command[FILENAME_MAX] = _T("cmd.exe");
+
+	STARTUPINFO si;
+	PROCESS_INFORMATION pi;
+	ZeroMemory( &si, sizeof(si) );
+	si.cb = sizeof(si);
+	si.dwFlags = STARTF_USESHOWWINDOW;
+	si.wShowWindow = SW_SHOW;
+	ZeroMemory( &pi, sizeof(pi) );
+
+	// ZViewer 를 실행시킨다.
+	CreateProcess(NULL, command, NULL, NULL, FALSE, 0, NULL, m_strCurrentDir.c_str(), &si, &pi);
+
+	//MessageBox(HWND_DESKTOP, m_szCurrentDir, TEXT("zviewer a"), MB_OK);
 }

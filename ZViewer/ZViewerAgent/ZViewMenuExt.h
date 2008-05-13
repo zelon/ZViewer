@@ -84,7 +84,9 @@ protected:
 	void _SaveAS();
 
 	void MsgBox(const tstring & strMsg);		// for debugging messagebox
-    TCHAR   m_szFile[MAX_PATH];
+
+	tstring m_strCurrentDir;		///< 현재 탐색기 메뉴가 띄워진 폴더 위치
+	TCHAR   m_szFile[MAX_PATH];
 	CBitmap m_bmp;
 	bool m_b8bit;
 
@@ -123,6 +125,8 @@ public:
 
 public:
 
+	/// 현재 위치에 CMD 창을 띄운다.
+	void OpenCmdWindow(void);
 };
 
 OBJECT_ENTRY_AUTO(__uuidof(ZViewMenuExt), CZViewMenuExt)
