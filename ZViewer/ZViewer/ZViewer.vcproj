@@ -476,14 +476,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\src\ZOption.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\ZOption.h"
-				>
-			</File>
-			<File
 				RelativePath=".\src\ZResourceManager.cpp"
 				>
 			</File>
@@ -601,6 +593,14 @@
 			</File>
 			<File
 				RelativePath="..\commonSrc\ZImage.h"
+				>
+			</File>
+			<File
+				RelativePath="..\commonSrc\ZOption.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\commonSrc\ZOption.h"
 				>
 			</File>
 			<Filter
