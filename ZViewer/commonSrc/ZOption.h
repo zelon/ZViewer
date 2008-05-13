@@ -49,6 +49,8 @@ public:
 	{
 		return m_bFullScreen;
 	}
+
+	void SetDontSave() { m_bDontSaveInstance = true; }
 	void SetFullScreen(bool bFullScreen) { m_bFullScreen = bFullScreen; }
 
 	int GetMaxCacheMemoryMB() const { return m_iMaximumCacheMemoryMB; }
@@ -64,6 +66,9 @@ public:
 	void ToggleSmallToBigStretchImage() { m_bSmallToBigStretchImage = !m_bSmallToBigStretchImage; }
 
 	const bool IsUseCache() const { return m_bUseCache; }
+
+	const bool IsUsingPreviewModeInShell() const { return m_bUsePreviewInShell; }
+	const bool IsUsingOpenCMDInShell() const { return m_bUseOpenCMDInShell; }
 	//-----------------------------------------------------------
 	// 아래는 프로그램 구동 후에 임시로 쓰이는 옵션들. 파일에 저장하지 않는다.
 
@@ -112,12 +117,23 @@ private:
 
 	tstring m_strOptionFilename;
 
+	/// Shell 에서 미리 보기를 사용할 것인가.
+	bool m_bUsePreviewInShell;
+
+	/// Shell 에서 cmd 창 열기를 사용할 것인가.
+	bool m_bUseOpenCMDInShell;
+
 	void SetDefaultOption();
 
 	void LoadFromFile();
 	void SaveToFile();
 
+	/// 이 멤버들은 이 이름으로 저장되고, 불려져 온다라고 설정
 	void SetSaveOptions();
+
+	/// 이 값이 false 이면 singleton 을 끝낼 때 값을 저장하지 않는다(ZviewerAgent 의 종료 시점을 정확히 알 수 없기 때문)
+	bool m_bDontSaveInstance;
+
 protected:
 	/// 파일로부터 옵션을 읽어들여서 바뀐 옵션이 있나.
 	bool m_bOptionChanged;

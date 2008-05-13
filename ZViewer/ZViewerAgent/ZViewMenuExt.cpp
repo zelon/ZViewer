@@ -14,6 +14,7 @@
 #include "ZViewMenuExt.h"
 #include "../commonSrc/MessageManager.h"
 #include "../commonSrc/SaveAs.h"
+#include "../commonSrc/ZOption.h"
 #include <shlobj.h>
 #include <sstream>
 
@@ -40,9 +41,6 @@ void CZViewMenuExt::_SaveAS()
 {
 	CSaveAs::getInstance().setParentHWND(HWND_DESKTOP);
 
-	//TCHAR bufferDir[MAX_PATH] = { 0 };
-	//GetCurrentDirectory(MAX_PATH, bufferDir);
-
 	CSaveAs::getInstance().setDefaultSaveFilename(m_strCurrentDir, m_szFile);
 
 	if ( CSaveAs::getInstance().showDialog() )
@@ -65,9 +63,21 @@ void CZViewMenuExt::_SaveAS()
 
 STDMETHODIMP CZViewMenuExt::Initialize (LPCITEMIDLIST pidlFolder, LPDATAOBJECT  pDO, HKEY hkeyProgID )
 {
-	g_bPreviewMenuInsert = true;
-	g_bShowCommdOpenMenu = true;
+	/// 만약 Shift 키를 누르고 메뉴를 띄운 것이면 이미지 미리보기를 보여주지 않는다.
+	if ( GetKeyState(VK_LSHIFT) < 0 )
+	{
+		return E_FAIL;
+	}
 
+	ZOption::GetInstance().LoadOption();
+	ZOption::GetInstance().SetDontSave();
+
+	g_bPreviewMenuInsert = ZOption::GetInstance().IsUsingPreviewModeInShell();
+	g_bShowCommdOpenMenu = ZOption::GetInstance().IsUsingOpenCMDInShell();
+
+	if ( g_bPreviewMenuInsert == false && g_bShowCommdOpenMenu == false ) return E_FAIL;
+
+	const ZOption & fff = ZOption::GetInstance();
 
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
@@ -77,9 +87,6 @@ STDMETHODIMP CZViewMenuExt::Initialize (LPCITEMIDLIST pidlFolder, LPDATAOBJECT  
 
 	if ( FALSE == SHGetPathFromIDList(pidlFolder, &(m_strCurrentDir[0])) )
 	{
-		//assert(false);
-		//OutputDebugString(_T("Cannot get current directory\r\n"));
-		//return E_FAIL;
 		bGetCurrentDirOK = false;
 	}
 
@@ -112,44 +119,34 @@ STDMETHODIMP CZViewMenuExt::Initialize (LPCITEMIDLIST pidlFolder, LPDATAOBJECT  
 		if ( NULL == hdrop )
 			return E_INVALIDARG;
 
-		/// 만약 Shift 키를 누르고 메뉴를 띄운 것이면 이미지 미리보기를 보여주지 않는다.
-		if ( GetKeyState(VK_LSHIFT) < 0 )
+		/// Get the name of the first selected file.
+		if ( DragQueryFile( hdrop, 0, m_szFile, MAX_PATH ) )
 		{
-			g_bPreviewMenuInsert = false;
-			g_bShowCommdOpenMenu = false;
-		}
-		else
-		{
-			/// Get the name of the first selected file.
-			if ( DragQueryFile( hdrop, 0, m_szFile, MAX_PATH ) )
+			/// 현재 디렉토리 위치를 읽어온다.
+			m_strCurrentDir = GetFolderNameFromFullFileName(m_szFile);
+
+			if ( g_bPreviewMenuInsert )
 			{
-				/// 현재 디렉토리 위치를 읽어온다.
-				m_strCurrentDir = GetFolderNameFromFullFileName(m_szFile);
-
-				if ( g_bPreviewMenuInsert )
+				/// Is it's extension is valid 'Image File', 이미지 라이브러리에서 읽을 수 없는 파일이면 미리보기 메뉴를 비활성화시킨다.
+				if ( ZImage::IsValidImageFileExt(m_szFile) )
 				{
-					/// Is it's extension is valid 'Image File', 이미지 라이브러리에서 읽을 수 없는 파일이면 미리보기 메뉴를 비활성화시킨다.
-					if ( ZImage::IsValidImageFileExt(m_szFile) )
+					if ( m_originalImage.LoadFromFile(m_szFile) )
 					{
-						if ( m_originalImage.LoadFromFile(m_szFile) )
-						{
-							g_bPreviewMenuInsert = true;
-							//	MsgBox("Here");
+						g_bPreviewMenuInsert = true;
 
-							if ( m_originalImage.GetBPP() == 8 )
-							{
-								m_b8bit = true;
-							}
-						}
-						else /// 이미지 파일을 읽을 수 없었다.
+						if ( m_originalImage.GetBPP() == 8 )
 						{
-							g_bPreviewMenuInsert = false;//	MsgBox("Here2");
+							m_b8bit = true;
 						}
 					}
-					else
+					else /// 이미지 파일을 읽을 수 없었다.
 					{
 						g_bPreviewMenuInsert = false;
 					}
+				}
+				else
+				{
+					g_bPreviewMenuInsert = false;
 				}
 			}
 		}
@@ -164,6 +161,7 @@ STDMETHODIMP CZViewMenuExt::Initialize (LPCITEMIDLIST pidlFolder, LPDATAOBJECT  
 
 }
 
+/// shell32 를 검사해서 UseOwnerDraw 를 할 수 있는 버젼인지 검사한다.
 bool CanUseOwnerDraw()
 {
 	HINSTANCE hinstShell;
@@ -254,8 +252,12 @@ STDMETHODIMP CZViewMenuExt::QueryContextMenu(HMENU hmenu, UINT uIndex, UINT uidC
 			InsertMenu( hSubMenu, 6, MF_BYPOSITION | MF_STRING, uID++, GetMessage(TEXT("DESKTOP_WALLPAPER_CLEAR")));
 			InsertMenu( hSubMenu, 7, MF_SEPARATOR, NULL, NULL);
 			InsertMenu( hSubMenu, 8, MF_BYPOSITION | MF_STRING, uID++, GetMessage(TEXT("ZVIEWERAGENT_SAVE_AS")));
-			InsertMenu( hSubMenu, 9, MF_SEPARATOR, NULL, NULL);
-			InsertMenu( hSubMenu, 10, MF_BYPOSITION | MF_STRING, uID++, GetMessage(TEXT("ZVIEWERAGENT_OPEN_COMMAND_WINDOW")));
+			
+			if ( g_bShowCommdOpenMenu )
+			{
+				InsertMenu( hSubMenu, 9, MF_SEPARATOR, NULL, NULL);
+				InsertMenu( hSubMenu, 10, MF_BYPOSITION | MF_STRING, uID++, GetMessage(TEXT("ZVIEWERAGENT_OPEN_COMMAND_WINDOW")));
+			}
 		}
 
 		bResult = InsertMenu( hmenu, uIndex, MF_BYPOSITION | MF_POPUP, (UINT_PTR)hSubMenu, szImageInfo);
@@ -554,7 +556,7 @@ STDMETHODIMP CZViewMenuExt::OnDrawItem(DRAWITEMSTRUCT * pdis, LRESULT * pResult 
 	}
 	else
 	{
-        pdcMenu->FillSolidRect ( rcItem, GetSysColor ( COLOR_3DFACE ));
+        pdcMenu->FillSolidRect ( rcItem, GetSysColor ( COLOR_MENU ));
 	}
 
 	// Draw the sunken 3D border.

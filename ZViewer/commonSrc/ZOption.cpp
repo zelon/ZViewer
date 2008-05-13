@@ -21,11 +21,15 @@ ZOption & ZOption::GetInstance()
 
 ZOption::ZOption()
 {
+	/// 아래 값은 ZViewerAgent 에서만 true 이다
+	m_bDontSaveInstance = false;
 }
 
 void ZOption::LoadOption()
 {
 	TCHAR buffer[256];
+
+	/// C:\Documents and Settings\USERID\Local Settings\Application Data 의 위치를 얻어온다.
 	if ( S_OK != SHGetFolderPath(NULL, CSIDL_LOCAL_APPDATA, NULL, SHGFP_TYPE_CURRENT, buffer) )
 	{
 		m_strOptionFilename = GetProgramFolder();
@@ -47,6 +51,7 @@ void ZOption::LoadOption()
 	LoadFromFile();
 }
 
+/// 이 멤버들은 이 이름으로 저장되고, 불려져 온다라고 설정
 void ZOption::SetSaveOptions()
 {
 	_InsertSaveOptionSetting(L"maximumcachememoryMB", &m_iMaximumCacheMemoryMB);
@@ -57,11 +62,16 @@ void ZOption::SetSaveOptions()
 
 	_InsertSaveOptionSetting(L"stretch_small_to_big", &m_bSmallToBigStretchImage);
 	_InsertSaveOptionSetting(L"stretch_big_to_small", &m_bBigToSmallStretchImage);
+
+	_InsertSaveOptionSetting(L"use_open_cmd_shell", &m_bUseOpenCMDInShell);
+	_InsertSaveOptionSetting(L"use_preview_shell", &m_bUsePreviewInShell);
 }
 
 /// 기본적인 옵션을 설정해둔다.
 void ZOption::SetDefaultOption()
 {
+	m_bUsePreviewInShell = true;
+	m_bUseOpenCMDInShell = false;
 	m_bAlwaysOnTop = false;
 	m_bSlideMode = false;
 	m_iSlideModePeriodMiliSeconds = 5000;	///< Default slide mode period is 5 seconds
@@ -77,6 +87,7 @@ void ZOption::SetDefaultOption()
 #ifdef _DEBUG
 	m_iMaxCacheImageNum = 10;
 	m_iSlideModePeriodMiliSeconds = 1000;
+	m_bUseOpenCMDInShell = true;
 #endif
 }
 
@@ -99,6 +110,9 @@ void ZOption::LoadFromFile()
 
 void ZOption::SaveToFile()
 {
+	/// ZViewerAgent 에서 마칠 때는 저장을 하지 않기 위해
+	if ( m_bDontSaveInstance ) return;
+
 	iniMap data;
 
 	m_bOptionChanged = true;
