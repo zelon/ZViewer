@@ -10,6 +10,8 @@
 
 #pragma once
 
+#include <vector>
+
 #include "CommonFunc.h"
 #include "OptionFile.h"
 #include "StringToValue.h"
@@ -39,6 +41,9 @@ public:
 	{
 		SaveToFile();
 	}
+
+	/// 기본 옵션을 파일로부터 불러온다.
+	void LoadOption();
 
 	bool IsFullScreen() const
 	{
