@@ -565,6 +565,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\commonSrc\StringToValue.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\commonSrc\StringToValue.h"
+				>
+			</File>
+			<File
 				RelativePath="..\commonSrc\UnicodeFile.cpp"
 				>
 			</File>
@@ -578,6 +586,14 @@
 			</File>
 			<File
 				RelativePath="..\commonSrc\ZImage.h"
+				>
+			</File>
+			<File
+				RelativePath="..\commonSrc\ZOption.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\commonSrc\ZOption.h"
 				>
 			</File>
 		</Filter>
