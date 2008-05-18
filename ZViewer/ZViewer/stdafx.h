@@ -13,7 +13,7 @@
 #define _WIN32_WINNT 0x0400
 
 #include <windows.h>
-#include <crtdbg.h>
+#include <cassert>
 #include <CommCtrl.h>
 #include <WindowsX.h>
 #include <Shlwapi.h>
