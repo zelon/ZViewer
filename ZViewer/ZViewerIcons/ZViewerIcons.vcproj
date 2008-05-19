@@ -4,6 +4,7 @@
 	Version="8.00"
 	Name="ZViewerIcons"
 	ProjectGUID="{C61FF398-EFA2-4094-B558-58A784FAF364}"
+	RootNamespace="ZViewerIcons"
 	Keyword="Win32Proj"
 	>
 	<Platforms>
@@ -39,6 +40,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalOptions="/MP"
 				Optimization="0"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;ZVIEWERICONS_EXPORTS"
 				MinimalRebuild="true"
