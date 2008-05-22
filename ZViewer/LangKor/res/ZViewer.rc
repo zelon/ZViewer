@@ -56,58 +56,57 @@ IDR_MAIN_MENU MENU
 BEGIN
     POPUP "파일(&F)"
     BEGIN
-        MENUITEM "파일 열기(&O)\tCtrl+O",       ID_MAINMENU_FILE_OPEN
-        MENUITEM "다른 형식으로 저장(&A)\tCtrl+S", ID_FILE_SAVE_AS_NEW_EXT
-        MENUITEM "현재 폴더 파일목록 다시 읽기\tF5", ID_FILE_RESCAN_FOLDER
+        MENUITEM "파일 열기(&O)\tCtrl+O",           ID_MAINMENU_FILE_OPEN
+        MENUITEM "다른 형식으로 저장(&A)\tCtrl+S",      ID_FILE_SAVE_AS_NEW_EXT
+        MENUITEM "현재 폴더 파일목록 다시 읽기\tF5",        ID_FILE_RESCAN_FOLDER
         MENUITEM SEPARATOR
-        MENUITEM "파일 이동...\tAlt+M",         ID_FILE_MOVETO
-        MENUITEM "파일 복사...\tAlt+C",         ID_FILE_COPYTO
+        MENUITEM "파일 이동...\tAlt+M",             ID_FILE_MOVETO
+        MENUITEM "파일 복사...\tAlt+C",             ID_FILE_COPYTO
+        MENUITEM "현재 파일 삭제\tDel",               ID_DELETETHISFILE
         MENUITEM SEPARATOR
-        MENUITEM "종료(&X)\tAlt+X",             ID_MAINMENU_FILE_EXIT
+        MENUITEM "종료(&X)\tAlt+X",               ID_MAINMENU_FILE_EXIT
     END
     POPUP "보기(&V)"
     BEGIN
-        MENUITEM "전체화면(&F)\tAlt+Enter",     ID_VIEW_FULLSCREEN
-        MENUITEM "오른쪽 위부터 보기",          ID_VIEW_RIGHTTOPFIRSTDRAW
+        MENUITEM "전체화면(&F)\tAlt+Enter",         ID_VIEW_FULLSCREEN
+        MENUITEM "오른쪽 위부터 보기",                  ID_VIEW_RIGHTTOPFIRSTDRAW
         MENUITEM SEPARATOR
-        MENUITEM "큰 그림 화면에 맞게 축소",    ID_VIEW_BIGTOSCREENSTRETCH
-        MENUITEM "작은 그림 화면에 맞게 확대",  ID_VIEW_SMALLTOSCREENSTRETCH
+        MENUITEM "큰 그림 화면에 맞게 축소",              ID_VIEW_BIGTOSCREENSTRETCH
+        MENUITEM "작은 그림 화면에 맞게 확대",             ID_VIEW_SMALLTOSCREENSTRETCH
         MENUITEM SEPARATOR
-        MENUITEM "시계 방향으로 90도 회전\t]",  ID_VIEW_ROTATECLOCKWISE
-        MENUITEM "반시계 방향으로 90도 회전\t[", 
-                                                ID_VIEW_ROTATECOUNTERCLOCKWISE
-
+        MENUITEM "시계 방향으로 90도 회전\t]",           ID_VIEW_ROTATECLOCKWISE
+        MENUITEM "반시계 방향으로 90도 회전\t[",          ID_VIEW_ROTATECOUNTERCLOCKWISE
         MENUITEM SEPARATOR
-        MENUITEM "다음 이미지(&N)\tPageDown",   ID_MOVE_NEXTIMAGE
-        MENUITEM "이전 이미지(&P)\tPageUp",     ID_MOVE_PREVIMAGE
+        MENUITEM "다음 이미지(&N)\tPageDown",        ID_MOVE_NEXTIMAGE
+        MENUITEM "이전 이미지(&P)\tPageUp",          ID_MOVE_PREVIMAGE
         MENUITEM SEPARATOR
-        MENUITEM "다음 10 장\tCtrl+Right",      ID_MOVE_NEXT_JUMP
-        MENUITEM "이전 10 장\tCtrl+Left",       ID_MOVE_PREV_JUMP
+        MENUITEM "다음 10 장\tCtrl+Right",         ID_MOVE_NEXT_JUMP
+        MENUITEM "이전 10 장\tCtrl+Left",          ID_MOVE_PREV_JUMP
         MENUITEM SEPARATOR
-        MENUITEM "처음 이미지(&F)\tHome",       ID_MOVE_FIRSTIMAGE
-        MENUITEM "마지막 이미지(&L)\tEnd",      ID_MOVE_LASTIMAGE
+        MENUITEM "처음 이미지(&F)\tHome",            ID_MOVE_FIRSTIMAGE
+        MENUITEM "마지막 이미지(&L)\tEnd",            ID_MOVE_LASTIMAGE
         MENUITEM SEPARATOR
-        MENUITEM "다음 폴더\tCtrl+PageDown",    ID_MOVE_NEXTFOLDER
-        MENUITEM "이전 폴더\tCtrl+PageUp",      ID_MOVE_PREVFOLDER
+        MENUITEM "다음 폴더\tCtrl+PageDown",        ID_MOVE_NEXTFOLDER
+        MENUITEM "이전 폴더\tCtrl+PageUp",          ID_MOVE_PREVFOLDER
         MENUITEM SEPARATOR
-        MENUITEM "이미지 위치 되돌림\tBackspace", ID_MOVE_UNDOIMAGEPOSITION
+        MENUITEM "이미지 위치 되돌림\tBackspace",       ID_MOVE_UNDOIMAGEPOSITION
         MENUITEM SEPARATOR
         POPUP "파일순서 정렬"
         BEGIN
-            MENUITEM "파일이름 - A 가 먼저",        ID_SORT_FILENAME
-            MENUITEM "파일크기 - 큰파일이 먼저",    ID_SORT_FILESIZE
-            MENUITEM "파일날짜 - 최근파일이 먼저",  ID_SORT_FILEDATE
+            MENUITEM "파일이름 - A 가 먼저",               ID_SORT_FILENAME
+            MENUITEM "파일크기 - 큰파일이 먼저",              ID_SORT_FILESIZE
+            MENUITEM "파일날짜 - 최근파일이 먼저",             ID_SORT_FILEDATE
         END
-        MENUITEM "항상 위에",                   ID_VIEW_ALWAYSONTOP
+        MENUITEM "항상 위에",                       ID_VIEW_ALWAYSONTOP
     END
     POPUP "옵션(&O)"
     BEGIN
-        MENUITEM "마지막 다음이 처음으로",      ID_OPTION_VIEWLOOP
-        MENUITEM "파일 확장자...",              ID_OPTION_FILE_EXT
+        MENUITEM "마지막 다음이 처음으로",                ID_OPTION_VIEWLOOP
+        MENUITEM "파일 확장자...",                   ID_OPTION_FILE_EXT
     END
     POPUP "도움말(&H)"
     BEGIN
-        MENUITEM "정보(&A)\tF1",                ID_HELP_ABOUT
+        MENUITEM "정보(&A)\tF1",                  ID_HELP_ABOUT
     END
 END
 
@@ -115,33 +114,27 @@ IDR_POPUP_MENU MENU
 BEGIN
     POPUP "PopupMenu"
     BEGIN
-        MENUITEM "처음 이미지\tHome",           ID_MOVE_FIRSTIMAGE
-        MENUITEM "마지막 이미지\tEnd",          ID_MOVE_LASTIMAGE
+        MENUITEM "처음 이미지\tHome",                ID_MOVE_FIRSTIMAGE
+        MENUITEM "마지막 이미지\tEnd",                ID_MOVE_LASTIMAGE
         MENUITEM SEPARATOR
-        MENUITEM "전체화면\tAlt+Enter,Enter",   ID_VIEW_FULLSCREEN
-        MENUITEM "오른쪽 위부터 그리기",        ID_VIEW_RIGHTTOPFIRSTDRAW
+        MENUITEM "전체화면\tAlt+Enter,Enter",       ID_VIEW_FULLSCREEN
+        MENUITEM "오른쪽 위부터 그리기",                 ID_VIEW_RIGHTTOPFIRSTDRAW
         MENUITEM SEPARATOR
-        MENUITEM "큰 그림 화면에 맞게 축소",    ID_POPUPMENU_BIGTOSCREENSTRETCH
-
-        MENUITEM "작은 그림 화면에 맞게 확대",  ID_POPUPMENU_SMALLTOSCREENSTRETCH
-
+        MENUITEM "큰 그림 화면에 맞게 축소",              ID_POPUPMENU_BIGTOSCREENSTRETCH
+        MENUITEM "작은 그림 화면에 맞게 확대",             ID_POPUPMENU_SMALLTOSCREENSTRETCH
         MENUITEM SEPARATOR
-        MENUITEM "현재 파일 지우기\tDelete",    ID_DELETETHISFILE
+        MENUITEM "현재 파일 지우기\tDelete",           ID_DELETETHISFILE
         MENUITEM SEPARATOR
         POPUP "바탕화면 배경으로 지정"
         BEGIN
-            MENUITEM "가운데",                      ID_SETDESKTOPWALLPAPER_CENTER
-
-            MENUITEM "늘이기",                      ID_SETDESKTOPWALLPAPER_STRETCH
-
-            MENUITEM "바둑판식",                    ID_SETDESKTOPWALLPAPER_TILE
-
+            MENUITEM "가운데",                         ID_SETDESKTOPWALLPAPER_CENTER
+            MENUITEM "늘이기",                         ID_SETDESKTOPWALLPAPER_STRETCH
+            MENUITEM "바둑판식",                        ID_SETDESKTOPWALLPAPER_TILE
             MENUITEM SEPARATOR
-            MENUITEM "지우기",                      ID_SETDESKTOPWALLPAPER_CLEAR
-
+            MENUITEM "지우기",                         ID_SETDESKTOPWALLPAPER_CLEAR
         END
-        MENUITEM "연속보기 시작",               ID_START_SLIDESHOW
-        MENUITEM "종료(&X)",                    ID_MAINMENU_FILE_EXIT
+        MENUITEM "연속보기 시작",                     ID_START_SLIDESHOW
+        MENUITEM "종료(&X)",                      ID_MAINMENU_FILE_EXIT
     END
 END
 
@@ -209,49 +202,38 @@ IDC_MOVE_HAND_CAPTURE_CURSOR CURSOR                  "MoveHandHold.cur"
 //
 
 IDD_DIALOGHELP DIALOGEX 0, 0, 264, 129
-STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | 
-    WS_CAPTION | WS_SYSMENU
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "ZViewer About"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
     DEFPUSHBUTTON   "Close",IDOK,192,108,50,14
-    LTEXT           "Homepage : http://zviewer.wimy.com",IDC_STATIC,129,33,
-                    122,8
+    LTEXT           "Homepage : http://zviewer.wimy.com",IDC_STATIC,129,33,122,8
     LTEXT           "김진욱(zelon) 이 만듦",IDC_STATIC,68,20,75,8
     LTEXT           "ZViewer version : ",IDC_STATIC,7,7,58,8
     LTEXT           "VERSION",IDC_STATIC_VERSION,69,7,139,8
     LTEXT           "캐시 적중률 : ",IDC_STATIC_HITRATE,7,50,112,8
     LTEXT           "캐시 메모리량 :",IDC_STATIC_CACHE_MEMORY,7,63,235,8
     LTEXT           "프로그램 경로 :",IDC_STATIC_PROGRAM_PATH,7,79,235,8
-    LTEXT           "라이브러리 버젼 :",IDC_STATIC_LIBRARY_VERSION,7,95,125,
-                    8
+    LTEXT           "라이브러리 버젼 :",IDC_STATIC_LIBRARY_VERSION,7,95,125,8
 END
 
 IDD_FILE_EXT_DIALOG DIALOGEX 0, 0, 121, 95
-STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | 
-    WS_CAPTION | WS_SYSMENU
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "파일 확장자 연결..."
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
     DEFPUSHBUTTON   "확인",IDOK,7,74,50,14
     PUSHBUTTON      "취소",IDCANCEL,64,74,50,14
-    CONTROL         "BMP",IDC_CHECK_BMP,"Button",BS_AUTOCHECKBOX | 
-                    WS_DISABLED | WS_TABSTOP,7,7,29,10
-    CONTROL         "JPG",IDC_CHECK_JPG,"Button",BS_AUTOCHECKBOX | 
-                    WS_DISABLED | WS_TABSTOP,42,7,28,10
-    CONTROL         "GIF",IDC_CHECK_GIF,"Button",BS_AUTOCHECKBOX | 
-                    WS_DISABLED | WS_TABSTOP,76,7,27,10
-    CONTROL         "PNG",IDC_CHECK_PNG,"Button",BS_AUTOCHECKBOX | 
-                    WS_DISABLED | WS_TABSTOP,7,26,29,10
-    CONTROL         "PSD",IDC_CHECK_PSD,"Button",BS_AUTOCHECKBOX | 
-                    WS_DISABLED | WS_TABSTOP,42,26,29,10
-    LTEXT           "* 현재 모든 파일을 항상 연결합니다. 원하지 않으면 취소를 눌러주세요.",
-                    IDC_STATIC,7,41,107,24
+    CONTROL         "BMP",IDC_CHECK_BMP,"Button",BS_AUTOCHECKBOX | WS_DISABLED | WS_TABSTOP,7,7,29,10
+    CONTROL         "JPG",IDC_CHECK_JPG,"Button",BS_AUTOCHECKBOX | WS_DISABLED | WS_TABSTOP,42,7,28,10
+    CONTROL         "GIF",IDC_CHECK_GIF,"Button",BS_AUTOCHECKBOX | WS_DISABLED | WS_TABSTOP,76,7,27,10
+    CONTROL         "PNG",IDC_CHECK_PNG,"Button",BS_AUTOCHECKBOX | WS_DISABLED | WS_TABSTOP,7,26,29,10
+    CONTROL         "PSD",IDC_CHECK_PSD,"Button",BS_AUTOCHECKBOX | WS_DISABLED | WS_TABSTOP,42,26,29,10
+    LTEXT           "* 현재 모든 파일을 항상 연결합니다. 원하지 않으면 취소를 눌러주세요.",IDC_STATIC,7,41,107,24
 END
 
 IDD_MOVE_DIALOG DIALOGEX 0, 0, 228, 50
-STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | 
-    WS_CAPTION | WS_SYSMENU
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "폴더 선택..."
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN

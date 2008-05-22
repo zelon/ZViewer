@@ -62,6 +62,7 @@ BEGIN
         MENUITEM SEPARATOR
         MENUITEM "Copy to...\tAlt+C",           ID_FILE_COPYTO
         MENUITEM "Move to...\tAlt+M",           ID_FILE_MOVETO
+        MENUITEM "Delete this File\tDel",       ID_DELETETHISFILE
         MENUITEM SEPARATOR
         MENUITEM "E&xit\tAlt+X",                ID_MAINMENU_FILE_EXIT
     END
@@ -75,7 +76,6 @@ BEGIN
         MENUITEM SEPARATOR
         MENUITEM "Rotate Clockwise\t]",         ID_VIEW_ROTATECLOCKWISE
         MENUITEM "Rotate CounterClockWise\t[",  ID_VIEW_ROTATECOUNTERCLOCKWISE
-
         MENUITEM SEPARATOR
         MENUITEM "&Next Image\tPageDown",       ID_MOVE_NEXTIMAGE
         MENUITEM "&Prev Image\tPageUp",         ID_MOVE_PREVIMAGE
@@ -121,23 +121,17 @@ BEGIN
         MENUITEM "RightTop First Draw",         ID_VIEW_RIGHTTOPFIRSTDRAW
         MENUITEM SEPARATOR
         MENUITEM "BigToScreenStretch",          ID_POPUPMENU_BIGTOSCREENSTRETCH
-
         MENUITEM "SmallToScreenStretch",        ID_POPUPMENU_SMALLTOSCREENSTRETCH
-
         MENUITEM SEPARATOR
         MENUITEM "DeleteThisFile\tDelete",      ID_DELETETHISFILE
         MENUITEM SEPARATOR
         POPUP "Set DesktopWallPaper"
         BEGIN
             MENUITEM "Center",                      ID_SETDESKTOPWALLPAPER_CENTER
-
             MENUITEM "Stretch",                     ID_SETDESKTOPWALLPAPER_STRETCH
-
             MENUITEM "Tile",                        ID_SETDESKTOPWALLPAPER_TILE
-
             MENUITEM SEPARATOR
             MENUITEM "Clear",                       ID_SETDESKTOPWALLPAPER_CLEAR
-
         END
         MENUITEM "Start SlideShow",             ID_START_SLIDESHOW
         MENUITEM "E&xit",                       ID_MAINMENU_FILE_EXIT
@@ -208,14 +202,12 @@ IDC_MOVE_HAND_CAPTURE_CURSOR CURSOR                  "MoveHandHold.cur"
 //
 
 IDD_DIALOGHELP DIALOGEX 0, 0, 264, 129
-STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | 
-    WS_CAPTION | WS_SYSMENU
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "ZViewer About"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
     DEFPUSHBUTTON   "Close",IDOK,207,108,50,14
-    LTEXT           "Homepage : http://zviewer.wimy.com",IDC_STATIC,135,33,
-                    122,8
+    LTEXT           "Homepage : http://zviewer.wimy.com",IDC_STATIC,135,33,122,8
     LTEXT           "Written by Kim Jinwook - zelon",IDC_STATIC,53,20,98,8
     LTEXT           "ZViewer version : ",IDC_STATIC,7,7,58,8
     LTEXT           "VERSION",IDC_STATIC_VERSION,69,7,130,8
@@ -226,30 +218,22 @@ BEGIN
 END
 
 IDD_FILE_EXT_DIALOG DIALOGEX 0, 0, 121, 95
-STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | 
-    WS_CAPTION | WS_SYSMENU
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "파일 확장자 연결..."
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
     DEFPUSHBUTTON   "확인",IDOK,7,74,50,14
     PUSHBUTTON      "취소",IDCANCEL,64,74,50,14
-    CONTROL         "BMP",IDC_CHECK_BMP,"Button",BS_AUTOCHECKBOX | 
-                    WS_DISABLED | WS_TABSTOP,7,7,29,10
-    CONTROL         "JPG",IDC_CHECK_JPG,"Button",BS_AUTOCHECKBOX | 
-                    WS_DISABLED | WS_TABSTOP,42,7,28,10
-    CONTROL         "GIF",IDC_CHECK_GIF,"Button",BS_AUTOCHECKBOX | 
-                    WS_DISABLED | WS_TABSTOP,76,7,27,10
-    CONTROL         "PNG",IDC_CHECK_PNG,"Button",BS_AUTOCHECKBOX | 
-                    WS_DISABLED | WS_TABSTOP,7,26,29,10
-    CONTROL         "PSD",IDC_CHECK_PSD,"Button",BS_AUTOCHECKBOX | 
-                    WS_DISABLED | WS_TABSTOP,42,26,29,10
-    LTEXT           "* 현재 모든 파일을 항상 연결합니다. 원하지 않으면 취소를 눌러주세요.",
-                    IDC_STATIC,7,41,107,24
+    CONTROL         "BMP",IDC_CHECK_BMP,"Button",BS_AUTOCHECKBOX | WS_DISABLED | WS_TABSTOP,7,7,29,10
+    CONTROL         "JPG",IDC_CHECK_JPG,"Button",BS_AUTOCHECKBOX | WS_DISABLED | WS_TABSTOP,42,7,28,10
+    CONTROL         "GIF",IDC_CHECK_GIF,"Button",BS_AUTOCHECKBOX | WS_DISABLED | WS_TABSTOP,76,7,27,10
+    CONTROL         "PNG",IDC_CHECK_PNG,"Button",BS_AUTOCHECKBOX | WS_DISABLED | WS_TABSTOP,7,26,29,10
+    CONTROL         "PSD",IDC_CHECK_PSD,"Button",BS_AUTOCHECKBOX | WS_DISABLED | WS_TABSTOP,42,26,29,10
+    LTEXT           "* 현재 모든 파일을 항상 연결합니다. 원하지 않으면 취소를 눌러주세요.",IDC_STATIC,7,41,107,24
 END
 
 IDD_MOVE_DIALOG DIALOGEX 0, 0, 228, 50
-STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | 
-    WS_CAPTION | WS_SYSMENU
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Choose Folder..."
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
