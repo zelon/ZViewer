@@ -26,6 +26,8 @@ typedef std::string tstring;
 
 const tstring g_strVersion = TEXT("0.7.0rc1");
 
+#define g_strFileFilter TEXT("ImageFiles(jpg,jpeg2000,gif,png,bmp,wbmp,psd,tga,tif,ico)\0*.jpg;*.jpeg;*.jp2;*.j2k;*.gif;*.png;*.bmp;*.wbmp;*.psd,*.tga;*.tif;*.ico\0All(*.*)\0*.*\0")
+
 struct FileData
 {
 	tstring m_strFileName;	// ÆÄÀÏ¸í

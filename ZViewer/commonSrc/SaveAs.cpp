@@ -80,7 +80,7 @@ bool CSaveAs::showDialog()
 	//
 	m_ofn.lpstrFile[0] = '\0';
 	m_ofn.nMaxFile = FILENAME_MAX;
-	m_ofn.lpstrFilter = TEXT("ImageFiles(jpg,jpeg2000,gif,png,bmp,psd,tga,tif,ico)\0*.jpg;*.jpeg;*.jp2;*.j2k;*.gif;*.png;*.bmp;*.psd,*.tga;*.tif;*.ico\0All(*.*)\0*.*\0");
+	m_ofn.lpstrFilter = g_strFileFilter;
 	m_ofn.nFilterIndex = 1;
 	m_ofn.lpstrFileTitle = NULL;
 	m_ofn.nMaxFileTitle = 0;

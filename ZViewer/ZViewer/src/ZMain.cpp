@@ -127,7 +127,8 @@ void ZMain::InitOpenFileDialog()
 	//
 	ofn.lpstrFile[0] = '\0';
 	ofn.nMaxFile = sizeof(szFile);
-	ofn.lpstrFilter = TEXT("ImageFiles(jpg,jpeg2000,gif,png,bmp,psd,tga,tif,ico)\0*.jpg;*.jpeg;*.jp2;*.j2k;*.gif;*.png;*.bmp;*.psd,*.tga;*.tif;*.ico\0All(*.*)\0*.*\0");
+	ofn.lpstrFilter = g_strFileFilter;
+
 	ofn.nFilterIndex = 1;
 	ofn.lpstrFileTitle = NULL;
 	ofn.nMaxFileTitle = 0;
