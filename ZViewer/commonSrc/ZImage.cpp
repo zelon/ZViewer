@@ -28,6 +28,7 @@ bool ZImage::IsValidImageFileExt(const TCHAR * szFilename)
 	const TCHAR * szExtOnly = szLowerExt + 1;
 
 	if ( _tcscmp(szExtOnly, TEXT("bmp")) == 0 ||
+		0 == _tcscmp(szExtOnly, TEXT("wbmp")) ||
 		0 == _tcscmp(szExtOnly, TEXT("jpg")) ||
 		0 == _tcscmp(szExtOnly, TEXT("jpeg")) ||
 		0 == _tcscmp(szExtOnly, TEXT("jp2")) ||

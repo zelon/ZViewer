@@ -58,6 +58,7 @@ void ZFileExtDlg::ExtMapInit()
 	ExtSetting extSet;
 
 	_AddExtSet(1, TEXT("bmp"));
+	_AddExtSet(1, TEXT("wbmp"));
 	_AddExtSet(2, TEXT("jpg"));
 	_AddExtSet(2, TEXT("jpeg"));
 	_AddExtSet(2, TEXT("jpe"));
