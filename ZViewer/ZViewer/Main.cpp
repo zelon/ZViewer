@@ -1,4 +1,4 @@
-/********************************************************************
+ï»¿/********************************************************************
 *
 * Created by zelon(Kim, Jinwook Korea)
 * 
@@ -11,7 +11,7 @@
 /**
 	@mainpage ZViewer's Document
 
-	ZViewer ´Â GPL ¿¡ ÀÇÇØ ¹èÆ÷µÇ´Â ÀÌ¹ÌÁö ºä¾î ÇÁ·Î±×·¥ÀÔ´Ï´Ù.
+	ZViewer ëŠ” GPL ì— ì˜í•´ ë°°í¬ë˜ëŠ” ì´ë¯¸ì§€ ë·°ì–´ í”„ë¡œê·¸ëž¨ìž…ë‹ˆë‹¤.
 
 	Created by zelon (Kim, Jinwook in Korea)
 
@@ -20,19 +20,19 @@
 	Createor Homepage : http://www.wimy.com
 
 
-	ÁÖ¿ä ±â´ÉÀº ´ÙÀ½°ú °°½À´Ï´Ù.
+	ì£¼ìš” ê¸°ëŠ¥ì€ ë‹¤ìŒê³¼ ê°™ìŠµë‹ˆë‹¤.
 
-	- ´Ù¾çÇÑ È®ÀåÀÚ¸¦ °¡Áø ÀÌ¹ÌÁö ÆÄÀÏÀ» º¼ ¼ö ÀÖ½À´Ï´Ù.
+	- ë‹¤ì–‘í•œ í™•ìž¥ìžë¥¼ ê°€ì§„ ì´ë¯¸ì§€ íŒŒì¼ì„ ë³¼ ìˆ˜ ìžˆìŠµë‹ˆë‹¤.
 
-	- Å½»ö±â¿¡¼­ ¿À¸¥ÂÊ ¹öÆ°À» ÅëÇÑ ¹Ì¸®º¸±â°¡ °¡´ÉÇÕ´Ï´Ù.
+	- íƒìƒ‰ê¸°ì—ì„œ ì˜¤ë¥¸ìª½ ë²„íŠ¼ì„ í†µí•œ ë¯¸ë¦¬ë³´ê¸°ê°€ ê°€ëŠ¥í•©ë‹ˆë‹¤.
 
-	- ÀÌ¹ÌÁö ÆÄÀÏµéÀ» Ä³½ÃÇØµÎ¾î ºü¸¥ ÀÌ¹ÌÁö º¸±â°¡ °¡´ÉÇÕ´Ï´Ù.
+	- ì´ë¯¸ì§€ íŒŒì¼ë“¤ì„ ìºì‹œí•´ë‘ì–´ ë¹ ë¥¸ ì´ë¯¸ì§€ ë³´ê¸°ê°€ ê°€ëŠ¥í•©ë‹ˆë‹¤.
 
-	- ½ÇÇà Å©±â°¡ ÀÛ¾Æ »¡¸® ·ÎµùµË´Ï´Ù.
+	- ì‹¤í–‰ í¬ê¸°ê°€ ìž‘ì•„ ë¹¨ë¦¬ ë¡œë”©ë©ë‹ˆë‹¤.
 
-	- ÀÌ¹ÌÁö ÆÄÀÏÀ» ´Ù¸¥ Çü½ÄÀ¸·Î º¯È¯ÀÌ °¡´ÉÇÕ´Ï´Ù.
+	- ì´ë¯¸ì§€ íŒŒì¼ì„ ë‹¤ë¥¸ í˜•ì‹ìœ¼ë¡œ ë³€í™˜ì´ ê°€ëŠ¥í•©ë‹ˆë‹¤.
 
-	- È­¸é Å©±â°Ô ¸Â°Ô È®´ë/Ãà¼ÒÇÏ¿© ÀÌ¹ÌÁö¸¦ º¼ ¼ö ÀÖ½À´Ï´Ù.
+	- í™”ë©´ í¬ê¸°ê²Œ ë§žê²Œ í™•ëŒ€/ì¶•ì†Œí•˜ì—¬ ì´ë¯¸ì§€ë¥¼ ë³¼ ìˆ˜ ìžˆìŠµë‹ˆë‹¤.
 
 */
 
@@ -54,12 +54,12 @@
 
 int APIENTRY _tWinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance ,LPTSTR lpszCmdParam,int nCmdShow)
 {
-	// ±âº»ÀûÀÎ ¾ð¾îÆÑÀº ÇÁ·ÎÁ§Æ®¿¡ ÀÖ´Â ¿µ¾îÀÌ´Ù.
+	// ê¸°ë³¸ì ì¸ ì–¸ì–´íŒ©ì€ í”„ë¡œì íŠ¸ì— ìžˆëŠ” ì˜ì–´ì´ë‹¤.
 	ZResourceManager::GetInstance().SetHandleInstance(hInstance);
 
 	HINSTANCE hLang = NULL;
 
-	// debug mode ¿¡¼­´Â Ç×»ó ¿µ¾î¸ðµå(¾ð¾îÆÑ Å×½ºÆ®¸¦ À§ÇØ¼­)
+	// debug mode ì—ì„œëŠ” í•­ìƒ ì˜ì–´ëª¨ë“œ(ì–¸ì–´íŒ© í…ŒìŠ¤íŠ¸ë¥¼ ìœ„í•´ì„œ)
 #ifndef _DEBUG
 	if ( GetSystemDefaultLangID() == 0x0412 )
 	{
@@ -78,7 +78,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance ,LPTSTR lpszC
 	}
 #endif
 
-	/// ÆÄÀÏ È®ÀåÀÚ¸¦ ¿¬°áÇÏ¶ó´Â °Å¸é
+	/// íŒŒì¼ í™•ìž¥ìžë¥¼ ì—°ê²°í•˜ë¼ëŠ” ê±°ë©´
 	if ( _tcscmp(lpszCmdParam, TEXT("/fileext")) == 0 )	
 	{
 		int iRet = MessageBox(HWND_DESKTOP, GetMessage(TEXT("REG_FILE_TYPE")), TEXT("ZViewer"), MB_YESNO);
@@ -89,7 +89,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance ,LPTSTR lpszC
 		}
 		return 0;
 	}
-	else if ( _tcscmp(lpszCmdParam, TEXT("/freezvieweragent")) == 0 )	// uninstall ÇÒ ¶§ ZViewerAgent ¸¦ unload ÇÑ´Ù.
+	else if ( _tcscmp(lpszCmdParam, TEXT("/freezvieweragent")) == 0 )	// uninstall í•  ë•Œ ZViewerAgent ë¥¼ unload í•œë‹¤.
 	{
 		CoFreeUnusedLibraries();
 		return 0;
@@ -97,10 +97,10 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance ,LPTSTR lpszC
 
 	tstring strCmdString;
 
-	// ½©¿¡¼­ º¸³¾ ¶§´Â µû¿ÈÇ¥·Î µÑ·¯½Î¼­ ÁØ´Ù. ±×·¡¼­ µû¿ÈÇ¥¸¦ Á¦°ÅÇÑ´Ù.
+	// ì‰˜ì—ì„œ ë³´ë‚¼ ë•ŒëŠ” ë”°ì˜´í‘œë¡œ ë‘˜ëŸ¬ì‹¸ì„œ ì¤€ë‹¤. ê·¸ëž˜ì„œ ë”°ì˜´í‘œë¥¼ ì œê±°í•œë‹¤.
 	if ( _tcslen(lpszCmdParam) > 0 )
 	{
-		// ¸¸¾à µû¿ÈÇ¥¸¦ Æ÷ÇÔÇÏ°í ÀÖÀ¸¸é(¹ÙÅÁÈ­¸é¿¡¼­ º¸³ÂÀ» ¶§)
+		// ë§Œì•½ ë”°ì˜´í‘œë¥¼ í¬í•¨í•˜ê³  ìžˆìœ¼ë©´(ë°”íƒ•í™”ë©´ì—ì„œ ë³´ëƒˆì„ ë•Œ)
 		size_t iLen = _tcslen(lpszCmdParam);
 		for ( unsigned int i=0; i<iLen; ++i)
 		{
@@ -112,7 +112,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance ,LPTSTR lpszC
 		}
 	}
 
-	// ~1 Çü½ÄÀ¸·Î ±ä ÆÄÀÏ¸íÀÌ ¿Â´Ù¸é, ¿ø·¡ ±ä ÆÐ½º¸¦ ¾ò´Â´Ù.
+	// ~1 í˜•ì‹ìœ¼ë¡œ ê¸´ íŒŒì¼ëª…ì´ ì˜¨ë‹¤ë©´, ì›ëž˜ ê¸´ íŒ¨ìŠ¤ë¥¼ ì–»ëŠ”ë‹¤.
 	TCHAR szTemp[MAX_PATH] = { 0 };
 	GetLongPathName(strCmdString.c_str(), szTemp, MAX_PATH);
 
