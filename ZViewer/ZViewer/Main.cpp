@@ -15,9 +15,9 @@
 
 	Created by zelon (Kim, Jinwook in Korea)
 
-	Project Homepage : http://kldp.net/projects/zviewer/
+	Project Homepage : http://zviewer.wimy.com
 
-	Createor Homepage : http://www.wimy.com
+	Creator Homepage : http://www.wimy.com
 
 
 	주요 기능은 다음과 같습니다.
@@ -32,7 +32,7 @@
 
 	- 이미지 파일을 다른 형식으로 변환이 가능합니다.
 
-	- 화면 크기게 맞게 확대/축소하여 이미지를 볼 수 있습니다.
+	- 화면 크기에 맞게 확대/축소하여 이미지를 볼 수 있습니다.
 
 */
 
@@ -52,6 +52,7 @@
 
 
 
+/// Entry point
 int APIENTRY _tWinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance ,LPTSTR lpszCmdParam,int nCmdShow)
 {
 	// 기본적인 언어팩은 프로젝트에 있는 영어이다.

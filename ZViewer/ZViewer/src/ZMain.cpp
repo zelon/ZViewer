@@ -201,7 +201,7 @@ void ZMain::_InitControls()
 }
 
 
-void ZMain::Draw(bool bEraseBg)
+void ZMain::Draw(HDC toDrawDC, bool bEraseBg)
 {
 	if ( m_currentImage.IsValid() == FALSE ) return;
 	if ( m_hMainDlg == NULL ) return;
@@ -209,7 +209,17 @@ void ZMain::Draw(bool bEraseBg)
 	RECT currentScreenRect;
 	getCurrentScreenRect(currentScreenRect);
 
-	HDC mainDC = GetDC(m_hMainDlg);
+	HDC mainDC;
+	
+	if ( NULL == toDrawDC )
+	{
+		mainDC = GetDC(m_hMainDlg);
+	}
+	else
+	{
+		/// 무효화된 부분만 그릴 때의 DC 를 얻어오기 위해
+		mainDC = toDrawDC;
+	}
 
 	if ( m_vFile.size() <= 0 )
 	{
@@ -1330,7 +1340,7 @@ void ZMain::_ProcAfterRemoveThisFile()
 
 		SetTitle();
 		SetStatusBarText();
-		Draw(true);
+		Draw(NULL, true);
 	}
 	else
 	{
@@ -1364,7 +1374,7 @@ void ZMain::_ProcAfterRemoveThisFile()
 			SetTitle();
 			SetStatusBarText();
 
-			Draw(true);
+			Draw(NULL, true);
 		}
 		else
 		{
@@ -1394,7 +1404,7 @@ void ZMain::_ProcAfterRemoveThisFile()
 			m_vFile.erase(it);
 			SetTitle();
 			SetStatusBarText();
-			Draw(true);
+			Draw(NULL, true);
 		}
 	}
 }
@@ -1623,7 +1633,7 @@ void ZMain::Rotate(bool bClockWise)
 
 		_releaseBufferDC();
 
-		Draw(true);
+		Draw(NULL, true);
 	}
 }
 

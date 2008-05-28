@@ -240,7 +240,7 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 			GetCursorPos(&pt);
 			ScreenToClient(hWnd, &pt);
 
-			//if ( PtInRect(&rt, pt) )
+			if ( PtInRect(&rt, pt) || m_bCapture )
 			{
 				HandCursorProc();
 				return 0;
@@ -530,7 +530,7 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 		PAINTSTRUCT ps;
 		hdc=BeginPaint(hWnd, &ps);
 
-		ZMain::GetInstance().Draw();
+		ZMain::GetInstance().Draw(hdc);
 		EndPaint(hWnd, &ps);
 
 		SendMessage(ZMain::GetInstance().GetStatusHandle(), WM_PAINT, wParam, lParam);
