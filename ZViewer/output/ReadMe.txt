@@ -5,7 +5,7 @@
 
 -- 주요 기능 --
 
- * 지원하는 이미지 파일 : bmp, jpg, jpeg2000, png, tif, psd, gif, dds, tga, pcx, xpm, xbm, cut, ico, hdr, jng, koa, mng, pcd, ras
+ * 지원하는 이미지 파일 : bmp, jpg, jpeg2000, png, tif, psd, gif, dds, tga, pcx, xpm, xbm, cut, ico, hdr, jng, koa, mng, pcd, ras, wbmp
  * 이미지를 캐시해두어 빨리 볼 수 있게 함. 50메가 캐시 메모리 제한.
  * 파일 이동, 삭제 기능
  * 실수로 Home, Last 등을 눌러 처음, 마지막 파일로 갔을 때 Backspace 키를 이용한 이전 위치로 돌아가기
@@ -23,12 +23,15 @@
 -- version history --
 
  * v0.7.0
-  * 연속보기 기능 추가
-  * 설치 프로그램에서의 다국어 지원 추가
   * '항상 위' 기능 추가
+  * 연속보기 기능 추가
+  * wbmp 파일확장자 추가
+  * 설치 프로그램에서의 다국어 지원 추가
   * 그림을 드래그해서 볼 때 마우스 커서가 '펴진 손모양' 이 되는 버그 수정
   * 기본 창 크기를 화면의 80% 로 수정하고 위치 조정(이제 800x600 해상도에서도 제대로 동작)
-  * 
+  * ZViewerAgent 에서 현재 위치에 명령 프롬프트 메뉴 추가
+  * .NET 2003, 2005 모두 컴파일되게 수정. MinGW 에서 컴파일 테스트 진행 중
+
  * v0.6.0(2008. 2. 20)
   * freeimage library 3.10.0 로 업데이트
   * jpeg2000 지원(jp2, j2k)
