@@ -11,6 +11,7 @@
  * xp64, vista64 에서 정상 동작하지 않음(설치는 정상이나 ZViewerAgent 가 안되는듯)
 
 == 해야할 일 ==
+ * 파일명 바꾸기 기능
  * 화면보다 매우 큰 사진을 움직여가면서 볼 때, 포토샵의 미니View 처럼 쉽게 움직이는 방법
  * exif 읽어서 자동회전
  * 현재보고 있는 그림파일을 Ctrl+C 등으로 클립보드에 넣는 기능
@@ -34,7 +35,7 @@
 
  * ZViewerAgent 에서 간단한 리사이즈
  * ZViewerAgent 에서 위 아래로 Seperator
- * ZViewerAgent 에서 Command 창 띄우기
+
 
 
 == 나중으로 미뤄진 일 ==
