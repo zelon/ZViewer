@@ -169,6 +169,12 @@ void ZMain::SaveFileDialog()
 
 void ZMain::OnInit()
 {
+	/// 기본 옵션을 불러온다.
+	ZOption::GetInstance().LoadOption();
+
+	/// 불러온 최종 옵션을 점검하여 메뉴 중 체크표시할 것들을 표시한다.
+	SetCheckMenus();
+
 	if ( m_strInitArg.empty() )
 	{
 		// 시작 인자가 없으면 프로그램 폴더가 현재 폴더이다.
@@ -182,27 +188,13 @@ void ZMain::OnInit()
 		// 시작 인자가 있으면 그 파일을 보여준다.
 		OpenFile(m_strInitArg);
 	}
-
-	/// 기본 옵션을 불러온다.
-	ZOption::GetInstance().LoadOption();
-
-	/// 불러온 최종 옵션을 점검하여 메뉴 중 체크표시할 것들을 표시한다.
-	ZMain::GetInstance().SetCheckMenus();
-
-	/// 여러 컨트롤들을 초기화시켜준다.
-	_InitControls();
 }
 
-
-/// 여러 컨트롤들을 초기화시켜준다.
-void ZMain::_InitControls()
-{
-	SetCheckMenus();
-}
 
 
 void ZMain::Draw(HDC toDrawDC, bool bEraseBg)
 {
+	DebugPrintf(TEXT("ZMain::Draw()"));
 	if ( m_currentImage.IsValid() == FALSE ) return;
 	if ( m_hMainDlg == NULL ) return;
 
@@ -1285,7 +1277,7 @@ void ZMain::OnDrag(int x, int y)
 
 	if ( m_iShowingX != iNowShowingX || m_iShowingY != iNowShowingY )
 	{
-		Draw(false);
+		Draw(NULL, false);
 	}
 }
 

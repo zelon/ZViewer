@@ -53,9 +53,6 @@ public:
 	
 	void OnInit();
 
-	/// 여러 컨트롤들을 초기화시켜준다.
-	void _InitControls();
-
 	void Draw(HDC toDrawDC = NULL, bool bEraseBg = true);
 
 	/// 현재보고 있는 이미지를 윈도우 바탕화면의 배경으로 지정한다.
