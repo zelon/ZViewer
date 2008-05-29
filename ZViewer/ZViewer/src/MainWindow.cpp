@@ -196,8 +196,6 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 
 				HandCursorProc();
 			}
-
-
 		}
 		break;
 
@@ -551,9 +549,9 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 
 void HandCursorProc()
 {
-	if ( ZMain::GetInstance().IsHandCursor() )
+	if ( ZMain::GetInstance().IsHandCursor() && ZOption::GetInstance().IsBigToSmallStretchImage() == false )
 	{
-		if ( m_bCapture )	// 마우스 왼쪽 버튼을 누르고 있으면
+		if ( m_bCapture )	// 마우스 왼쪽 버튼을 누르고 있으면 움켜쥔 커서를 그린다.
 		{
 			SetCursor(LoadCursor(ZMain::GetInstance().GetHInstance(), MAKEINTRESOURCE(IDC_MOVE_HAND_CAPTURE_CURSOR)));
 		}
