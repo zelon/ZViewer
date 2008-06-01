@@ -124,5 +124,6 @@ bool CUnicodeFile::getLine(std::string & str)
 	char buff[256];
 	m_inputStream.getline(buff, 256);
 
+	str = buff;
 	return true;
 }
