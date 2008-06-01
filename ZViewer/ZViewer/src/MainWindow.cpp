@@ -187,10 +187,8 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 			{
 				int x = GET_X_LPARAM(lParam);
 				int y = GET_Y_LPARAM(lParam);
-				int diffX = x - lastX;
-				int diffY = y - lastY;
 
-				ZMain::GetInstance().OnDrag(-diffX, -diffY);
+				ZMain::GetInstance().OnDrag(-(x - lastX), -(y - lastY));
 				lastX = x;
 				lastY = y;
 
