@@ -49,9 +49,13 @@ ZMain::~ZMain(void)
 	{
 		DebugPrintf(TEXT("Before delete bufferDC"));
 		BOOL bRet = DeleteDC(m_hBufferDC);
+
 		DebugPrintf(TEXT("after delete bufferDC"));
 	
-		_ASSERTE(bRet);
+		if ( bRet == FALSE )
+		{
+			_ASSERTE(bRet);
+		}
 
 		m_hBufferDC = NULL;
 	}
@@ -64,7 +68,11 @@ void ZMain::_releaseBufferDC()
 	if ( m_hBufferDC != NULL )
 	{
 		BOOL bRet = DeleteDC(m_hBufferDC);
-		_ASSERTE(bRet);
+
+		if ( bRet == FALSE )
+		{
+			_ASSERTE(bRet);
+		}
 		m_hBufferDC = NULL;
 	}
 }
@@ -305,6 +313,12 @@ void ZMain::Draw(HDC toDrawDC, bool bEraseBg)
 				stretchedImage.GetData(),
 				stretchedImage.GetBitmapInfo(),
 				DIB_RGB_COLORS, SRCCOPY);
+
+			if ( r == GDI_ERROR )
+			{
+				assert(false);
+			}
+
 		}
 		else
 		{
@@ -345,6 +359,11 @@ void ZMain::Draw(HDC toDrawDC, bool bEraseBg)
 						m_currentImage.GetData(),
 						m_currentImage.GetBitmapInfo(),
 						DIB_RGB_COLORS, SRCCOPY);
+
+					if ( r == GDI_ERROR )
+					{
+						assert(false);
+					}
 				}
 				DeleteObject(hbmScreen);
 			}
@@ -366,6 +385,8 @@ void ZMain::Draw(HDC toDrawDC, bool bEraseBg)
 				m_hBufferDC, 
 				iDrawPartX, iDrawPartY,			// 그려질 이미지 원본의 시작 x,y 좌표
 				SRCCOPY);
+
+			assert(b == TRUE);
 
 			//DebugPrintf("rt.bottom : %d, PartX : %d, iDrawPartY : %d", currentScreenRect.bottom, iDrawPartX, iDrawPartY);
 
@@ -433,6 +454,11 @@ void ZMain::Draw(HDC toDrawDC, bool bEraseBg)
 					stretchedImage.GetData(),
 					stretchedImage.GetBitmapInfo(),
 					DIB_RGB_COLORS, SRCCOPY);
+
+				if ( r == GDI_ERROR )
+				{
+					assert(false);
+				}
 			}
 
 		}
@@ -470,6 +496,11 @@ void ZMain::Draw(HDC toDrawDC, bool bEraseBg)
 					m_currentImage.GetData(),
 					m_currentImage.GetBitmapInfo(),
 					DIB_RGB_COLORS, SRCCOPY);
+
+				if ( r == GDI_ERROR )
+				{
+					assert(false);
+				}
 			}
 
 		}
@@ -1275,6 +1306,7 @@ void ZMain::OnDrag(int x, int y)
 		m_iShowingY = 0;
 	}
 
+	/// 보여주는 X 좌표나 Y 좌표 둘 중 하나라도 변경되었으면, 드래그된 것이므로 다시 그린다.
 	if ( m_iShowingX != iNowShowingX || m_iShowingY != iNowShowingY )
 	{
 		Draw(NULL, false);

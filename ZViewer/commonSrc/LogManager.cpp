@@ -48,12 +48,15 @@ CLogManager::~CLogManager(void)
 }
 
 
+#ifndef _DEBUG
+void CLogManager::Output(const TCHAR * , ...)
+{
+	return;
+}
+#else
 void CLogManager::Output(const TCHAR * fmt, ...)
 {
 	if ( false == m_bGoOn ) return;
-#ifndef _DEBUG
-	return;
-#endif
 
 	va_list			argptr;
 	TCHAR cBuf[512];
@@ -71,4 +74,4 @@ void CLogManager::Output(const TCHAR * fmt, ...)
 	WriteConsole(m_hConsoleOutput, cBuf, (DWORD)(_tcslen(cBuf)), &dwWritten, NULL);
 	WriteConsole(m_hConsoleOutput, "\n", 1, &dwWritten, NULL);
 }
-
+#endif

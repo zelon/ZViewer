@@ -14,11 +14,10 @@ I/********************************************************************
 #include "LogManager.h"
 #include <strsafe.h>
 
+#ifdef _DEBUG
 void DebugPrintf( const TCHAR *fmt, ... )
 {
-#ifndef _DEBUG
 	return;
-#endif
 
 	va_list v;
 	TCHAR buf[1024*4];
@@ -33,6 +32,10 @@ void DebugPrintf( const TCHAR *fmt, ... )
 
 	CLogManager::getInstance().Output(buf);
 }
+#else
+void DebugPrintf( const TCHAR * , ...){}
+#endif
+
 
 const tstring GetOnlyFileName(const tstring & strFullFileName)
 {
@@ -102,7 +105,6 @@ RECT GetResizedRectForBigToSmall(const RECT & MaximumSize, const RECT & original
 	// 큰 값이 MaximumSize 가 되게 하는 비례를 찾는다.
 	RECT ret;
 
-	double dRate = 1;
 	if ( bSetWidth == true )
 	{
 		// 가로 크기가 기준이다.
@@ -238,7 +240,8 @@ eOSKind getOSVersion()
 	ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
 	osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
 
-	if( !(bOsVersionInfoEx = GetVersionEx ((OSVERSIONINFO *) &osvi)) )
+	bOsVersionInfoEx = GetVersionEx ((OSVERSIONINFO *) &osvi);
+	if( !bOsVersionInfoEx )
 	{
 		osvi.dwOSVersionInfoSize = sizeof (OSVERSIONINFO);
 		if (! GetVersionEx ( (OSVERSIONINFO *) &osvi) ) 

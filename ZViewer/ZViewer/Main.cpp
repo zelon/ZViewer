@@ -53,7 +53,7 @@
 
 
 /// Entry point
-int APIENTRY _tWinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance ,LPTSTR lpszCmdParam,int nCmdShow)
+int APIENTRY _tWinMain(HINSTANCE hInstance,HINSTANCE /*hPrevInstance */,LPTSTR lpszCmdParam,int nCmdShow)
 {
 	// 기본적인 언어팩은 프로젝트에 있는 영어이다.
 	ZResourceManager::GetInstance().SetHandleInstance(hInstance);

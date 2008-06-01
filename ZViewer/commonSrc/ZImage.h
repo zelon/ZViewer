@@ -57,6 +57,8 @@ public:
 		if ( 0 == WideCharToMultiByte(CP_THREAD_ACP, 0, strFilename.c_str(), (int)strFilename.size(), buffer, 256, NULL, NULL) )
 		{
 			DWORD dwError = GetLastError();
+			
+			DebugPrintf(TEXT("Error Code : %d"), dwError);
 			_ASSERTE(false);
 			return false;
 		}
