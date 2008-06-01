@@ -14,6 +14,7 @@
 
 #include "MainWindow.h"
 #include "AboutWindow.h"
+#include "TaskBar.h"
 
 #include "../commonSrc/MessageManager.h"
 
@@ -221,7 +222,7 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 		{
 			if ( ZOption::GetInstance().IsFullScreen() )
 			{
-				ZMain::GetInstance().ShellTrayShow();
+				TaskBar::ShellTrayShow();
 			}
 			PostQuitMessage(0);
 		}
@@ -297,7 +298,7 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 			if ( ZOption::GetInstance().m_bSlideMode ) ZOption::GetInstance().m_bSlideMode = false;
 
 			int wMid = LOWORD(wParam);
-			int wmEvent = HIWORD(wParam);
+			//int wmEvent = HIWORD(wParam);
 
 			switch ( wParam )
 			{

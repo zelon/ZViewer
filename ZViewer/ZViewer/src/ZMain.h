@@ -1,6 +1,6 @@
 /********************************************************************
 *
-* Created by zelon(Kim, Jinwook Korea)
+* Created by zelon(Kim, Jinwook - Korea)
 * 
 *   2005. 5. 7
 *	ZMain.h
@@ -166,9 +166,6 @@ public:
 
 	void ShowFileExtDlg();
 
-	/// 윈도우의 작업 표시줄을 보이게 해준다.
-	void ShellTrayShow();
-
 	void ChangeFileSort(eFileSortOrder sortOrder);
 	void ReLoadFileList();
 
@@ -195,9 +192,6 @@ private:
 	typedef std::vector< FileData > FileListVector;
 
 	void _GetFileListAndSort(const tstring & strFolderPathAndWildCard, FileListVector & vFileList);
-
-	/// 윈도우의 작업 표시줄을 숨긴다.
-	void ShellTrayHide();
 
 	// 현재 파일이 지워졌을 때 후의 처리. 파일 삭제, 이동 후에 불리는 함수이다.
 	void _ProcAfterRemoveThisFile();

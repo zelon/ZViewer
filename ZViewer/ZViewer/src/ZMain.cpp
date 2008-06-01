@@ -17,6 +17,7 @@
 #include "../commonSrc/SaveAs.h"
 #include "../commonSrc/ZOption.h"
 #include "MessageManager.h"
+#include "TaskBar.h"
 
 #include <ShlObj.h>
 #include <cstdio>
@@ -386,7 +387,10 @@ void ZMain::Draw(HDC toDrawDC, bool bEraseBg)
 				iDrawPartX, iDrawPartY,			// 그려질 이미지 원본의 시작 x,y 좌표
 				SRCCOPY);
 
-			assert(b == TRUE);
+			if ( b == FALSE )
+			{
+				assert(b == TRUE);
+			}
 
 			//DebugPrintf("rt.bottom : %d, PartX : %d, iDrawPartY : %d", currentScreenRect.bottom, iDrawPartX, iDrawPartY);
 
@@ -1004,7 +1008,7 @@ void ZMain::ToggleFullScreen()
 	{
 		ZOption::GetInstance().SetFullScreen(!ZOption::GetInstance().IsFullScreen());
 
-		ShellTrayShow();	// 숨겨졌던 작업 표시줄을 보여준다.
+		TaskBar::ShellTrayShow();	// 숨겨졌던 작업 표시줄을 보여준다.
 
 		FormShow();	// 메뉴, 상태 표시줄등을 보여준다.
 
@@ -1023,7 +1027,7 @@ void ZMain::ToggleFullScreen()
 		MoveWindow(m_hMainDlg, 0,0,::GetSystemMetrics(SM_CXSCREEN),::GetSystemMetrics(SM_CYSCREEN), TRUE);
 
 		// 작업 표시줄을 가려준다.
-		ShellTrayHide();
+		TaskBar::ShellTrayHide();
 
 		// 포커스를 잃으면 원래대로 돌아가야하므로 풀어놓는다.
 		SetWindowPos(m_hMainDlg, HWND_NOTOPMOST, 0, 0, ::GetSystemMetrics(SM_CXSCREEN),::GetSystemMetrics(SM_CYSCREEN), SWP_NOMOVE|SWP_NOSIZE);
@@ -1313,18 +1317,6 @@ void ZMain::OnDrag(int x, int y)
 	}
 }
 
-/// 작업 표시줄을 보이게 해준다.
-void ZMain::ShellTrayShow()
-{
-	/// 작업 표시줄을 보이게 해준다.
-	HWND h = FindWindow(TEXT("Shell_TrayWnd"), TEXT(""));
-
-	if ( h != INVALID_HANDLE_VALUE )
-	{
-		ShowWindow(h, SW_SHOW);
-	}
-}
-
 
 void ZMain::ChangeFileSort(eFileSortOrder sortOrder)
 {
@@ -1339,18 +1331,6 @@ void ZMain::ReLoadFileList()
 
 	OpenFile(strFileName);
 }
-
-void ZMain::ShellTrayHide()
-{
-	// 작업 표시줄을 보이게 해준다.
-	HWND h = FindWindow(TEXT("Shell_TrayWnd"), TEXT(""));
-
-	if ( h != INVALID_HANDLE_VALUE )
-	{
-		ShowWindow(h, SW_HIDE);
-	}
-}
-
 
 void ZMain::_ProcAfterRemoveThisFile()
 {
@@ -1438,7 +1418,7 @@ void ZMain::OnFocusLose()
 {
 	//DebugPrintf("OnFocusLose()");
 
-	ShellTrayShow();
+	TaskBar::ShellTrayShow();
 	/*
 //	if ( m_bOpeningFileDialog )
 	{
@@ -1459,7 +1439,7 @@ void ZMain::OnFocusGet()
 		SetWindowPos(m_hMainDlg, HWND_TOPMOST, 0, 0, ::GetSystemMetrics(SM_CXSCREEN),::GetSystemMetrics(SM_CYSCREEN), SWP_NOMOVE|SWP_NOSIZE);
 		MoveWindow(m_hMainDlg, 0,0,::GetSystemMetrics(SM_CXSCREEN),::GetSystemMetrics(SM_CYSCREEN), TRUE);
 		SetWindowPos(m_hMainDlg, HWND_NOTOPMOST, 0, 0, ::GetSystemMetrics(SM_CXSCREEN),::GetSystemMetrics(SM_CYSCREEN), SWP_NOMOVE|SWP_NOSIZE);
-		ShellTrayHide();
+		TaskBar::ShellTrayHide();
 	}
 }
 
