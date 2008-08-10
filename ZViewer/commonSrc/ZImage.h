@@ -22,7 +22,6 @@ class ZImage
 public:
 	static bool StartupLibrary(){ return true; }
 	static bool CleanupLibrary(){ return true; }
-	static bool IsValidImageFileExt(const TCHAR * szFilename);
 	static const tstring GetLibraryVersion()
 	{
 #ifdef _UNICODE

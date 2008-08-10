@@ -10,12 +10,6 @@
 
 #pragma once
 
-struct ExtSetting
-{
-	unsigned int m_numIconIndex;		// icon dll 에서의 index
-	tstring m_strExt;				// 파일의 확장자
-};
-
 class ZFileExtDlg
 {
 	ZFileExtDlg();
@@ -43,11 +37,4 @@ private:
 
 	/// 실제로 파일 연결을 세팅하는 함수
 	bool SetExtWithProgram(const tstring & strProgramName, const tstring & strExt, tstring strFullProgramPath = TEXT(""), const tstring & strIcon = TEXT(""), int iIconIndex = 0);
-
-	/// 확장자를 연결
-	void ExtMapInit();
-
-	void _AddExtSet(const int iIconIndex, const TCHAR * ext);
-
-	std::vector < ExtSetting > m_extConnect;
 };

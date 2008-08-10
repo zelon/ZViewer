@@ -16,6 +16,7 @@
 #include "src/SelectToFolderDlg.h"
 #include "../commonSrc/SaveAs.h"
 #include "../commonSrc/ZOption.h"
+#include "../commonSrc/ExtInfoManager.h"
 #include "MessageManager.h"
 #include "TaskBar.h"
 
@@ -136,7 +137,7 @@ void ZMain::InitOpenFileDialog()
 	//
 	ofn.lpstrFile[0] = '\0';
 	ofn.nMaxFile = sizeof(szFile);
-	ofn.lpstrFilter = g_strFileFilter;
+	ofn.lpstrFilter = ExtInfoManager::GetInstance().GetFileDlgFilter();
 
 	ofn.nFilterIndex = 1;
 	ofn.lpstrFileTitle = NULL;
@@ -559,7 +560,7 @@ void ZMain::FindFile(const TCHAR * path, std::vector< FileData > & foundStorage,
 		{
 			StringCchPrintf(fname, _MAX_FNAME, L"%s%s%s",drive,dir,wfd.cFileName);
 
-			if ( ZImage::IsValidImageFileExt(wfd.cFileName) )
+			if ( ExtInfoManager::GetInstance().IsValidImageFileExt(wfd.cFileName) )
 			{
 				FileData aData;
 				aData.m_timeModified = wfd.ftLastWriteTime;

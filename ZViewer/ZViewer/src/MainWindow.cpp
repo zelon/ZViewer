@@ -17,10 +17,11 @@
 #include "TaskBar.h"
 
 #include "../commonSrc/MessageManager.h"
+#include "../commonSrc/ExtInfoManager.h"
+#include "../commonSrc/ZOption.h"
 
 #include "src/ZMain.h"
 #include "src/ZResourceManager.h"
-#include "../commonSrc/ZOption.h"
 
 enum
 {
@@ -147,7 +148,7 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 			TCHAR szFileName[MAX_PATH] = { 0 };
 			DragQueryFile(hDrop, 0, szFileName, MAX_PATH);
 
-			if ( ZImage::IsValidImageFileExt(szFileName) )
+			if ( ExtInfoManager::GetInstance().IsValidImageFileExt(szFileName) )
 			{
 				ZMain::GetInstance().OpenFile(szFileName);
 			}

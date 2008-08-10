@@ -24,9 +24,7 @@ typedef std::wstring tstring;
 typedef std::string tstring;
 #endif
 
-const tstring g_strVersion = TEXT("0.7.0rc1");
-
-#define g_strFileFilter TEXT("ImageFiles(jpg,jpeg2000,gif,png,bmp,wbmp,psd,tga,tif,ico)\0*.jpg;*.jpeg;*.jp2;*.j2k;*.gif;*.png;*.bmp;*.wbmp;*.psd,*.tga;*.tif;*.ico\0All(*.*)\0*.*\0")
+const tstring g_strVersion = TEXT("0.7.0rc2");
 
 struct FileData
 {
@@ -34,6 +32,13 @@ struct FileData
 	_FILETIME m_timeModified;	// 최근 수정된 날짜
 	DWORD m_nFileSize;			// 파일크기
 };
+
+struct ExtSetting
+{
+	unsigned int m_numIconIndex;		// icon dll 에서의 index
+	tstring m_strExt;				// 파일의 확장자
+};
+
 
 class CFileDataSort_OnlyFilenameCompare
 {

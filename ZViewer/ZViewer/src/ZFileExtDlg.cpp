@@ -17,13 +17,13 @@
 
 #include "ZFileExtReg.h"
 
+#include "../commonSrc/ExtInfoManager.h"
+
 ZFileExtDlg * pThis = NULL;
 
 ZFileExtDlg::ZFileExtDlg()
 {
 	pThis = this;
-
-	ExtMapInit();
 }
 
 ZFileExtDlg & ZFileExtDlg::GetInstance()
@@ -42,47 +42,6 @@ void ZFileExtDlg::ShowDlg()
 	}
 }
 
-
-void ZFileExtDlg::_AddExtSet(const int iIconIndex, const TCHAR * ext)
-{
-	ExtSetting extSet;
-
-	extSet.m_numIconIndex = iIconIndex;
-	extSet.m_strExt = ext;
-	m_extConnect.push_back(extSet);
-}
-
-
-void ZFileExtDlg::ExtMapInit()
-{
-	ExtSetting extSet;
-
-	_AddExtSet(1, TEXT("bmp"));
-	_AddExtSet(1, TEXT("wbmp"));
-	_AddExtSet(2, TEXT("jpg"));
-	_AddExtSet(2, TEXT("jpeg"));
-	_AddExtSet(2, TEXT("jpe"));
-	_AddExtSet(2, TEXT("jp2"));
-	_AddExtSet(2, TEXT("j2k"));
-	_AddExtSet(3, TEXT("png"));
-	_AddExtSet(4, TEXT("psd"));
-	_AddExtSet(5, TEXT("gif"));
-	_AddExtSet(0, TEXT("dds"));
-	_AddExtSet(0, TEXT("tga"));
-	_AddExtSet(0, TEXT("pcx"));
-	_AddExtSet(0, TEXT("xpm"));
-	_AddExtSet(0, TEXT("xbm"));
-	_AddExtSet(0, TEXT("tif"));
-	_AddExtSet(0, TEXT("tiff"));
-	_AddExtSet(0, TEXT("cut"));
-	_AddExtSet(6, TEXT("ico"));
-	_AddExtSet(0, TEXT("hdr"));
-	_AddExtSet(0, TEXT("jng"));
-	_AddExtSet(0, TEXT("koa"));
-	_AddExtSet(0, TEXT("mng"));
-	_AddExtSet(0, TEXT("pcd"));
-	_AddExtSet(0, TEXT("ras"));
-}
 int CALLBACK ZFileExtDlg::FileExtDlgProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 {
 	switch(iMessage)
@@ -133,14 +92,14 @@ void ZFileExtDlg::LoadExtEnv(HWND hwnd)
 
 void ZFileExtDlg::SaveExtEnv()
 {
-	std::vector < ExtSetting >::iterator it, endit = m_extConnect.end();
+	std::vector < ExtSetting >::iterator it, endit = ExtInfoManager::GetInstance().m_extConnect.end();
 
 	tstring strProgramFolder(GetProgramFolder());
 
 	tstring strIconDll = strProgramFolder;
 	strIconDll += TEXT("ZViewerIcons.dll");
 
-	for ( it = m_extConnect.begin(); it != endit; ++it)
+	for ( it = ExtInfoManager::GetInstance().m_extConnect.begin(); it != endit; ++it)
 	{
 		const ExtSetting & extset = *it;
 

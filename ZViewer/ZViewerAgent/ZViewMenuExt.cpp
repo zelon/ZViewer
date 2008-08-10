@@ -15,6 +15,7 @@
 #include "../commonSrc/MessageManager.h"
 #include "../commonSrc/SaveAs.h"
 #include "../commonSrc/ZOption.h"
+#include "../commonSrc/ExtInfoManager.h"
 #include <shlobj.h>
 #include <sstream>
 
@@ -128,7 +129,7 @@ STDMETHODIMP CZViewMenuExt::Initialize (LPCITEMIDLIST pidlFolder, LPDATAOBJECT  
 			if ( g_bPreviewMenuInsert )
 			{
 				/// Is it's extension is valid 'Image File', 이미지 라이브러리에서 읽을 수 없는 파일이면 미리보기 메뉴를 비활성화시킨다.
-				if ( ZImage::IsValidImageFileExt(m_szFile) )
+				if ( ExtInfoManager::GetInstance().IsValidImageFileExt(m_szFile) )
 				{
 					if ( m_originalImage.LoadFromFile(m_szFile) )
 					{

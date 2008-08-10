@@ -545,6 +545,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\commonSrc\ExtInfoManager.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\commonSrc\ExtInfoManager.h"
+				>
+			</File>
+			<File
 				RelativePath="..\commonSrc\LockUtil.h"
 				>
 			</File>

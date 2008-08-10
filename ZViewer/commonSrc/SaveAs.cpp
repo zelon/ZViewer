@@ -12,6 +12,8 @@
 #include "stdafx.h"
 #include "SaveAs.h"
 
+#include "ExtInfoManager.h"
+
 CSaveAs & CSaveAs::getInstance()
 {
     static CSaveAs inst;
@@ -80,7 +82,7 @@ bool CSaveAs::showDialog()
 	//
 	m_ofn.lpstrFile[0] = '\0';
 	m_ofn.nMaxFile = FILENAME_MAX;
-	m_ofn.lpstrFilter = g_strFileFilter;
+	m_ofn.lpstrFilter = ExtInfoManager::GetInstance().GetFileDlgFilter();
 	m_ofn.nFilterIndex = 1;
 	m_ofn.lpstrFileTitle = NULL;
 	m_ofn.nMaxFileTitle = 0;
