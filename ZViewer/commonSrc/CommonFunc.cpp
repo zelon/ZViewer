@@ -440,8 +440,17 @@ tstring GetProgramFolder()
 
 	TCHAR szGetFileName[FILENAME_MAX] = { 0 };
 
+	HMODULE hModule = GetModuleHandle(
+		
+#ifdef _DEBUG
+		TEXT("FreeImaged.dll")
+#else
+		TEXT("FreeImage.dll")
+#endif
+		);
+
 	/// ZViewer, ZViewerAgent 둘다 FreeImage.dll 을 쓰므로 이 dll 이 있는 폴더를 찾는다.
-	DWORD ret = GetModuleFileName(GetModuleHandle(TEXT("FreeImage.dll")), szGetFileName, FILENAME_MAX);
+	DWORD ret = GetModuleFileName(hModule, szGetFileName, FILENAME_MAX);
 
 	if ( ret == 0 )
 	{
