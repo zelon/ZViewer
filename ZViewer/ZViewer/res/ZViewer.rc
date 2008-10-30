@@ -219,7 +219,7 @@ END
 
 IDD_FILE_EXT_DIALOG DIALOGEX 0, 0, 121, 95
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "파일 확장자 연결..."
+CAPTION "Associate File Ext..."
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
     DEFPUSHBUTTON   "확인",IDOK,7,74,50,14
@@ -229,7 +229,7 @@ BEGIN
     CONTROL         "GIF",IDC_CHECK_GIF,"Button",BS_AUTOCHECKBOX | WS_DISABLED | WS_TABSTOP,76,7,27,10
     CONTROL         "PNG",IDC_CHECK_PNG,"Button",BS_AUTOCHECKBOX | WS_DISABLED | WS_TABSTOP,7,26,29,10
     CONTROL         "PSD",IDC_CHECK_PSD,"Button",BS_AUTOCHECKBOX | WS_DISABLED | WS_TABSTOP,42,26,29,10
-    LTEXT           "* 현재 모든 파일을 항상 연결합니다. 원하지 않으면 취소를 눌러주세요.",IDC_STATIC,7,41,107,24
+    LTEXT           "* This dialog associate all ext files. If you don't want, choose Cancel.",IDC_STATIC,7,41,107,24
 END
 
 IDD_MOVE_DIALOG DIALOGEX 0, 0, 228, 50
