@@ -165,6 +165,9 @@ bool ZCacheImage::_CacheIndex(int iIndex)
 	tstring strFileName;
 
 	strFileName = m_imageMap[iIndex];
+
+	if ( strFileName.length() <= 0 ) return false;
+
 	{
 		CLockObjUtil lock(m_cacheLock);
 		if ( m_cacheData.count(strFileName) > 0)
@@ -380,18 +383,18 @@ void ZCacheImage::ThreadFunc()
 			if ( m_lastActionDirection == eLastActionDirection_FORWARD )
 			{
 				// right side
-				if ( !_CacheIndex(m_iCurrentIndex + iPos) ) break;
+				if ( false == _CacheIndex(m_iCurrentIndex + iPos) ) break;
 
 				// left side
-				if ( !_CacheIndex(m_iCurrentIndex - iPos) ) break;
+				if ( false == _CacheIndex(m_iCurrentIndex - iPos) ) break;
 			}
 			else if ( m_lastActionDirection == eLastActionDirection_BACKWARD )
 			{
 				// left side
-				if ( !_CacheIndex(m_iCurrentIndex - iPos) ) break;
+				if ( false == _CacheIndex(m_iCurrentIndex - iPos) ) break;
 
 				// right side
-				if ( !_CacheIndex(m_iCurrentIndex + iPos) ) break;
+				if ( false == _CacheIndex(m_iCurrentIndex + iPos) ) break;
 			}
 			else
 			{
