@@ -10,7 +10,7 @@
  */
 
 #include "stdafx.h"
-#include "resource.h"
+#include "../res/resource.h"
 
 #include "AboutWindow.h"
 #include "src/ZMain.h"
