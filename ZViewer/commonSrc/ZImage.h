@@ -50,24 +50,13 @@ public:
 	{
 		//DebugPrintf("LoadFromFile : %s", strFilename.c_str());
 
-		char buffer[FILENAME_MAX] = {0};
-
-#ifdef _UNICODE
-		if ( 0 == WideCharToMultiByte(CP_THREAD_ACP, 0, strFilename.c_str(), (int)strFilename.size(), buffer, 256, NULL, NULL) )
-		{
-			DWORD dwError = GetLastError();
-			
-			DebugPrintf(TEXT("Error Code : %d"), dwError);
-			_ASSERTE(false);
-			return false;
-		}
-#else
-		StringCchPrintf(buffer, FILENAME_MAX, strFilename.c_str());
-#endif
-
 		try
 		{
-			if ( m_image.load(buffer) == TRUE )
+#ifdef _UNICODE
+			if ( m_image.loadU(strFilename.c_str()) == TRUE )
+#else
+			if ( m_image.load(strFilename.c_str()) == TRUE )
+#endif
 			{
 				m_originalWidth = m_image.getWidth();
 				m_originalHeight = m_image.getHeight();
