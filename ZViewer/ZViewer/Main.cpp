@@ -1,4 +1,4 @@
-﻿/********************************************************************
+﻿﻿/********************************************************************
 *
 * Created by zelon(Kim, Jinwook Korea)
 * 
@@ -152,7 +152,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,HINSTANCE /*hPrevInstance */,LPTSTR l
 		return 0;
 	}
 
-	WPARAM wParam = aWindow.MsgProc();
+	WPARAM wParam = aWindow.DoModal();
 
 	/*
 	/// KillTimer

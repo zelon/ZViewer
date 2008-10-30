@@ -80,7 +80,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				IgnoreImportLibrary="true"
-				AdditionalDependencies="$(SolutionDir)/lib/freeimage/FreeImage.lib $(SolutionDir)/lib/freeimage/FreeImagePlus.lib"
+				AdditionalDependencies="$(SolutionDir)/lib/freeimage/FreeImaged.lib $(SolutionDir)/lib/freeimage/FreeImagePlusd.lib"
 				OutputFile="$(OutDir)/ZViewerAgentD.dll"
 				LinkIncremental="2"
 				ModuleDefinitionFile=".\ZViewerAgent.def"

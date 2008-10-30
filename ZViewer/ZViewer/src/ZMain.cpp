@@ -24,6 +24,8 @@
 #include <cstdio>
 #include <strsafe.h>
 
+#include "src/ExifDlg.h"
+
 #include "resource.h"
 
 using namespace std;
@@ -200,7 +202,13 @@ void ZMain::OnInit()
 	}
 }
 
-
+/// 현재 보고 있는 파일의 Exif 정보를 보여준다.
+void ZMain::ShowExif()
+{
+	ExifDlg aDlg;
+	aDlg.Create(m_hMainInstance, m_hMainDlg, SW_SHOW, TEXT("ExifDlg"), NULL);
+	aDlg.DoModal();
+}
 
 void ZMain::Draw(HDC toDrawDC, bool bEraseBg)
 {

@@ -52,6 +52,65 @@ void CMainWindow::SetWndProc()
 }
 
 
+HWND CMainWindow::Create(HINSTANCE hInstance, HWND hParentHWND, int nCmdShow)
+{
+	SetWndProc();
+	if ( NULL == m_wndProc)
+	{
+		_ASSERTE(!"before create, set WndProc");
+		return (HWND)INVALID_HANDLE_VALUE;
+	}
+
+	m_hParentWindow = hParentHWND;
+
+	TCHAR lpszClass[256] = TEXT("ZViewer");
+
+	WNDCLASS WndClass;
+	WndClass.cbClsExtra=0;
+	WndClass.cbWndExtra=0;
+	WndClass.hbrBackground=(HBRUSH)GetStockObject(BLACK_BRUSH);
+	WndClass.hCursor=LoadCursor(NULL,IDC_ARROW);
+	WndClass.hIcon=LoadIcon(hInstance, MAKEINTRESOURCE(IDI_BIG_MAIN));
+	WndClass.hInstance=hInstance;
+	WndClass.lpfnWndProc=m_wndProc;
+	WndClass.lpszClassName=lpszClass;
+	WndClass.lpszMenuName=NULL;
+	WndClass.style=CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS;
+	RegisterClass(&WndClass);
+
+	int iWidth = (int)(GetSystemMetrics(SM_CXSCREEN) * 0.8);
+	int iHeight = (int)(GetSystemMetrics(SM_CYSCREEN) * 0.8);
+	int iXPosition = (GetSystemMetrics(SM_CXSCREEN)/2) - (iWidth/2);
+	int iYPosition = (GetSystemMetrics(SM_CYSCREEN)/2) - ( iHeight/2) ;
+
+	HMENU hMenu = (HMENU)LoadMenu(ZResourceManager::GetInstance().GetHInstance(), MAKEINTRESOURCE(IDR_MAIN_MENU));
+
+	ZMain::GetInstance().SetMainMenu(hMenu);
+
+	m_hWindow = ::CreateWindow(
+		lpszClass,
+		lpszClass,		///< Window Title
+		WS_OVERLAPPEDWINDOW,///< | WS_EX_ACCEPTFILES,
+		iXPosition,		///< 기본 x 위치
+		iYPosition,		///< 기본 y 위치
+		iWidth,			///< width
+		iHeight,		///< height
+		NULL,
+		hMenu,			///< MainMenu
+		hInstance,NULL);
+
+	// 탐색기에서의 Drag&Drop 을 가능하게 한다.
+	DragAcceptFiles(m_hWindow, TRUE);
+
+	ShowWindow(m_hWindow, nCmdShow);
+
+	// 단축키 설정. 여기서 반환된 핸들은 프로그램이 종료될 때 자동적으로 close 됨.
+	m_hAccel = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDR_MAIN_ACCELERATOR));
+
+	return m_hWindow;
+}
+
+
 int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 {
 	static int lastX;
@@ -63,6 +122,11 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 		{
 			switch ( wParam )
 			{
+			case 'p':
+			case 'P':
+//				ZMain::GetInstance().ShowExif();
+				break;
+				
 			case 'g':
 			case 'G':
 				ZMain::GetInstance().StartSlideMode();

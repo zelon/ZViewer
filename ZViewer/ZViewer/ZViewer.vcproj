@@ -63,7 +63,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="shlwapi.lib comctl32.lib $(SolutionDir)/lib/freeimage/FreeImage.lib $(SolutionDir)/lib/freeimage/FreeImagePlus.lib"
+				AdditionalDependencies="shlwapi.lib comctl32.lib $(SolutionDir)/lib/freeimage/FreeImaged.lib $(SolutionDir)/lib/freeimage/FreeImagePlus.lib"
 				OutputFile="$(OutDir)/ZViewerD.exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="$(SolutionDir)/lib/vld"
@@ -123,6 +123,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				UseUnicodeResponseFiles="true"
 				AdditionalIncludeDirectories="$(SolutionDir)/ZViewer;$(SolutionDir)/ZViewer/res;$(SolutionDir)/lib;$(SolutionDir)/commonSrc;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				RuntimeLibrary="0"
@@ -410,6 +411,14 @@
 			</File>
 			<File
 				RelativePath=".\src\AboutWindow.h"
+				>
+			</File>
+			<File
+				RelativePath=".\src\ExifDlg.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\ExifDlg.h"
 				>
 			</File>
 			<File

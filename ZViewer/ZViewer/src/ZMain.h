@@ -53,6 +53,9 @@ public:
 	
 	void OnInit();
 
+	/// 현재 보고 있는 파일의 Exif 정보를 보여준다.
+	void ShowExif();
+	
 	void Draw(HDC toDrawDC = NULL, bool bEraseBg = true);
 
 	/// 현재보고 있는 이미지를 윈도우 바탕화면의 배경으로 지정한다.

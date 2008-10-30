@@ -19,12 +19,16 @@ public:
 
 	virtual void SetWndProc() = 0;
 
-	HWND Create(HINSTANCE hInstance, HWND hParentHWND, int nCmdShow);
+	virtual HWND Create(HINSTANCE hInstance, HWND hParentHWND, int nCmdShow, const tstring & dlgName, HMENU hMenu);
 
-	WPARAM MsgProc();
+	WPARAM DoModal()
+	{
+		return MsgProc();
+	}
 
 protected:
 
+	WPARAM MsgProc();
 	HWND m_hParentWindow;
 	HWND m_hWindow;
 	HACCEL m_hAccel;

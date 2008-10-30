@@ -30,8 +30,9 @@ ZWindow::~ZWindow()
 }
 
 
-HWND ZWindow::Create(HINSTANCE hInstance, HWND hParentHWND, int nCmdShow)
+HWND ZWindow::Create(HINSTANCE hInstance, HWND hParentHWND, int nCmdShow, const tstring & dlgName, HMENU hMenu)
 {
+	SetWndProc();
 	if ( NULL == m_wndProc)
 	{
 		_ASSERTE(!"before create, set WndProc");
@@ -39,8 +40,6 @@ HWND ZWindow::Create(HINSTANCE hInstance, HWND hParentHWND, int nCmdShow)
 	}
 
 	m_hParentWindow = hParentHWND;
-
-	TCHAR lpszClass[256] = TEXT("ZViewer");
 
 	WNDCLASS WndClass;
 	WndClass.cbClsExtra=0;
@@ -50,7 +49,7 @@ HWND ZWindow::Create(HINSTANCE hInstance, HWND hParentHWND, int nCmdShow)
 	WndClass.hIcon=LoadIcon(hInstance, MAKEINTRESOURCE(IDI_BIG_MAIN));
 	WndClass.hInstance=hInstance;
 	WndClass.lpfnWndProc=m_wndProc;
-	WndClass.lpszClassName=lpszClass;
+	WndClass.lpszClassName = dlgName.c_str();
 	WndClass.lpszMenuName=NULL;
 	WndClass.style=CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS;
 	RegisterClass(&WndClass);
@@ -60,29 +59,31 @@ HWND ZWindow::Create(HINSTANCE hInstance, HWND hParentHWND, int nCmdShow)
 	int iXPosition = (GetSystemMetrics(SM_CXSCREEN)/2) - (iWidth/2);
 	int iYPosition = (GetSystemMetrics(SM_CYSCREEN)/2) - ( iHeight/2) ;
 
-	HMENU hMenu = (HMENU)LoadMenu(ZResourceManager::GetInstance().GetHInstance(), MAKEINTRESOURCE(IDR_MAIN_MENU));
+	//HMENU hMenu = (HMENU)LoadMenu(ZResourceManager::GetInstance().GetHInstance(), MAKEINTRESOURCE(IDR_MAIN_MENU));
 
-	ZMain::GetInstance().SetMainMenu(hMenu);
+	//ZMain::GetInstance().SetMainMenu(hMenu);
 
 	m_hWindow = ::CreateWindow(
-		lpszClass,
-		lpszClass,		///< Window Title
+		dlgName.c_str(),
+		dlgName.c_str(),		///< Window Title
 		WS_OVERLAPPEDWINDOW,///< | WS_EX_ACCEPTFILES,
 		iXPosition,		///< 기본 x 위치
 		iYPosition,		///< 기본 y 위치
 		iWidth,			///< width
 		iHeight,		///< height
-		NULL,
+		hParentHWND,
 		hMenu,			///< MainMenu
 		hInstance,NULL);
 
 	// 탐색기에서의 Drag&Drop 을 가능하게 한다.
-	DragAcceptFiles(m_hWindow, TRUE);
+	//DragAcceptFiles(m_hWindow, TRUE);
 
 	ShowWindow(m_hWindow, nCmdShow);
 
 	// 단축키 설정. 여기서 반환된 핸들은 프로그램이 종료될 때 자동적으로 close 됨.
 	m_hAccel = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDR_MAIN_ACCELERATOR));
+
+	DialogBox(hInstance, dlgName.c_str(), hParentHWND, (DLGPROC)m_wndProc);
 
 	return m_hWindow;
 }

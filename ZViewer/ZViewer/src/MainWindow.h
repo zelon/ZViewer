@@ -24,5 +24,7 @@ public:
 
 	virtual void SetWndProc();
 
+	HWND Create(HINSTANCE hInstance, HWND hParentHWND, int nCmdShow);
+
 protected:
 };
