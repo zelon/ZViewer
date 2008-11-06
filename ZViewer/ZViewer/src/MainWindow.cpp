@@ -124,9 +124,9 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 			{
 			case 'p':
 			case 'P':
-//				ZMain::GetInstance().ShowExif();
+				ZMain::GetInstance().ShowExif();
 				break;
-				
+
 			case 'g':
 			case 'G':
 				ZMain::GetInstance().StartSlideMode();

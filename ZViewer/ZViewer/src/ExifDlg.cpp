@@ -10,6 +10,9 @@
 #include "stdafx.h"
 
 #include "ExifDlg.h"
+#include "ZResourceManager.h"
+
+#include "resource.h"
 
 int CALLBACK ExifDlgWndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam);
 
@@ -62,4 +65,15 @@ int CALLBACK ExifDlgWndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 
 	}
 	return FALSE;
+}
+
+void ExifDlg::DoResource(HWND hParentHWND)
+{
+	DialogBox(ZResourceManager::GetInstance().GetHInstance(), MAKEINTRESOURCE(IDD_EXIF_DLG), hParentHWND, (DLGPROC)m_wndProc);
+}
+
+
+void ExifDlg::MakeExifMap(ZImage & image)
+{
+	image.GetExifMap(m_exifMap);
 }

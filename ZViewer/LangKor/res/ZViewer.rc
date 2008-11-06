@@ -243,6 +243,15 @@ BEGIN
     PUSHBUTTON      "폴더 선택...",IDC_BUTTON_SELECT_FOLDER,171,7,50,14
 END
 
+IDD_EXIF_DLG DIALOGEX 0, 0, 307, 250
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Exif 정보 대화상자"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "확인",IDOK,250,229,50,14
+    CONTROL         "",IDC_EXIF_INFO_LIST,"SysListView32",LVS_REPORT | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,7,7,293,214
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -275,6 +284,14 @@ BEGIN
         TOPMARGIN, 7
         BOTTOMMARGIN, 43
     END
+
+    IDD_EXIF_DLG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 300
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 243
+    END
 END
 #endif    // APSTUDIO_INVOKED
 
@@ -304,12 +321,12 @@ BEGIN
             VALUE "Comments", "Author by Kim Jinwook in Korea"
             VALUE "CompanyName", "Rh Lab."
             VALUE "FileDescription", "ZViewer"
-            VALUE "FileVersion", "0, 3, 2, 1"
+            VALUE "FileVersion", "0.7.0.0"
             VALUE "InternalName", "ZViewer"
-            VALUE "LegalCopyright", "Copyright (c) - 2005"
+            VALUE "LegalCopyright", "GPL"
             VALUE "OriginalFilename", "ZViewer.rc"
             VALUE "ProductName", "ZViewer"
-            VALUE "ProductVersion", "0, 3, 2, 1"
+            VALUE "ProductVersion", "0.7.0.0"
         END
     END
     BLOCK "VarFileInfo"

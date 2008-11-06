@@ -1,7 +1,7 @@
 /********************************************************************
 *
 * Created by zelon(Kim, Jinwook Korea)
-* 
+*
 *   2005. 5. 7
 *	ZImage.h
 *
@@ -12,6 +12,7 @@
 
 #include <strsafe.h>
 #include <cassert>
+#include <map>
 
 #include "freeimage/FreeImagePlus.h"
 #include "CommonFunc.h"
@@ -88,6 +89,11 @@ public:
 
 	bool Resize(WORD newWidth, WORD newHeight)
 	{
+		if ( newWidth <=  0 || newHeight <= 0 )
+		{
+			_ASSERTE(!"Resize to below 0 or 0");
+			return false;
+		}
 		return ( m_image.rescale(newWidth, newHeight, FILTER_BOX) == TRUE );
 	}
 
@@ -112,6 +118,8 @@ public:
 	{
 		return m_image;
 	}
+
+	void GetExifMap(std::map < tstring, tstring > & exifMap);
 
 private:
 	mutable fipWinImage m_image;

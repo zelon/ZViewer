@@ -1,7 +1,7 @@
 /********************************************************************
 *
 * Created by zelon(Kim, Jinwook Korea)
-* 
+*
 *   2005. 5. 7
 *	ZMain.cpp
 *
@@ -55,7 +55,7 @@ ZMain::~ZMain(void)
 		BOOL bRet = DeleteDC(m_hBufferDC);
 
 		DebugPrintf(TEXT("after delete bufferDC"));
-	
+
 		if ( bRet == FALSE )
 		{
 			_ASSERTE(bRet);
@@ -134,7 +134,7 @@ void ZMain::InitOpenFileDialog()
 	ofn.hwndOwner = m_hMainDlg;
 	ofn.lpstrFile = szFile;
 	//
-	// Set lpstrFile[0] to '\0' so that GetOpenFileName does not 
+	// Set lpstrFile[0] to '\0' so that GetOpenFileName does not
 	// use the contents of szFile to initialize itself.
 	//
 	ofn.lpstrFile[0] = '\0';
@@ -155,8 +155,8 @@ void ZMain::OpenFileDialog()
 
 	//m_bOpeningFileDialog = true;
 
-	// Display the Open dialog box. 
-	if (GetOpenFileName(&ofn)==TRUE) 
+	// Display the Open dialog box.
+	if (GetOpenFileName(&ofn)==TRUE)
 	{
 		OpenFile(ofn.lpstrFile);
 	}
@@ -167,7 +167,7 @@ void ZMain::SaveFileDialog()
 {
 	CSaveAs::getInstance().setParentHWND(m_hMainDlg);
 	CSaveAs::getInstance().setDefaultSaveFilename(m_strCurrentFolder, m_strCurrentFilename);
-	
+
 	if ( CSaveAs::getInstance().showDialog() )
 	{
 		tstring strSaveFilename = CSaveAs::getInstance().getSaveFileName();
@@ -207,7 +207,8 @@ void ZMain::ShowExif()
 {
 	ExifDlg aDlg;
 	aDlg.Create(m_hMainInstance, m_hMainDlg, SW_SHOW, TEXT("ExifDlg"), NULL);
-	aDlg.DoModal();
+	aDlg.MakeExifMap(m_currentImage);
+	aDlg.DoResource(m_hMainDlg);
 }
 
 void ZMain::Draw(HDC toDrawDC, bool bEraseBg)
@@ -220,7 +221,7 @@ void ZMain::Draw(HDC toDrawDC, bool bEraseBg)
 	getCurrentScreenRect(currentScreenRect);
 
 	HDC mainDC;
-	
+
 	if ( NULL == toDrawDC )
 	{
 		mainDC = GetDC(m_hMainDlg);
@@ -241,7 +242,7 @@ void ZMain::Draw(HDC toDrawDC, bool bEraseBg)
 	}
 
 	// 그림이 그려지기 시작할 화면의 위치
-	int iDrawX = 0;			
+	int iDrawX = 0;
 	int iDrawY = 0;
 
 	// 그림이 그려지기 시작하는 그림의 위치
@@ -305,7 +306,7 @@ void ZMain::Draw(HDC toDrawDC, bool bEraseBg)
 			*/
 
 			stretchedImage.Resize((WORD)toRect.right, (WORD)toRect.bottom);
-			
+
 			iDrawX = (currentScreenRect.right - toRect.right) / 2;
 			iDrawY = (currentScreenRect.bottom - toRect.bottom) / 2;
 
@@ -316,7 +317,7 @@ void ZMain::Draw(HDC toDrawDC, bool bEraseBg)
 			}
 
 			int r = StretchDIBits(mainDC,
-				iDrawX, iDrawY, 
+				iDrawX, iDrawY,
 				stretchedImage.GetWidth(), stretchedImage.GetHeight(),
 				0, 0,
 				stretchedImage.GetWidth(), stretchedImage.GetHeight(),
@@ -339,7 +340,7 @@ void ZMain::Draw(HDC toDrawDC, bool bEraseBg)
 				/// 큰 그림을 스크롤이 가능하게 클리핑해서 그린다.
 				m_hBufferDC = CreateCompatibleDC(mainDC);
 
-				HBITMAP hbmScreen = CreateCompatibleBitmap(mainDC, currentImageWidth, currentImageHeight); 
+				HBITMAP hbmScreen = CreateCompatibleBitmap(mainDC, currentImageWidth, currentImageHeight);
 
 				SelectObject(m_hBufferDC, hbmScreen);
 
@@ -362,7 +363,7 @@ void ZMain::Draw(HDC toDrawDC, bool bEraseBg)
 				else
 				{
 					int r = StretchDIBits(m_hBufferDC,
-						0, 0, 
+						0, 0,
 						currentImageWidth, currentImageHeight,
 						0, 0,
 						currentImageWidth, currentImageHeight,
@@ -389,10 +390,10 @@ void ZMain::Draw(HDC toDrawDC, bool bEraseBg)
 			}
 
 			// 메모리것을 화면에 그린다.
-			BOOL b = BitBlt(mainDC, 
+			BOOL b = BitBlt(mainDC,
 				iDrawX, iDrawY,			// 그릴 화면의 x, y 좌표. 화면에 꽉 찰 때는 0, 0 이어야한다.
-				m_currentImage.GetWidth(), currentScreenRect.bottom,		// 그려질 화면의 가로, 세로 길이. 
-				m_hBufferDC, 
+				m_currentImage.GetWidth(), currentScreenRect.bottom,		// 그려질 화면의 가로, 세로 길이.
+				m_hBufferDC,
 				iDrawPartX, iDrawPartY,			// 그려질 이미지 원본의 시작 x,y 좌표
 				SRCCOPY);
 
@@ -408,7 +409,7 @@ void ZMain::Draw(HDC toDrawDC, bool bEraseBg)
 	}
 	else	/// image is smaller than screen
 	{
-		if ( currentImageWidth < currentScreenRect.right && currentImageHeight < currentScreenRect.bottom 
+		if ( currentImageWidth < currentScreenRect.right && currentImageHeight < currentScreenRect.bottom
 			&& ZOption::GetInstance().IsSmallToBigStretchImage() ) ///< if option is on
 		{
 			DebugPrintf(TEXT("!!!!!!!!!!!! stretching on draw..."));
@@ -428,13 +429,13 @@ void ZMain::Draw(HDC toDrawDC, bool bEraseBg)
 			*/
 
 			stretchedImage.Resize((WORD)toRect.right, (WORD)toRect.bottom);
-			
+
 			_ASSERTE(toRect.right == stretchedImage.GetWidth());
 			_ASSERTE(toRect.bottom == stretchedImage.GetHeight());
 
 			int iDrawPointX = (currentScreenRect.right - toRect.right) / 2;
 			int iDrawPointY = (currentScreenRect.bottom - toRect.bottom) / 2;
-			
+
 			if ( bEraseBg )	// 배경을 지워야 하면 지운다. 새로운 그림을 그리기 직전에 그려야 깜빡임이 적다.
 			{
 				SelectObject(mainDC, GetStockObject(BLACK_BRUSH));
@@ -460,7 +461,7 @@ void ZMain::Draw(HDC toDrawDC, bool bEraseBg)
 			else
 			{
 				int r = StretchDIBits(mainDC,
-					iDrawPointX, iDrawPointY, 
+					iDrawPointX, iDrawPointY,
 					toRect.right, toRect.bottom,
 					0, 0,
 					toRect.right, toRect.bottom,
@@ -488,7 +489,7 @@ void ZMain::Draw(HDC toDrawDC, bool bEraseBg)
 				DebugPrintf(TEXT("Drawing transparent image..."));
 				fipWinImage tempImage;
 				tempImage = m_currentImage.getFipImage();
-				
+
 				/// rescale 을 하면, 투명한 배경에 체크무늬가 그려진다... 왜 이럴까;;;
 				tempImage.rescale(currentImageWidth, currentImageHeight, FILTER_BOX);
 				RECT rt;
@@ -502,7 +503,7 @@ void ZMain::Draw(HDC toDrawDC, bool bEraseBg)
 			{
 				/// 작은 그림을 화면 가운데에 그린다.
 				int r = StretchDIBits(mainDC,
-					iDrawX, iDrawY, 
+					iDrawX, iDrawY,
 					currentImageWidth, currentImageHeight,
 					0, 0,
 					currentImageWidth, currentImageHeight,
@@ -961,7 +962,7 @@ void ZMain::showCacheStatus()
 	if ( bLastActionIsCache != bNowActionIsCache )
 	{
 		bLastActionIsCache = bNowActionIsCache;
-		
+
 		if ( bNowActionIsCache )
 		{
 			PostMessage(m_hStatusBar, SB_SETTEXT, 5, (LPARAM)TEXT("Caching"));
@@ -1041,7 +1042,7 @@ void ZMain::ToggleFullScreen()
 		// 포커스를 잃으면 원래대로 돌아가야하므로 풀어놓는다.
 		SetWindowPos(m_hMainDlg, HWND_NOTOPMOST, 0, 0, ::GetSystemMetrics(SM_CXSCREEN),::GetSystemMetrics(SM_CYSCREEN), SWP_NOMOVE|SWP_NOSIZE);
 		//MoveWindow(m_hMainDlg, )
-		//m_iRestoreX = 
+		//m_iRestoreX =
 	}
 
 	SetCheckMenus();
@@ -1055,7 +1056,7 @@ void ZMain::ToggleSmallToScreenStretch()
 {
 	ZOption::GetInstance().ToggleSmallToBigStretchImage();
 
-	SetCheckMenus();	
+	SetCheckMenus();
 
 	ZCacheImage::GetInstance().clearCache();
 	ZCacheImage::GetInstance().setCacheEvent();
@@ -1293,7 +1294,7 @@ void ZMain::OnDrag(int x, int y)
 	int iNowShowingX = m_iShowingX;
 	int iNowShowingY = m_iShowingY;
 
-	if ( (m_iShowingX + x) >= 0 ) 
+	if ( (m_iShowingX + x) >= 0 )
 	{
 		if ( m_iShowingX + x + rt.right >= m_currentImage.GetWidth())
 		{
@@ -1306,7 +1307,7 @@ void ZMain::OnDrag(int x, int y)
 		m_iShowingX = 0;
 	}
 
-	if ( ( m_iShowingY + y )  >= 0 ) 
+	if ( ( m_iShowingY + y )  >= 0 )
 	{
 		if ( m_iShowingY + y + rt.bottom >= m_currentImage.GetHeight())
 		{
@@ -1529,7 +1530,7 @@ void ZMain::MoveThisFile()
 	}
 
 	CSelectToFolderDlg aDlg;
-	
+
 	if ( !aDlg.DoModal() )
 	{
 		return;
@@ -1539,7 +1540,7 @@ void ZMain::MoveThisFile()
 
 	tstring filename = GetFileNameFromFullFileName(m_strCurrentFilename);
 	tstring strToFileName = aDlg.GetMoveToFolder();
-	
+
 	if ( strToFileName.size() <= 2 )
 	{
 		MessageBox(TEXT("MOVE_DESTINATION_IS_TOO_SHORT"));
@@ -1565,7 +1566,7 @@ void ZMain::MoveThisFile()
 			return;
 		}
 	}
-	
+
 	if ( FALSE == MoveFileEx(m_strCurrentFilename.c_str(), strToFileName.c_str(), MOVEFILE_COPY_ALLOWED | MOVEFILE_REPLACE_EXISTING) )
 	{
 		MessageBox(TEXT("CANNOT_MOVE_FILE"));
@@ -1680,11 +1681,18 @@ void ZMain::SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyle style)
 
 
 /// 현재 화면의 그릴 수 있는 영역의 크기를 받아온다.
-void ZMain::getCurrentScreenRect(RECT & rect)
+bool ZMain::getCurrentScreenRect(RECT & rect)
 {
-	_ASSERTE(m_hMainDlg);
-	GetClientRect(m_hMainDlg, &rect);
+	if ( NULL == m_hMainDlg )
+	{
+		_ASSERTE(m_hMainDlg);
+		return false;
+	}
+	
+	if ( FALSE == GetClientRect(m_hMainDlg, &rect) ) return false;
 	if ( ZOption::GetInstance().IsFullScreen() == false ) rect.bottom -= STATUSBAR_HEIGHT;
+
+	return true;
 }
 
 /// On Window is resized

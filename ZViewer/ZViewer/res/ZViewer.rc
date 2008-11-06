@@ -243,6 +243,15 @@ BEGIN
     PUSHBUTTON      "Browse...",IDC_BUTTON_SELECT_FOLDER,171,7,50,14
 END
 
+IDD_EXIF_DLG DIALOGEX 0, 0, 234, 222
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Exif Dialog"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,177,201,50,14
+    CONTROL         "",IDC_EXIF_INFO_LIST,"SysListView32",LVS_REPORT | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,7,7,220,188
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -274,6 +283,14 @@ BEGIN
         RIGHTMARGIN, 221
         TOPMARGIN, 7
         BOTTOMMARGIN, 43
+    END
+
+    IDD_EXIF_DLG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 227
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 215
     END
 END
 #endif    // APSTUDIO_INVOKED
@@ -329,7 +346,7 @@ BEGIN
     ID_FILE_OPEN40016       "ZViewer Project do not use String Table."
 END
 
-#endif    // ÇÑ±¹¾î resources
+#endif    // English resources
 /////////////////////////////////////////////////////////////////////////////
 
 

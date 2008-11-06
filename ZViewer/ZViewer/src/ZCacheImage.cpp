@@ -209,8 +209,8 @@ bool ZCacheImage::_CacheIndex(int iIndex)
 
 			if ( ZOption::GetInstance().IsBigToSmallStretchImage() )
 			{
-				RECT screenRect;
-				ZMain::GetInstance().getCurrentScreenRect(screenRect);
+				RECT screenRect = { 0 };
+				if ( false == ZMain::GetInstance().getCurrentScreenRect(screenRect) ) return false;
 
 				RECT imageRect = { 0 };
 				imageRect.right = cacheReayImage.GetWidth();
@@ -231,7 +231,7 @@ bool ZCacheImage::_CacheIndex(int iIndex)
 			if ( ZOption::GetInstance().IsSmallToBigStretchImage() )
 			{
 				RECT screenRect;
-				ZMain::GetInstance().getCurrentScreenRect(screenRect);
+				if ( false == ZMain::GetInstance().getCurrentScreenRect(screenRect) ) return false;
 
 				/*
 				if ( screenRect.right > 10 )
@@ -482,7 +482,11 @@ void ZCacheImage::AddCacheData(const tstring & strFilename, ZImage & image)
 void ZCacheImage::debugShowCacheInfo()
 {
 	RECT rt;
-	ZMain::GetInstance().getCurrentScreenRect(rt);
+	if ( false == ZMain::GetInstance().getCurrentScreenRect(rt) )
+	{
+		DebugPrintf(TEXT("CurrentScreenSize : Cannot getCurrentScreenRect"));
+		return;
+	}
 	DebugPrintf(TEXT("CurrentScreenSize : %d, %d"), rt.right, rt.bottom);
 
 	std::map < tstring, ZImage >::iterator it;

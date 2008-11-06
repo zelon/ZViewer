@@ -39,7 +39,7 @@ public:
 	int MessageBox(const TCHAR * msg, UINT button = MB_OK);
 
 	/// 현재 화면의 그릴 수 있는 영역의 크기를 받아온다.
-	void getCurrentScreenRect(RECT & rect);
+	bool getCurrentScreenRect(RECT & rect);
 
 	/// On Window is resized
 	void OnWindowResized();

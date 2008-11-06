@@ -11,6 +11,7 @@
 #define IDD_DIALOGHELP                  112
 #define IDD_FILE_EXT_DIALOG             113
 #define IDD_MOVE_DIALOG                 114
+#define IDD_EXIF_DLG                    115
 #define IDC_CHECK_BMP                   1002
 #define IDC_CHECK_JPG                   1003
 #define IDC_CHECK_GIF                   1004
@@ -23,6 +24,8 @@
 #define IDC_STATIC_LIBRARY_VERSION      1011
 #define IDC_EDIT_MOVE_TO_FOLDER         1012
 #define IDC_BUTTON_SELECT_FOLDER        1013
+#define IDC_LIST1                       1014
+#define IDC_EXIF_INFO_LIST              1014
 #define ID_MAINMENU_FILE_EXIT           40002
 #define ID_FILE_OPEN40016               40016
 #define ID_MAINMENU_FILE_OPEN           40017
@@ -73,15 +76,14 @@
 #define ID_FILE_COPYTO                  40086
 #define ID_START_SLIDESHOW              40088
 #define ID_VIEW_ALWAYSONTOP             40089
-#define ID_40090                        40090
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        115
-#define _APS_NEXT_COMMAND_VALUE         40091
-#define _APS_NEXT_CONTROL_VALUE         1014
+#define _APS_NEXT_RESOURCE_VALUE        116
+#define _APS_NEXT_COMMAND_VALUE         40090
+#define _APS_NEXT_CONTROL_VALUE         1015
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif
