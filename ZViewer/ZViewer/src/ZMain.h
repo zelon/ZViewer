@@ -261,6 +261,9 @@ private:
 	/// 버퍼로 쓰이는 DC 를 릴리즈한다.
 	void _releaseBufferDC();
 
+	/// Brush for Background
+	HBRUSH m_bgBrush;
+
 	/// 배경을 지운다.
 	void _eraseBackground(HDC mainDC, LONG right, LONG bottom);
 };

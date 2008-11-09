@@ -46,6 +46,13 @@ ZMain::ZMain(void)
 	m_hBufferDC = NULL;
 	m_bLastCacheHit = false;
 	SetProgramFolder();
+
+	m_bgBrush = CreateSolidBrush(RGB(128,128,128));
+
+	if ( INVALID_HANDLE_VALUE == m_bgBrush )
+	{
+		assert(false);
+	}
 }
 
 ZMain::~ZMain(void)
@@ -63,6 +70,11 @@ ZMain::~ZMain(void)
 		}
 
 		m_hBufferDC = NULL;
+	}
+
+	if ( m_bgBrush != INVALID_HANDLE_VALUE )
+	{
+		DeleteObject(m_bgBrush);
 	}
 }
 
@@ -1735,7 +1747,6 @@ void ZMain::OnWindowResized()
 	}
 }
 
-
 /// 상태 표시 윈도우를 만든다.
 void ZMain::CreateStatusBar()
 {
@@ -1798,6 +1809,6 @@ void ZMain::ToggleAlwaysOnTop()
 /// 배경을 지운다.
 void ZMain::_eraseBackground(HDC mainDC, LONG right, LONG bottom)
 {
-	SelectObject(mainDC, GetStockObject(BLACK_BRUSH));
+	SelectObject(mainDC, m_bgBrush);
 	Rectangle(mainDC, 0, 0, right, bottom);
 }
