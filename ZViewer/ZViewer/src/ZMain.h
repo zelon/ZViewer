@@ -1,7 +1,7 @@
 /********************************************************************
 *
 * Created by zelon(Kim, Jinwook - Korea)
-* 
+*
 *   2005. 5. 7
 *	ZMain.h
 *
@@ -50,12 +50,12 @@ public:
 	void SetInitArg(const tstring & strArg) { m_strInitArg = strArg; }
 	void SetProgramFolder();
 	void RescanFolder();			///< 파일목록을 다시 읽어들인다.
-	
+
 	void OnInit();
 
 	/// 현재 보고 있는 파일의 Exif 정보를 보여준다.
 	void ShowExif();
-	
+
 	void Draw(HDC toDrawDC = NULL, bool bEraseBg = true);
 
 	/// 현재보고 있는 이미지를 윈도우 바탕화면의 배경으로 지정한다.
@@ -210,7 +210,7 @@ private:
 
 	tstring m_strCurrentFolder;		///< 현재 폴더
 	tstring m_strCurrentFilename;	///< 현재 보여주고 있는 파일이름
-	
+
 	FileListVector m_vFile;
 	eFileSortOrder m_sortOrder;
 
@@ -221,7 +221,7 @@ private:
 
 	/// 현재 보여주고 있는 이미지
 	ZImage m_currentImage;
-	
+
 	///< 현재 이미지를 로딩하는 데 걸린 시간
 	DWORD m_dwLoadingTime;
 
@@ -242,6 +242,8 @@ private:
 	int m_iShowingX;					///< 그림 중 어디를 찍기 시작하나.
 	int m_iShowingY;					///< 그림 중 어디를 찍기 시작하나.
 
+	RECT m_lastPosition;				///< Full Screen 을 toggle 할 때 full screen 전의 창 위치
+
 	static void FindFile(const TCHAR *path, std::vector< FileData > & foundStorage, bool bFindRecursive);
 	static void FindFolders(const TCHAR *path, std::vector<tstring> & foundStorage, bool bFindRecursive = false);
 
@@ -258,4 +260,7 @@ private:
 
 	/// 버퍼로 쓰이는 DC 를 릴리즈한다.
 	void _releaseBufferDC();
+
+	/// 배경을 지운다.
+	void _eraseBackground(HDC mainDC, LONG right, LONG bottom);
 };

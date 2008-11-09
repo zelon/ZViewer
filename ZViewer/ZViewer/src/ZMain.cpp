@@ -42,6 +42,7 @@ ZMain::ZMain(void)
 ,	m_sortOrder(eFileSortOrder_FILENAME)
 ,	m_osKind(eOSKind_UNKNOWN)
 {
+	memset( &m_lastPosition, 0, sizeof( m_lastPosition ) );
 	m_hBufferDC = NULL;
 	m_bLastCacheHit = false;
 	SetProgramFolder();
@@ -234,9 +235,7 @@ void ZMain::Draw(HDC toDrawDC, bool bEraseBg)
 
 	if ( m_vFile.size() <= 0 )
 	{
-		SelectObject(mainDC, GetStockObject(BLACK_BRUSH));
-		Rectangle(mainDC, 0, 0, currentScreenRect.right, currentScreenRect.bottom);
-
+		_eraseBackground(mainDC, currentScreenRect.right, currentScreenRect.bottom);
 		ReleaseDC(m_hMainDlg, mainDC);
 		return;
 	}
@@ -312,8 +311,7 @@ void ZMain::Draw(HDC toDrawDC, bool bEraseBg)
 
 			if ( bEraseBg )	// 배경을 지워야 하면 지운다. 새로운 그림을 그리기 직전에 그려야 깜빡임이 적다.
 			{
-				SelectObject(mainDC, GetStockObject(BLACK_BRUSH));
-				Rectangle(mainDC, 0, 0, currentScreenRect.right, currentScreenRect.bottom);
+				_eraseBackground(mainDC, currentScreenRect.right, currentScreenRect.bottom);
 			}
 
 			int r = StretchDIBits(mainDC,
@@ -385,8 +383,7 @@ void ZMain::Draw(HDC toDrawDC, bool bEraseBg)
 
 			if ( bEraseBg )	// 배경을 지워야 하면 지운다. 새로운 그림을 그리기 직전에 그려야 깜빡임이 적다.
 			{
-				SelectObject(mainDC, GetStockObject(BLACK_BRUSH));
-				Rectangle(mainDC, 0, 0, currentScreenRect.right, currentScreenRect.bottom);
+				_eraseBackground(mainDC, currentScreenRect.right, currentScreenRect.bottom);
 			}
 
 			// 메모리것을 화면에 그린다.
@@ -438,8 +435,7 @@ void ZMain::Draw(HDC toDrawDC, bool bEraseBg)
 
 			if ( bEraseBg )	// 배경을 지워야 하면 지운다. 새로운 그림을 그리기 직전에 그려야 깜빡임이 적다.
 			{
-				SelectObject(mainDC, GetStockObject(BLACK_BRUSH));
-				Rectangle(mainDC, 0, 0, currentScreenRect.right, currentScreenRect.bottom);
+				_eraseBackground(mainDC, currentScreenRect.right, currentScreenRect.bottom);
 			}
 
 			if ( stretchedImage.isTransparent() )
@@ -480,8 +476,7 @@ void ZMain::Draw(HDC toDrawDC, bool bEraseBg)
 		{
 			if ( bEraseBg )	// 배경을 지워야 하면 지운다. 새로운 그림을 그리기 직전에 그려야 깜빡임이 적다.
 			{
-				SelectObject(mainDC, GetStockObject(BLACK_BRUSH));
-				Rectangle(mainDC, 0, 0, currentScreenRect.right, currentScreenRect.bottom);
+				_eraseBackground(mainDC, currentScreenRect.right, currentScreenRect.bottom);
 			}
 
 			if ( m_currentImage.isTransparent() )
@@ -1012,8 +1007,6 @@ void ZMain::showCacheStatus()
 
 void ZMain::ToggleFullScreen()
 {
-	static RECT lastPosition;
-
 	if ( ZOption::GetInstance().IsFullScreen() )	// 현재 풀스크린이면 원래 화면으로 돌아간다.
 	{
 		ZOption::GetInstance().SetFullScreen(!ZOption::GetInstance().IsFullScreen());
@@ -1022,25 +1015,42 @@ void ZMain::ToggleFullScreen()
 
 		FormShow();	// 메뉴, 상태 표시줄등을 보여준다.
 
-		SetWindowPos(m_hMainDlg, HWND_TOP, lastPosition.left, lastPosition.top, lastPosition.right - lastPosition.left, lastPosition.bottom - lastPosition.top, SWP_SHOWWINDOW);
+		SetWindowPos(m_hMainDlg, HWND_TOP, m_lastPosition.left, m_lastPosition.top, m_lastPosition.right - m_lastPosition.left, m_lastPosition.bottom - m_lastPosition.top, SWP_SHOWWINDOW);
 	}
 	else	// 현재 풀스크린이 아니면 풀스크린으로 만든다.
 	{
 		ZOption::GetInstance().SetFullScreen(!ZOption::GetInstance().IsFullScreen());
 		// 현재 크기를 기억한다.
 #pragma message("TODO: Maximized 되었을 때 처리")
-		GetWindowRect(m_hMainDlg, &lastPosition);
+		GetWindowRect(m_hMainDlg, &m_lastPosition);
 
 		FormHide();// 메뉴, 상태 표시줄등을 숨긴다.
 
+		const int screenWidth = ::GetSystemMetrics( SM_CXSCREEN );
+		const int screenHeight = ::GetSystemMetrics(SM_CYSCREEN);
+
+		// 화면 듀얼 모니터 처리를 해줌. 처음 위치에 따라서 full screen 후 화면의 위치를 바꿔준다.
+		const int screenX = int(m_lastPosition.left / screenWidth) * screenWidth;
+		const int screenY = int(m_lastPosition.top / screenHeight) * screenHeight;
+
+		SetWindowPos(m_hMainDlg, HWND_TOPMOST, screenX, screenY, screenWidth, screenHeight, SWP_NOMOVE|SWP_NOSIZE);
+		MoveWindow(m_hMainDlg, screenX, screenY, screenWidth, screenHeight, TRUE);
+
+
+		/* patch 적용하기 전의 소스
 		SetWindowPos(m_hMainDlg, HWND_TOPMOST, 0, 0, ::GetSystemMetrics(SM_CXSCREEN),::GetSystemMetrics(SM_CYSCREEN), SWP_NOMOVE|SWP_NOSIZE);
 		MoveWindow(m_hMainDlg, 0,0,::GetSystemMetrics(SM_CXSCREEN),::GetSystemMetrics(SM_CYSCREEN), TRUE);
+		*/
 
 		// 작업 표시줄을 가려준다.
 		TaskBar::ShellTrayHide();
 
 		// 포커스를 잃으면 원래대로 돌아가야하므로 풀어놓는다.
+		SetWindowPos(m_hMainDlg, HWND_NOTOPMOST, screenX, screenY, screenWidth, screenHeight, SWP_NOMOVE|SWP_NOSIZE);
+		/* patch 적용하기 전의 소스
 		SetWindowPos(m_hMainDlg, HWND_NOTOPMOST, 0, 0, ::GetSystemMetrics(SM_CXSCREEN),::GetSystemMetrics(SM_CYSCREEN), SWP_NOMOVE|SWP_NOSIZE);
+		*/
+
 		//MoveWindow(m_hMainDlg, )
 		//m_iRestoreX =
 	}
@@ -1446,9 +1456,23 @@ void ZMain::OnFocusGet()
 	if ( ZOption::GetInstance().IsFullScreen() )
 	{
 		DebugPrintf(TEXT("OnFocusGet() at fullscreen"));
+
+		const int screenWidth = ::GetSystemMetrics( SM_CXSCREEN );
+		const int screenHeight = ::GetSystemMetrics(SM_CYSCREEN);
+
+		// 화면 듀얼 모니터 처리를 해줌.
+		const int screenX = int(m_lastPosition.left / screenWidth) * screenWidth;
+		const int screenY = int(m_lastPosition.top / screenHeight) * screenHeight;
+
+		SetWindowPos(m_hMainDlg, HWND_TOPMOST, screenX, screenY, screenWidth, screenHeight, SWP_NOMOVE|SWP_NOSIZE);
+		MoveWindow(m_hMainDlg, screenX, screenY, screenWidth, screenHeight, TRUE);
+		SetWindowPos(m_hMainDlg, HWND_NOTOPMOST, screenX, screenY, screenWidth, screenHeight, SWP_NOMOVE|SWP_NOSIZE);
+
+		/*
 		SetWindowPos(m_hMainDlg, HWND_TOPMOST, 0, 0, ::GetSystemMetrics(SM_CXSCREEN),::GetSystemMetrics(SM_CYSCREEN), SWP_NOMOVE|SWP_NOSIZE);
 		MoveWindow(m_hMainDlg, 0,0,::GetSystemMetrics(SM_CXSCREEN),::GetSystemMetrics(SM_CYSCREEN), TRUE);
 		SetWindowPos(m_hMainDlg, HWND_NOTOPMOST, 0, 0, ::GetSystemMetrics(SM_CXSCREEN),::GetSystemMetrics(SM_CYSCREEN), SWP_NOMOVE|SWP_NOSIZE);
+		*/
 		TaskBar::ShellTrayHide();
 	}
 }
@@ -1688,7 +1712,7 @@ bool ZMain::getCurrentScreenRect(RECT & rect)
 		_ASSERTE(m_hMainDlg);
 		return false;
 	}
-	
+
 	if ( FALSE == GetClientRect(m_hMainDlg, &rect) ) return false;
 	if ( ZOption::GetInstance().IsFullScreen() == false ) rect.bottom -= STATUSBAR_HEIGHT;
 
@@ -1771,3 +1795,9 @@ void ZMain::ToggleAlwaysOnTop()
 	SetCheckMenus();
 }
 
+/// 배경을 지운다.
+void ZMain::_eraseBackground(HDC mainDC, LONG right, LONG bottom)
+{
+	SelectObject(mainDC, GetStockObject(BLACK_BRUSH));
+	Rectangle(mainDC, 0, 0, right, bottom);
+}
