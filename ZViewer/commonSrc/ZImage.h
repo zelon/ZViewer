@@ -119,7 +119,7 @@ public:
 		return m_image;
 	}
 
-	void GetExifMap(std::map < tstring, tstring > & exifMap);
+	void GetExifMap(std::map < std::string, std::string > & exifMap);
 
 private:
 	mutable fipWinImage m_image;

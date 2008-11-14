@@ -8,6 +8,7 @@
  */
 
 #include <map>
+#include <string>
 
 #include "../commonSrc/windowLib/ZWindow.h"
 #include "../commonSrc/ZImage.h"
@@ -26,8 +27,12 @@ public:
 
 	void MakeExifMap(ZImage & image);
 
-protected:
-	std::map < tstring, tstring > m_exifMap;
+	void ShowExifMap();
 
+protected:
+	std::map < std::string, std::string > m_exifMap;
+
+	tstring convertExifKey(const tstring & strKey) const;
+	tstring convertExifValue(const tstring & strKey, tstring & strValue) const;
 };
 
