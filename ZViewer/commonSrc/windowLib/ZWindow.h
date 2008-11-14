@@ -26,6 +26,11 @@ public:
 		return MsgProc();
 	}
 
+	virtual void SetHWND(HWND hWnd)
+	{
+		m_hWindow = hWnd;
+	}
+
 protected:
 
 	WPARAM MsgProc();
