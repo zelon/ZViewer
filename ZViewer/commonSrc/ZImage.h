@@ -12,10 +12,12 @@
 
 #include <strsafe.h>
 #include <cassert>
-#include <map>
+#include <list>
+
 
 #include "freeimage/FreeImagePlus.h"
 #include "CommonFunc.h"
+#include "CommonDefine.h"
 
 /// FreeImagePlus 의 클래스인 fipWinImage 를 래핑하여 함수 등을 쓰기 쉽게 하는 클래스
 class ZImage
@@ -119,7 +121,7 @@ public:
 		return m_image;
 	}
 
-	void GetExifMap(std::map < std::string, std::string > & exifMap);
+	void GetExifList(std::list < TagData > & exifList);
 
 private:
 	mutable fipWinImage m_image;

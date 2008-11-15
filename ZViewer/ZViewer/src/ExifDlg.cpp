@@ -95,12 +95,12 @@ void ExifDlg::DoResource(HWND hParentHWND)
 
 void ExifDlg::MakeExifMap(ZImage & image)
 {
-	image.GetExifMap(m_exifMap);
+	image.GetExifList(m_exifList);
 }
 
 void ExifDlg::ShowExifMap()
 {
-	std::map < std::string, std::string >::iterator it;
+	std::list < TagData >::iterator it;
 
 	assert(m_hWindow != NULL);
 	HWND hList = GetDlgItem(m_hWindow, IDC_EXIF_INFO_LIST);
@@ -110,20 +110,20 @@ void ExifDlg::ShowExifMap()
 	tstring readKey, convertedKey, readValue, convertedValue;
 
 	int iIndex = 0;
-	for ( it = m_exifMap.begin(); it != m_exifMap.end(); ++it, ++iIndex )
+	for ( it = m_exifList.begin(); it != m_exifList.end(); ++it, ++iIndex )
 	{
 		li.mask = LVIF_TEXT;
 		li.iItem = iIndex;
 		li.iSubItem = 0;
-		readKey = getWStringFromString(it->first);
+		readKey = getWStringFromString(it->m_strKey);
 		convertedKey = convertExifKey(readKey);
 		li.pszText = (LPWSTR)(convertedKey.c_str());
 		SendMessage(hList, LVM_INSERTITEM, 0, (LPARAM)&li);
 
 		li.iSubItem = 1;
-		readValue = getWStringFromString(it->second);
-		convertExifValue(readKey, readValue);
-		li.pszText = (LPWSTR)(readValue.c_str());
+		readValue = getWStringFromString(it->m_strValue);
+		convertedValue = convertExifValue(readKey, readValue);
+		li.pszText = (LPWSTR)(convertedValue.c_str());
 		SendMessage(hList, LVM_SETITEM, 0, (LPARAM)&li);
 	}
 }
@@ -144,5 +144,18 @@ tstring ExifDlg::convertExifKey(const tstring & strKey) const
 
 tstring ExifDlg::convertExifValue(const tstring & strKey, tstring & strValue) const
 {
+	std::map < tstring, tstring > valueMatch;
+	valueMatch[TEXT("top, left side")] = GetMessage(TEXT("METADATA_VALUE_ORIENTATION_0"));
+	valueMatch[TEXT("right side, top")] = GetMessage(TEXT("METADATA_VALUE_ORIENTATION_90"));
+	valueMatch[TEXT("bottom, right side")] = GetMessage(TEXT("METADATA_VALUE_ORIENTATION_180"));
+	valueMatch[TEXT("left side, bottom")] = GetMessage(TEXT("METADATA_VALUE_ORIENTATION_270"));
+
+	if ( strKey == TEXT("Orientation") )
+	{
+		if ( valueMatch.find(strValue) != valueMatch.end() )
+		{
+			return valueMatch[strValue];
+		}
+	}
 	return strValue;
 }

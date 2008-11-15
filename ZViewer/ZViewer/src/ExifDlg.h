@@ -12,7 +12,7 @@
 
 #include "../commonSrc/windowLib/ZWindow.h"
 #include "../commonSrc/ZImage.h"
-
+#include "../commonSrc/CommonDefine.h"
 
 class ExifDlg : public ZWindow
 {
@@ -30,7 +30,7 @@ public:
 	void ShowExifMap();
 
 protected:
-	std::map < std::string, std::string > m_exifMap;
+	std::list < TagData > m_exifList;
 
 	tstring convertExifKey(const tstring & strKey) const;
 	tstring convertExifValue(const tstring & strKey, tstring & strValue) const;
