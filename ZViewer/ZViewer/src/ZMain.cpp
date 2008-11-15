@@ -118,7 +118,7 @@ void ZMain::onTimer()
 
 
 /// ZViewer 전용 메시지 박스
-int ZMain::MessageBox(const TCHAR * msg, UINT button)
+int ZMain::ShowMessageBox(const TCHAR * msg, UINT button)
 {
 	return ::MessageBox(m_hMainDlg, GetMessage(msg), TEXT("ZViewer"), button);
 }
@@ -187,7 +187,7 @@ void ZMain::SaveFileDialog()
 
 		if ( false == m_currentImage.SaveToFile(strSaveFilename, 0) )
 		{
-			MessageBox(TEXT("CANNOT_SAVE_AS_FILE"));
+			ShowMessageBox(GetMessage(TEXT("CANNOT_SAVE_AS_FILE")));
 		}
 	}
 }
@@ -653,8 +653,6 @@ void ZMain::SetProgramFolder()
 
 bool ZMain::GetNeighborFolders(std::vector < tstring > & vFolders)
 {
-	tstring strParentFolder;
-
 	// 현재 폴더의 상위 폴더를 검색한다.
 	{
 		// 현재 폴더에서 오른쪽부터 2번째의 \ 를 얻는다.
@@ -662,7 +660,7 @@ bool ZMain::GetNeighborFolders(std::vector < tstring > & vFolders)
 
 		if ( pos == m_strCurrentFolder.npos )
 		{
-			MessageBox(TEXT("CANNOT_FIND_PARENT_DIRECTORY"));
+			ShowMessageBox(GetMessage(TEXT("CANNOT_FIND_PARENT_DIRECTORY")));
 			return false;
 		}
 
@@ -672,7 +670,7 @@ bool ZMain::GetNeighborFolders(std::vector < tstring > & vFolders)
 
 		if ( pos == strParentFolder.npos )
 		{
-			MessageBox(TEXT("CANNOT_FIND_PARENT_DIRECTORY"));
+			ShowMessageBox(GetMessage(TEXT("CANNOT_FIND_PARENT_DIRECTORY")));
 			return false;
 		}
 
@@ -726,7 +724,7 @@ void ZMain::NextFolder()
 		if ( (iFoundIndex + 1) >= (int)vFolders.size() )
 		{
 			// 마지막 폴더이다.
-			MessageBox(TEXT("LAST_DIRECTORY"));
+			ShowMessageBox(GetMessage(TEXT("LAST_DIRECTORY")));
 			return;
 		}
 		else
@@ -761,7 +759,7 @@ void ZMain::PrevFolder()
 		if ( (iFoundIndex-1 < 0 ) )
 		{
 			// 마지막 폴더이다.
-			MessageBox(TEXT("FIRST_FOLDER"));
+			ShowMessageBox(GetMessage(TEXT("FIRST_FOLDER")));
 			return;
 		}
 		else
@@ -1271,7 +1269,7 @@ void ZMain::LoadCurrent()
 			if ( !m_currentImage.LoadFromFile(strErrorFilename) )
 			{
 				// 에러 때 표시하는 파일을 읽어들이지 못 했으면
-				MessageBox(TEXT("CANNOT_LOAD_ERROR_IMAGE_FILE"));
+				ShowMessageBox(GetMessage(TEXT("CANNOT_LOAD_ERROR_IMAGE_FILE")));
 			}
 		}
 		else
@@ -1551,7 +1549,7 @@ void ZMain::DeleteThisFile()
 		}
 		else
 		{
-			MessageBox(TEXT("CANNOT_DELETE_THIS_FILE"));
+			ShowMessageBox(GetMessage(TEXT("CANNOT_DELETE_THIS_FILE")));
 		}
 	}
 }
@@ -1579,7 +1577,7 @@ void ZMain::MoveThisFile()
 
 	if ( strToFileName.size() <= 2 )
 	{
-		MessageBox(TEXT("MOVE_DESTINATION_IS_TOO_SHORT"));
+		ShowMessageBox(GetMessage(TEXT("MOVE_DESTINATION_IS_TOO_SHORT")));
 		return;
 	}
 
@@ -1589,7 +1587,7 @@ void ZMain::MoveThisFile()
 	// 옮겨갈 폴더에 같은 파일이 있는지 확인한다.
 	if ( 0 != _taccess(aDlg.GetMoveToFolder().c_str(), 00) )
 	{
-		MessageBox(TEXT("WRONG_DIRECTORY_NAME"));
+		ShowMessageBox(GetMessage(TEXT("WRONG_DIRECTORY_NAME")));
 		return;
 	}
 
@@ -1597,7 +1595,7 @@ void ZMain::MoveThisFile()
 	if ( 0 == _taccess(strToFileName.c_str(), 00) )
 	{
 		// 이미 존재하면
-		if ( IDNO == MessageBox(TEXT("ASK_OVERWRITE_FILE"), MB_YESNO) )
+		if ( IDNO == ShowMessageBox(GetMessage(TEXT("ASK_OVERWRITE_FILE")), MB_YESNO) )
 		{
 			return;
 		}
@@ -1605,7 +1603,7 @@ void ZMain::MoveThisFile()
 
 	if ( FALSE == MoveFileEx(m_strCurrentFilename.c_str(), strToFileName.c_str(), MOVEFILE_COPY_ALLOWED | MOVEFILE_REPLACE_EXISTING) )
 	{
-		MessageBox(TEXT("CANNOT_MOVE_FILE"));
+		ShowMessageBox(GetMessage(TEXT("CANNOT_MOVE_FILE")));
 	}
 	_ProcAfterRemoveThisFile();
 }
@@ -1634,7 +1632,7 @@ void ZMain::CopyThisFile()
 
 	if ( strToFileName.size() <= 2 )
 	{
-		MessageBox(TEXT("MOVE_DESTINATION_IS_TOO_SHORT"));
+		ShowMessageBox(GetMessage(TEXT("MOVE_DESTINATION_IS_TOO_SHORT")));
 		return;
 	}
 
@@ -1644,7 +1642,7 @@ void ZMain::CopyThisFile()
 	// 옮겨갈 폴더에 같은 파일이 있는지 확인한다.
 	if ( 0 != _taccess(aDlg.GetMoveToFolder().c_str(), 00) )
 	{
-		MessageBox(TEXT("WRONG_DIRECTORY_NAME"));
+		ShowMessageBox(GetMessage(TEXT("WRONG_DIRECTORY_NAME")));
 		return;
 	}
 
@@ -1652,7 +1650,7 @@ void ZMain::CopyThisFile()
 	if ( 0 == _taccess(strToFileName.c_str(), 00) )
 	{
 		// 이미 존재하면
-		if ( IDNO == MessageBox(TEXT("ASK_OVERWRITE_FILE"), MB_YESNO) )
+		if ( IDNO == ShowMessageBox(GetMessage(TEXT("ASK_OVERWRITE_FILE")), MB_YESNO) )
 		{
 			return;
 		}
@@ -1660,7 +1658,7 @@ void ZMain::CopyThisFile()
 
 	if ( FALSE == CopyFile(m_strCurrentFilename.c_str(), strToFileName.c_str(), FALSE) )
 	{
-		MessageBox(TEXT("CANNOT_COPY_FILE"));
+		ShowMessageBox(GetMessage(TEXT("CANNOT_COPY_FILE")));
 	}
 }
 

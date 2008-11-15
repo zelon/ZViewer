@@ -36,7 +36,7 @@ public:
 	void onTimer();
 
 	/// ZViewer 전용 메시지 박스
-	int MessageBox(const TCHAR * msg, UINT button = MB_OK);
+	int ShowMessageBox(const TCHAR * msg, UINT button = MB_OK);
 
 	/// 현재 화면의 그릴 수 있는 영역의 크기를 받아온다.
 	bool getCurrentScreenRect(RECT & rect);
