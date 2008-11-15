@@ -1,7 +1,7 @@
 /********************************************************************
 *
 * Created by zelon(Kim, Jinwook Korea)
-* 
+*
 *   2005. 5. 7
 *	ZCacheImage.cpp
 *
@@ -40,7 +40,7 @@ ZCacheImage::ZCacheImage()
 ZCacheImage::~ZCacheImage()
 {
 	m_bGoOn = false;
-	
+
 	m_hCacheEvent.setEvent();
 
 	if ( m_hThread != INVALID_HANDLE_VALUE )
@@ -83,7 +83,7 @@ void ZCacheImage::StartThread()
 		DWORD dwThreadID;
 		m_hThread = CreateThread(0, 0, ThreadFuncProxy, this, 0, &dwThreadID);
 
-		// Cache 를 진행하는 쓰레드는 
+		// Cache 를 진행하는 쓰레드는
 		if ( SetThreadPriority(m_hThread, THREAD_PRIORITY_BELOW_NORMAL) == FALSE )
 		{
 			_ASSERTE(!"Can't SetThreadPriority!");
@@ -99,7 +99,7 @@ void ZCacheImage::ShowCachedImageToOutputWindow()
 #endif
 
 	CLockObjUtil lock(m_cacheLock);
-	
+
 	CacheMapIterator it, endIt = m_cacheData.end();
 
 	for ( it = m_cacheData.begin(); it != endIt; ++it)
@@ -365,7 +365,7 @@ void ZCacheImage::ThreadFunc()
 		_ASSERTE(m_iCurrentIndex <= (int)m_numImageVectorSize);
 
 #ifdef _DEBUG
-		
+
 		{
 			CLockObjUtil lock(m_cacheLock);
 			if ( m_cacheData.empty() )
@@ -375,10 +375,10 @@ void ZCacheImage::ThreadFunc()
 		}
 #endif
 
-		for ( int i=0; i<ZOption::GetInstance().m_iMaxCacheImageNum/2; ++i)
+		for ( i=0; i<ZOption::GetInstance().m_iMaxCacheImageNum/2; ++i)
 		{
 			if ( m_bNewChange) break;	// 현재보고 있는 파일 인덱스가 바뀌었으면 빨리 다음 for 를 시작한다.
-			
+
 			/// 현재보고 있는 방향에 따라서 어디쪽 이미지를 먼저 캐시할 것인지 판단한다.
 			if ( m_lastActionDirection == eLastActionDirection_FORWARD )
 			{
@@ -426,7 +426,7 @@ bool ZCacheImage::hasCachedData(const tstring & strFilename, int iIndex)
 
 	{
 		CLockObjUtil lock(m_cacheLock);
-		
+
 		if ( m_cacheData.count(strFilename) > 0 ) return true;
 	}
 	return false;
@@ -436,7 +436,7 @@ void ZCacheImage::getCachedData(const tstring & strFilename, ZImage & image)
 {
 	CacheMapIterator it;
 	CLockObjUtil lock(m_cacheLock);
-	
+
 	it = m_cacheData.find(strFilename);
 	if ( it == m_cacheData.end() )
 	{
