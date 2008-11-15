@@ -1,7 +1,7 @@
 /********************************************************************
 *
 * Created by zelon(Kim, Jinwook Korea)
-* 
+*
 *   2005. 5. 7
 *	CommonDefine.h
 *
@@ -24,7 +24,13 @@ typedef std::wstring tstring;
 typedef std::string tstring;
 #endif
 
-const tstring g_strVersion = TEXT("0.7.0rc3");
+const tstring g_strVersion = TEXT("0.7.0rc4");
+
+struct TagData
+{
+	std::string m_strKey;
+	std::string m_strValue;
+};
 
 struct FileData
 {
