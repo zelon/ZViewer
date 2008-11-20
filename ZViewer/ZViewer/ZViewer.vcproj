@@ -97,6 +97,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				CommandLine="cd $(SolutionDir)&#x0D;&#x0A;python testLang.py&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -177,6 +178,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				CommandLine="cd $(SolutionDir)&#x0D;&#x0A;python testLang.py&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -240,6 +242,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				CommandLine="cd $(SolutionDir)&#x0D;&#x0A;python testLang.py&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -319,6 +322,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				CommandLine="cd $(SolutionDir)&#x0D;&#x0A;python testLang.py&#x0D;&#x0A;"
 			/>
 		</Configuration>
 	</Configurations>
