@@ -4,11 +4,13 @@
   * Microsoft Visual Studio .NET 2003 에서도 가능하나 주 개발이 2005 를 기준으로 이루어지므로 2003 에서의 빌드 오류가 발생할 수 있다.
  * 설치파일만드는 환경 : NSIS 2.36 이상
  * 프로그래머 작업 환경 : WinXP Pro Korean SP2
+ * python
 
 == 빌드 ==
 
  * 소스 파일을 공백이 포함된 폴더 밑에 두면 링크 오류가 생길 수 있다!!
 
+ 0. python(http://python.org)을 설치 후 환경변수 path 에 추가해준다.
  1. Visual Studio .NET 2005 에서 ZViewerWin32.sln 파일을 연 후, Release 로 빌드 솔루션을 한다.
  2. output 폴더에 실행 파일 및 부속 파일들이 생긴다.
 
@@ -22,6 +24,7 @@
 
 == 릴리즈 진행하는 과정 ==
 
+ * ZViewer 폴더의 testLang.py 를 실행해해서 FAILED 가 생기지 않는지 확인한다.
  * output 폴더의 ReadMe.txt 파일의 내용이 최신인지 확인한다.
  * ZViewer 소스 폴더의 가장 상위에 있는 QATest-Korean.txt 파일의 내용을 테스트한다.
  * setVersion.py 파일을 이용해 새로운 버젼을 세팅하고, rebuild 한다.
