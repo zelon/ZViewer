@@ -2,7 +2,6 @@ import re
 import os
 
 def commonDefineVersionUp(major, minor, patch, postfix):
-	print ("CommonDefine.h file update...")
 
 	filename = r"commonSrc\CommonDefine.h"
 	if False == os.access(filename, os.F_OK):
@@ -30,13 +29,18 @@ def commonDefineVersionUp(major, minor, patch, postfix):
 	file = open(filename, "w")
 	file.writelines(outputs)
 	file.close()
+	print ("[OK] CommonDefine.h file updated")
 
 	return True
 
-def zviewerAgentRcVersionUp(major, minor, patch):
-	print ("ZViewAgent rc file Version update...")
+def SetRcVersionUp(rcFileName, major, minor, patch):
 
-	file = open(r"ZViewerAgent\ZViewerAgent.rc")
+	#file = open(r"ZViewerAgent\ZViewerAgent.rc")
+	try:
+		file = open(rcFileName)
+	except:
+		print("[FAILED] Cannot open " + rcFileName)
+		return False
 	
 	lines = file.readlines()
 	
@@ -59,42 +63,13 @@ def zviewerAgentRcVersionUp(major, minor, patch):
 	
 	file.close()
 	
-	file = open(r"ZViewerAgent\ZViewerAgent.rc", "w")
+	file = open(rcFileName, "w")
 	file.writelines(outputs)
 	file.close()
-
-def zviewerRcVersionUp(major, minor, patch):
-	print ("ZViewer rc file Version update...")
-
-	file = open(r"ZViewer\res\ZViewer.rc")
-	
-	lines = file.readlines()
-
-	productVersionPattern = r"(\s*VALUE \"ProductVersion\", )\"(\d.\d.\d.\d)\""
-	fileVersionPattern = r"(\s*VALUE \"FileVersion\", )\"(\d.\d.\d.\d)\""
-
-	outputs = []
-	for i in lines:
-
-		if re.match(r" FILEVERSION \d,\d,\d,\d\n", i) != None:
-			outputs.append(" FILEVERSION " + str(major) + "," + str(minor) + "," + str(patch) + ",0\n")
-		elif re.match(r" PRODUCTVERSION \d,\d,\d,\d\n", i) != None:
-			outputs.append(" PRODUCTVERSION " + str(major) + "," + str(minor) + "," + str(patch) + ",0\n")
-		elif re.match(productVersionPattern, i) != None:
-			outputs.append(re.sub(productVersionPattern, r"\1" + "\"" + str(major) + "." + str(minor) + "." + str(patch) + ".0\"", i))
-		elif re.match(fileVersionPattern, i) != None:
-			outputs.append(re.sub(fileVersionPattern, r"\1" + "\"" + str(major) + "." + str(minor) + "." + str(patch) + ".0\"", i))
-		else:
-			outputs.append(i)
-
-	file.close()
-
-	file = open(r"ZViewer\res\ZViewer.rc", "w")
-	file.writelines(outputs)
-	file.close()
+	print ("[OK] " + rcFileName + " file Version updated")
+	return True
 
 def nsisVersionUp(major, minor, patch, postfix):
-    print ("nsis file Version update...")
     
     file = open(r"output\ZViewer.nsi")
     
@@ -115,6 +90,7 @@ def nsisVersionUp(major, minor, patch, postfix):
     file = open(r"output\ZViewer.nsi", "w")
     file.writelines(outputs)
     file.close()
+    print ("[OK] nsis file Version updated")
     
 def getCurrentVersionFromNSIS():
 	
@@ -137,43 +113,55 @@ def getCurrentVersionFromNSIS():
 
 def doVersionUp():
 
-	print("Major is A of A.B.Cxxx");
+	print("Major is [A].B.Cxxx");
 	print("Enter Major : "),
 	vMajor = input()
 
-	print("\nMajor is B of A.B.Cxxx");
+	print("\nMinor is A.[B].Cxxx");
 	print("Enter Minor : "),
 	vMinor = input()
 
-	print("\nMajor is C of A.B.Cxxx");
+	print("\nPatch is A.B.[C]xxx");
 	print("Enter patch : "),
 	vPatch = input()
 
-	print("\nMajor is xxx of A.B.Cxxx");
+	print("\nPostfix is A.B.C[xxx]");
 	print("Enter postfix : "),
 	vPostfix = raw_input()
 
+	print("New version : " + str(vMajor) + "." + str(vMinor) + "." + str(vPatch) + str(vPostfix))
+	print("Is it right? (y/N) : "),
+	strYesNo = raw_input()
+
+	if strYesNo != "y":
+		print ("Canceled by user input")
+		return
 	# version up ZViewerAgent\ZViewerAgent.rc
-	if False == zviewerRcVersionUp(vMajor, vMinor, vPatch):
-		print ("!!! Error on zviewerRcVersionUp!!!!!!!!!!")
+	if False == SetRcVersionUp(r"ZViewerAgent\ZViewerAgent.rc", vMajor, vMinor, vPatch):
+		print ("[FAILED] !!! Error on zviewerRcVersionUp!!!!!!!!!!")
 		return
 
 	# version up ZViewer/res/ZViewer.rc
-	if False == zviewerAgentRcVersionUp(vMajor, vMinor, vPatch):
-		print ("!!! Error on zviewerAgentRcVersionUp!!!!!!!!!!")
+	if False == SetRcVersionUp(r"ZViewer\res\ZViewer.rc", vMajor, vMinor, vPatch):
+		print ("[FAILED] !!! Error on zviewerAgentRcVersionUp!!!!!!!!!!")
+		return
+
+	# version up ZViewer/LangKor/res/ZViewer.rc
+	if False == SetRcVersionUp(r"LangKor\res\ZViewer.rc", vMajor, vMinor, vPatch):
+		print ("[FAILED] !!! Error on LangKor RcVersionUp!!!!!!!!!!")
 		return
 
 	# version up output/ZViewer.nsi
 	if False == nsisVersionUp(vMajor, vMinor, vPatch, vPostfix):
-		print ("!!! Error on nsisVersionUp!!!!!!!!!!")
+		print ("[FAILED] !!! Error on nsisVersionUp!!!!!!!!!!")
 		return
 
 	# version up commonSrc/CommonDefin.h
 	if False == commonDefineVersionUp(vMajor, vMinor, vPatch, vPostfix):
-		print ("!!! Error on commonDefineVersionUp!!!!!!!!!!")
+		print ("[FAILED] !!! Error on commonDefineVersionUp!!!!!!!!!!")
 		return
 
-	print("version update completed")
+	print("[OK] version update completed")
 
 if __name__ == "__main__":
 	print("Current version : " + getCurrentVersionFromNSIS())
