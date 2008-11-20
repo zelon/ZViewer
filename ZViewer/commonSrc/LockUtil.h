@@ -98,5 +98,8 @@ public:
 protected:
 	/// 생성자에서 받은 크리티컬 섹션을 내부적으로 가지고 있는 멤버 변수
 	CLockObj & m_lockObj;
+
+	/// 할당 연산자가 쓰이는 걸 방지하는 코드. 할당 연산자가 쓰이게 되면 오류 발생하게 됨
+	CLockObjUtil & operator=(const CLockObjUtil & obj);
 };
 

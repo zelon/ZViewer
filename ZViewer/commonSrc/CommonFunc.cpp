@@ -17,7 +17,7 @@ I/********************************************************************
 #ifdef _DEBUG
 void DebugPrintf( const TCHAR *fmt, ... )
 {
-	return;
+//	return;
 
 	va_list v;
 	TCHAR buf[1024*4];
@@ -345,6 +345,7 @@ eOSKind getOSVersion()
 
 			RegCloseKey( hKey );
 
+			/*
 			if ( lstrcmpi( TEXT("WINNT"), szProductType) == 0 )
 				printf( "Workstation " );
 			if ( lstrcmpi( TEXT("LANMANNT"), szProductType) == 0 )
@@ -353,12 +354,12 @@ eOSKind getOSVersion()
 				printf( "Advanced Server " );
 
 			printf( "%d.%d ", osvi.dwMajorVersion, osvi.dwMinorVersion );
+			*/
 		}
 
 		// Display service pack (if any) and build number.
 
-		if( osvi.dwMajorVersion == 4 && 
-			lstrcmpi( osvi.szCSDVersion, TEXT("Service Pack 6") ) == 0 )
+		if( osvi.dwMajorVersion == 4 )//&& lstrcmpi( osvi.szCSDVersion, TEXT("Service Pack 6") ) == 0 )
 		{
 			HKEY hKey;
 			LONG lRet;
@@ -371,18 +372,14 @@ eOSKind getOSVersion()
 				printf( "Service Pack 6a (Build %d)\n", osvi.dwBuildNumber & 0xFFFF );         
 			else // Windows NT 4.0 prior to SP6a
 			{
-				printf( "%s (Build %d)\n",
-					osvi.szCSDVersion,
-					osvi.dwBuildNumber & 0xFFFF);
+				//printf( "%s (Build %d)\n", osvi.szCSDVersion, osvi.dwBuildNumber & 0xFFFF);
 			}
 
 			RegCloseKey( hKey );
 		}
 		else // Windows NT 3.51 and earlier or Windows 2000 and later
 		{
-			printf( "%s (Build %d)\n",
-				osvi.szCSDVersion,
-				osvi.dwBuildNumber & 0xFFFF);
+			//printf( "%s (Build %d)\n", osvi.szCSDVersion, osvi.dwBuildNumber & 0xFFFF);
 		}
 
 

@@ -30,7 +30,7 @@ CSaveAs::~CSaveAs()
 }
 
 /// 파일 열기 다이얼로그는 항상 부모의 가운데에 띄운다.
-UINT_PTR CALLBACK OFNHookProc(HWND hdlg, UINT uiMsg, WPARAM wParam, LPARAM lParam )
+UINT_PTR CALLBACK OFNHookProc(HWND hdlg, UINT uiMsg, WPARAM /*wParam*/, LPARAM /*lParam*/ )
 {
 	switch ( uiMsg )
 	{
