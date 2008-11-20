@@ -59,11 +59,12 @@ def checkUsedMap():
 
 
 			if bFound == False:
-				print "Not found in all lang : " + key
+				print "[FAILED]Not found in all lang : " + key
+				return False
 
 	for lang in langMap:
 		if False == (lang in collectedUsedKeyList):
-			print "Not found in source code : " + lang
+			print "[WARNING] Not found in source code : " + lang
 
 
 def checkSameMap():
@@ -127,10 +128,67 @@ def checkSameMap():
 				print "there is no matching word for : " + thisLang + " in " + file
 
 	if False == bFound:
-		print "There is no error for checking same word."
+		print "[OK] There is no error for checking same word."
+
+""" Resource 파일들이 서로 같은지 체크~~~ """
+def checkSameRes():
+	left = open(r'ZViewer\res\resource.h', "r")
+	right = open(r'LangKor\res\resource.h', "r")
+
+	leftdata = left.read()
+	left.close()
+
+	rightdata = right.read()
+	right.close()
+
+	#print leftdata
+	reDefines = r"#define.*"
+	leftdefines = re.findall(reDefines, leftdata)
+	rightdefines = re.findall(reDefines, rightdata)
+
+	lcount = len(leftdefines)
+	rcount = len(rightdefines)
+
+	if lcount == rcount:
+		print "[OK] Define count same"
+	else:
+		print "[FAILED] !!! Define count not same"
+		return False
+
+	reNextValue = r"_APS_NEXT_COMMAND_VALUE.*?(\d+)"
+	lnextValue = re.findall(reNextValue, leftdata)
+	rnextValue = re.findall(reNextValue, rightdata)
+
+	if len(lnextValue) == len(rnextValue) and lnextValue[0] == rnextValue[0]:
+		print "[OK] Same next value : " + lnextValue[0]
+	else:
+		print "[FAILED] Not same next value!! left:" + lnextValue[0] + " and right:" + rnextValue[0]
+		return False
+
+	reDefineValues = r"#define.*?(\d+)"
+	lDefineValues= re.findall(reDefineValues, leftdata)
+	rDefineValues= re.findall(reDefineValues, rightdata)
+
+	for l in lDefineValues:
+		if int(l) > int(lnextValue[0]):
+			print "[FAILED] over next value : " + l
+			print "[FAILED] next value : " + lnextValue[0]
+			return False
+
+	for r in lDefineValues:
+		if int(r) > int(rnextValue[0]):
+			print "[FAILED] over next value : " + r
+			print "[FAILED] next value : " + rnextValue[0]
+			return False
 
 if __name__ == "__main__":
 	print "---- start checkSameMap ----"
-	checkSameMap()
+	if False == checkSameMap():
+		exit(1)
 	print "---- start checkUseMap ----"
-	checkUsedMap()
+	if False == checkUsedMap():
+		exit(1)
+	print "---- start checkSameResource ----"
+	if False == checkSameRes():
+		exit(1)
+	exit(0)
