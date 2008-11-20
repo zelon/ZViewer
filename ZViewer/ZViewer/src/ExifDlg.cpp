@@ -29,7 +29,7 @@ void ExifDlg::SetWndProc()
 	pDlg = this;
 }
 
-int CALLBACK ExifDlgWndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
+int CALLBACK ExifDlgWndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM /*lParam*/)
 {
 	switch(iMessage)
 	{

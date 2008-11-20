@@ -34,7 +34,7 @@ void CAboutWindow::SetWndProc()
 }
 
 
-int CALLBACK AboutWndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
+int CALLBACK AboutWndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM /*lParam*/)
 {
 	switch(iMessage)
 	{

@@ -182,7 +182,7 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 					fipMultiPage image;
 					image.open("C:\\_Samples\\ljyzzno_2.gif", FALSE, TRUE);
 
-					int iGetPageCount = image.getPageCount();
+//					int iGetPageCount = image.getPageCount();
 
 					FIBITMAP * pBitmap = FreeImage_Clone(image.lockPage(0));
 

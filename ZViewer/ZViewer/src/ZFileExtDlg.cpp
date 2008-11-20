@@ -42,7 +42,7 @@ void ZFileExtDlg::ShowDlg()
 	}
 }
 
-int CALLBACK ZFileExtDlg::FileExtDlgProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
+int CALLBACK ZFileExtDlg::FileExtDlgProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM /*lParam*/)
 {
 	switch(iMessage)
 	{
