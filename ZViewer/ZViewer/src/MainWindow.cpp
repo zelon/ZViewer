@@ -122,11 +122,6 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 		{
 			switch ( wParam )
 			{
-			case 'p':
-			case 'P':
-				ZMain::GetInstance().ShowExif();
-				break;
-
 			case 'g':
 			case 'G':
 				ZMain::GetInstance().StartSlideMode();
@@ -497,6 +492,9 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 				}
 				break;
 
+			case ID_SHOW_DETAILINFOMATION:
+				ZMain::GetInstance().ShowExif();
+				break;
 			case ID_ACCELERATOR_CANCEL_FULLSCREEN:
 				// 현재 풀 스크린 일 때만 풀스크린을 취소한다.
 				if ( ZOption::GetInstance().IsFullScreen() )

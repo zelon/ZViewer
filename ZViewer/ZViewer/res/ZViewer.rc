@@ -98,6 +98,7 @@ BEGIN
             MENUITEM "FileDate - New is first",     ID_SORT_FILEDATE
         END
         MENUITEM "Always on Top",               ID_VIEW_ALWAYSONTOP
+        MENUITEM "Show Detail Infomation",      ID_SHOW_DETAILINFOMATION
     END
     POPUP "Option"
     BEGIN
@@ -120,8 +121,8 @@ BEGIN
         MENUITEM "FullScreen\tAlt+Enter,Enter", ID_VIEW_FULLSCREEN
         MENUITEM "RightTop First Draw",         ID_VIEW_RIGHTTOPFIRSTDRAW
         MENUITEM SEPARATOR
-        MENUITEM "BigToScreenStretch",          ID_POPUPMENU_BIGTOSCREENSTRETCH
-        MENUITEM "SmallToScreenStretch",        ID_POPUPMENU_SMALLTOSCREENSTRETCH
+        MENUITEM "&BigToScreenStretch",         ID_POPUPMENU_BIGTOSCREENSTRETCH
+        MENUITEM "&SmallToScreenStretch",       ID_POPUPMENU_SMALLTOSCREENSTRETCH
         MENUITEM SEPARATOR
         MENUITEM "DeleteThisFile\tDelete",      ID_DELETETHISFILE
         MENUITEM SEPARATOR
@@ -206,14 +207,14 @@ STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | WS_CAPTI
 CAPTION "ZViewer About"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
-    DEFPUSHBUTTON   "Close",IDOK,207,108,50,14
-    LTEXT           "Homepage : http://zviewer.wimy.com",IDC_STATIC,135,33,122,8
-    LTEXT           "Written by Kim Jinwook - zelon",IDC_STATIC,53,20,98,8
+    DEFPUSHBUTTON   "Close",IDOK,192,108,50,14
+    LTEXT           "Homepage : http://zviewer.wimy.com",IDC_STATIC,129,33,122,8
+    LTEXT           "Written by Kim Jinwook - zelon",IDC_STATIC,68,20,75,8
     LTEXT           "ZViewer version : ",IDC_STATIC,7,7,58,8
-    LTEXT           "VERSION",IDC_STATIC_VERSION,69,7,130,8
+    LTEXT           "VERSION",IDC_STATIC_VERSION,69,7,139,8
     LTEXT           "CacheHitRate",IDC_STATIC_HITRATE,7,50,112,8
-    LTEXT           "CacheMemory",IDC_STATIC_CACHE_MEMORY,7,64,250,8
-    LTEXT           "Program Path",IDC_STATIC_PROGRAM_PATH,7,81,250,8
+    LTEXT           "CacheMemory",IDC_STATIC_CACHE_MEMORY,7,63,235,8
+    LTEXT           "Program Path",IDC_STATIC_PROGRAM_PATH,7,79,235,8
     LTEXT           "LibraryVersion :",IDC_STATIC_LIBRARY_VERSION,7,95,125,8
 END
 
@@ -243,13 +244,13 @@ BEGIN
     PUSHBUTTON      "Browse...",IDC_BUTTON_SELECT_FOLDER,171,7,50,14
 END
 
-IDD_EXIF_DLG DIALOGEX 0, 0, 234, 222
+IDD_EXIF_DLG DIALOGEX 0, 0, 307, 250
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Exif Dialog"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
-    DEFPUSHBUTTON   "OK",IDOK,177,201,50,14
-    CONTROL         "",IDC_EXIF_INFO_LIST,"SysListView32",LVS_REPORT | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,7,7,220,188
+    DEFPUSHBUTTON   "OK",IDOK,250,229,50,14
+    CONTROL         "",IDC_EXIF_INFO_LIST,"SysListView32",LVS_REPORT | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,7,7,293,214
 END
 
 
@@ -288,9 +289,9 @@ BEGIN
     IDD_EXIF_DLG, DIALOG
     BEGIN
         LEFTMARGIN, 7
-        RIGHTMARGIN, 227
+        RIGHTMARGIN, 300
         TOPMARGIN, 7
-        BOTTOMMARGIN, 215
+        BOTTOMMARGIN, 243
     END
 END
 #endif    // APSTUDIO_INVOKED
@@ -346,7 +347,7 @@ BEGIN
     ID_FILE_OPEN40016       "ZViewer Project do not use String Table."
 END
 
-#endif    // English resources
+#endif    // ÇÑ±¹¾î resources
 /////////////////////////////////////////////////////////////////////////////
 
 

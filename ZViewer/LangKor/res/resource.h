@@ -76,13 +76,15 @@
 #define ID_FILE_COPYTO                  40086
 #define ID_START_SLIDESHOW              40088
 #define ID_VIEW_ALWAYSONTOP             40089
+#define ID_VIEW_SHOWDETAILINFOMATION    40090
+#define ID_SHOW_DETAILINFOMATION        40091
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        116
-#define _APS_NEXT_COMMAND_VALUE         40090
+#define _APS_NEXT_COMMAND_VALUE         40092
 #define _APS_NEXT_CONTROL_VALUE         1015
 #define _APS_NEXT_SYMED_VALUE           101
 #endif

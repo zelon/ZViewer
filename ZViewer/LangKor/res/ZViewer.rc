@@ -98,6 +98,7 @@ BEGIN
             MENUITEM "파일날짜 - 최근파일이 먼저",             ID_SORT_FILEDATE
         END
         MENUITEM "항상 위에",                       ID_VIEW_ALWAYSONTOP
+        MENUITEM "세부 정보 보기",                    ID_SHOW_DETAILINFOMATION
     END
     POPUP "옵션(&O)"
     BEGIN
@@ -120,8 +121,8 @@ BEGIN
         MENUITEM "전체화면\tAlt+Enter,Enter",       ID_VIEW_FULLSCREEN
         MENUITEM "오른쪽 위부터 그리기",                 ID_VIEW_RIGHTTOPFIRSTDRAW
         MENUITEM SEPARATOR
-        MENUITEM "큰 그림 화면에 맞게 축소",              ID_POPUPMENU_BIGTOSCREENSTRETCH
-        MENUITEM "작은 그림 화면에 맞게 확대",             ID_POPUPMENU_SMALLTOSCREENSTRETCH
+        MENUITEM "큰 그림 화면에 맞게 축소(&B)",          ID_POPUPMENU_BIGTOSCREENSTRETCH
+        MENUITEM "작은 그림 화면에 맞게 확대(&S)",         ID_POPUPMENU_SMALLTOSCREENSTRETCH
         MENUITEM SEPARATOR
         MENUITEM "현재 파일 지우기\tDelete",           ID_DELETETHISFILE
         MENUITEM SEPARATOR
