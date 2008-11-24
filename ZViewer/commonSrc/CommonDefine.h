@@ -24,7 +24,7 @@ typedef std::wstring tstring;
 typedef std::string tstring;
 #endif
 
-const tstring g_strVersion = TEXT("0.7.0rc4");
+const tstring g_strVersion = TEXT("0.7.0");
 
 struct TagData
 {
