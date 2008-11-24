@@ -491,6 +491,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\src\ZImageManager.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\ZImageManager.h"
+				>
+			</File>
+			<File
 				RelativePath=".\src\ZMain.cpp"
 				>
 			</File>
