@@ -206,7 +206,7 @@ bool ZCacheImage::_CacheIndex(int iIndex)
 			}
 			*/
 
-
+#if 0
 			if ( ZOption::GetInstance().IsBigToSmallStretchImage() )
 			{
 				RECT screenRect = { 0 };
@@ -259,7 +259,7 @@ bool ZCacheImage::_CacheIndex(int iIndex)
 					}
 				}
 			}
-
+#endif
 			// 읽은 이미지를 넣을 공간이 없으면
 			if ( (m_lCacheSize + cacheReayImage.GetImageSize()) / 1024 / 1024 > ZOption::GetInstance().GetMaxCacheMemoryMB() )
 			{

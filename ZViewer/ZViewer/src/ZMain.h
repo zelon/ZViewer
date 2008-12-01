@@ -41,6 +41,9 @@ public:
 	/// 현재 화면의 그릴 수 있는 영역의 크기를 받아온다.
 	bool getCurrentScreenRect(RECT & rect);
 
+	/// 현재 크기에 맞는 ShowWindow 크기를 정한다.
+	void SetShowWindowScreen();
+
 	/// On Window is resized
 	void OnWindowResized();
 
@@ -174,11 +177,21 @@ public:
 
 	void LoadCurrent();
 
+	/// 그림을 보여줄 윈도우를 만든다.
+	void CreateShowWindow();
+
 	/// 상태 표시 윈도우를 만든다.
 	void CreateStatusBar();
 
 	/// 메뉴 중 체크표시 되는 것을 확인하여 설정해준다.
 	void SetCheckMenus();
+
+	void ZoomIn();
+	void ZoomOut();
+
+	void ZoomNone();
+
+	HWND GetShowWindow() const { return m_hShowWindow; }
 
 private:
 
@@ -218,6 +231,9 @@ private:
 
 	int m_iCurrentScreenWidth;
 	int m_iCurrentScreenHeight;
+
+	/// 현재 보는 화면 배율. 1 이면 100%, 2 이면 200%, 0.1 이면 10%의 크기로 본다. 그림을 m_currentImage 로 했을 때 옵션에 따라서 배율을 결정한다.
+	double m_fCurrentZoomRate;
 
 	/// 현재 보여주고 있는 이미지
 	ZImage m_currentImage;
@@ -266,4 +282,7 @@ private:
 
 	/// 배경을 지운다.
 	void _eraseBackground(HDC mainDC, LONG right, LONG bottom);
+
+	/// 실제로 그림을 그릴 화면창
+	HWND m_hShowWindow;
 };

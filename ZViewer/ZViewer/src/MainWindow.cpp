@@ -156,6 +156,16 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 				ZMain::GetInstance().OnDrag(5000, 5000);
 				break;
 
+			case '=':
+			case '+':
+				ZMain::GetInstance().ZoomIn();
+				break;
+			case '-':
+				ZMain::GetInstance().ZoomOut();
+				break;
+			case '0':
+				ZMain::GetInstance().ZoomNone();
+				break;
 /// 디버그 모드에서만 작동하는 단축키들
 #ifdef _DEBUG
 			case '`':
@@ -172,7 +182,7 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 				}
 				break;
 
-			case '0':
+			case 'm':
 				{
 					fipMultiPage image;
 					image.open("C:\\_Samples\\ljyzzno_2.gif", FALSE, TRUE);
@@ -266,6 +276,9 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 			// 아이콘을 지정해준다.
 			SendMessage(hWnd, WM_SETICON, ICON_BIG, (LPARAM)LoadIcon(ZMain::GetInstance().GetHInstance(), MAKEINTRESOURCE(IDI_BIG_MAIN)));
 
+			/// 그림을 표시할 child window 를 만든다.
+			ZMain::GetInstance().CreateShowWindow();
+
 			ZMain::GetInstance().CreateStatusBar();
 
 			// 팝업 메뉴를 불러놓는다.
@@ -331,6 +344,10 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 
 	case WM_SIZE:
 		{
+			/// ShowWindow 크기를 조절한다.
+			ZMain::GetInstance().SetShowWindowScreen();
+
+			/// StatusBar 크기를 조절한다.
 			SendMessage(ZMain::GetInstance().GetStatusHandle(), WM_SIZE, wParam, lParam);
 			ZMain::GetInstance().OnWindowResized();
 		}
@@ -588,11 +605,15 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 	case WM_PAINT:
 		HDC hdc;
 		PAINTSTRUCT ps;
-		hdc=BeginPaint(hWnd, &ps);
-
+		// 아래의 BeginPaint/EndPaint 부분을 지우면 WM_PAINT 가 무한히 호출된다.
+		hdc=BeginPaint(ZMain::GetInstance().GetHWND(), &ps);
+		EndPaint(ZMain::GetInstance().GetHWND(), &ps);
+		
+		hdc=BeginPaint(ZMain::GetInstance().GetShowWindow(), &ps);
 		ZMain::GetInstance().Draw(hdc);
-		EndPaint(hWnd, &ps);
+		EndPaint(ZMain::GetInstance().GetShowWindow(), &ps);
 
+		/// 상태 표시줄도 새로 그린다.
 		SendMessage(ZMain::GetInstance().GetStatusHandle(), WM_PAINT, wParam, lParam);
 
 		DebugPrintf(TEXT("Recv WM_PAINT"));

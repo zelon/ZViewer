@@ -237,13 +237,17 @@ void ZMain::Draw(HDC toDrawDC, bool bEraseBg)
 
 	if ( NULL == toDrawDC )
 	{
-		mainDC = GetDC(m_hMainDlg);
+		mainDC = GetDC(m_hShowWindow);
 	}
 	else
 	{
 		/// 무효화된 부분만 그릴 때의 DC 를 얻어오기 위해
 		mainDC = toDrawDC;
 	}
+
+	/// ShowWindow 부분만 그리도록 클리핑 영역을 설정한다.
+	HRGN hrgn = CreateRectRgn(currentScreenRect.left, currentScreenRect.top, currentScreenRect.right, currentScreenRect.bottom);
+	SelectClipRgn(mainDC, hrgn);
 
 	if ( m_vFile.size() <= 0 )
 	{
@@ -253,8 +257,8 @@ void ZMain::Draw(HDC toDrawDC, bool bEraseBg)
 	}
 
 	// 그림이 그려지기 시작할 화면의 위치
-	int iDrawX = 0;
-	int iDrawY = 0;
+	int iDrawStartPositionOnScreenX = 0;
+	int iDrawStartPositionOnScreenY = 0;
 
 	// 그림이 그려지기 시작하는 그림의 위치
 	int iDrawPartX = 0;
@@ -262,13 +266,15 @@ void ZMain::Draw(HDC toDrawDC, bool bEraseBg)
 
 	bool bNeedClipping = false;
 
-	const WORD currentImageWidth = m_currentImage.GetWidth();
-	const WORD currentImageHeight = m_currentImage.GetHeight();
+	const WORD zoomedImageWidth = (WORD)(m_currentImage.GetWidth() * m_fCurrentZoomRate);
+	const WORD zoomedImageHeight = (WORD)(m_currentImage.GetHeight() * m_fCurrentZoomRate);
 
-	if ( currentImageWidth <= currentScreenRect.right )
+	if ( zoomedImageWidth <= currentScreenRect.right )
 	{
 		// 가로 길이가 화면보다 작을 때는 중앙에 오게
-		iDrawX = (currentScreenRect.right/2) - (currentImageWidth/2);
+		iDrawStartPositionOnScreenX = (currentScreenRect.right/2) - (zoomedImageWidth/2);
+
+		m_iShowingX = -iDrawStartPositionOnScreenX;
 	}
 	else
 	{
@@ -277,10 +283,11 @@ void ZMain::Draw(HDC toDrawDC, bool bEraseBg)
 		bNeedClipping = true;
 	}
 
-	if ( currentImageHeight <= currentScreenRect.bottom )
+	if ( zoomedImageHeight <= currentScreenRect.bottom )
 	{
 		// 세로 길이가 화면보다 작을 때는 중앙에 오게
-		iDrawY = (currentScreenRect.bottom/2) - (currentImageHeight/2);
+		iDrawStartPositionOnScreenY = (currentScreenRect.bottom/2) - (zoomedImageHeight/2);
+		m_iShowingY = -iDrawStartPositionOnScreenY;
 	}
 	else
 	{
@@ -288,249 +295,41 @@ void ZMain::Draw(HDC toDrawDC, bool bEraseBg)
 		iDrawPartY = m_iShowingY;
 		bNeedClipping = true;
 	}
+	SetStretchBltMode(mainDC, COLORONCOLOR);
 
 #pragma message("TODO : 화면을 지워야할 때 Rectangle 로 지우지 않고, 화면 크기만큼 memoryDC 를 잡은 후 검게 칠하고, 그림을 거기 그리고, 그 memDC 를 그리자")
-#pragma message("TODO : memDC 가 다시 세팅되어야하는지를 flag 로 관리해서 화면을 스크롤할 때, 좀더 부드럽게 하자")
 
-	/// 그림이 화면보다 큰가 확인
-	if ( bNeedClipping )
+	DebugPrintf(TEXT("!!!!!!!!! clipping on draw......"));
+
+	/// 그림이 화면보다 크면...
+
+	if ( bEraseBg )	// 배경을 지워야 하면 지운다. 새로운 그림을 그리기 직전에 그려야 깜빡임이 적다.
 	{
-		DebugPrintf(TEXT("!!!!!!!!! clipping on draw......"));
+		_eraseBackground(mainDC, currentScreenRect.right, currentScreenRect.bottom);
+	}
 
-		/// 그림이 화면보다 크면...
-
-		if ( ZOption::GetInstance().IsBigToSmallStretchImage() )
-		{
-			/// 큰 그림을 축소시켜서 그린다.
-
-			RECT toRect;
-			SetRect(&toRect, 0, 0, currentImageWidth, currentImageHeight);
-			toRect = GetResizedRectForBigToSmall(currentScreenRect, toRect);
-
-			ZImage stretchedImage(m_currentImage);
-
-			/*
-			if ( stretchedImage.GetBPP() == 8 )
-			{
-				stretchedImage.ConvertTo32Bit();
-			}
-			*/
-
-			stretchedImage.Resize((WORD)toRect.right, (WORD)toRect.bottom);
-
-			iDrawX = (currentScreenRect.right - toRect.right) / 2;
-			iDrawY = (currentScreenRect.bottom - toRect.bottom) / 2;
-
-			if ( bEraseBg )	// 배경을 지워야 하면 지운다. 새로운 그림을 그리기 직전에 그려야 깜빡임이 적다.
-			{
-				_eraseBackground(mainDC, currentScreenRect.right, currentScreenRect.bottom);
-			}
-
-			int r = StretchDIBits(mainDC,
-				iDrawX, iDrawY,
-				stretchedImage.GetWidth(), stretchedImage.GetHeight(),
-				0, 0,
-				stretchedImage.GetWidth(), stretchedImage.GetHeight(),
-				stretchedImage.GetData(),
-				stretchedImage.GetBitmapInfo(),
+	// 메모리것을 화면에 그린다.
+	BOOL b = StretchDIBits(mainDC,
+				-m_iShowingX, -m_iShowingY,
+				zoomedImageWidth, zoomedImageHeight,
+				0, 0,//iDrawPartX, iDrawPartY,
+				m_currentImage.GetWidth(), m_currentImage.GetHeight(),
+				m_currentImage.GetData(),
+				m_currentImage.GetBitmapInfo(),
 				DIB_RGB_COLORS, SRCCOPY);
 
-			if ( r == GDI_ERROR )
-			{
-				assert(false);
-			}
-
-		}
-		else
-		{
-			/// 버퍼의 DC 가 NULL 이란 것은 이전 캐시가 없거나, 무효화되었다는 것이다.
-			if ( m_hBufferDC == NULL )
-			{
-				DebugPrintf(TEXT("!!!!! no DC cache clipping..."));
-				/// 큰 그림을 스크롤이 가능하게 클리핑해서 그린다.
-				m_hBufferDC = CreateCompatibleDC(mainDC);
-
-				HBITMAP hbmScreen = CreateCompatibleBitmap(mainDC, currentImageWidth, currentImageHeight);
-
-				SelectObject(m_hBufferDC, hbmScreen);
-
-				// 메모리에 전체 그림을 그린다.
-				if ( m_currentImage.isTransparent() )
-				{
-					DebugPrintf(TEXT("Drawing transparent image..."));
-					fipWinImage tempImage;
-					tempImage = m_currentImage.getFipImage();
-
-					tempImage.rescale(currentImageWidth, currentImageHeight, FILTER_BOX);
-					RECT rt;
-					rt.left = 0;
-					rt.top = 0;
-					rt.right = currentImageWidth;
-					rt.bottom = currentImageHeight;
-
-					tempImage.drawEx(m_hBufferDC, rt, TRUE);
-				}
-				else
-				{
-					int r = StretchDIBits(m_hBufferDC,
-						0, 0,
-						currentImageWidth, currentImageHeight,
-						0, 0,
-						currentImageWidth, currentImageHeight,
-						m_currentImage.GetData(),
-						m_currentImage.GetBitmapInfo(),
-						DIB_RGB_COLORS, SRCCOPY);
-
-					if ( r == GDI_ERROR )
-					{
-						assert(false);
-					}
-				}
-				DeleteObject(hbmScreen);
-			}
-			else
-			{
-				DebugPrintf(TEXT("DC cache clipping"));
-			}
-
-			if ( bEraseBg )	// 배경을 지워야 하면 지운다. 새로운 그림을 그리기 직전에 그려야 깜빡임이 적다.
-			{
-				_eraseBackground(mainDC, currentScreenRect.right, currentScreenRect.bottom);
-			}
-
-			// 메모리것을 화면에 그린다.
-			BOOL b = BitBlt(mainDC,
-				iDrawX, iDrawY,			// 그릴 화면의 x, y 좌표. 화면에 꽉 찰 때는 0, 0 이어야한다.
-				m_currentImage.GetWidth(), currentScreenRect.bottom,		// 그려질 화면의 가로, 세로 길이.
-				m_hBufferDC,
-				iDrawPartX, iDrawPartY,			// 그려질 이미지 원본의 시작 x,y 좌표
-				SRCCOPY);
-
-			if ( b == FALSE )
-			{
-				assert(b == TRUE);
-			}
-
-			//DebugPrintf("rt.bottom : %d, PartX : %d, iDrawPartY : %d", currentScreenRect.bottom, iDrawPartX, iDrawPartY);
-
-//				DeleteDC(memDC);
-		}
-	}
-	else	/// image is smaller than screen
+	if ( b == FALSE )
 	{
-		if ( currentImageWidth < currentScreenRect.right && currentImageHeight < currentScreenRect.bottom
-			&& ZOption::GetInstance().IsSmallToBigStretchImage() ) ///< if option is on
-		{
-			DebugPrintf(TEXT("!!!!!!!!!!!! stretching on draw..."));
-
-			/// 작은 그림을 화면에 맞게 확대해서 그린다.
-			RECT originalImageRect;
-			SetRect(&originalImageRect, 0, 0, currentImageWidth, currentImageHeight);
-			RECT toRect = GetResizedRectForSmallToBig(currentScreenRect, originalImageRect);
-
-			ZImage stretchedImage(m_currentImage);
-
-			/*
-			if ( stretchedImage.GetBPP() == 8 )
-			{
-				stretchedImage.ConvertTo32Bit();
-			}
-			*/
-
-			stretchedImage.Resize((WORD)toRect.right, (WORD)toRect.bottom);
-
-			_ASSERTE(toRect.right == stretchedImage.GetWidth());
-			_ASSERTE(toRect.bottom == stretchedImage.GetHeight());
-
-			int iDrawPointX = (currentScreenRect.right - toRect.right) / 2;
-			int iDrawPointY = (currentScreenRect.bottom - toRect.bottom) / 2;
-
-			if ( bEraseBg )	// 배경을 지워야 하면 지운다. 새로운 그림을 그리기 직전에 그려야 깜빡임이 적다.
-			{
-				_eraseBackground(mainDC, currentScreenRect.right, currentScreenRect.bottom);
-			}
-
-			if ( stretchedImage.isTransparent() )
-			{
-				DebugPrintf(TEXT("drawing trans....."));
-//				stretchedImage.Resize(currentImageWidth, currentImageHeight);
-
-				fipWinImage temp;
-				temp = stretchedImage.getFipImage();
-
-				RECT rt;
-				rt.left = iDrawPointX;
-				rt.top = iDrawPointY;
-				rt.right = toRect.right;
-				rt.bottom = toRect.bottom;
-
-				temp.drawEx(mainDC, rt, TRUE);
-			}
-			else
-			{
-				int r = StretchDIBits(mainDC,
-					iDrawPointX, iDrawPointY,
-					toRect.right, toRect.bottom,
-					0, 0,
-					toRect.right, toRect.bottom,
-					stretchedImage.GetData(),
-					stretchedImage.GetBitmapInfo(),
-					DIB_RGB_COLORS, SRCCOPY);
-
-				if ( r == GDI_ERROR )
-				{
-					assert(false);
-				}
-			}
-
-		}
-		else
-		{
-			if ( bEraseBg )	// 배경을 지워야 하면 지운다. 새로운 그림을 그리기 직전에 그려야 깜빡임이 적다.
-			{
-				_eraseBackground(mainDC, currentScreenRect.right, currentScreenRect.bottom);
-			}
-
-			if ( m_currentImage.isTransparent() )
-			{
-				DebugPrintf(TEXT("Drawing transparent image..."));
-				fipWinImage tempImage;
-				tempImage = m_currentImage.getFipImage();
-
-				/// rescale 을 하면, 투명한 배경에 체크무늬가 그려진다... 왜 이럴까;;;
-				tempImage.rescale(currentImageWidth, currentImageHeight, FILTER_BOX);
-				RECT rt;
-				rt.left = iDrawX;
-				rt.top = iDrawY;
-				rt.right = rt.left + currentImageWidth;
-				rt.bottom = rt.top + currentImageHeight;
-				tempImage.drawEx(mainDC, rt, TRUE);
-			}
-			else
-			{
-				/// 작은 그림을 화면 가운데에 그린다.
-				int r = StretchDIBits(mainDC,
-					iDrawX, iDrawY,
-					currentImageWidth, currentImageHeight,
-					0, 0,
-					currentImageWidth, currentImageHeight,
-					m_currentImage.GetData(),
-					m_currentImage.GetBitmapInfo(),
-					DIB_RGB_COLORS, SRCCOPY);
-
-				if ( r == GDI_ERROR )
-				{
-					assert(false);
-				}
-			}
-
-		}
+		DWORD dwError = GetLastError();
+		DebugPrintf(TEXT("StretchDIBits error : %d"), dwError);
+		assert(b == TRUE);
 	}
+
 	ReleaseDC(m_hMainDlg, mainDC);
 
 	// 마우스 커서 모양
-	if ( currentImageWidth > currentScreenRect.right ||
-		currentImageHeight > currentScreenRect.bottom
+	if ( zoomedImageWidth > currentScreenRect.right ||
+		zoomedImageHeight > currentScreenRect.bottom
 		)
 	{
 		// 마우스 커서를 hand 로
@@ -1212,7 +1011,8 @@ void ZMain::SetTitle()
 
 		StringCchPrintf(szTemp, MAX_PATH+256, TEXT("%s%s - %s"), szFileName, szFileExt, m_strCurrentFilename.c_str());
 	}
-	SetWindowText(m_hMainDlg, szTemp);
+	BOOL bRet = SetWindowText(m_hMainDlg, szTemp);
+	assert(bRet == TRUE);
 }
 
 void ZMain::LoadCurrent()
@@ -1231,9 +1031,10 @@ void ZMain::LoadCurrent()
 
 	_releaseBufferDC();
 
+	/// 캐시된 데이터에 있으면
 	if ( ZCacheImage::GetInstance().hasCachedData(m_strCurrentFilename, m_iCurretFileIndex) )
 	{
-		{
+		{/// 캐시된 데이터를 읽어온다.
 			ZCacheImage::GetInstance().getCachedData(m_strCurrentFilename, m_currentImage);
 		}
 
@@ -1253,11 +1054,11 @@ void ZMain::LoadCurrent()
 		for ( unsigned int i=0; i<10; ++i)
 		{
 			bLoadOK = m_currentImage.LoadFromFile(m_strCurrentFilename);
-			if ( bLoadOK || i >= 5) break;
+			if ( bLoadOK || i >= 5) break; ///< 그림 읽어들이는 데 성공하거나, 5번 해도 실패면 빠져나간다.
 
 			DebugPrintf(TEXT("Direct Load failed. sleep"));
 
-			Sleep(10);
+			Sleep(10); ///< 그림 읽어들일 때 실패했으면 10ms 의 딜레이를 준 후 다시 읽어본다.
 		}
 
 		if ( bLoadOK == false )
@@ -1280,8 +1081,8 @@ void ZMain::LoadCurrent()
 		}
 	}
 	m_dwLoadingTime = GetTickCount() - start;
-	SetTitle();	// 파일명을 윈도우 타이틀바에 적는다.
-	SetStatusBarText();
+	SetTitle();			///< 파일명을 윈도우 타이틀바에 적는다.
+	SetStatusBarText();	///< 상태 표시줄 내용을 설정한다.
 
 	m_iShowingX = 0;
 	m_iShowingY = 0;
@@ -1296,17 +1097,46 @@ void ZMain::LoadCurrent()
 			m_iShowingX = m_currentImage.GetWidth() - rt.right;
 		}
 	}
+
+	/// 기본적으로 그림의 zoom rate 를 설정한다.
+	m_fCurrentZoomRate = 1.0f;
+	RECT currentScreenRect;
+	if ( false == getCurrentScreenRect(currentScreenRect) )
+	{
+		assert(false);
+	}
+	else
+	{
+		if ( ZOption::GetInstance().IsBigToSmallStretchImage() )
+		{
+			if ( m_currentImage.GetWidth() > (currentScreenRect.right - currentScreenRect.left) || m_currentImage.GetHeight() > (currentScreenRect.bottom - currentScreenRect.top) )
+			{
+				RECT toRect;
+				SetRect(&toRect, 0, 0, m_currentImage.GetWidth(), m_currentImage.GetHeight());
+				toRect = GetResizedRectForBigToSmall(currentScreenRect, toRect);
+
+				m_fCurrentZoomRate = (float)(toRect.right - toRect.left) / (float)(m_currentImage.GetWidth());
+			}
+		}
+
+		if ( ZOption::GetInstance().IsSmallToBigStretchImage() )
+		{
+			if ( m_currentImage.GetWidth() < (currentScreenRect.right - currentScreenRect.left) && m_currentImage.GetHeight() < (currentScreenRect.bottom - currentScreenRect.top) )
+			{
+				RECT toRect;
+				SetRect(&toRect, 0, 0, m_currentImage.GetWidth(), m_currentImage.GetHeight());
+				toRect = GetResizedRectForSmallToBig(currentScreenRect, toRect);
+
+				m_fCurrentZoomRate = (float)(m_currentImage.GetWidth()) / (float)(toRect.right - toRect.left);
+			}
+		}
+	}
 }
 
 void ZMain::OnDrag(int x, int y)
 {
+//	DebugPrintf(TEXT("(%d,%d)"), x, y);
 	if ( !m_currentImage.IsValid()) return;
-
-	if ( ZOption::GetInstance().IsBigToSmallStretchImage() )
-	{
-		/// 큰 그림을 화면에 맞게 스트레칭할 때는 드래그는 하지 않아도 된다.
-		return;
-	}
 
 	RECT rt;
 	getCurrentScreenRect(rt);
@@ -1314,36 +1144,27 @@ void ZMain::OnDrag(int x, int y)
 	int iNowShowingX = m_iShowingX;
 	int iNowShowingY = m_iShowingY;
 
-	if ( (m_iShowingX + x) >= 0 )
-	{
-		if ( m_iShowingX + x + rt.right >= m_currentImage.GetWidth())
-		{
-			x = m_currentImage.GetWidth() - rt.right - m_iShowingX;// - 1;
-		}
-		m_iShowingX += x;
-	}
-	else
-	{
-		m_iShowingX = 0;
-	}
+	int iZoomedWidth = (int)(m_currentImage.GetWidth() * m_fCurrentZoomRate);
+	int iZoomedHeight = (int)(m_currentImage.GetHeight() * m_fCurrentZoomRate);
 
-	if ( ( m_iShowingY + y )  >= 0 )
-	{
-		if ( m_iShowingY + y + rt.bottom >= m_currentImage.GetHeight())
-		{
-			y = m_currentImage.GetHeight() - rt.bottom - m_iShowingY;// - 1;
-		}
-		m_iShowingY += y;
-	}
-	else
-	{
-		m_iShowingY = 0;
-	}
+	m_iShowingX += x;
 
+	if ( m_iShowingX <= 0 ) m_iShowingX = 0;
+	if ( m_iShowingX + rt.right >= iZoomedWidth ) m_iShowingX = iZoomedWidth - rt.right;
+
+	m_iShowingY += y;
+	if ( m_iShowingY <= 0 ) m_iShowingY = 0;
+	if ( m_iShowingY + rt.bottom >= iZoomedHeight ) m_iShowingY = iZoomedHeight - rt.bottom;
+
+	DebugPrintf(TEXT("ShowingX(%d), ShowingY(%d)"), m_iShowingX, m_iShowingY);
 	/// 보여주는 X 좌표나 Y 좌표 둘 중 하나라도 변경되었으면, 드래그된 것이므로 다시 그린다.
 	if ( m_iShowingX != iNowShowingX || m_iShowingY != iNowShowingY )
 	{
+		/// 여기서 false 인 이유는, 드래그를 할 수 있으면, 배경을 다시 칠할 필요가 없기 때문이다.
 		Draw(NULL, false);
+		/// 상태 표시줄도 새로 그린다.
+		SendMessage(ZMain::GetInstance().GetStatusHandle(), WM_PAINT, 0, 0);
+
 	}
 }
 
@@ -1717,14 +1538,14 @@ void ZMain::SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyle style)
 /// 현재 화면의 그릴 수 있는 영역의 크기를 받아온다.
 bool ZMain::getCurrentScreenRect(RECT & rect)
 {
-	if ( NULL == m_hMainDlg )
+	if ( NULL == m_hShowWindow )
 	{
-		_ASSERTE(m_hMainDlg);
+		_ASSERTE(m_hShowWindow);
 		return false;
 	}
 
-	if ( FALSE == GetClientRect(m_hMainDlg, &rect) ) return false;
-	if ( ZOption::GetInstance().IsFullScreen() == false ) rect.bottom -= STATUSBAR_HEIGHT;
+	if ( FALSE == GetClientRect(m_hShowWindow, &rect) ) return false;
+	//if ( ZOption::GetInstance().IsFullScreen() == false ) rect.bottom -= STATUSBAR_HEIGHT;
 
 	return true;
 }
@@ -1736,13 +1557,6 @@ void ZMain::OnWindowResized()
 	getCurrentScreenRect(rt);
 
 	OnChangeCurrentSize(rt.right, rt.bottom);
-
-	if ( ZOption::GetInstance().IsBigToSmallStretchImage() || ZOption::GetInstance().IsSmallToBigStretchImage() )
-	{
-		ZCacheImage::GetInstance().clearCache();
-		ZCacheImage::GetInstance().setCacheEvent();
-		LoadCurrent();
-	}
 }
 
 /// 상태 표시 윈도우를 만든다.
@@ -1809,4 +1623,51 @@ void ZMain::_eraseBackground(HDC mainDC, LONG right, LONG bottom)
 {
 	SelectObject(mainDC, m_bgBrush);
 	Rectangle(mainDC, 0, 0, right, bottom);
+}
+
+void ZMain::ZoomIn()
+{
+	if ( m_fCurrentZoomRate >= 10.0 ) return;
+	m_fCurrentZoomRate += 0.1;
+
+	m_iShowingX = 0;
+	m_iShowingY = 0;
+	Draw();
+}
+
+void ZMain::ZoomOut()
+{
+	if ( m_fCurrentZoomRate <= 0.2 ) return;
+	m_fCurrentZoomRate -= 0.1;
+
+	m_iShowingX = 0;
+	m_iShowingY = 0;
+	Draw();
+}
+
+void ZMain::ZoomNone()
+{
+	m_fCurrentZoomRate = 1.0;
+	m_iShowingX = 0;
+	m_iShowingY = 0;
+	Draw();
+}
+
+
+/// 그림을 보여줄 윈도우를 만든다.
+void ZMain::CreateShowWindow()
+{
+	m_hShowWindow = CreateWindow(TEXT("static"), TEXT(""), WS_CHILD | WS_VISIBLE , 0,0,100,100,
+	m_hMainDlg, (HMENU)-1, ZResourceManager::GetInstance().GetHInstance(), NULL);
+
+	assert(m_hShowWindow != INVALID_HANDLE_VALUE);
+}
+
+
+/// 현재 크기에 맞는 ShowWindow 크기를 정한다.
+void ZMain::SetShowWindowScreen()
+{
+	RECT rect;
+	GetClientRect(m_hMainDlg, &rect);
+	SetWindowPos(m_hShowWindow, HWND_TOP, 0, 0, rect.right, rect.bottom - STATUSBAR_HEIGHT, SWP_NOMOVE);
 }

@@ -129,5 +129,16 @@ private:
 
 	/// 캐시되어 있는 데이터들 중 현재 인덱스로부터 가장 멀리있는 인덱스를 얻는다.
 	int _GetFarthestIndexFromCurrentIndex();
+
+	/*
+	/// 현재 캐시 쓰레드에서 읽고 있는 파일이름
+	tstring m_cacheThreadReadingFileName;
+	CLockObj m_cacheThreadReadingFileNameLock;	///< m_cacheThreadReadingFileName 를 위한 lock 객체
+
+	/// 현재 메인 쓰레드에서 읽고 있는 파일이름
+	tstring m_mainThreadReadingFileName;
+	CLockObj m_mainThreadReadingFileNameLock;	///< m_mainThreadReadingFileName 를 위한 lock 객체
+	*/
+
 };
 
