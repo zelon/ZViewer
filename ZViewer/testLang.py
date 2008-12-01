@@ -59,12 +59,12 @@ def checkUsedMap():
 
 
 			if bFound == False:
-				print "[FAILED]Not found in all lang : " + key
+				print "[FAILED]testLang : error lang:Not found in all lang : " + key
 				return False
 
 	for lang in langMap:
 		if False == (lang in collectedUsedKeyList):
-			print "[WARNING] Not found in source code : " + lang
+			print "[WARNING]testLang : warning lang:Not found in source code : " + lang
 
 
 def checkSameMap():
@@ -152,7 +152,7 @@ def checkSameRes():
 	if lcount == rcount:
 		print "[OK] Define count same"
 	else:
-		print "[FAILED] !!! Define count not same"
+		print "[FAILED]testLang : error lang:  Define count not same"
 		return False
 
 	reNextValue = r"_APS_NEXT_COMMAND_VALUE.*?(\d+)"
@@ -162,7 +162,7 @@ def checkSameRes():
 	if len(lnextValue) == len(rnextValue) and lnextValue[0] == rnextValue[0]:
 		print "[OK] Same next value : " + lnextValue[0]
 	else:
-		print "[FAILED] Not same next value!! left:" + lnextValue[0] + " and right:" + rnextValue[0]
+		print "[FAILED]testLang : error lang: Not same next value!! left:" + lnextValue[0] + " and right:" + rnextValue[0]
 		return False
 
 	reDefineValues = r"#define.*?(\d+)"
@@ -171,14 +171,14 @@ def checkSameRes():
 
 	for l in lDefineValues:
 		if int(l) > int(lnextValue[0]):
-			print "[FAILED] over next value : " + l
-			print "[FAILED] next value : " + lnextValue[0]
+			print "[FAILED]testLang : error lang: over next value : " + l
+			print "[FAILED]testLang : error lang: next value : " + lnextValue[0]
 			return False
 
 	for r in lDefineValues:
 		if int(r) > int(rnextValue[0]):
-			print "[FAILED] over next value : " + r
-			print "[FAILED] next value : " + rnextValue[0]
+			print "[FAILED]testLang : error lang: over next value : " + r
+			print "[FAILED]testLang : error lang: next value : " + rnextValue[0]
 			return False
 
 if __name__ == "__main__":
