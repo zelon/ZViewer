@@ -482,6 +482,16 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 				}
 				break;
 
+			case ID_ZOOM_100:
+				ZMain::GetInstance().ZoomNone();
+				break;
+			case ID_ZOOM_IN:
+				ZMain::GetInstance().ZoomIn();
+				break;
+			case ID_ZOOM_OUT:
+				ZMain::GetInstance().ZoomOut();
+				break;
+
 			case ID_VIEW_FULLSCREEN:
 				ZMain::GetInstance().ToggleFullScreen();
 				break;

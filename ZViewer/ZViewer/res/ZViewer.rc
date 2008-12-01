@@ -105,6 +105,12 @@ BEGIN
         MENUITEM "View Loop",                   ID_OPTION_VIEWLOOP
         MENUITEM "File Extension...",           ID_OPTION_FILE_EXT
     END
+    POPUP "Zoom"
+    BEGIN
+        MENUITEM "Zoom In\t+",                  ID_ZOOM_IN
+        MENUITEM "Zoom Out\t-",                 ID_ZOOM_OUT
+        MENUITEM "100%\t0",                     ID_ZOOM_100
+    END
     POPUP "&Help"
     BEGIN
         MENUITEM "&About\tF1",                  ID_HELP_ABOUT
