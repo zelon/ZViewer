@@ -1545,8 +1545,6 @@ bool ZMain::getCurrentScreenRect(RECT & rect)
 	}
 
 	if ( FALSE == GetClientRect(m_hShowWindow, &rect) ) return false;
-	//if ( ZOption::GetInstance().IsFullScreen() == false ) rect.bottom -= STATUSBAR_HEIGHT;
-
 	return true;
 }
 
@@ -1669,5 +1667,15 @@ void ZMain::SetShowWindowScreen()
 {
 	RECT rect;
 	GetClientRect(m_hMainDlg, &rect);
-	SetWindowPos(m_hShowWindow, HWND_TOP, 0, 0, rect.right, rect.bottom - STATUSBAR_HEIGHT, SWP_NOMOVE);
+
+	if ( false == ZOption::GetInstance().IsFullScreen() ) /// 풀 스크린이 아닐 때는 작업표시줄의 영역만큼은 빼줘야함
+	{
+		enum
+		{
+			STATUSBAR_HEIGHT = 20
+		};
+
+		rect.bottom -= STATUSBAR_HEIGHT;
+	}
+	SetWindowPos(m_hShowWindow, HWND_TOP, 0, 0, rect.right, rect.bottom, SWP_NOMOVE);
 }
