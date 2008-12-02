@@ -130,6 +130,30 @@ def checkSameMap():
 	if False == bFound:
 		print "[OK] There is no error for checking same word."
 
+""" .rc 파일들의 주요 내용이 서로 같은지 체크 """
+def checkSameRCFile():
+	left = open(r'ZViewer\res\ZViewer.rc', "r")
+	right = open(r'LangKor\res\ZViewer.rc', "r")
+
+	leftdata = left.read()
+	left.close()
+
+	rightdata = right.read()
+	right.close()
+
+	strRe = r"IDR_MAIN_ACCELERATOR.*?^END"
+	strRe = r"IDR_MAIN_ACCELERATOR.*?^END"
+
+	leftAccel = re.findall(strRe, leftdata, re.S | re.I | re.M )
+	rightAccel = re.findall(strRe, rightdata, re.S | re.I | re.M )
+
+	if leftAccel != rightAccel:
+		print "[FAILED]testLang : error lang: Not same accelerator"
+		return False
+	else:
+		print "[OK] Same accelerator"
+	return True
+
 """ Resource 파일들이 서로 같은지 체크~~~ """
 def checkSameRes():
 	left = open(r'ZViewer\res\resource.h', "r")
@@ -181,14 +205,19 @@ def checkSameRes():
 			print "[FAILED]testLang : error lang: next value : " + rnextValue[0]
 			return False
 
+	if leftdata != rightdata:
+		print "[FAILED]testLang : error lang: Not same resource.h"
+		return False
+
+	print "[OK] Completed checking resource.h"
+
 if __name__ == "__main__":
-	print "---- start checkSameMap ----"
 	if False == checkSameMap():
 		exit(1)
-	print "---- start checkUseMap ----"
 	if False == checkUsedMap():
 		exit(1)
-	print "---- start checkSameResource ----"
 	if False == checkSameRes():
+		exit(1)
+	if False == checkSameRCFile():
 		exit(1)
 	exit(0)
