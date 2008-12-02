@@ -297,10 +297,10 @@ void ZMain::Draw(HDC toDrawDC, bool bEraseBg)
 	}
 
 	/// 추후 확대/축소 후의 화면 위치등을 위해서
-	m_fCenterX = (float)currentScreenRect.right / (float)drawRect.right / 2.0;
-	m_fCenterY = (float)currentScreenRect.bottom / (float)drawRect.bottom / 2.0;
+	m_fCenterX = (float)((currentScreenRect.right/2.0f) - (float)drawRect.left) / (float)(drawRect.right-drawRect.left);
+	m_fCenterY = (float)((currentScreenRect.bottom/2.0f) - (float)drawRect.top) / (float)(drawRect.bottom-drawRect.top);
 
-	DebugPrintf(TEXT("center(%f,%f)"), m_fCenterX, m_fCenterY);
+	DebugPrintf(TEXT("center(%f,%f) on Dtaw()"), m_fCenterX, m_fCenterY);
 
 #ifdef _DEBUG
 	DWORD dwStart = GetTickCount();
@@ -1609,6 +1609,16 @@ void ZMain::_eraseBackground(HDC mainDC, LONG right, LONG bottom)
 	Rectangle(mainDC, 0, 0, right, bottom);
 }
 
+/// Zoom in & out 전의 센터 위치로 그림을 드래그함. ZoomOut, ZoomIn 중에 호출됨
+void ZMain::_PositionPreviousCenter()
+{
+	RECT cr;
+	getCurrentScreenRect(cr);
+	int moveX = (int)(m_currentImage.GetWidth() * m_fCurrentZoomRate * m_fCenterX - (cr.right / 2));
+	int moveY = (int)(m_currentImage.GetHeight() * m_fCurrentZoomRate * m_fCenterY - (cr.bottom / 2));
+	OnDrag(moveX, moveY);
+}
+
 void ZMain::ZoomIn()
 {
 	double fBeforeModify = m_fCurrentZoomRate;
@@ -1636,13 +1646,8 @@ void ZMain::ZoomIn()
 		m_iShowingY = 0;
 
 		SetStatusBarText();
-
-		RECT cr;
-		getCurrentScreenRect(cr);
-		int moveX = m_currentImage.GetWidth() * m_fCurrentZoomRate - (cr.right / 2);
-		int moveY = m_currentImage.GetHeight() * m_fCurrentZoomRate - (cr.bottom/ 2);
-		OnDrag(moveX, moveY);
-		//Draw();
+		_PositionPreviousCenter(); ///< 이전 배율에서의 화면 위치로 드래그해서 Zoom 할 때 자연스럽게 보여준다.
+		Draw();
 	}
 }
 
@@ -1673,6 +1678,7 @@ void ZMain::ZoomOut()
 		m_iShowingY = 0;
 
 		SetStatusBarText();
+		_PositionPreviousCenter(); ///< 이전 배율에서의 화면 위치로 드래그해서 Zoom 할 때 자연스럽게 보여준다.
 		Draw();
 	}
 }

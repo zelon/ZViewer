@@ -294,4 +294,7 @@ private:
 	/// 현재보고 있는 화면의 센터는 그림의 몇 % 지점인가 기록
 	float m_fCenterX;
 	float m_fCenterY;
+
+	/// Zoom in & out 전의 센터 위치로 그림을 드래그함. ZoomOut, ZoomIn 중에 호출됨
+	void _PositionPreviousCenter();
 };
