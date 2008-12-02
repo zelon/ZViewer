@@ -66,6 +66,10 @@ BEGIN
         MENUITEM SEPARATOR
         MENUITEM "E&xit\tAlt+X",                ID_MAINMENU_FILE_EXIT
     END
+    POPUP "&Edit"
+    BEGIN
+        MENUITEM "&Copy to clipboard\tCtrl+C",  ID_COPY_TO_CLIPBOARD
+    END
     POPUP "&View"
     BEGIN
         MENUITEM "&FullScreen\tAlt+Enter, Enter", ID_VIEW_FULLSCREEN
@@ -100,12 +104,12 @@ BEGIN
         MENUITEM "Always on Top",               ID_VIEW_ALWAYSONTOP
         MENUITEM "Show Detail Infomation",      ID_SHOW_DETAILINFOMATION
     END
-    POPUP "Option"
+    POPUP "&Option"
     BEGIN
         MENUITEM "View Loop",                   ID_OPTION_VIEWLOOP
         MENUITEM "File Extension...",           ID_OPTION_FILE_EXT
     END
-    POPUP "Zoom"
+    POPUP "&Zoom"
     BEGIN
         MENUITEM "Zoom In\t+",                  ID_ZOOM_IN
         MENUITEM "Zoom Out\t-",                 ID_ZOOM_OUT
@@ -167,6 +171,7 @@ BEGIN
     VK_LEFT,        ID_ACCELERATOR_LEFT,    VIRTKEY, NOINVERT
     VK_RIGHT,       ID_ACCELERATOR_RIGHT,   VIRTKEY, NOINVERT
     VK_UP,          ID_ACCELERATOR_UP,      VIRTKEY, NOINVERT
+    "C",            ID_COPY_TO_CLIPBOARD,   VIRTKEY, CONTROL, NOINVERT
     VK_DELETE,      ID_DELETETHISFILE,      VIRTKEY, NOINVERT
     "C",            ID_FILE_COPYTO,         VIRTKEY, ALT, NOINVERT
     "M",            ID_FILE_MOVETO,         VIRTKEY, ALT, NOINVERT
@@ -188,10 +193,10 @@ BEGIN
     VK_BACK,        ID_MOVE_REDOIMAGEPOSITION, VIRTKEY, SHIFT, NOINVERT
     VK_BACK,        ID_MOVE_UNDOIMAGEPOSITION, VIRTKEY, NOINVERT
     VK_F9,          ID_SHOW_CACHED_FILENAME, VIRTKEY, NOINVERT
+    VK_RETURN,      ID_VIEW_FULLSCREEN,     VIRTKEY, NOINVERT
     VK_RETURN,      ID_VIEW_FULLSCREEN,     VIRTKEY, ALT, NOINVERT
     "]",            ID_VIEW_ROTATECLOCKWISE, ASCII, NOINVERT
     "[",            ID_VIEW_ROTATECOUNTERCLOCKWISE, ASCII, NOINVERT
-    VK_RETURN,      ID_VIEW_FULLSCREEN,     VIRTKEY, NOINVERT
 END
 
 

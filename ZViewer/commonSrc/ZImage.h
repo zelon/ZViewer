@@ -87,6 +87,8 @@ public:
 #endif
 	}
 
+	void Draw(HDC hDC, RECT& rcDest) const { m_image.draw(hDC, rcDest); }
+
 	void Rotate(double dAngle) { m_image.rotate(dAngle); }
 
 	bool Resize(WORD newWidth, WORD newHeight)
@@ -123,6 +125,7 @@ public:
 
 	void GetExifList(std::list < TagData > & exifList);
 
+	bool CopyToClipboard(HWND hWndNewOwner) { return (TRUE == m_image.copyToClipboard(hWndNewOwner)); }
 private:
 	mutable fipWinImage m_image;
 

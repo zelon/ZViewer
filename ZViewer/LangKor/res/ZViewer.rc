@@ -66,6 +66,10 @@ BEGIN
         MENUITEM SEPARATOR
         MENUITEM "종료(&X)\tAlt+X",               ID_MAINMENU_FILE_EXIT
     END
+    POPUP "편집(&E)"
+    BEGIN
+        MENUITEM "클립보드에 복사(&C)",                ID_COPY_TO_CLIPBOARD
+    END
     POPUP "보기(&V)"
     BEGIN
         MENUITEM "전체화면(&F)\tAlt+Enter",         ID_VIEW_FULLSCREEN
@@ -105,7 +109,7 @@ BEGIN
         MENUITEM "마지막 다음이 처음으로",                ID_OPTION_VIEWLOOP
         MENUITEM "파일 확장자...",                   ID_OPTION_FILE_EXT
     END
-    POPUP "확대/축소"
+    POPUP "확대/축소(&Z)"
     BEGIN
         MENUITEM "확대하기\t+",                     ID_ZOOM_IN
         MENUITEM "축소하기\t-",                     ID_ZOOM_OUT
@@ -167,6 +171,7 @@ BEGIN
     VK_LEFT,        ID_ACCELERATOR_LEFT,    VIRTKEY, NOINVERT
     VK_RIGHT,       ID_ACCELERATOR_RIGHT,   VIRTKEY, NOINVERT
     VK_UP,          ID_ACCELERATOR_UP,      VIRTKEY, NOINVERT
+    "C",            ID_COPY_TO_CLIPBOARD,   VIRTKEY, CONTROL, NOINVERT
     VK_DELETE,      ID_DELETETHISFILE,      VIRTKEY, NOINVERT
     "C",            ID_FILE_COPYTO,         VIRTKEY, ALT, NOINVERT
     "M",            ID_FILE_MOVETO,         VIRTKEY, ALT, NOINVERT
@@ -188,10 +193,10 @@ BEGIN
     VK_BACK,        ID_MOVE_REDOIMAGEPOSITION, VIRTKEY, SHIFT, NOINVERT
     VK_BACK,        ID_MOVE_UNDOIMAGEPOSITION, VIRTKEY, NOINVERT
     VK_F9,          ID_SHOW_CACHED_FILENAME, VIRTKEY, NOINVERT
+    VK_RETURN,      ID_VIEW_FULLSCREEN,     VIRTKEY, NOINVERT
     VK_RETURN,      ID_VIEW_FULLSCREEN,     VIRTKEY, ALT, NOINVERT
     "]",            ID_VIEW_ROTATECLOCKWISE, ASCII, NOINVERT
     "[",            ID_VIEW_ROTATECOUNTERCLOCKWISE, ASCII, NOINVERT
-    VK_RETURN,      ID_VIEW_FULLSCREEN,     VIRTKEY, NOINVERT
 END
 
 

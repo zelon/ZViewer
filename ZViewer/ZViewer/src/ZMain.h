@@ -42,7 +42,7 @@ public:
 	bool getCurrentScreenRect(RECT & rect);
 
 	/// 현재 크기에 맞는 ShowWindow 크기를 정한다.
-	void SetShowWindowScreen();
+	void AdjustShowWindowScreen();
 
 	/// On Window is resized
 	void OnWindowResized();
@@ -123,7 +123,7 @@ public:
 	HWND GetStatusHandle() const { return m_hStatusBar; }
 
 	/// Cache status 를 상태 표시줄에 표시한다.
-	void showCacheStatus();
+	void ShowCacheStatus();
 
 	void ToggleAlwaysOnTop();
 
@@ -193,6 +193,8 @@ public:
 
 	HWND GetShowWindow() const { return m_hShowWindow; }
 
+	/// 현재보는 이미지를 클립보드에 복사한다.
+	void CopyToClipboard();
 private:
 
 	/// 현재 이미지를 드래그할 수 있어서, 손모양의 커서인가
@@ -285,4 +287,11 @@ private:
 
 	/// 실제로 그림을 그릴 화면창
 	HWND m_hShowWindow;
+
+	/// 배경을 지울 때 쓰일 Region
+	HRGN m_hEraseRgb;
+
+	/// 현재보고 있는 화면의 센터는 그림의 몇 % 지점인가 기록
+	float m_fCenterX;
+	float m_fCenterY;
 };

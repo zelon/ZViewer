@@ -78,10 +78,14 @@ HWND CMainWindow::Create(HINSTANCE hInstance, HWND hParentHWND, int nCmdShow)
 	WndClass.style=CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS;
 	RegisterClass(&WndClass);
 
-	int iWidth = (int)(GetSystemMetrics(SM_CXSCREEN) * 0.8);
-	int iHeight = (int)(GetSystemMetrics(SM_CYSCREEN) * 0.8);
-	int iXPosition = (GetSystemMetrics(SM_CXSCREEN)/2) - (iWidth/2);
-	int iYPosition = (GetSystemMetrics(SM_CYSCREEN)/2) - ( iHeight/2) ;
+	int iScreenWidth = GetSystemMetrics(SM_CXFULLSCREEN);
+	int iScreenHeight = GetSystemMetrics(SM_CYFULLSCREEN);
+
+	int iWidth = (int)(iScreenWidth * 0.8);
+	int iHeight = (int)(iScreenHeight * 0.8);
+
+	int iXPosition = (iScreenWidth/2) - (iWidth/2);
+	int iYPosition = (iScreenHeight/2) - ( iHeight/2) ;
 
 	HMENU hMenu = (HMENU)LoadMenu(ZResourceManager::GetInstance().GetHInstance(), MAKEINTRESOURCE(IDR_MAIN_MENU));
 
@@ -345,7 +349,7 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 	case WM_SIZE:
 		{
 			/// ShowWindow 크기를 조절한다.
-			ZMain::GetInstance().SetShowWindowScreen();
+			ZMain::GetInstance().AdjustShowWindowScreen();
 
 			/// StatusBar 크기를 조절한다.
 			SendMessage(ZMain::GetInstance().GetStatusHandle(), WM_SIZE, wParam, lParam);
@@ -496,6 +500,9 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 				ZMain::GetInstance().ToggleFullScreen();
 				break;
 
+			case ID_COPY_TO_CLIPBOARD:
+				ZMain::GetInstance().CopyToClipboard();
+				break;
 			case ID_SORT_FILENAME:
 				ZMain::GetInstance().ChangeFileSort(eFileSortOrder_FILENAME);
 				break;
@@ -622,9 +629,6 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 		hdc=BeginPaint(ZMain::GetInstance().GetShowWindow(), &ps);
 		ZMain::GetInstance().Draw(hdc);
 		EndPaint(ZMain::GetInstance().GetShowWindow(), &ps);
-
-		/// 상태 표시줄도 새로 그린다.
-		SendMessage(ZMain::GetInstance().GetStatusHandle(), WM_PAINT, wParam, lParam);
 
 		DebugPrintf(TEXT("Recv WM_PAINT"));
 		return 0;
