@@ -2,7 +2,7 @@ import re
 import os
 import ZViewer
 
-def testmain():
+def archiveDebugDatas():
 	strCurrentVersion = ZViewer.getCurrentVersionFromNSIS()
 	if strCurrentVersion == "Unknown":
 		print("[FAILED] Cannot get current version from NSIS")
@@ -14,22 +14,31 @@ def testmain():
 		print("[FAILED] There is no 7zip : " + str7ZipPath)
 		return 1
 
-	files = [ "dbghelp.dll", "language", "_Zviewer.png", "FreeImage.dll", "FreeImagePlus.dll", "License.txt", "LoadError.png", "ReadMe.txt", "ZViewer.exe", "ZViewerAgent.dll", "ZViewerIcons.dll"]
+	files = [ "ZViewer.exe", "ZViewer.pdb" ]
 
 	for file in files:
 		if False == os.path.isfile(file) and False == os.path.isdir(file):
 			print("[FAILED] Cannot find : " + file)
 			return 1
 
-	strCmd = "\"" + str7ZipPath + "\" a ZViewerPortable" + strCurrentVersion + ".zip "
+	# log current dir
+	strPathLogFile = "path.txt"
+	f = open(strPathLogFile, "w")
+	f.write(os.path.abspath("ZViewer.exe"))
+	f.close()
+
+	strCmd = "\"" + str7ZipPath + "\" a ZViewerDebugInfo" + strCurrentVersion + ".zip "
 	for file in files:
 		strCmd = strCmd + file + " "
+	strCmd = strCmd + strPathLogFile
 
-	print strCmd
+	print(strCmd)
 	os.system(strCmd)
+	os.unlink(strPathLogFile)
 
 if __name__ == "__main__":
-	if 1 == testmain():
+	if 1 == archiveDebugDatas():
+		print("[FAILED] Archiving debug datas is failed.")
 		exit(1)
 	else:
-		print("[OK] Making portable version is completed.")
+		print("[OK] Archiving debug datas is completed.")
