@@ -60,7 +60,7 @@ void CZViewMenuExt::_SaveAS()
 	}
 }
 
-STDMETHODIMP CZViewMenuExt::Initialize (LPCITEMIDLIST pidlFolder, LPDATAOBJECT  pDO, HKEY hkeyProgID )
+STDMETHODIMP CZViewMenuExt::Initialize (LPCITEMIDLIST pidlFolder, LPDATAOBJECT  pDO, HKEY /*hkeyProgID*/ )
 {
 	/// 만약 Shift 키를 누르고 메뉴를 띄운 것이면 이미지 미리보기를 보여주지 않는다.
 	if ( GetKeyState(VK_LSHIFT) < 0 )
@@ -292,14 +292,17 @@ STDMETHODIMP CZViewMenuExt::QueryContextMenu(HMENU hmenu, UINT uIndex, UINT uidC
 	iAddedMenuCount = (uID - uidCmdFirst);
 
 	/// uID 는 함수 인자로 넘어온 uidCmdLast 보다 작아야한다(ref by msdn)
-	assert(uID < uidCmdLast);
+	if ( uID >= uidCmdLast )
+	{
+		assert(uID < uidCmdLast);
+	}
 
 	// 메뉴에 몇 개의 메뉴를 넣었는지 얘기해준다. 여기의 iAddedMenuCount 값이 이상하면, 명령을 실행했는데 다른 명령이 실행되곤 한다.
 	return MAKE_HRESULT ( SEVERITY_SUCCESS, FACILITY_NULL, iAddedMenuCount );
 }
 
 /// mouseover 한 메뉴에 따라서, 이 함수에서 얻은 문자열을 탐색기의 '상태표시줄' 에 보여준다.
-STDMETHODIMP CZViewMenuExt::GetCommandString (UINT uCmd, UINT uFlags, UINT* puReserved, LPSTR pszName, UINT cchMax)
+STDMETHODIMP CZViewMenuExt::GetCommandString (UINT uCmd, UINT uFlags, UINT* /*puReserved*/, LPSTR pszName, UINT cchMax)
 {
 	// 여기서 uCmd 는 메뉴에 넣은 순서대로 0 부터 순서대로 온다. 단, 선택할 수 없는 메뉴는 무시한 순서다.
 
@@ -477,7 +480,7 @@ STDMETHODIMP CZViewMenuExt::HandleMenuMsg2(UINT uMsg, WPARAM wParam, LPARAM lPar
 	}
 }
 
-STDMETHODIMP CZViewMenuExt::MenuMessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT * pResult)
+STDMETHODIMP CZViewMenuExt::MenuMessageHandler(UINT uMsg, WPARAM /*wParam*/, LPARAM lParam, LRESULT * pResult)
 {
     switch ( uMsg )
 	{
@@ -590,7 +593,7 @@ STDMETHODIMP CZViewMenuExt::OnDrawItem(DRAWITEMSTRUCT * pdis, LRESULT * pResult 
 		}
 		*/
 
-		m_originalImage.Resize(rcDraw.Width(), rcDraw.Height());
+		m_originalImage.Resize((WORD)rcDraw.Width(), (WORD)rcDraw.Height());
 	}
 
 	// 실제로 그린다.
