@@ -79,9 +79,7 @@ public:
 	bool SaveToFile(const tstring & strFilename, int iFlag) const
 	{
 #ifdef _UNICODE
-		char buffer[256] = { 0 };
-		WideCharToMultiByte(CP_THREAD_ACP, 0, strFilename.c_str(), (int)strFilename.size(), buffer, 256, NULL, NULL);
-		return ( TRUE == m_image.save(buffer, iFlag));
+		return ( TRUE == m_image.saveU(strFilename.c_str(), iFlag));
 #else
 		return ( TRUE == m_image.save(strFilename.c_str(), iFlag));
 #endif
