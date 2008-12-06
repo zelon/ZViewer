@@ -18,10 +18,13 @@ def getCurrentVersionFromNSIS():
 			return (m.group(1))
 		else:
 			pass
-	return "Cannot get current version from nsis"
+	return "Unknown"
 
 def testmain():
 	strCurrentVersion = getCurrentVersionFromNSIS()
+	if strCurrentVersion == "Unknown":
+		print("[FAILED] Cannot get current version from NSIS")
+		return 1
 	str7ZipPath = r"C:\Program Files\7-Zip\7z.exe" 
 	if True == os.path.isfile(str7ZipPath):
 		print("Founded 7z")
@@ -33,7 +36,7 @@ def testmain():
 
 	for file in files:
 		if False == os.path.isfile(file) and False == os.path.isdir(file):
-			print("[FAILED] Cannot find " + file)
+			print("[FAILED] Cannot find : " + file)
 			return 1
 
 	strCmd = "\"" + str7ZipPath + "\" a ZViewerPortable" + strCurrentVersion + ".zip "
@@ -44,5 +47,5 @@ def testmain():
 	os.system(strCmd)
 
 if __name__ == "__main__":
-	testmain()
-	os.system("pause")
+	if 1 == testmain():
+		exit(1)

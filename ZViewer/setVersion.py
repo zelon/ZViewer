@@ -135,35 +135,36 @@ def doVersionUp():
 
 	if strYesNo != "y":
 		print ("Canceled by user input")
-		return
+		return False
+
 	# version up ZViewerAgent\ZViewerAgent.rc
 	if False == SetRcVersionUp(r"ZViewerAgent\ZViewerAgent.rc", vMajor, vMinor, vPatch):
 		print ("[FAILED] !!! Error on zviewerRcVersionUp!!!!!!!!!!")
-		return
+		return False
 
 	# version up ZViewer/res/ZViewer.rc
 	if False == SetRcVersionUp(r"ZViewer\res\ZViewer.rc", vMajor, vMinor, vPatch):
 		print ("[FAILED] !!! Error on zviewerAgentRcVersionUp!!!!!!!!!!")
-		return
+		return False
 
 	# version up ZViewer/LangKor/res/ZViewer.rc
 	if False == SetRcVersionUp(r"LangKor\res\ZViewer.rc", vMajor, vMinor, vPatch):
 		print ("[FAILED] !!! Error on LangKor RcVersionUp!!!!!!!!!!")
-		return
+		return False
 
 	# version up output/ZViewer.nsi
 	if False == nsisVersionUp(vMajor, vMinor, vPatch, vPostfix):
 		print ("[FAILED] !!! Error on nsisVersionUp!!!!!!!!!!")
-		return
+		return False
 
 	# version up commonSrc/CommonDefin.h
 	if False == commonDefineVersionUp(vMajor, vMinor, vPatch, vPostfix):
 		print ("[FAILED] !!! Error on commonDefineVersionUp!!!!!!!!!!")
-		return
+		return False
 
 	print("[OK] version update completed")
 
 if __name__ == "__main__":
 	print("Current version : " + getCurrentVersionFromNSIS())
-	doVersionUp()
-	os.system("pause")
+	if False == doVersionUp():
+		exit(1)
