@@ -59,6 +59,8 @@ public:
 	const bool IsLoopImages() const { return m_bLoopImages; }
 	void ToggleLoopImages() { m_bLoopImages = !m_bLoopImages; }
 
+	const bool IsUseDebug() const { return m_bUseDebug;}
+
 	const bool IsBigToSmallStretchImage() const { return m_bBigToSmallStretchImage; }
 	void ToggleBigToSmallStretchImage() { m_bBigToSmallStretchImage = !m_bBigToSmallStretchImage; }
 
@@ -105,6 +107,9 @@ private:
 
 	/// 마지막 그림 파일에서 다음으로 가면 처음 그림 파일로 갈 것인가?
 	bool m_bLoopImages;
+
+	/// 디버그 정보를 남기나
+	bool m_bUseDebug;
 
 	/// 화면보다 큰 그림을 화면에 맞게 축소할 것인가
 	bool m_bBigToSmallStretchImage;

@@ -195,9 +195,6 @@ void ZMain::SaveFileDialog()
 
 void ZMain::OnInit()
 {
-	/// 기본 옵션을 불러온다.
-	ZOption::GetInstance().LoadOption();
-
 	/// 불러온 최종 옵션을 점검하여 메뉴 중 체크표시할 것들을 표시한다.
 	SetCheckMenus();
 
@@ -996,7 +993,11 @@ void ZMain::SetTitle()
 		StringCchPrintf(szTemp, MAX_PATH+256, TEXT("%s%s - %s"), szFileName, szFileExt, m_strCurrentFilename.c_str());
 	}
 	BOOL bRet = SetWindowText(m_hMainDlg, szTemp);
-	assert(bRet == TRUE);
+	
+	if ( FALSE == bRet )
+	{
+		assert(!"Can't SetWindowText");
+	}
 }
 
 void ZMain::LoadCurrent()

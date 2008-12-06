@@ -654,6 +654,18 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="minidump"
+				>
+				<File
+					RelativePath="..\commonSrc\minidump\MiniDumper.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\commonSrc\minidump\MiniDumper.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 	</Files>
 	<Globals>

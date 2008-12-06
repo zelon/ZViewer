@@ -65,6 +65,8 @@ void ZOption::SetSaveOptions()
 
 	_InsertSaveOptionSetting(L"use_open_cmd_shell", &m_bUseOpenCMDInShell);
 	_InsertSaveOptionSetting(L"use_preview_shell", &m_bUsePreviewInShell);
+
+	_InsertSaveOptionSetting(L"use_debug", &m_bUseDebug);
 }
 
 /// 기본적인 옵션을 설정해둔다.
@@ -78,6 +80,7 @@ void ZOption::SetDefaultOption()
 	m_bLoopImages = false;
 	m_bUseCache = true;
 	m_bFullScreen = false;
+	m_bUseDebug = false;
 	m_bBigToSmallStretchImage = false;
 	m_bSmallToBigStretchImage = false;
 	m_iMaximumCacheMemoryMB = 50;
@@ -88,6 +91,7 @@ void ZOption::SetDefaultOption()
 	m_iMaxCacheImageNum = 10;
 	m_iSlideModePeriodMiliSeconds = 1000;
 	m_bUseOpenCMDInShell = true;
+	m_bUseDebug = true;
 #endif
 }
 

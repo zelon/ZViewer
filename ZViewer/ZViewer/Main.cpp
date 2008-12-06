@@ -45,12 +45,12 @@
 
 #include "../commonSrc/LogManager.h"
 #include "../commonSrc/MessageManager.h"
+#include "../commonSrc/minidump/MiniDumper.h"
+#include "../commonSrc/ZOption.h"
 
 #ifdef _DEBUG
 #include "vld/vld.h"
 #endif
-
-
 
 /// Entry point
 int APIENTRY _tWinMain(HINSTANCE hInstance,HINSTANCE /*hPrevInstance */,LPTSTR lpszCmdParam,int nCmdShow)
@@ -78,6 +78,26 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,HINSTANCE /*hPrevInstance */,LPTSTR l
 		}
 	}
 #endif
+
+	/// 기본 옵션을 불러온다.
+	ZOption::GetInstance().LoadOption();
+
+	MiniDumper * pDump = NULL;
+	if ( ZOption::GetInstance().IsUseDebug() )
+	{
+		tstring strDumpFilename = TEXT("C:\\ZViewer");
+		strDumpFilename += g_strVersion;
+		strDumpFilename += TEXT(".dmp");
+
+		TCHAR szDumpMsg[_MAX_PATH];
+		StringCchPrintf(szDumpMsg, _MAX_PATH, TEXT("%s\r\n\r\nFile : %s\r\nHomepage : %s"), GetMessage(TEXT("CRASH_MSG")), strDumpFilename.c_str(), g_strHomepage.c_str());
+
+		/// 아래의 객체는 프로그램이 끝날 때에 삭제되어야 한다. 그전에 삭제되면 크래시되었을 때 제대로 덤프를 만들지 못한다.
+		pDump = new MiniDumper(strDumpFilename.c_str(), szDumpMsg);
+
+		//int * p = 0;
+		//*p = 0;
+	}
 
 	/// 파일 확장자를 연결하라는 거면
 	if ( _tcscmp(lpszCmdParam, TEXT("/fileext")) == 0 )	
@@ -176,6 +196,8 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,HINSTANCE /*hPrevInstance */,LPTSTR l
 	ZCacheImage::GetInstance().CleanUp();
 	CLogManager::getInstance().CleanUp();
 	ZImage::CleanupLibrary();
+
+	delete pDump;
 
 	return (int)wParam;
 }
