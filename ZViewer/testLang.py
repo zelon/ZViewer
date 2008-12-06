@@ -59,12 +59,12 @@ def checkUsedMap():
 
 
 			if bFound == False:
-				print "[FAILED]testLang : error lang:Not found in all lang : " + key
+				print("[FAILED]testLang : error lang:Not found in all lang : " + key)
 				return False
 
 	for lang in langMap:
 		if False == (lang in collectedUsedKeyList):
-			print "[WARNING]testLang : warning lang:Not found in source code : " + lang
+			print("[WARNING]testLang : warning lang:Not found in source code : " + lang)
 
 
 def checkSameMap():
@@ -125,10 +125,11 @@ def checkSameMap():
 				pass
 			except:
 				bFound = True
-				print "there is no matching word for : " + thisLang + " in " + file
+				print(file + ": error lang:there is no matching word for : " + thisLang + " in " + file)
+				print("[FAILED]there is no matching word for : " + thisLang + " in " + file)
 
 	if False == bFound:
-		print "[OK] There is no error for checking same word."
+		print("[OK] There is no error for checking same word.")
 
 """ .rc 파일들의 주요 내용이 서로 같은지 체크 """
 def checkSameRCFile():
