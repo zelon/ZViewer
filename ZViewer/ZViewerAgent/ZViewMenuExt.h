@@ -127,6 +127,9 @@ public:
 
 	/// 현재 위치에 CMD 창을 띄운다.
 	void OpenCmdWindow(void);
+
+	/// 클립보드의 이미지를 파일로 붙여넣기
+	void PasteAsImagefileFromClipboard();
 };
 
 OBJECT_ENTRY_AUTO(__uuidof(ZViewMenuExt), CZViewMenuExt)

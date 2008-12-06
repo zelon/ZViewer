@@ -126,6 +126,7 @@ public:
 	void GetExifList(std::list < TagData > & exifList);
 
 	bool CopyToClipboard(HWND hWndNewOwner) { return (TRUE == m_image.copyToClipboard(hWndNewOwner)); }
+	bool PasteFromClipboard() { return (TRUE == m_image.pasteFromClipboard()); }
 private:
 	mutable fipWinImage m_image;
 

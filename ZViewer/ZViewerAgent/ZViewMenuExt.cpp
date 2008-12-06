@@ -26,8 +26,6 @@ const LONG CZViewMenuExt::m_l3DBorderWidth    = 1;
 const LONG CZViewMenuExt::m_lMenuItemSpacing  = 4;
 const LONG CZViewMenuExt::m_lTotalBorderSpace = 2*(m_lMenuItemSpacing+m_l3DBorderWidth);
 
-bool g_bShowCommdOpenMenu = true;
-
 /// 탐색기의 오른쪽 버튼을 눌렀을 때 미리보기창을 넣을 것인가
 bool g_bPreviewMenuInsert = true;
 
@@ -74,9 +72,6 @@ STDMETHODIMP CZViewMenuExt::Initialize (LPCITEMIDLIST pidlFolder, LPDATAOBJECT  
 	ZOption::GetInstance().SetDontSave();
 
 	g_bPreviewMenuInsert = ZOption::GetInstance().IsUsingPreviewModeInShell();
-	g_bShowCommdOpenMenu = ZOption::GetInstance().IsUsingOpenCMDInShell();
-
-	if ( g_bPreviewMenuInsert == false && g_bShowCommdOpenMenu == false ) return E_FAIL;
 
 	const ZOption & fff = ZOption::GetInstance();
 
@@ -153,10 +148,6 @@ STDMETHODIMP CZViewMenuExt::Initialize (LPCITEMIDLIST pidlFolder, LPDATAOBJECT  
 		}
 
 		GlobalUnlock ( hglobal );
-
-		if ( g_bPreviewMenuInsert || g_bShowCommdOpenMenu ) return S_OK;
-
-		return E_FAIL;
 	}
 	return S_OK;
 
@@ -245,20 +236,20 @@ STDMETHODIMP CZViewMenuExt::QueryContextMenu(HMENU hmenu, UINT uIndex, UINT uidC
 		HMENU hSubMenu = CreatePopupMenu();
 		{
 			InsertMenu( hSubMenu, 0, MF_BYPOSITION | MF_STRING, uID++, GetMessage(TEXT("VIEW_IN_ZVIEWER")));
+
 			InsertMenu( hSubMenu, 1, MF_SEPARATOR, NULL, NULL);
 			InsertMenu( hSubMenu, 2, MF_BYPOSITION | MF_STRING, uID++, GetMessage(TEXT("DESKTOP_WALLPAPER_CENTER")));
 			InsertMenu( hSubMenu, 3, MF_BYPOSITION | MF_STRING, uID++, GetMessage(TEXT("DESKTOP_WALLPAPER_STRETCH")));
 			InsertMenu( hSubMenu, 4, MF_BYPOSITION | MF_STRING, uID++, GetMessage(TEXT("DESKTOP_WALLPAPER_TILE")));
+
 			InsertMenu( hSubMenu, 5, MF_SEPARATOR, NULL, NULL);
 			InsertMenu( hSubMenu, 6, MF_BYPOSITION | MF_STRING, uID++, GetMessage(TEXT("DESKTOP_WALLPAPER_CLEAR")));
+
 			InsertMenu( hSubMenu, 7, MF_SEPARATOR, NULL, NULL);
 			InsertMenu( hSubMenu, 8, MF_BYPOSITION | MF_STRING, uID++, GetMessage(TEXT("ZVIEWERAGENT_SAVE_AS")));
-			
-			if ( g_bShowCommdOpenMenu )
-			{
-				InsertMenu( hSubMenu, 9, MF_SEPARATOR, NULL, NULL);
-				InsertMenu( hSubMenu, 10, MF_BYPOSITION | MF_STRING, uID++, GetMessage(TEXT("ZVIEWERAGENT_OPEN_COMMAND_WINDOW")));
-			}
+	
+			InsertMenu( hSubMenu, 9, MF_SEPARATOR, NULL, NULL);
+			InsertMenu( hSubMenu, 10, MF_BYPOSITION | MF_STRING, uID++, GetMessage(TEXT("ZVIEWERAGENT_OPEN_COMMAND_WINDOW")));
 		}
 
 		bResult = InsertMenu( hmenu, uIndex, MF_BYPOSITION | MF_POPUP, (UINT_PTR)hSubMenu, szImageInfo);
@@ -269,11 +260,23 @@ STDMETHODIMP CZViewMenuExt::QueryContextMenu(HMENU hmenu, UINT uIndex, UINT uidC
 			assert(false);
 		}
 	}
-
-		///TODO : 왜 아래 메뉴가 제일 처음에 넣으면 안되는지 이유 파악. Preview 랑 같이 왜 안되는지 파악
-	if ( g_bShowCommdOpenMenu && g_bPreviewMenuInsert == false )
+	else
 	{
-		BOOL bResult = InsertMenu( hmenu, ++uIndex, MF_BYPOSITION | MF_STRING, uID++, GetMessage(TEXT("ZVIEWERAGENT_OPEN_COMMAND_WINDOW")));
+		/// 하위 메뉴를 만든다.
+		HMENU hSubMenu = CreatePopupMenu();
+		{
+			InsertMenu( hSubMenu, 0, MF_BYPOSITION | MF_STRING, uID++, GetMessage(TEXT("ZVIEWERAGENT_OPEN_COMMAND_WINDOW")));
+
+			UINT bPasteMenuFlag = MF_BYPOSITION | MF_STRING;
+			/// 클립보드에 이미지가 아니면 메뉴를 disble 한다.
+			if ( FALSE == IsClipboardFormatAvailable(CF_DIB) )
+			{
+				bPasteMenuFlag |= MF_GRAYED;
+			}
+			InsertMenu( hSubMenu, 1, bPasteMenuFlag, uID++, GetMessage(TEXT("ZVIEWERAGENT_PASTE_IMAGE_FILE_FROM_CLIPBOARD")));
+		}
+
+		bResult = InsertMenu( hmenu, uIndex, MF_BYPOSITION | MF_POPUP, (UINT_PTR)hSubMenu, TEXT("&ZViewer"));
 
 		if ( FALSE == bResult )
 		{
@@ -286,11 +289,9 @@ STDMETHODIMP CZViewMenuExt::QueryContextMenu(HMENU hmenu, UINT uIndex, UINT uidC
 
 	int iAddedMenuCount = 0;
 
-//	if ( g_bShowCommdOpenMenu ) ++iAddedMenuCount;
-//	if ( g_bPreviewMenuInsert ) iAddedMenuCount += 6;
-
 	iAddedMenuCount = (uID - uidCmdFirst);
 
+	/// uID 는 함수 인자로 넘어온 uidCmdLast 보다 작아야한다(ref by msdn)
 	assert(uID < uidCmdLast);
 
 	// 메뉴에 몇 개의 메뉴를 넣었는지 얘기해준다. 여기의 iAddedMenuCount 값이 이상하면, 명령을 실행했는데 다른 명령이 실행되곤 한다.
@@ -316,7 +317,7 @@ STDMETHODIMP CZViewMenuExt::GetCommandString (UINT uCmd, UINT uFlags, UINT* puRe
 		return E_INVALIDARG;
 	}
 
-	static LPCTSTR szHelpString = _T("Select this thumbnail to view the entire picture.");
+	static LPCTSTR szHelpString = _T("ZViewer menu");
 
     USES_CONVERSION;
 
@@ -420,11 +421,15 @@ STDMETHODIMP CZViewMenuExt::InvokeCommand( LPCMINVOKECOMMANDINFO pInfo )
 			}
 		}
 	}
-	else
+	else /// 선택된 파일이 없을 때
 	{
 		if ( commandID == 0 )
 		{
 			OpenCmdWindow();
+		}
+		else if ( commandID == 1 )
+		{
+			PasteAsImagefileFromClipboard();
 		}
 		else
 		{
@@ -669,4 +674,50 @@ void CZViewMenuExt::OpenCmdWindow(void)
 	CreateProcess(NULL, command, NULL, NULL, FALSE, 0, NULL, m_strCurrentDir.c_str(), &si, &pi);
 
 	//MessageBox(HWND_DESKTOP, m_szCurrentDir, TEXT("zviewer a"), MB_OK);
+}
+
+/// 클립보드의 이미지를 파일로 붙여넣기
+void CZViewMenuExt::PasteAsImagefileFromClipboard()
+{
+	ZImage image;
+	if ( false == image.PasteFromClipboard() )
+	{
+		MsgBox(GetMessage(TEXT("ZVIEWERAGENT_CANNOT_PASTE_IMAGE_FILE")));
+	}
+	else
+	{
+		TCHAR dir[255];
+
+		GetCurrentDirectory(127, dir);
+
+		int iPostFix = 0;
+
+		TCHAR szDes[MAX_PATH];
+
+		enum { eMax_NO = 999 };
+		do
+		{
+			StringCchPrintf(szDes, MAX_PATH, TEXT("%s\\Clip%03d.png"), m_strCurrentDir.c_str(), iPostFix);
+
+
+			if ( 0 != _taccess(szDes, 00) )
+			{
+				break;
+			}
+
+			if ( iPostFix == eMax_NO )
+			{
+				MsgBox(GetMessage(TEXT("ZVIEWERAGENT_CANNOT_PASTE_IMAGE_FILE_MAX_NO")));
+				return;
+			}
+
+			++iPostFix;
+		}
+		while ( iPostFix <= eMax_NO );
+
+		if ( false == image.SaveToFile(szDes, 0) )
+		{
+			MsgBox(GetMessage(TEXT("ZVIEWERAGENT_CANNOT_PASTE_IMAGE_FILE")));
+		}
+	}
 }
