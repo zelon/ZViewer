@@ -1,11 +1,23 @@
 @echo off
 SET NSIS_PATH="C:\Program Files\NSIS\makensis.exe"
+SET NSIS_PATH_PLUGIN1="C:\Program Files\NSIS\Plugins\KillProcDLL.dll"
+SET NSIS_PATH_PLUGIN2="C:\Program Files\NSIS\Plugins\FindProcDLL.dll"
 SET VS_BATCH="C:\Program Files\Microsoft Visual Studio 8\VC\vcvarsall.bat"
 SET START_DIR=%CD%
 
 :CHECK_NSIS
-if exist %NSIS_PATH% GOTO CHECK_VS_BATCH
+if exist %NSIS_PATH% GOTO CHECK_NSIS_PLUGIN1
 echo Cannot find %NSIS_PATH%
+GOTO END
+
+:CHECK_NSIS_PLUGIN1
+if exist %NSIS_PATH_PLUGIN1% GOTO CHECK_NSIS_PLUGIN2
+echo Cannot find %NSIS_PATH_PLUGIN1%
+GOTO END
+
+:CHECK_NSIS_PLUGIN2
+if exist %NSIS_PATH_PLUGIN2% GOTO CHECK_VS_BATCH
+echo Cannot find %NSIS_PATH_PLUGIN2%
 GOTO END
 
 :CHECK_VS_BATCH
