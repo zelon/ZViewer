@@ -1,12 +1,12 @@
 ﻿
-== 개발 환경 ==
+= 개발 환경 =
  * Build 환경 : Microsoft Visual Studio .NET 2005
   * Microsoft Visual Studio .NET 2003 에서도 가능하나 주 개발이 2005 를 기준으로 이루어지므로 2003 에서의 빌드 오류가 발생할 수 있다.
- * 설치파일만드는 환경 : NSIS 2.36 이상
+ * NSIS 2.36 이상 - http://nsis.sf.net
  * 프로그래머 작업 환경 : WinXP Pro Korean SP2
- * python
+ * python 2.6 - http://www.python.org
 
-== 빌드 ==
+= 빌드 =
 
  * 소스 파일을 공백이 포함된 폴더 밑에 두면 링크 오류가 생길 수 있다!!
 
@@ -14,22 +14,20 @@
  1. Visual Studio .NET 2005 에서 ZViewerWin32.sln 파일을 연 후, Release 로 빌드 솔루션을 한다.
  2. output 폴더에 실행 파일 및 부속 파일들이 생긴다.
 
-== 설치 파일 만들기 ==
+= 설치 파일 만들기 =
 
  1. http://nsis.sf.net 에서 최신 NSIS 를 받아 설치한다.
- 2. exttool 에 있는 zip 파일들의 압축을 풀어 각각 안에 있는 DLL 파일을 NSIS 가 설치된 폴더 밑에 있는
-    'Plugins' 폴더에 넣는다.
- 3. output 폴더에 가서 ZViewer.nsi 파일에 대고 마우스 오른쪽 클릭을 한 후, 'Compile NSIS Script' 를 선택한다.
- 4. 설치 파일이 생성된다.
+ 2. exttool 에 있는 zip 파일들의 압축을 풀어 각각 안에 있는 DLL 파일을 NSIS 가 설치된 폴더 밑에 있는 'Plugins' 폴더에 넣는다.
+ 3. BuildRelease.bat 을 실행한다.
+ 4. 버젼 설정 후 빌드, 설치 파일이 만들어져서 _release 폴더 밑에 모아진다.
 
-== 릴리즈 진행하는 과정 ==
+= 릴리즈 진행하는 과정 =
 
- * ZViewer 폴더의 testLang.py 를 실행해해서 FAILED 가 생기지 않는지 확인한다.
- * output 폴더의 ReadMe.txt 파일의 내용이 최신인지 확인한다.
+ * BuildRelease.bat 를 실행한다.
+ * 설치를 해본다.
+ * ReadMe.txt 파일의 내용이 최신인지 확인한다.
  * ZViewer 소스 폴더의 가장 상위에 있는 QATest-Korean.txt 파일의 내용을 테스트한다.
- * setVersion.py 파일을 이용해 새로운 버젼을 세팅하고, rebuild 한다.
  * 모든 파일을 커밋하고, SCM 에 태그를 달아준다.
- * NSIS 로 설치 파일을 만든다.
  * kldp.net 에 설치 파일을 올린다.
  * zviewer.wimy.com 에 링크를 걸고 페이지를 업데이트한다.
  * wimy.com/tt 에 새로운 버젼을 알린다.
