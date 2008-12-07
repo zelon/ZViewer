@@ -129,13 +129,18 @@ def doVersionUp():
 	print("Enter postfix : "),
 	vPostfix = raw_input()
 
-	print("New version : " + str(vMajor) + "." + str(vMinor) + "." + str(vPatch) + str(vPostfix))
+	strNewVersion = str(vMajor) + "." + str(vMinor) + "." + str(vPatch) + str(vPostfix)
+	print("New version : " + strNewVersion)
 	print("Is it right? (y/N) : "),
 	strYesNo = raw_input()
 
 	if strYesNo != "y":
 		print ("Canceled by user input")
 		return False
+
+	if strNewVersion == getCurrentVersionFromNSIS():
+		print("Same version => skip updating files")
+		return True
 
 	# version up ZViewerAgent\ZViewerAgent.rc
 	if False == SetRcVersionUp(r"ZViewerAgent\ZViewerAgent.rc", vMajor, vMinor, vPatch):
@@ -168,3 +173,5 @@ if __name__ == "__main__":
 	print("Current version : " + getCurrentVersionFromNSIS())
 	if False == doVersionUp():
 		exit(1)
+	else:
+		print("[OK] Version updating is completed")
