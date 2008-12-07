@@ -57,7 +57,7 @@ HWND CMainWindow::Create(HINSTANCE hInstance, HWND hParentHWND, int nCmdShow)
 	SetWndProc();
 	if ( NULL == m_wndProc)
 	{
-		_ASSERTE(!"before create, set WndProc");
+		assert(!"before create, set WndProc");
 		return (HWND)INVALID_HANDLE_VALUE;
 	}
 
@@ -370,7 +370,7 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 		break;
 
 	case WM_CONTEXTMENU:
-		ZMain::GetInstance().SetHandCursor(false);
+		ZMain::GetInstance().SetHandCursor(false);	///< When popup menu, change to arrow cursor
 		TrackPopupMenu(g_hPopupMenu, TPM_LEFTALIGN, LOWORD(lParam), HIWORD(lParam), 0, hWnd, NULL);
 		break;
 
@@ -625,7 +625,7 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 		// 아래의 BeginPaint/EndPaint 부분을 지우면 WM_PAINT 가 무한히 호출된다.
 		hdc=BeginPaint(ZMain::GetInstance().GetHWND(), &ps);
 		EndPaint(ZMain::GetInstance().GetHWND(), &ps);
-		
+
 		hdc=BeginPaint(ZMain::GetInstance().GetShowWindow(), &ps);
 		ZMain::GetInstance().Draw(hdc);
 		EndPaint(ZMain::GetInstance().GetShowWindow(), &ps);
@@ -646,7 +646,7 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 
 void HandCursorProc()
 {
-	if ( ZMain::GetInstance().IsHandCursor() && ZOption::GetInstance().IsBigToSmallStretchImage() == false )
+	if ( ZMain::GetInstance().IsHandCursor() )
 	{
 		if ( m_bCapture )	// 마우스 왼쪽 버튼을 누르고 있으면 움켜쥔 커서를 그린다.
 		{
