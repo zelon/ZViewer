@@ -37,8 +37,8 @@ const tstring ZResourceManager::GetString(UINT iStringID)
 		TCHAR szString[COMMON_BUFFER_SIZE] = { 0 };
 		if ( 0 == LoadString(m_hInstance, iStringID, szString, 256) )
 		{
-			_ASSERTE(!"Can't get string");
-			StringCchPrintf(szString, COMMON_BUFFER_SIZE, TEXT("Can't GET STRING"));
+			assert(!"Can't get string");
+			SPrintf(szString, COMMON_BUFFER_SIZE, TEXT("Can't GET STRING"));
 		}
 
 		tstring strString = szString;

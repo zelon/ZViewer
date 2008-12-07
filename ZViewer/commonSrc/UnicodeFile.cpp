@@ -10,7 +10,7 @@ bool CUnicodeFile::open(const tstring & strFileName, eFileOpenMode openMode)
 #ifdef _UNICODE
 	WideCharToMultiByte(CP_THREAD_ACP, 0, strFileName.c_str(), (int)strFileName.size(), filename, 256, NULL, NULL);
 #else
-	StringCchPrintf(filename, FILENAME_MAX, strFileName.c_str());
+	SPrintf(filename, FILENAME_MAX, strFileName.c_str());
 #endif
 
 	if ( openMode == eFileOpenMode_READ )
@@ -27,7 +27,7 @@ bool CUnicodeFile::open(const tstring & strFileName, eFileOpenMode openMode)
 		size_t pos = m_inputStream.tellg();
 		if ( pos < 2 || pos % 2 != 1)
 		{
-			_ASSERTE(!"not unicode file");
+			assert(!"not unicode file");
 			m_inputStream.close();
 			return false;
 		}

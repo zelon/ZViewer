@@ -24,7 +24,7 @@ bool ZFileExtReg::RegSetExtension()
 {
 	if( m_strExtension.empty() )
 	{
-		_ASSERTE(!"Extension string is empty!");
+		assert(!"Extension string is empty!");
 		return false;
 	}
 
@@ -51,7 +51,7 @@ bool  ZFileExtReg::RegSetDocumentType()
 {
 	if( m_strDocumentClassName.empty())
 	{
-		_ASSERTE(!"DocumentClassName string is empty!");
+		assert(!"DocumentClassName string is empty!");
 		return false;
 	}
 

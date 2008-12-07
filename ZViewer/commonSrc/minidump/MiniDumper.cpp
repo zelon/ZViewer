@@ -10,8 +10,8 @@ MiniDumper::MiniDumper(const TCHAR * szDumpFilename, const TCHAR * szDumpMsg)
 {
 	pThis = this;
 
-	StringCchPrintf(m_szDumpFilename, FILENAME_MAX, szDumpFilename);
-	StringCchPrintf(m_szDumpMsg, FILENAME_MAX, szDumpMsg);
+	SPrintf(m_szDumpFilename, FILENAME_MAX, szDumpFilename);
+	SPrintf(m_szDumpMsg, FILENAME_MAX, szDumpMsg);
 
 	::SetUnhandledExceptionFilter( TopLevelFilter );
 }
@@ -52,7 +52,7 @@ LONG MiniDumper::TopLevelFilter( struct _EXCEPTION_POINTERS *pExceptionInfo )
 			TCHAR szDumpPath[_MAX_PATH];
 			TCHAR szScratch [_MAX_PATH];
 
-			StringCchPrintf( szDumpPath, _MAX_PATH, TEXT("%s"), pThis->m_szDumpFilename);
+			SPrintf( szDumpPath, _MAX_PATH, TEXT("%s"), pThis->m_szDumpFilename);
 
 			// ask the user if they want to save a dump file
 			//if (::MessageBox( NULL, "Something bad happened in your program, would you like to save a diagnostic file?", m_szAppName, MB_YESNO )==IDYES)
@@ -75,19 +75,19 @@ LONG MiniDumper::TopLevelFilter( struct _EXCEPTION_POINTERS *pExceptionInfo )
 					if (bOK)
 					{
 						MessageBox(HWND_DESKTOP, pThis->m_szDumpMsg, TEXT("ZViewer"), MB_OK);
-						StringCchPrintf( szScratch, _MAX_PATH, TEXT("Saved dump file to '%s'"), szDumpPath );
+						SPrintf( szScratch, _MAX_PATH, TEXT("Saved dump file to '%s'"), szDumpPath );
 						szResult = szScratch;
 						retval = EXCEPTION_EXECUTE_HANDLER;
 					}
 					else
 					{
-						StringCchPrintf( szScratch, _MAX_PATH, TEXT("Failed to save dump file to '%s' (error %d)"), szDumpPath, GetLastError() );
+						SPrintf( szScratch, _MAX_PATH, TEXT("Failed to save dump file to '%s' (error %d)"), szDumpPath, GetLastError() );
 						szResult = szScratch;
 					}
 				}
 				else
 				{
-					StringCchPrintf( szScratch, _MAX_PATH, TEXT("Failed to create dump file '%s' (error %d)"), szDumpPath, GetLastError() );
+					SPrintf( szScratch, _MAX_PATH, TEXT("Failed to create dump file '%s' (error %d)"), szDumpPath, GetLastError() );
 					szResult = szScratch;
 				}
 			}

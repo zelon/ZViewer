@@ -109,7 +109,7 @@ void ZFileExtDlg::SaveExtEnv()
 			extset.m_numIconIndex	/// 아이콘 index
 		) )
 		{
-			_ASSERTE(false);
+			assertfalse);
 		}
 	}
 
@@ -159,7 +159,7 @@ bool ZFileExtDlg::SetExtWithProgram(const tstring & strProgramName, const tstrin
 		// 아이콘 프로그램을 지정했으면 icon 번호를 쓴다.
 		if ( iIconIndex < 0 )
 		{
-			_ASSERTE(iIconIndex >= 0 );
+			assert(iIconIndex >= 0 );
 			iIconIndex = 0;
 		}
 
@@ -167,7 +167,7 @@ bool ZFileExtDlg::SetExtWithProgram(const tstring & strProgramName, const tstrin
 		strTempText += TEXT(",");
 
 		TCHAR szTemp[COMMON_BUFFER_SIZE] = { 0 };
-		StringCchPrintf(szTemp, COMMON_BUFFER_SIZE, TEXT("%d"), iIconIndex);
+		SPrintf(szTemp, COMMON_BUFFER_SIZE, TEXT("%d"), iIconIndex);
 		strTempText += szTemp;
 	}
 	fileExtReg.m_strDocumentDefaultIcon = strTempText.c_str();

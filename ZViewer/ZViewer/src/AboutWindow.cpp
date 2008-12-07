@@ -43,22 +43,22 @@ int CALLBACK AboutWndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM /*lParam*
 			SetDlgItemText(hWnd, IDC_STATIC_VERSION, g_strVersion.c_str());
 
 			TCHAR szTemp[MAX_PATH];
-			StringCchPrintf(szTemp, MAX_PATH, TEXT("CacheHitRate : %d%%"), ZMain::GetInstance().GetLogCacheHitRate());
+			SPrintf(szTemp, MAX_PATH, TEXT("CacheHitRate : %d%%"), ZMain::GetInstance().GetLogCacheHitRate());
 			SetDlgItemText(hWnd, IDC_STATIC_HITRATE, szTemp);
 
 			NUMBERFMT nFmt = { 0, 0, 3, TEXT("."), TEXT(","), 1 };
 
 			TCHAR szOUT[20];
-			StringCchPrintf(szTemp, MAX_PATH, TEXT("%d"),ZMain::GetInstance().GetCachedKByte());
-			::GetNumberFormat(NULL, NULL, szTemp, &nFmt, szOUT, 20);
+			SPrintf(szTemp, MAX_PATH, TEXT("%d"),ZMain::GetInstance().GetCachedKByte());
+			::GetNumberFormat((LCID)NULL, (DWORD)NULL, szTemp, &nFmt, szOUT, 20);
 
-			StringCchPrintf(szTemp, MAX_PATH, TEXT("CachedMemory : %sKB, Num of Cached Image : %d"), szOUT, ZCacheImage::GetInstance().GetNumOfCacheImage());
+			SPrintf(szTemp, MAX_PATH, TEXT("CachedMemory : %sKB, Num of Cached Image : %d"), szOUT, ZCacheImage::GetInstance().GetNumOfCacheImage());
 			SetDlgItemText(hWnd, IDC_STATIC_CACHE_MEMORY, szTemp);
 
-			StringCchPrintf(szTemp, MAX_PATH, TEXT("ProgramPath : %s"), GetProgramFolder().c_str());
+			SPrintf(szTemp, MAX_PATH, TEXT("ProgramPath : %s"), GetProgramFolder().c_str());
 			SetDlgItemText(hWnd, IDC_STATIC_PROGRAM_PATH, szTemp);
 
-			StringCchPrintf(szTemp, MAX_PATH, TEXT("Library Version : %s"), ZImage::GetLibraryVersion().c_str());
+			SPrintf(szTemp, MAX_PATH, TEXT("Library Version : %s"), ZImage::GetLibraryVersion().c_str());
 			SetDlgItemText(hWnd, IDC_STATIC_LIBRARY_VERSION, szTemp);
 		}
 		return TRUE;

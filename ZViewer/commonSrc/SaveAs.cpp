@@ -13,6 +13,7 @@
 #include "SaveAs.h"
 
 #include "ExtInfoManager.h"
+#include "CommonFunc.h"
 
 CSaveAs & CSaveAs::getInstance()
 {
@@ -54,12 +55,12 @@ UINT_PTR CALLBACK OFNHookProc(HWND hdlg, UINT uiMsg, WPARAM /*wParam*/, LPARAM /
 				}
 				else
 				{
-					_ASSERTE(false);
+					assert(false);
 				}
 			}
 			else
 			{
-				_ASSERTE(false);
+				assert(false);
 			}
 		}
 		break;
@@ -74,7 +75,7 @@ bool CSaveAs::showDialog()
 	ZeroMemory(&m_ofn, sizeof(m_ofn));
 	m_ofn.lStructSize = sizeof(m_ofn);
 	m_ofn.hwndOwner = m_hParent;
-	StringCchPrintf(m_szFilenamebuf, FILENAME_MAX, m_strSaveFileName.c_str());
+	SPrintf(m_szFilenamebuf, FILENAME_MAX, m_strSaveFileName.c_str());
 	m_ofn.lpstrFile = m_szFilenamebuf;
 	//
 	// Set lpstrFile[0] to '\0' so that GetOpenFileName does not 

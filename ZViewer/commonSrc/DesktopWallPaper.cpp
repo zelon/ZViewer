@@ -32,7 +32,7 @@ void CDesktopWallPaper::SetDesktopWallPaper(const tstring & strBitmapFileName, e
 		break;
 
 	default:
-		_ASSERTE(false);
+		assert(false);
 	}
 	SetRegistryValue(HKEY_CURRENT_USER, TEXT("Control Panel\\Desktop"), TEXT("WallpaperStyle"), strStyle.c_str());
 	SetRegistryValue(HKEY_CURRENT_USER, TEXT("Control Panel\\Desktop"), TEXT("Wallpaper"), strBitmapFileName.c_str());
@@ -49,7 +49,7 @@ void CDesktopWallPaper::SetDesktopWallPaper(const tstring & strBitmapFileName, e
 	// 실제로 적용시킨다.
 	if ( 0 == SystemParametersInfo(SPI_SETDESKWALLPAPER, 0, (PVOID)strBitmapFileName.c_str(), SPIF_SENDCHANGE) )
 	{
-		_ASSERTE(false);
+		assert(false);
 	}
 }
 

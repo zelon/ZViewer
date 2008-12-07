@@ -10,7 +10,6 @@
 
 #pragma once
 
-#include <strsafe.h>
 #include <cassert>
 #include <list>
 
@@ -93,7 +92,7 @@ public:
 	{
 		if ( newWidth <=  0 || newHeight <= 0 )
 		{
-			_ASSERTE(!"Resize to below 0 or 0");
+			assert(!"Resize to below 0 or 0");
 			return false;
 		}
 		return ( m_image.rescale(newWidth, newHeight, FILTER_BOX) == TRUE );

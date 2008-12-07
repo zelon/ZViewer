@@ -22,7 +22,7 @@ void StringToValue::InsertValueToMap(iniMap & mapData)
 		}
 		break;
 	default:
-		_ASSERTE(false);
+		assert(false);
 	}
 }
 
@@ -64,6 +64,6 @@ void StringToValue::InsertMapToValue(iniMap & mapData)
 		}
 		break;
 	default:
-		_ASSERTE(false);
+		assert(false);
 	}
 }

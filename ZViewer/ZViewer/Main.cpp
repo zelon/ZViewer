@@ -90,7 +90,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,HINSTANCE /*hPrevInstance */,LPTSTR l
 		strDumpFilename += TEXT(".dmp");
 
 		TCHAR szDumpMsg[_MAX_PATH];
-		StringCchPrintf(szDumpMsg, _MAX_PATH, TEXT("%s\r\n\r\nFile : %s\r\nHomepage : %s"), GetMessage(TEXT("CRASH_MSG")), strDumpFilename.c_str(), g_strHomepage.c_str());
+		SPrintf(szDumpMsg, _MAX_PATH, TEXT("%s\r\n\r\nFile : %s\r\nHomepage : %s"), GetMessage(TEXT("CRASH_MSG")), strDumpFilename.c_str(), g_strHomepage.c_str());
 
 		/// 아래의 객체는 프로그램이 끝날 때에 삭제되어야 한다. 그전에 삭제되면 크래시되었을 때 제대로 덤프를 만들지 못한다.
 		pDump = new MiniDumper(strDumpFilename.c_str(), szDumpMsg);
@@ -180,7 +180,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,HINSTANCE /*hPrevInstance */,LPTSTR l
 	{
 		BOOL bRet = KillTimer(hWnd, eTimerValue);
 
-		_ASSERTE(bRet);
+		assert(bRet);
 	}
 	*/
 

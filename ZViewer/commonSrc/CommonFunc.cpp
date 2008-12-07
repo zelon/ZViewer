@@ -49,7 +49,7 @@ bool SetRegistryValue(HKEY hOpenKey, const tstring & strKey,LPCTSTR szValue, con
 {
 	if( !hOpenKey || strKey.empty() || !szValue)
 	{
-		_ASSERTE(!"SetRegistryValue invalid arg");
+		assert(!"SetRegistryValue invalid arg");
 		return false;
 	}
 
@@ -117,8 +117,8 @@ RECT GetResizedRectForBigToSmall(const RECT & MaximumSize, const RECT & original
 	}
 
 
-	_ASSERTE(ret.right <= MaximumSize.right);
-	_ASSERTE(ret.bottom <= MaximumSize.bottom);
+	assert(ret.right <= MaximumSize.right);
+	assert(ret.bottom <= MaximumSize.bottom);
 
 	return ret;
 }
@@ -159,8 +159,8 @@ RECT GetResizedRectForSmallToBig(const RECT & MaximumSize, const RECT & original
 	}
 
 
-	_ASSERTE(ret.right <= MaximumSize.right);
-	_ASSERTE(ret.bottom <= MaximumSize.bottom);
+	assert(ret.right <= MaximumSize.right);
+	assert(ret.bottom <= MaximumSize.bottom);
 
 	return ret;
 }
@@ -169,7 +169,7 @@ tstring toString(int i)
 {
 	const int szSize = 20;
 	TCHAR szTemp[szSize];
-	StringCchPrintf(szTemp, szSize, TEXT("%d"), i);
+	SPrintf(szTemp, szSize, TEXT("%d"), i);
 
 	return tstring(szTemp);
 }
@@ -451,7 +451,7 @@ tstring GetProgramFolder()
 
 	if ( ret == 0 )
 	{
-		_ASSERTE(!"Can't get module folder");
+		assert(!"Can't get module folder");
 	}
 	TCHAR szDrive[_MAX_DRIVE] = { 0 };
 	TCHAR szDir[_MAX_DIR] = { 0 };

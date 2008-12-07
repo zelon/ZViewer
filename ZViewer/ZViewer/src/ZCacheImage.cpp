@@ -86,7 +86,7 @@ void ZCacheImage::StartThread()
 		// Cache 를 진행하는 쓰레드는
 		if ( SetThreadPriority(m_hThread, THREAD_PRIORITY_BELOW_NORMAL) == FALSE )
 		{
-			_ASSERTE(!"Can't SetThreadPriority!");
+			assert(!"Can't SetThreadPriority!");
 		}
 	}
 }
@@ -144,7 +144,7 @@ int ZCacheImage::_GetFarthestIndexFromCurrentIndex()
 		}
 	}
 
-	_ASSERTE(iFarthestIndex >= 0 );
+	assert(iFarthestIndex >= 0 );
 
 	return iFarthestIndex;
 }
@@ -270,7 +270,7 @@ bool ZCacheImage::_CacheIndex(int iIndex)
 				{
 					// 캐시되어 있는 것들 중 가장 현재 index 에서 먼것을 찾는다.
 					iFarthestIndex = _GetFarthestIndexFromCurrentIndex();
-					_ASSERTE(iFarthestIndex >= 0 );
+					assert(iFarthestIndex >= 0 );
 
 					size_t nCachedFarthestDiff = abs(iFarthestIndex - m_iCurrentIndex);
 					size_t nToCacheDiff = abs(iIndex - m_iCurrentIndex );
@@ -321,7 +321,7 @@ bool ZCacheImage::_CacheIndex(int iIndex)
 						}
 						else
 						{
-							_ASSERTE(!"Can't find the cache data.");
+							assert(!"Can't find the cache data.");
 							return false;
 						}
 					}
@@ -337,7 +337,7 @@ bool ZCacheImage::_CacheIndex(int iIndex)
 					--iTemp;
 				} while( iTemp > 0 );
 
-				_ASSERTE(iTemp >= 0 );
+				assert(iTemp >= 0 );
 			}
 			else
 			{
@@ -360,9 +360,9 @@ void ZCacheImage::ThreadFunc()
 	{
 		m_bNowCaching = true;
 		iPos = 0;
-		_ASSERTE((int)m_numImageVectorSize == (int)m_imageMap.size());
-		_ASSERTE(m_iCurrentIndex <= (int)m_imageMap.size());
-		_ASSERTE(m_iCurrentIndex <= (int)m_numImageVectorSize);
+		assert((int)m_numImageVectorSize == (int)m_imageMap.size());
+		assert(m_iCurrentIndex <= (int)m_imageMap.size());
+		assert(m_iCurrentIndex <= (int)m_numImageVectorSize);
 
 #ifdef _DEBUG
 
@@ -370,7 +370,7 @@ void ZCacheImage::ThreadFunc()
 			CLockObjUtil lock(m_cacheLock);
 			if ( m_cacheData.empty() )
 			{
-				_ASSERTE(m_lCacheSize == 0);
+				assert(m_lCacheSize == 0);
 			}
 		}
 #endif
@@ -398,7 +398,7 @@ void ZCacheImage::ThreadFunc()
 			}
 			else
 			{
-				_ASSERTE(false);
+				assert(false);
 			}
 
 			++iPos;
@@ -440,7 +440,7 @@ void ZCacheImage::getCachedData(const tstring & strFilename, ZImage & image)
 	it = m_cacheData.find(strFilename);
 	if ( it == m_cacheData.end() )
 	{
-		_ASSERTE(!"Can't get NOT CACHED");
+		assert(!"Can't get NOT CACHED");
 	}
 	else
 	{

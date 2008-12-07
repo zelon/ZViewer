@@ -32,7 +32,11 @@
 #include <functional>
 #include <algorithm>
 #include <tchar.h>
+
+#ifdef _MSC_VER
 #include <strsafe.h>
+#endif
+
 #include <cassert>
 
 #include <shlobj.h>

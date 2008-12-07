@@ -32,7 +32,7 @@ void ZHistory::push_lastImageIndex(int iIndex)
 
 int ZHistory::Undo()
 {
-	_ASSERTE(CanUndo());
+	assert(CanUndo());
 
 	// Undo/Redo 위치를 조정한다.
 	--m_iCurrentIndex;
@@ -46,7 +46,7 @@ int ZHistory::Undo()
 
 int ZHistory::Redo()
 {
-	_ASSERTE(CanRedo());
+	assert(CanRedo());
 
 	// Undo 를 되돌린다.
 

@@ -35,7 +35,7 @@ HWND ZWindow::Create(HINSTANCE hInstance, HWND hParentHWND, int nCmdShow, const 
 	SetWndProc();
 	if ( NULL == m_wndProc)
 	{
-		_ASSERTE(!"before create, set WndProc");
+		assert(!"before create, set WndProc");
 		return (HWND)INVALID_HANDLE_VALUE;
 	}
 
