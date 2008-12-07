@@ -9,6 +9,9 @@
 *********************************************************************/
 #pragma once
 
+#ifdef _MSC_VER
+#include <strsafe.h>
+#endif
 #include "CommonDefine.h"
 
 /// OS 종류를 판단할 때 쓰일 enum
@@ -106,3 +109,9 @@ tstring GetProgramFolder();
 /// 컴파일러 버젼에 맞게 함수 정의
 void SplitPath(const TCHAR * path, TCHAR * drive, size_t driveNumberOfElements, TCHAR * dir, size_t dirNumberOfElements,
 				TCHAR * fname, size_t nameNumberOfElements, TCHAR * ext, size_t extNumberOfElements);
+
+#ifdef _MSC_VER
+#define SPrintf	StringCchPrintf
+#else
+#define SPrintf _snwprintf
+#endif

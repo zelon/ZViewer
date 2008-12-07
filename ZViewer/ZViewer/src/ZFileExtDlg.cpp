@@ -109,7 +109,7 @@ void ZFileExtDlg::SaveExtEnv()
 			extset.m_numIconIndex	/// ¾ÆÀÌÄÜ index
 		) )
 		{
-			assertfalse);
+			assert(false);
 		}
 	}
 

@@ -204,7 +204,7 @@ STDMETHODIMP CZViewMenuExt::QueryContextMenu(HMENU hmenu, UINT uIndex, UINT uidC
 
 		// 이미지 파일에 대한 정보를 수집해놓는다.
 		TCHAR szImageInfo[COMMON_BUFFER_SIZE] = { 0 };
-		StringCchPrintf(szImageInfo, COMMON_BUFFER_SIZE, TEXT("ZViewer %dx%d %dbpp"), m_originalImage.GetWidth(), m_originalImage.GetHeight(), m_originalImage.GetBPP());
+		SPrintf(szImageInfo, COMMON_BUFFER_SIZE, TEXT("ZViewer %dx%d %dbpp"), m_originalImage.GetWidth(), m_originalImage.GetHeight(), m_originalImage.GetBPP());
 
 		// Store the menu item's ID so we can check against it later when
 		// WM_MEASUREITEM/WM_DRAWITEM are sent.
@@ -308,7 +308,7 @@ STDMETHODIMP CZViewMenuExt::GetCommandString (UINT uCmd, UINT uFlags, UINT* /*pu
 
 #ifdef _DEBUG
 	TCHAR szTemp[COMMON_BUFFER_SIZE];
-	StringCchPrintf(szTemp, COMMON_BUFFER_SIZE, TEXT("ucmd(%d), uFlags(%d), pszName(%s), cchMax(%d)"), uCmd, uFlags, pszName, cchMax);
+	SPrintf(szTemp, COMMON_BUFFER_SIZE, TEXT("ucmd(%d), uFlags(%d), pszName(%s), cchMax(%d)"), uCmd, uFlags, pszName, cchMax);
 	OutputDebugString(szTemp);
 	OutputDebugString(TEXT("\r\n"));
 #endif
@@ -316,7 +316,7 @@ STDMETHODIMP CZViewMenuExt::GetCommandString (UINT uCmd, UINT uFlags, UINT* /*pu
 	// 메뉴에 넣은 갯수를 넘어서면 안된다.
 	if ( uCmd > m_uiMaxMenuID )
 	{
-		_ASSERTE(false);
+		assert(false);
 		return E_INVALIDARG;
 	}
 
@@ -337,7 +337,7 @@ STDMETHODIMP CZViewMenuExt::GetCommandString (UINT uCmd, UINT uFlags, UINT* /*pu
 
 			/* 아래 코드를 살펴보면 제대로 구성할 수 있다.
 			TCHAR buffer[256];
-            StringCchPrintf( buffer, sizeof(buffer) / sizeof(TCHAR), TEXT("uCmd(%d)"), uCmd);
+            SPrintf( buffer, sizeof(buffer) / sizeof(TCHAR), TEXT("uCmd(%d)"), uCmd);
 
 			lstrcpynW ( (LPWSTR) pszName, T2CW(buffer), cchMax );
 			*/
@@ -368,7 +368,7 @@ STDMETHODIMP CZViewMenuExt::InvokeCommand( LPCMINVOKECOMMANDINFO pInfo )
     // 넘어올 수 있는 command 의 값을 체크한다.
 	if ( commandID > m_uiMaxMenuID)
 	{
-		_ASSERTE(false);
+		assert(false);
         return E_INVALIDARG;
 	}
 
@@ -420,7 +420,7 @@ STDMETHODIMP CZViewMenuExt::InvokeCommand( LPCMINVOKECOMMANDINFO pInfo )
 		default:
 			{
 				/// 처리하지 않은 메뉴이다.
-				_ASSERTE(false);
+				assert(false);
 			}
 		}
 	}
@@ -616,7 +616,7 @@ void CZViewMenuExt::ExecZViewer()
 
 	tstring strProgramFolder = GetProgramFolder();
 
-	StringCchPrintf(command, FILENAME_MAX, TEXT("%s\\ZViewer.exe %s"), strProgramFolder.c_str(), m_szFile);
+	SPrintf(command, FILENAME_MAX, TEXT("%s\\ZViewer.exe %s"), strProgramFolder.c_str(), m_szFile);
 
 	STARTUPINFO si;
 	PROCESS_INFORMATION pi;
@@ -637,7 +637,7 @@ void CZViewMenuExt::SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyl
 
 	if ( E_FAIL == SHGetFolderPath(NULL, CSIDL_WINDOWS, NULL, SHGFP_TYPE_CURRENT, szSystemFolder) )
 	{
-		_ASSERTE(false);
+		assert(false);
 		return;
 	}
 
@@ -653,7 +653,7 @@ void CZViewMenuExt::SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyl
 
 	if ( false == tempImage.SaveToFile(strSaveFileName, BMP_DEFAULT) )
 	{
-		_ASSERTE(false);
+		assert(false);
 		return;
 	}
 
@@ -700,7 +700,7 @@ void CZViewMenuExt::PasteAsImagefileFromClipboard()
 		enum { eMax_NO = 999 };
 		do
 		{
-			StringCchPrintf(szDes, MAX_PATH, TEXT("%s\\Clip%03d.png"), m_strCurrentDir.c_str(), iPostFix);
+			SPrintf(szDes, MAX_PATH, TEXT("%s\\Clip%03d.png"), m_strCurrentDir.c_str(), iPostFix);
 
 
 			if ( 0 != _taccess(szDes, 00) )

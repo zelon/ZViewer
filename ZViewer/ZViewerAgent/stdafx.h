@@ -52,6 +52,7 @@
 #include <afxOle.h>
 #include <atlconv.h>  // for ATL string conversion macros
 
+
 #include <string>
 
 #include "../commonSrc/ZImage.h"
