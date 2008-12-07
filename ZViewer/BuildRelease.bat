@@ -54,7 +54,9 @@ GOTO END
 :SUCCESS
 echo -------------------------------------------------
 echo [OK] Build for release is completed without error
+echo [OK] Before release, don't forget the QA TEST!!!
 echo -------------------------------------------------
+copy ..\QATest-Korean.txt ..\_release /y > NUL
 GOTO END
 
 :END
