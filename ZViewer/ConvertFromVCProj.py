@@ -15,7 +15,13 @@ def Conevrt():
 	print("SRCS\t="),
 	for find in finds:
 		if find.endswith(".cpp"):
-			print("ZViewer\\" + find + "\t"),
+			if False == find.endswith("stdafx.cpp"):
+				if find.startswith(".\\"):
+					find = find.replace('.\\', "")
+					print("ZViewer\\" + find + "\t"),
+				elif find.startswith("..\\"):
+					find = find.replace("..\\", "")
+					print(find + "\t"),
 
 if __name__ == "__main__":
 	Conevrt()
