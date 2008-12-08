@@ -16,13 +16,13 @@
 #include "src/SelectToFolderDlg.h"
 #include "../commonSrc/SaveAs.h"
 #include "../commonSrc/ZOption.h"
+#include "../commonSrc/CommonFunc.h"
 #include "../commonSrc/ExtInfoManager.h"
 #include "MessageManager.h"
 #include "TaskBar.h"
 
 #include <ShlObj.h>
 #include <cstdio>
-#include <strsafe.h>
 
 #include "src/ExifDlg.h"
 
@@ -986,7 +986,7 @@ void ZMain::SetTitle()
 		SPrintf(szTemp, MAX_PATH+256, TEXT("%s%s - %s"), szFileName, szFileExt, m_strCurrentFilename.c_str());
 	}
 	BOOL bRet = SetWindowText(m_hMainDlg, szTemp);
-	
+
 	if ( FALSE == bRet )
 	{
 		assert(!"Can't SetWindowText");
