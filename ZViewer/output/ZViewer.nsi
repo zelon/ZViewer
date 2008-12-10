@@ -2,7 +2,7 @@
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "ZViewer"
-!define PRODUCT_VERSION "0.7.0b1"
+!define PRODUCT_VERSION "0.7.0alpha1"
 !define PRODUCT_PUBLISHER "RhLab"
 !define PRODUCT_WEB_SITE "http://zviewer.wimy.com"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
@@ -29,6 +29,7 @@ SetCompressor /SOLID lzma
 ;!define MUI_LICENSEPAGE_CHECKBOX
 !insertmacro MUI_PAGE_LICENSE "ReadMe.txt"
 ; Directory page
+!define MUI_PAGE_CUSTOMFUNCTION_SHOW onDirectoryShow
 !insertmacro MUI_PAGE_DIRECTORY
 ; Instfiles page
 !insertmacro MUI_PAGE_INSTFILES
@@ -60,11 +61,35 @@ SetCompressor /SOLID lzma
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
 OutFile "${PRODUCT_NAME}Setup${PRODUCT_VERSION}.exe"
 InstallDir "$PROGRAMFILES\${PRODUCT_NAME}"
+InstallDirRegKey HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\ZViewer" "UninstallString"
 ShowInstDetails show
 ShowUnInstDetails show
+CRCCheck on
 
 Function .onInit
+; installer 가 시작할 때 어떤 언어를 선택할지 묻는다.
   !insertmacro MUI_LANGDLL_DISPLAY
+FunctionEnd
+
+; 디렉토리 선택 화면이 보여질 때 실행되는 함수. 이미 설치된 경우 디렉토리 선택을 할 수 없게 한다.
+Function onDirectoryShow
+  push $R0
+  push $R1
+  ReadRegStr $0 HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\ZViewer" "UninstallString"
+  IfErrors onDirectoryShowEnd onDirectoryShowDisableBrowse
+onDirectoryShowDisableBrowse:
+  FindWindow $R0 "#32770" "" $HWNDPARENT
+  GetDlgItem $R1 $R0 1019
+  EnableWindow $R1 0
+  GetDlgItem $R1 $R0 1001
+  EnableWindow $R1 0
+; '기존의 설치될 디렉토리를 고르세요' 라는 메시지를 '다시 설치합니다' 라는 내용으로 바꿈
+  GetDlgItem $R1 $R0 1006
+  SendMessage $R1 ${WM_SETTEXT} 0 "STR:$(TEXT_REINSTALL)"
+
+onDirectoryShowEnd:
+  pop $R1
+  pop $R0
 FunctionEnd
 
 Section "MainSection" SEC01
@@ -76,9 +101,9 @@ Section "MainSection" SEC01
 
 ZViewerDllCheck:
   Delete "$INSTDIR\ZViewerAgent.dll"
-  IfErrors ZViewerNeedUninstallAndReboot ZViewerCopyDll
+  IfErrors ZViewerNeedKillExplorer ZViewerCopyDll
 
-ZViewerNeedUninstallAndReboot:
+ZViewerNeedKillExplorer:
   MessageBox MB_OK $(RestartExplorer)
   KillProcDLL::KillProc "explorer.exe"
 
@@ -140,12 +165,12 @@ SectionEnd
 
 Function un.onUninstSuccess
   HideWindow
-  MessageBox MB_ICONINFORMATION|MB_OK "$(^Name) is uninstalled."
+  MessageBox MB_ICONINFORMATION|MB_OK $(UninstallCompleted)
 FunctionEnd
 
 Function un.onInit
 !insertmacro MUI_UNGETLANGUAGE
-  MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 "Uninstall $(^Name)?" IDYES +2
+  MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 $(UninstallQuestion) IDYES +2
   Abort
 FunctionEnd
 
