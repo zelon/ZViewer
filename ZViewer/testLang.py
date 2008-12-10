@@ -131,24 +131,63 @@ def checkSameMap():
 	if False == bFound:
 		print("[OK] There is no error for checking same word.")
 
+def checkNSISLanguageFiles():
+	strLangDir = "output/language/"
+	files = [ strLangDir + "english.nsh", strLangDir + "korean.nsh" ]
+
+	strRe = r"^LangString[ \t]+.*?${CURLANG}[ \t]+\""
+	strRe = r"^LangString[ \t]+.*?\${CURLANG}[ \t]+\""
+	if False == checkSamePattern(files, strRe):
+		return False
+	print("[OK] All NSIS language files are checked.")
+	return True
+
+def checkSamePattern(files, strRe, printResult = False):
+	if len(files) <= 1:
+		print("testLang.py: error test lang:no or just one file list")
+		print("[FAILED]no or just one file list")
+		return False
+
+	file = open(files[0], "r")
+
+	data = file.read()
+	file.close()
+
+	compareFlag = re.S | re.I | re.M 
+	result = re.findall(strRe, data,  compareFlag)
+
+	if True == printResult:
+		print(result)
+
+	for file in files:
+		hFile = open(file, "r")
+		compareData = hFile.read()
+		hFile.close()
+
+		compareResult = re.findall(strRe, compareData, compareFlag)
+
+		if result != compareResult:
+			print("---------------------------------------------")
+			print(files[0] + ":")
+			print(result)
+			print("---------------------------------------------")
+			print(file + ":")
+			print(compareResult)
+			print("---------------------------------------------")
+			print("testLang.py: error test lang:Compare failed " + file + " with " + files[0])
+			print("[FAILED] Compare failed " + file + " with " + files[0])
+			return False
+
+	return True
+
 """ .rc 파일들의 주요 내용이 서로 같은지 체크 """
 def checkSameRCFile():
-	left = open(r'ZViewer\res\ZViewer.rc', "r")
-	right = open(r'LangKor\res\ZViewer.rc', "r")
-
-	leftdata = left.read()
-	left.close()
-
-	rightdata = right.read()
-	right.close()
+	files = [ r'ZViewer\res\ZViewer.rc', r'LangKor\res\ZViewer.rc' ]
 
 	strRe = r"IDR_MAIN_ACCELERATOR.*?^END"
-	strRe = r"IDR_MAIN_ACCELERATOR.*?^END"
 
-	leftAccel = re.findall(strRe, leftdata, re.S | re.I | re.M )
-	rightAccel = re.findall(strRe, rightdata, re.S | re.I | re.M )
-
-	if leftAccel != rightAccel:
+	bRet = checkSamePattern(files, strRe)
+	if False == bRet:
 		print "[FAILED]testLang : error lang: Not same accelerator"
 		return False
 	else:
@@ -220,5 +259,7 @@ if __name__ == "__main__":
 	if False == checkSameRes():
 		exit(1)
 	if False == checkSameRCFile():
+		exit(1)
+	if False == checkNSISLanguageFiles():
 		exit(1)
 	exit(0)
