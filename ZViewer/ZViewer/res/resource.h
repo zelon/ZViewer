@@ -82,13 +82,14 @@
 #define ID_ZOOM_IN                      40093
 #define ID_ZOOM_OUT                     40094
 #define ID_COPY_TO_CLIPBOARD            40095
+#define ID_AUTOROTATION                 40096
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        116
-#define _APS_NEXT_COMMAND_VALUE         40102
+#define _APS_NEXT_COMMAND_VALUE         40097
 #define _APS_NEXT_CONTROL_VALUE         1015
 #define _APS_NEXT_SYMED_VALUE           101
 #endif

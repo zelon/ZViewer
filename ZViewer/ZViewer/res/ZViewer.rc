@@ -75,9 +75,6 @@ BEGIN
         MENUITEM "&FullScreen\tAlt+Enter, Enter", ID_VIEW_FULLSCREEN
         MENUITEM "RightTop First Draw",         ID_VIEW_RIGHTTOPFIRSTDRAW
         MENUITEM SEPARATOR
-        MENUITEM "BigToScreenStretch",          ID_VIEW_BIGTOSCREENSTRETCH
-        MENUITEM "SmallToScreenStretch",        ID_VIEW_SMALLTOSCREENSTRETCH
-        MENUITEM SEPARATOR
         MENUITEM "Rotate Clockwise\t]",         ID_VIEW_ROTATECLOCKWISE
         MENUITEM "Rotate CounterClockWise\t[",  ID_VIEW_ROTATECOUNTERCLOCKWISE
         MENUITEM SEPARATOR
@@ -104,16 +101,20 @@ BEGIN
         MENUITEM "Always on Top",               ID_VIEW_ALWAYSONTOP
         MENUITEM "Show Detail Infomation",      ID_SHOW_DETAILINFOMATION
     END
+    POPUP "&Zoom"
+    BEGIN
+        MENUITEM "BigToScreenStretch",          ID_VIEW_BIGTOSCREENSTRETCH
+        MENUITEM "SmallToScreenStretch",        ID_VIEW_SMALLTOSCREENSTRETCH
+        MENUITEM SEPARATOR
+        MENUITEM "Zoom In\t+",                  ID_ZOOM_IN
+        MENUITEM "Zoom Out\t-",                 ID_ZOOM_OUT
+        MENUITEM "100%\t0",                     ID_ZOOM_100
+    END
     POPUP "&Option"
     BEGIN
         MENUITEM "View Loop",                   ID_OPTION_VIEWLOOP
         MENUITEM "File Extension...",           ID_OPTION_FILE_EXT
-    END
-    POPUP "&Zoom"
-    BEGIN
-        MENUITEM "Zoom In\t+",                  ID_ZOOM_IN
-        MENUITEM "Zoom Out\t-",                 ID_ZOOM_OUT
-        MENUITEM "100%\t0",                     ID_ZOOM_100
+        MENUITEM "&Auto Rotation",              ID_AUTOROTATION
     END
     POPUP "&Help"
     BEGIN

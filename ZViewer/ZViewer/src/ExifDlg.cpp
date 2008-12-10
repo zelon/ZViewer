@@ -145,10 +145,10 @@ tstring ExifDlg::convertExifKey(const tstring & strKey) const
 tstring ExifDlg::convertExifValue(const tstring & strKey, tstring & strValue) const
 {
 	std::map < tstring, tstring > valueMatch;
-	valueMatch[TEXT("top, left side")] = GetMessage(TEXT("METADATA_VALUE_ORIENTATION_0"));
-	valueMatch[TEXT("right side, top")] = GetMessage(TEXT("METADATA_VALUE_ORIENTATION_90"));
-	valueMatch[TEXT("bottom, right side")] = GetMessage(TEXT("METADATA_VALUE_ORIENTATION_180"));
-	valueMatch[TEXT("left side, bottom")] = GetMessage(TEXT("METADATA_VALUE_ORIENTATION_270"));
+	valueMatch[TEXT(EXIF_ROTATION_0)] = GetMessage(TEXT("METADATA_VALUE_ORIENTATION_0"));
+	valueMatch[TEXT(EXIF_ROTATION_90)] = GetMessage(TEXT("METADATA_VALUE_ORIENTATION_90"));
+	valueMatch[TEXT(EXIF_ROTATION_180)] = GetMessage(TEXT("METADATA_VALUE_ORIENTATION_180"));
+	valueMatch[TEXT(EXIF_ROTATION_270)] = GetMessage(TEXT("METADATA_VALUE_ORIENTATION_270"));
 
 	if ( strKey == TEXT("Orientation") )
 	{

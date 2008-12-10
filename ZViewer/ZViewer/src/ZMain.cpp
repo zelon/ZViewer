@@ -30,6 +30,11 @@
 
 using namespace std;
 
+enum
+{
+	eTimerValue = 9153
+};
+
 ZMain & ZMain::GetInstance()
 {
 	static ZMain aInstance;
@@ -240,10 +245,6 @@ void ZMain::Draw(HDC toDrawDC, bool bEraseBg)
 	if ( NULL == toDrawDC )
 	{
 		mainDC = GetDC(m_hShowWindow);
-
-		/// ShowWindow 부분만 그리도록 클리핑 영역을 설정한다.
-		HRGN hrgn = CreateRectRgn(currentScreenRect.left, currentScreenRect.top, currentScreenRect.right, currentScreenRect.bottom);
-		SelectClipRgn(mainDC, hrgn);
 	}
 	else
 	{
@@ -251,6 +252,10 @@ void ZMain::Draw(HDC toDrawDC, bool bEraseBg)
 		mainDC = toDrawDC;
 	}
 	assert(mainDC != NULL);
+
+	/// ShowWindow 부분만 그리도록 클리핑 영역을 설정한다.
+	HRGN hrgn = CreateRectRgn(currentScreenRect.left, currentScreenRect.top, currentScreenRect.right, currentScreenRect.bottom);
+	SelectClipRgn(mainDC, hrgn);
 
 	/// 파일이 하나도 없을 때는 배경만 지우고 바로 리턴한다.
 	if ( m_vFile.size() <= 0 )
@@ -650,6 +655,20 @@ bool ZMain::MoveIndex(int iIndex)
 {
 	if ( m_vFile.empty() ) return false;
 
+	iIndex = GetCalculatedMovedIndex(iIndex);
+
+	if ( m_iCurretFileIndex == iIndex ) return false;
+
+	m_iCurretFileIndex = iIndex;
+	m_strCurrentFilename = m_vFile[m_iCurretFileIndex].m_strFileName;
+	LoadCurrent();
+
+	return true;
+}
+
+/// 새로 이동할 인덱스 번호를 주면 지금 상황에 맞는 인덱스 번호를 돌려준다.
+int ZMain::GetCalculatedMovedIndex(int iIndex)
+{
 	if ( iIndex < 0 )
 	{
 		if ( ZOption::GetInstance().IsLoopImages() )
@@ -673,14 +692,7 @@ bool ZMain::MoveIndex(int iIndex)
 			iIndex = (int)m_vFile.size() - 1;
 		}
 	}
-
-	if ( m_iCurretFileIndex == iIndex ) return false;
-
-	m_iCurretFileIndex = iIndex;
-	m_strCurrentFilename = m_vFile[m_iCurretFileIndex].m_strFileName;
-	LoadCurrent();
-
-	return true;
+	return iIndex;
 }
 
 bool ZMain::FirstImage()
@@ -699,9 +711,6 @@ bool ZMain::LastImage()
 
 void ZMain::OnChangeCurrentSize(int iWidth, int iHeight)
 {
-	m_iCurrentScreenWidth = iWidth;
-	m_iCurrentScreenHeight = iHeight;
-
 	if ( m_iShowingX + iWidth > m_currentImage.GetWidth() )
 	{
 		m_iShowingX -= (m_iShowingX + iWidth - m_currentImage.GetWidth());
@@ -735,12 +744,32 @@ void ZMain::FormShow()
 	SetWindowLong(m_hMainDlg, GWL_STYLE, style);
 }
 
+void ZMain::StartTimer()
+{
+	/// Add Timer
+	m_timerPtr = SetTimer(m_hMainDlg, eTimerValue, 100, NULL);
+
+	if ( m_timerPtr == 0 )
+	{
+		MessageBox(m_hMainDlg, GetMessage(TEXT("CANNOT_MAKE_TIMER")), TEXT("ZViewer"), MB_OK);
+		return;
+	}
+}
+
+void ZMain::StopTimer()
+{
+	/// KillTimer
+	if ( m_timerPtr != 0 )
+	{
+		BOOL bRet = KillTimer(m_hMainDlg, eTimerValue);
+		DWORD dwErrorCode = GetLastError();
+		assert(bRet);
+	}
+}
+
 /// Cache status 를 상태 표시줄에 표시한다.
 void ZMain::ShowCacheStatus()
 {
-	// 해상도 정보
-	//SendMessage(m_hStatusBar, SB_SETTEXT, 1, (LPARAM)szTemp);
-
 	static bool bLastActionIsCache = false;
 
 	bool bNowActionIsCache = ZCacheImage::GetInstance().isCachingNow();
@@ -749,14 +778,24 @@ void ZMain::ShowCacheStatus()
 	{
 		bLastActionIsCache = bNowActionIsCache;
 
-		if ( bNowActionIsCache )
+		static tstring strStatusMsg=TEXT("...");	///< PostMessage() 로 호출하므로, 메모리가 없어지지 않게 하기 위해 static
+
+		if ( false == bNowActionIsCache ) ///< 캐쉬가 끝났으면
 		{
-			PostMessage(m_hStatusBar, SB_SETTEXT, 6, (LPARAM)TEXT("Caching"));
+			strStatusMsg = TEXT("Cached");
 		}
-		else
+		else///< 아직 캐쉬 중이면
 		{
-			PostMessage(m_hStatusBar, SB_SETTEXT, 6, (LPARAM)TEXT("Cached"));
+			if ( ZCacheImage::GetInstance().IsNextFileCached() )	///< 다음 파일의 캐쉬가 끝났으면
+			{
+				strStatusMsg = TEXT("Caching files");
+			}
+			else ///< 아직 다음 파일도 캐쉬가 안 끝났으면,
+			{
+				strStatusMsg = TEXT("Caching next");
+			}
 		}
+		PostMessage(m_hStatusBar, SB_SETTEXT, 6, (LPARAM)strStatusMsg.c_str());
 
 		/*
 		HDC hDC = ::GetDC(m_hStatusBar);
@@ -1058,6 +1097,13 @@ void ZMain::LoadCurrent()
 			ZCacheImage::GetInstance().LogCacheMiss();
 		}
 	}
+
+	/// 옵션에 따라 자동 회전을 시킨다.
+	if ( ZOption::GetInstance().IsUseAutoRotation() )
+	{
+		m_currentImage.AutoRotate();
+	}
+
 	m_dwLoadingTime = GetTickCount() - start;
 	SetTitle();			///< 파일명을 윈도우 타이틀바에 적는다.
 	SetStatusBarText();	///< 상태 표시줄 내용을 설정한다.
@@ -1551,7 +1597,7 @@ void ZMain::CreateStatusBar()
 		350,	///< zoom
 		470,	///< temp banner http://www.wimy.com
 		550,	///< 파일을 읽어들이는데 걸린 시간
-		603,	///< cache status
+		633,	///< cache status
 		1910,	///< 파일명표시
 	};
 	SendMessage(m_hStatusBar, SB_SETPARTS, STATUS_SPLIT_NUM, (LPARAM)SBPart);
@@ -1560,24 +1606,37 @@ void ZMain::CreateStatusBar()
 /// 메뉴 중 체크표시 되는 것을 확인하여 설정해준다.
 void ZMain::SetCheckMenus()
 {
+	/// start of checking main menu
 	CheckMenuItem(m_hMainMenu, ID_OPTION_VIEWLOOP, ZOption::GetInstance().IsLoopImages() ? MF_CHECKED : MF_UNCHECKED);
 	CheckMenuItem(m_hMainMenu, ID_VIEW_FULLSCREEN, ZOption::GetInstance().IsFullScreen() ? MF_CHECKED : MF_UNCHECKED);
 	CheckMenuItem(m_hMainMenu, ID_VIEW_SMALLTOSCREENSTRETCH, ZOption::GetInstance().IsSmallToBigStretchImage() ? MF_CHECKED : MF_UNCHECKED);
 	CheckMenuItem(m_hMainMenu, ID_VIEW_BIGTOSCREENSTRETCH , ZOption::GetInstance().IsBigToSmallStretchImage() ? MF_CHECKED : MF_UNCHECKED);
 	CheckMenuItem(m_hMainMenu, ID_VIEW_RIGHTTOPFIRSTDRAW, ZOption::GetInstance().m_bRightTopFirstDraw ? MF_CHECKED : MF_UNCHECKED);
 
+	CheckMenuItem(m_hMainMenu, ID_AUTOROTATION, ZOption::GetInstance().IsUseAutoRotation() ? MF_CHECKED : MF_UNCHECKED);
 	CheckMenuItem(m_hMainMenu, ID_VIEW_ALWAYSONTOP, ZOption::GetInstance().m_bAlwaysOnTop ? MF_CHECKED : MF_UNCHECKED);
+	/// end of checking main menu
 
+
+
+	/// start of checking popup menu
 	CheckMenuItem(m_hPopupMenu, ID_VIEW_RIGHTTOPFIRSTDRAW, ZOption::GetInstance().m_bRightTopFirstDraw ? MF_CHECKED : MF_UNCHECKED);
 	CheckMenuItem(m_hPopupMenu, ID_VIEW_FULLSCREEN, ZOption::GetInstance().IsFullScreen() ? MF_CHECKED : MF_UNCHECKED);
 	CheckMenuItem(m_hPopupMenu, ID_POPUPMENU_SMALLTOSCREENSTRETCH, ZOption::GetInstance().IsSmallToBigStretchImage() ? MF_CHECKED : MF_UNCHECKED);
 	CheckMenuItem(m_hPopupMenu, ID_POPUPMENU_BIGTOSCREENSTRETCH, ZOption::GetInstance().IsBigToSmallStretchImage() ? MF_CHECKED : MF_UNCHECKED);
+	/// end of checking popup menu
 }
 
 void ZMain::StartSlideMode()
 {
 	ZOption::GetInstance().m_bSlideMode = true;
 	ZOption::GetInstance().m_dwLastSlidedTime = GetTickCount();
+}
+
+void ZMain::ToggleAutoRotation()
+{
+	ZOption::GetInstance().SetAutoRotation(!ZOption::GetInstance().IsUseAutoRotation());
+	SetCheckMenus();
 }
 
 void ZMain::ToggleAlwaysOnTop()
@@ -1626,7 +1685,7 @@ void ZMain::ZoomIn()
 		m_fCurrentZoomRate += 1.0;
 	}
 
-	if ( m_fCurrentZoomRate >= 10.0 )
+	if ( m_fCurrentZoomRate >= 20.0 )
 	{
 		m_fCurrentZoomRate = fBeforeModify;
 	}

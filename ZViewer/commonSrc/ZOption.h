@@ -69,6 +69,9 @@ public:
 
 	const bool IsUseCache() const { return m_bUseCache; }
 
+	const bool IsUseAutoRotation() const { return m_bUseAutoRotation; }
+	void SetAutoRotation(const bool bUseAutoRotation) { m_bUseAutoRotation = bUseAutoRotation; }
+
 	const bool IsUsingPreviewModeInShell() const { return m_bUsePreviewInShell; }
 	const bool IsUsingOpenCMDInShell() const { return m_bUseOpenCMDInShell; }
 	//-----------------------------------------------------------
@@ -102,6 +105,9 @@ private:
 	//----------------------------------------------------------
 	// 아래는 지속적으로 저장되는 옵션들. 파일에 저장한다.
 
+	/// exif 정보에 따른 자동 회전을 할 것인가.
+	bool m_bUseAutoRotation;
+
 	/// 캐쉬 시스템을 쓸것인가... 메모리가 적은 컴퓨터에서는 끌 수 있도록 하기 위해서
 	bool m_bUseCache;
 
@@ -128,6 +134,7 @@ private:
 	/// Shell 에서 cmd 창 열기를 사용할 것인가.
 	bool m_bUseOpenCMDInShell;
 
+	/// 기본적인 옵션을 설정해둔다. 설치 후 처음 실행되었을 때 이 값을 기준으로 zviewer.ini 파일이 만들어진다.
 	void SetDefaultOption();
 
 	void LoadFromFile();

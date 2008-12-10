@@ -76,6 +76,8 @@ public:
 	/// 특정 위치의 이미지 파일로 건너뛴다.
 	bool MoveIndex(int iIndex);
 
+	int GetCalculatedMovedIndex(int iIndex);	///< 새로 이동할 인덱스 번호를 주면 지금 상황에 맞는 인덱스 번호를 돌려준다.
+
 	/// 현재 위치에서 파일을 이동한다.
 	bool MoveRelateIndex(int iRelateIndex)
 	{
@@ -122,9 +124,13 @@ public:
 	void SetStatusHandle(HWND hWnd) { m_hStatusBar = hWnd; }
 	HWND GetStatusHandle() const { return m_hStatusBar; }
 
+	void StartTimer();
+	void StopTimer();
+
 	/// Cache status 를 상태 표시줄에 표시한다.
 	void ShowCacheStatus();
 
+	void ToggleAutoRotation();
 	void ToggleAlwaysOnTop();
 
 	/// 전체화면 모드를 토글한다.
@@ -231,9 +237,6 @@ private:
 
 	int m_iCurretFileIndex;
 
-	int m_iCurrentScreenWidth;
-	int m_iCurrentScreenHeight;
-
 	/// 현재 보는 화면 배율. 1 이면 100%, 2 이면 200%, 0.1 이면 10%의 크기로 본다. 그림을 m_currentImage 로 했을 때 옵션에 따라서 배율을 결정한다.
 	double m_fCurrentZoomRate;
 
@@ -275,6 +278,8 @@ private:
 
 	/// For Cache DC
 	HDC m_hBufferDC;
+
+	UINT_PTR m_timerPtr;		///< for timer
 
 	/// 버퍼로 쓰이는 DC 를 릴리즈한다.
 	void _releaseBufferDC();

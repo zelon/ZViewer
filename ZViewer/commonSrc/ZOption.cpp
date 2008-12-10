@@ -67,9 +67,11 @@ void ZOption::SetSaveOptions()
 	_InsertSaveOptionSetting(L"use_preview_shell", &m_bUsePreviewInShell);
 
 	_InsertSaveOptionSetting(L"use_debug", &m_bUseDebug);
+
+	_InsertSaveOptionSetting(L"use_auto_rotation", &m_bUseAutoRotation);
 }
 
-/// 기본적인 옵션을 설정해둔다.
+/// 기본적인 옵션을 설정해둔다. 설치 후 처음 실행되었을 때 이 값을 기준으로 zviewer.ini 파일이 만들어진다.
 void ZOption::SetDefaultOption()
 {
 	m_bUsePreviewInShell = true;
@@ -79,6 +81,7 @@ void ZOption::SetDefaultOption()
 	m_iSlideModePeriodMiliSeconds = 5000;	///< Default slide mode period is 5 seconds
 	m_bLoopImages = false;
 	m_bUseCache = true;
+	m_bUseAutoRotation = true;
 	m_bFullScreen = false;
 	m_bUseDebug = false;
 	m_bBigToSmallStretchImage = false;

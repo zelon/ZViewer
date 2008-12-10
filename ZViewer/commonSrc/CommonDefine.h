@@ -22,7 +22,13 @@ typedef std::wstring tstring;
 typedef std::string tstring;
 #endif
 
-const tstring g_strVersion = TEXT("0.7.0alpha4");
+#define		EXIF_ROTATION_0		"top, left side"
+#define		EXIF_ROTATION_90	"right side, top"
+#define		EXIF_ROTATION_180	"bottom, right side"
+#define		EXIF_ROTATION_270	"left side, bottom"
+
+
+const tstring g_strVersion = TEXT("0.7.0alpha1");
 const tstring g_strHomepage = TEXT("http://zviewer.wimy.com");
 struct TagData
 {

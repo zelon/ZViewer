@@ -33,6 +33,8 @@ public:
 #endif
 	}
 
+	ZImage & operator=(const ZImage & image);
+
 	void clear()
 	{
 		m_image.clear();
@@ -121,6 +123,8 @@ public:
 	}
 
 	void GetExifList(std::list < TagData > & exifList);
+
+	void AutoRotate();
 
 	bool CopyToClipboard(HWND hWndNewOwner) { return (TRUE == m_image.copyToClipboard(hWndNewOwner)); }
 	bool PasteFromClipboard() { return (TRUE == m_image.pasteFromClipboard()); }

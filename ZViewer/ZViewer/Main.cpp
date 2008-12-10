@@ -146,7 +146,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,HINSTANCE /*hPrevInstance */,LPTSTR l
 #ifdef _DEBUG
 	if ( strInitArg.empty() )
 	{
-		strInitArg = TEXT("..\\SampleImages\\zviewer_jpg.jpg");
+		strInitArg = TEXT("..\\SampleImages\\GwangAn.jpg");
 	}
 	//strInitArg = "C:\\A.bmp";
 #endif
@@ -159,30 +159,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,HINSTANCE /*hPrevInstance */,LPTSTR l
 
 	HWND hWnd = aWindow.Create(hInstance, HWND_DESKTOP, nCmdShow);
 
-	/// Add Timer
-	enum
-	{
-		eTimerValue = 9153
-	};
-	UINT_PTR timerPtr = SetTimer(hWnd, eTimerValue, 100, NULL);
-
-	if ( timerPtr == 0 )
-	{
-		MessageBox(hWnd, GetMessage(TEXT("")), TEXT("ZViewer"), MB_OK);
-		return 0;
-	}
-
 	WPARAM wParam = aWindow.DoModal();
-
-	/*
-	/// KillTimer
-	if ( timerPtr != 0 )
-	{
-		BOOL bRet = KillTimer(hWnd, eTimerValue);
-
-		assert(bRet);
-	}
-	*/
 
 	//
 	if ( hLang )
@@ -194,6 +171,8 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,HINSTANCE /*hPrevInstance */,LPTSTR l
 	}
 
 	ZCacheImage::GetInstance().CleanUp();
+	ZCacheImage::GetInstance().WaitCacheLock();	///< cacheimage 를 cleanup 한 후 lock 을 기다려 제대로 끝난지를 기다린다.
+
 	CLogManager::getInstance().CleanUp();
 	ZImage::CleanupLibrary();
 

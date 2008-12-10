@@ -136,6 +136,10 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 				ZMain::GetInstance().ToggleFullScreen();
 				break;
 
+			case 'p':
+				ZMain::GetInstance().ShowExif();
+				break;
+
 			case 'A':
 			case 'a':
 			case '7':
@@ -189,8 +193,18 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 			case 'm':
 				{
 					fipMultiPage image;
-					image.open("C:\\_Samples\\ljyzzno_2.gif", FALSE, TRUE);
+					image.open("C:\\IMG_3854.jpg", FALSE, TRUE);
 
+					image.close();
+
+					if ( image.isValid() )
+					{
+						DebugPrintf(TEXT("isvalid true"));
+					}
+					else
+					{
+						DebugPrintf(TEXT("isvalid false"));
+					}
 //					int iGetPageCount = image.getPageCount();
 
 					FIBITMAP * pBitmap = FreeImage_Clone(image.lockPage(0));
@@ -291,6 +305,9 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 			ZMain::GetInstance().SetPopupMenu(g_hPopupMenu);
 
 			ZMain::GetInstance().OnInit();
+
+			/// 타이머를 시작한다.
+			ZMain::GetInstance().StartTimer();
 			return TRUE;
 		}
 		break;
@@ -301,6 +318,8 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 			{
 				TaskBar::ShellTrayShow();
 			}
+
+			ZMain::GetInstance().StopTimer();
 			PostQuitMessage(0);
 		}
 		break;
@@ -565,6 +584,10 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 
 			case ID_VIEW_RIGHTTOPFIRSTDRAW:
 				ZMain::GetInstance().OnRightTopFirstDraw();
+				break;
+
+			case ID_AUTOROTATION:
+				ZMain::GetInstance().ToggleAutoRotation();
 				break;
 
 			case ID_OPTION_VIEWLOOP:
