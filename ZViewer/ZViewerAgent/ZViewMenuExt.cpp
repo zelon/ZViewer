@@ -702,13 +702,12 @@ void CZViewMenuExt::PasteAsImagefileFromClipboard()
 		{
 			SPrintf(szDes, MAX_PATH, TEXT("%s\\Clip%03d.png"), m_strCurrentDir.c_str(), iPostFix);
 
-
-			if ( 0 != _taccess(szDes, 00) )
+			if ( 0 != _taccess(szDes, 00) )	///< file not exist
 			{
 				break;
 			}
 
-			if ( iPostFix == eMax_NO )
+			if ( iPostFix == eMax_NO )	///< file numbering over max
 			{
 				MsgBox(GetMessage(TEXT("ZVIEWERAGENT_CANNOT_PASTE_IMAGE_FILE_MAX_NO")));
 				return;
