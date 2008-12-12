@@ -25,6 +25,15 @@ PREDEPS = ZViewer\stdafx.h.d
 
 all:$(TARGET)
 
+VCDebug:
+	ConsoleBuild.bat
+
+VCRebuild:
+	ConsoleBuild.bat rebuild
+
+VCClean:
+	ConsoleBuild.bat clean
+
 srclist.txt: ConvertFromVCProj.py
 	@echo Creating source files list...
 	@python ConvertFromVCProj.py > srclist.txt
