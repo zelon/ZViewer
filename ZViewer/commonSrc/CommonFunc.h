@@ -103,6 +103,9 @@ eOSKind getOSVersion();
 /// string 을 wstring 으로 변환
 std::wstring getWStringFromString(const std::string & str);
 
+/// Make dump file name
+tstring GetDumpFilename();
+
 /// 현재 실행 파일이 있는 폴더를 얻는다.
 tstring GetProgramFolder();
 

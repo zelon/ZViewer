@@ -429,6 +429,24 @@ std::wstring getWStringFromString(const std::string & str)
 	return std::wstring(buff);
 }
 
+/// Make dump file name
+tstring GetDumpFilename()
+{
+	TCHAR szFilename[_MAX_PATH];
+
+	for ( int i=0; i<100; ++i )
+	{
+		SPrintf(szFilename, _MAX_PATH, TEXT("C:\\ZViewer%s_%d.dmp"), g_strVersion.c_str());
+
+		if ( 0 != _taccess(szFilename, 00) )	///< file not exist
+		{
+			break;
+		}
+	}
+	tstring strDumpFilename = szFilename;
+	return strDumpFilename;
+}
+
 
 /// 현재 실행 파일이 있는 폴더를 얻는다.
 tstring GetProgramFolder()

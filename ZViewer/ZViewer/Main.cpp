@@ -85,10 +85,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,HINSTANCE /*hPrevInstance */,LPTSTR l
 	MiniDumper * pDump = NULL;
 	if ( ZOption::GetInstance().IsUseDebug() )
 	{
-		tstring strDumpFilename = TEXT("C:\\ZViewer");
-		strDumpFilename += g_strVersion;
-		strDumpFilename += TEXT(".dmp");
-
+		tstring strDumpFilename = GetDumpFilename();
 		TCHAR szDumpMsg[_MAX_PATH];
 		SPrintf(szDumpMsg, _MAX_PATH, TEXT("%s\r\n\r\nFile : %s\r\nHomepage : %s"), GetMessage(TEXT("CRASH_MSG")), strDumpFilename.c_str(), g_strHomepage.c_str());
 
