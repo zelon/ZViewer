@@ -51,7 +51,6 @@ public:
 	void SetHandCursor(bool bHandCursor) { m_bHandCursor = bHandCursor; }
 
 	void SetInitArg(const tstring & strArg) { m_strInitArg = strArg; }
-	void SetProgramFolder();
 	void RescanFolder();			///< 파일목록을 다시 읽어들인다.
 
 	void OnInit();
@@ -227,7 +226,6 @@ private:
 	void FormHide();
 
 	tstring m_strInitArg;			///< 프로그램 시작 인자.
-	tstring m_strProgramFolder;		///< 프로그램 실행 파일이 있는 폴더
 
 	tstring m_strCurrentFolder;		///< 현재 폴더
 	tstring m_strCurrentFilename;	///< 현재 보여주고 있는 파일이름
@@ -245,9 +243,6 @@ private:
 
 	///< 현재 이미지를 로딩하는 데 걸린 시간
 	DWORD m_dwLoadingTime;
-
-	/// last image load is from cache
-	bool m_bLastCacheHit;
 
 	/// 메인 윈도우에 대한 핸들
 	HWND m_hMainDlg;
@@ -302,4 +297,6 @@ private:
 
 	/// Zoom in & out 전의 센터 위치로 그림을 드래그함. ZoomOut, ZoomIn 중에 호출됨
 	void _PositionPreviousCenter();
+
+	bool m_bCurrentImageLoaded;
 };

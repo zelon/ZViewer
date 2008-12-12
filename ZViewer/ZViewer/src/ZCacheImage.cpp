@@ -12,8 +12,10 @@
 #include "ZCacheImage.h"
 #include "ZOption.h"
 #include "ZMain.h"
+#include "../../commonSrc/MessageManager.h"
 
 using namespace std;
+
 
 ZCacheImage & ZCacheImage::GetInstance()
 {
@@ -179,8 +181,90 @@ bool ZCacheImage::_CacheIndex(int iIndex)
 
 	if ( bFound == false )	// 캐시되어 있지 않으면 읽어들인다.
 	{
-		ZImage cacheReayImage;
-		if ( cacheReayImage.LoadFromFile(strFileName) )
+		ZImage cacheReadyImage;
+
+		m_vBuffer.resize(0);
+		HANDLE hFile = CreateFile(strFileName.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_FLAG_SEQUENTIAL_SCAN | FILE_FLAG_POSIX_SEMANTICS,  NULL);
+
+		bool bLoadOK = false;
+
+		if ( INVALID_HANDLE_VALUE == hFile )
+		{
+			bLoadOK = false;
+		}
+		else
+		{
+			enum
+			{
+				readBufferSize = 2048
+			};
+			
+			BYTE readBuffer[readBufferSize];
+
+			DWORD dwReadBytes;
+			BOOL bReadOK = TRUE;
+			while ( bReadOK )
+			{
+				if ( m_bNewChange)
+				{
+					CloseHandle(hFile);
+					DebugPrintf(TEXT("---------------------------- stop readfile"));
+					return false;	// 현재보고 있는 파일 인덱스가 바뀌었으면 빨리 다음 for 를 시작한다.
+				}
+				bReadOK = ReadFile(hFile, readBuffer, readBufferSize, &dwReadBytes,  NULL);
+				if ( m_bNewChange)
+				{
+					CloseHandle(hFile);
+					DebugPrintf(TEXT("---------------------------- stop readfile"));
+					return false;	// 현재보고 있는 파일 인덱스가 바뀌었으면 빨리 다음 for 를 시작한다.
+				}
+				if ( FALSE == bReadOK )
+				{
+					assert(false);
+					bLoadOK = false;
+					break;
+				}
+				else
+				{
+					if ( dwReadBytes <= 0 )	///< 파일의 끝까지 읽었다.
+					{
+						break;
+					}
+					else /// 
+					{
+						m_vBuffer.resize(m_vBuffer.size() + dwReadBytes);
+
+						memcpy((&(m_vBuffer[0])) + m_vBuffer.size() - dwReadBytes, readBuffer, dwReadBytes);
+					}
+				}
+			}
+			CloseHandle(hFile);
+
+			/// todo: 아래 내용을 멤버 변수로 바꾸면 더 좋아질까
+			fipMemoryIO mem(&m_vBuffer[0], (DWORD)m_vBuffer.size());
+			bLoadOK = cacheReadyImage.LoadFromMemory(mem);
+		}
+
+		if ( bLoadOK == false )
+		{
+			assert(!"Can't load image");
+
+			tstring strErrorFilename = GetProgramFolder();
+			strErrorFilename += TEXT("LoadError.png");
+			if ( !cacheReadyImage.LoadFromFile(strErrorFilename) )
+			{
+				MessageBox(HWND_DESKTOP, TEXT("Please check LoadError.png in ZViewer installed folder"), TEXT("ZViewer"), MB_OK);
+
+				// 에러 때 표시하는 파일을 읽어들이지 못 했으면
+				//ShowMessageBox(GetMessage(TEXT("CANNOT_LOAD_ERROR_IMAGE_FILE")));
+
+				HBITMAP hBitmap = CreateBitmap(100, 100, 1, 1, NULL);
+				cacheReadyImage.CopyFromBitmap(hBitmap);
+			}
+		}
+
+
+		if ( bLoadOK )
 		{
 			/*
 			{/// Debug Code
@@ -261,7 +345,7 @@ bool ZCacheImage::_CacheIndex(int iIndex)
 			}
 #endif
 			// 읽은 이미지를 넣을 공간이 없으면
-			if ( (m_lCacheSize + cacheReayImage.GetImageSize()) / 1024 / 1024 > ZOption::GetInstance().GetMaxCacheMemoryMB() )
+			if ( (m_lCacheSize + cacheReadyImage.GetImageSize()) / 1024 / 1024 > ZOption::GetInstance().GetMaxCacheMemoryMB() )
 			{
 				int iTemp = 100;
 				int iFarthestIndex = -1;
@@ -327,9 +411,9 @@ bool ZCacheImage::_CacheIndex(int iIndex)
 					}
 
 					// 이제 어느 정도 용량을 확보했으니 다시 이 이미지를 넣을 수 있는 지 캐시를 체크한다.
-					if ( (m_lCacheSize + cacheReayImage.GetImageSize()) / 1024 / 1024 <= ZOption::GetInstance().GetMaxCacheMemoryMB() )
+					if ( (m_lCacheSize + cacheReadyImage.GetImageSize()) / 1024 / 1024 <= ZOption::GetInstance().GetMaxCacheMemoryMB() )
 					{
-						AddCacheData(strFileName, cacheReayImage);
+						AddCacheData(strFileName, cacheReadyImage);
 						return true;
 					}
 
@@ -341,7 +425,7 @@ bool ZCacheImage::_CacheIndex(int iIndex)
 			}
 			else
 			{
-				AddCacheData(strFileName, cacheReayImage);
+				AddCacheData(strFileName, cacheReadyImage);
 				if ( m_bNewChange) return false;	// 현재보고 있는 파일 인덱스가 바뀌었으면 빨리 다음 for 를 시작한다.
 			}
 		}
@@ -380,22 +464,31 @@ void ZCacheImage::ThreadFunc()
 			if ( false == m_bCacheGoOn ) break; ///< 프로그램이 종료되었으면 for 를 끝낸다.
 			if ( m_bNewChange) break;	// 현재보고 있는 파일 인덱스가 바뀌었으면 빨리 다음 for 를 시작한다.
 
+			/// 항상 현재 이미지를 먼저 캐쉬한다.
+			_CacheIndex(m_iCurrentIndex);
+			if ( m_bNewChange) break;	// 현재보고 있는 파일 인덱스가 바뀌었으면 빨리 다음 for 를 시작한다.
+
 			/// 현재보고 있는 방향에 따라서 어디쪽 이미지를 먼저 캐시할 것인지 판단한다.
+
 			if ( m_lastActionDirection == eLastActionDirection_FORWARD )
 			{
 				// right side
 				if ( false == _CacheIndex(m_iCurrentIndex + iPos) ) break;
+				if ( m_bNewChange) break;	// 현재보고 있는 파일 인덱스가 바뀌었으면 빨리 다음 for 를 시작한다.
 
 				// left side
 				if ( false == _CacheIndex(m_iCurrentIndex - iPos) ) break;
+				if ( m_bNewChange) break;	// 현재보고 있는 파일 인덱스가 바뀌었으면 빨리 다음 for 를 시작한다.
 			}
 			else if ( m_lastActionDirection == eLastActionDirection_BACKWARD )
 			{
 				// left side
 				if ( false == _CacheIndex(m_iCurrentIndex - iPos) ) break;
+				if ( m_bNewChange) break;	// 현재보고 있는 파일 인덱스가 바뀌었으면 빨리 다음 for 를 시작한다.
 
 				// right side
 				if ( false == _CacheIndex(m_iCurrentIndex + iPos) ) break;
+				if ( m_bNewChange) break;	// 현재보고 있는 파일 인덱스가 바뀌었으면 빨리 다음 for 를 시작한다.
 			}
 			else
 			{
@@ -479,11 +572,8 @@ void ZCacheImage::AddCacheData(const tstring & strFilename, ZImage & image)
 	try
 	{
 #endif
-	DebugPrintf(TEXT("here1"));
 		m_cacheData[strFilename] = image;
-	DebugPrintf(TEXT("here2"));
 		m_lCacheSize += imageSize;
-	DebugPrintf(TEXT("here3"));
 #ifndef _DEBUG
 	}
 	catch ( ... )

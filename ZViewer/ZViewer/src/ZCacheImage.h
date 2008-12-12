@@ -10,6 +10,8 @@
 
 #pragma once
 
+#include <vector>
+
 #include "../../commonSrc/ZImage.h"
 #include "../../commonSrc/LockUtil.h"
 
@@ -151,5 +153,6 @@ private:
 	CLockObj m_mainThreadReadingFileNameLock;	///< m_mainThreadReadingFileName ¸¦ À§ÇÑ lock °´Ã¼
 	*/
 
+	std::vector < BYTE > m_vBuffer;
 };
 

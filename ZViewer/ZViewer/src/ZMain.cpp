@@ -49,9 +49,10 @@ ZMain::ZMain(void)
 {
 	memset( &m_lastPosition, 0, sizeof( m_lastPosition ) );
 	m_hBufferDC = NULL;
-	m_bLastCacheHit = false;
-	SetProgramFolder();
+//	m_bLastCacheHit = false;
 
+	m_bCurrentImageLoaded = false;
+	m_currentImage.Clear();
 	m_bgBrush = CreateSolidBrush(RGB(128,128,128));
 	m_hEraseRgb = CreateRectRgn(0,0,1,1);
 
@@ -119,6 +120,12 @@ void ZMain::onTimer()
 	{
 		//DebugPrintf("now cache status...");
 	}
+
+	if ( false == m_bCurrentImageLoaded )
+	{
+		LoadCurrent();
+	}
+
 	ShowCacheStatus();
 }
 
@@ -205,8 +212,6 @@ void ZMain::OnInit()
 
 	if ( m_strInitArg.empty() )
 	{
-		// 시작 인자가 없으면 프로그램 폴더가 현재 폴더이다.
-		m_strCurrentFolder = m_strProgramFolder;
 		RescanFolder();
 
 		//m_currentImage = m_bannerImage;
@@ -430,11 +435,6 @@ void ZMain::RescanFolder()
 
 		LoadCurrent();
 	}
-}
-
-void ZMain::SetProgramFolder()
-{
-	m_strProgramFolder = GetProgramFolder();
 }
 
 bool ZMain::GetNeighborFolders(std::vector < tstring > & vFolders)
@@ -661,6 +661,7 @@ bool ZMain::MoveIndex(int iIndex)
 
 	m_iCurretFileIndex = iIndex;
 	m_strCurrentFilename = m_vFile[m_iCurretFileIndex].m_strFileName;
+	m_bCurrentImageLoaded = false;
 	LoadCurrent();
 
 	return true;
@@ -762,7 +763,6 @@ void ZMain::StopTimer()
 	if ( m_timerPtr != 0 )
 	{
 		BOOL bRet = KillTimer(m_hMainDlg, eTimerValue);
-		DWORD dwErrorCode = GetLastError();
 		assert(bRet);
 	}
 }
@@ -988,14 +988,7 @@ void ZMain::SetStatusBarText()
 		SendMessage(m_hStatusBar, SB_SETTEXT, 4, (LPARAM)TEXT("http://wimy.com"));
 
 		// 로딩시간
-		if ( m_bLastCacheHit )
-		{
-			SPrintf(szTemp, COMMON_BUFFER_SIZE, TEXT("%.3fsec [C]"), (float)(m_dwLoadingTime / 1000.0));
-		}
-		else
-		{
-			SPrintf(szTemp, COMMON_BUFFER_SIZE, TEXT("%.3fsec [N]"), (float)(m_dwLoadingTime / 1000.0));
-		}
+		SPrintf(szTemp, COMMON_BUFFER_SIZE, TEXT("%.3fsec"), (float)(m_dwLoadingTime / 1000.0));
 		SendMessage(m_hStatusBar, SB_SETTEXT, 5, (LPARAM)szTemp);
 
 		ShowCacheStatus(); ///< 6
@@ -1048,112 +1041,99 @@ void ZMain::LoadCurrent()
 
 	_releaseBufferDC();
 
+	static tstring lastCheckFileName;
+
 	/// 캐시된 데이터에 있으면
 	if ( ZCacheImage::GetInstance().hasCachedData(m_strCurrentFilename, m_iCurretFileIndex) )
 	{
 		{/// 캐시된 데이터를 읽어온다.
 			ZCacheImage::GetInstance().getCachedData(m_strCurrentFilename, m_currentImage);
+			m_bCurrentImageLoaded = true;
 		}
 
 		DebugPrintf(TEXT("Cache Hit!!!!!!!!!!!!!"));
 
-		m_bLastCacheHit = true;
-
 		ZCacheImage::GetInstance().LogCacheHit();
+
+		/// 옵션에 따라 자동 회전을 시킨다.
+		if ( ZOption::GetInstance().IsUseAutoRotation() )
+		{
+			m_currentImage.AutoRotate();
+		}
+
+		m_dwLoadingTime = GetTickCount() - start;
+		SetTitle();			///< 파일명을 윈도우 타이틀바에 적는다.
+		SetStatusBarText();	///< 상태 표시줄 내용을 설정한다.
+
+		m_iShowingX = 0;
+		m_iShowingY = 0;
+
+		if ( ZOption::GetInstance().m_bRightTopFirstDraw )	// 우측 상단부터 시작해야하면
+		{
+			RECT rt;
+			getCurrentScreenRect(rt);
+
+			if ( m_currentImage.GetWidth() > rt.right )
+			{
+				m_iShowingX = m_currentImage.GetWidth() - rt.right;
+			}
+		}
+
+		/// 기본적으로 그림의 zoom rate 를 설정한다.
+		m_fCurrentZoomRate = 1.0f;
+		RECT currentScreenRect;
+		if ( false == getCurrentScreenRect(currentScreenRect) )
+		{
+			assert(false);
+		}
+		else
+		{
+			if ( ZOption::GetInstance().IsBigToSmallStretchImage() || ZOption::GetInstance().IsSmallToBigStretchImage() )
+			{
+				RECT toRect;
+				SetRect(&toRect, 0, 0, m_currentImage.GetWidth(), m_currentImage.GetHeight());
+
+				if ( ZOption::GetInstance().IsBigToSmallStretchImage() )
+				{
+					if ( m_currentImage.GetWidth() > (currentScreenRect.right - currentScreenRect.left) || m_currentImage.GetHeight() > (currentScreenRect.bottom - currentScreenRect.top) )
+					{
+						toRect = GetResizedRectForBigToSmall(currentScreenRect, toRect);
+					}
+				}
+
+				if ( ZOption::GetInstance().IsSmallToBigStretchImage() )
+				{
+					if ( m_currentImage.GetWidth() < (currentScreenRect.right - currentScreenRect.left) && m_currentImage.GetHeight() < (currentScreenRect.bottom - currentScreenRect.top) )
+					{
+						toRect = GetResizedRectForSmallToBig(currentScreenRect, toRect);
+					}
+				}
+				m_fCurrentZoomRate = (float)(toRect.right - toRect.left) / (float)(m_currentImage.GetWidth());
+			}
+		}
+
+		Draw();
 	}
 	else
 	{
 		// 캐시에서 찾을 수 없으면 지금 읽어들이고, 캐시에 추가한다.
 		DebugPrintf(TEXT("Can't find in cache. load now..."));
 
-		bool bLoadOK = false;
-
-		for ( unsigned int i=0; i<10; ++i)
-		{
-			bLoadOK = m_currentImage.LoadFromFile(m_strCurrentFilename);
-			if ( bLoadOK || i >= 5) break; ///< 그림 읽어들이는 데 성공하거나, 5번 해도 실패면 빠져나간다.
-
-			DebugPrintf(TEXT("Direct Load failed. sleep"));
-
-			Sleep(10); ///< 그림 읽어들일 때 실패했으면 10ms 의 딜레이를 준 후 다시 읽어본다.
-		}
-
-		if ( bLoadOK == false )
-		{
-			assert(!"Can't load image");
-
-			tstring strErrorFilename = m_strProgramFolder;
-			strErrorFilename += TEXT("LoadError.png");
-			if ( !m_currentImage.LoadFromFile(strErrorFilename) )
-			{
-				// 에러 때 표시하는 파일을 읽어들이지 못 했으면
-				ShowMessageBox(GetMessage(TEXT("CANNOT_LOAD_ERROR_IMAGE_FILE")));
-			}
-		}
+/*
 		else
 		{
 			DebugPrintf(TEXT("Cache miss."));
 			m_bLastCacheHit = false;
 			ZCacheImage::GetInstance().LogCacheMiss();
 		}
+		*/
+
+		//m_currentImage = m_loadingImage;
+		//m_fCurrentZoomRate = 1.0f;
+		//Draw();
 	}
 
-	/// 옵션에 따라 자동 회전을 시킨다.
-	if ( ZOption::GetInstance().IsUseAutoRotation() )
-	{
-		m_currentImage.AutoRotate();
-	}
 
-	m_dwLoadingTime = GetTickCount() - start;
-	SetTitle();			///< 파일명을 윈도우 타이틀바에 적는다.
-	SetStatusBarText();	///< 상태 표시줄 내용을 설정한다.
-
-	m_iShowingX = 0;
-	m_iShowingY = 0;
-
-	if ( ZOption::GetInstance().m_bRightTopFirstDraw )	// 우측 상단부터 시작해야하면
-	{
-		RECT rt;
-		getCurrentScreenRect(rt);
-
-		if ( m_currentImage.GetWidth() > rt.right )
-		{
-			m_iShowingX = m_currentImage.GetWidth() - rt.right;
-		}
-	}
-
-	/// 기본적으로 그림의 zoom rate 를 설정한다.
-	m_fCurrentZoomRate = 1.0f;
-	RECT currentScreenRect;
-	if ( false == getCurrentScreenRect(currentScreenRect) )
-	{
-		assert(false);
-	}
-	else
-	{
-		if ( ZOption::GetInstance().IsBigToSmallStretchImage() || ZOption::GetInstance().IsSmallToBigStretchImage() )
-		{
-			RECT toRect;
-			SetRect(&toRect, 0, 0, m_currentImage.GetWidth(), m_currentImage.GetHeight());
-
-			if ( ZOption::GetInstance().IsBigToSmallStretchImage() )
-			{
-				if ( m_currentImage.GetWidth() > (currentScreenRect.right - currentScreenRect.left) || m_currentImage.GetHeight() > (currentScreenRect.bottom - currentScreenRect.top) )
-				{
-					toRect = GetResizedRectForBigToSmall(currentScreenRect, toRect);
-				}
-			}
-
-			if ( ZOption::GetInstance().IsSmallToBigStretchImage() )
-			{
-				if ( m_currentImage.GetWidth() < (currentScreenRect.right - currentScreenRect.left) && m_currentImage.GetHeight() < (currentScreenRect.bottom - currentScreenRect.top) )
-				{
-					toRect = GetResizedRectForSmallToBig(currentScreenRect, toRect);
-				}
-			}
-			m_fCurrentZoomRate = (float)(toRect.right - toRect.left) / (float)(m_currentImage.GetWidth());
-		}
-	}
 }
 
 void ZMain::OnDrag(int x, int y)

@@ -35,7 +35,7 @@ public:
 
 	ZImage & operator=(const ZImage & image);
 
-	void clear()
+	void Clear()
 	{
 		m_image.clear();
 	}
@@ -50,6 +50,14 @@ public:
 	BYTE * GetData() { return m_image.accessPixels(); }
 	BITMAPINFO * GetBitmapInfo() { return m_image.getInfo(); }
 	bool IsValid() const { return (m_image.isValid() == TRUE); }
+
+	bool CopyFromBitmap(HBITMAP hBitmap) { return (TRUE == m_image.copyFromBitmap(hBitmap)); }
+
+	bool LoadFromMemory(fipMemoryIO & memBuffer)
+	{
+		return ( TRUE == m_image.loadFromMemory(memBuffer) );
+	}
+
 	bool LoadFromFile(const tstring & strFilename)
 	{
 		//DebugPrintf("LoadFromFile : %s", strFilename.c_str());
@@ -65,6 +73,7 @@ public:
 				m_originalWidth = m_image.getWidth();
 				m_originalHeight = m_image.getHeight();
 				m_originalSize = m_image.getImageSize();
+				m_strFilename = strFilename;
 				return true;
 			}
 		}
@@ -139,4 +148,7 @@ private:
 
 	/// Image's original size - before resizing
 	long m_originalSize;
+
+	/// current loaded filename
+	tstring m_strFilename;
 };
