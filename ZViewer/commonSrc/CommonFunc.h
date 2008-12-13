@@ -118,3 +118,12 @@ void SplitPath(const TCHAR * path, TCHAR * drive, size_t driveNumberOfElements, 
 #else
 #define SPrintf _snwprintf
 #endif
+
+
+#ifdef _DEBUG
+#define TIMECHECK_START(szMsg)	DWORD dwStart___ = GetTickCount(); TCHAR szTimeCheckMsg___[] = TEXT(szMsg);
+#define TIMECHECK_END()			DWORD dwDiff___ = GetTickCount() - dwStart___; DebugPrintf(TEXT("--- %s - time(%d)"), szTimeCheckMsg___, dwDiff___);
+#else
+#define TIMECHECK_START(szMsg)	;
+#define TIMECHECK_END()			;
+#endif
