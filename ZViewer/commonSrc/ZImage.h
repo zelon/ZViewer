@@ -53,9 +53,14 @@ public:
 
 	bool CopyFromBitmap(HBITMAP hBitmap) { return (TRUE == m_image.copyFromBitmap(hBitmap)); }
 
-	bool LoadFromMemory(fipMemoryIO & memBuffer)
+	bool LoadFromMemory(fipMemoryIO & memBuffer, const tstring & strFilename)
 	{
-		return ( TRUE == m_image.loadFromMemory(memBuffer) );
+		if ( TRUE == m_image.loadFromMemory(memBuffer) )
+		{
+			_ProcAfterLoad(strFilename);
+			return true;
+		}
+		return false;
 	}
 
 	bool LoadFromFile(const tstring & strFilename)
@@ -70,10 +75,7 @@ public:
 			if ( m_image.load(strFilename.c_str()) == TRUE )
 #endif
 			{
-				m_originalWidth = m_image.getWidth();
-				m_originalHeight = m_image.getHeight();
-				m_originalSize = m_image.getImageSize();
-				m_strFilename = strFilename;
+				_ProcAfterLoad(strFilename);
 				return true;
 			}
 		}
@@ -84,6 +86,14 @@ public:
 			return false;
 		}
 		return false;
+	}
+
+	void _ProcAfterLoad(const tstring & strFilename)
+	{
+		m_originalWidth = m_image.getWidth();
+		m_originalHeight = m_image.getHeight();
+		m_originalSize = m_image.getImageSize();
+		m_strFilename = strFilename;
 	}
 
 	bool SaveToFile(const tstring & strFilename, int iFlag) const

@@ -71,35 +71,31 @@ void ZImage::GetExifList(std::list < TagData > & exifList)
 
 void ZImage::AutoRotate()
 {
-	std::list < TagData > exifList;
+	fipTag tag;
+	fipMetadataFind finder;
 
-	/// todo: 이전의 정보를 저장해두는 기능 개선 필요
-	GetExifList(exifList);
-
-	std::list < TagData >::iterator it = exifList.begin();
-
-	for ( ; it != exifList.end(); ++it )
+	if( finder.findFirstMetadata(FIMD_EXIF_MAIN, m_image, tag) )
 	{
-		if ( (*it).m_strKey == "Orientation" )
+		do
 		{
-			if ( (*it).m_strValue == EXIF_ROTATION_0 )
-			{
-				//Rotate(0);
-			}
-			else if ( (*it).m_strValue == EXIF_ROTATION_90 )
-			{
-				Rotate(-90);
-			}
-			else if ( (*it).m_strValue == EXIF_ROTATION_180 )
-			{
-				Rotate(-180);
-			}
-			else if ( (*it).m_strValue == EXIF_ROTATION_270 )
-			{
-				Rotate(-270);
-			}
+			string strValue = tag.toString(FIMD_EXIF_MAIN);
 
-			break;
-		}
+			if ( strcmp(tag.getKey(), "Orientation") == 0 )
+			{
+				if ( strValue == EXIF_ROTATION_90 )
+				{
+					Rotate(-90);
+				}
+				else if ( strValue == EXIF_ROTATION_180 )
+				{
+					Rotate(-180);
+				}
+				else if ( strValue == EXIF_ROTATION_270 )
+				{
+					Rotate(-270);
+				}
+				break;
+			}
+		} while( finder.findNextMetadata(tag) );
 	}
 }

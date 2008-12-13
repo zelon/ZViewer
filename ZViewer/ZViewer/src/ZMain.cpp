@@ -307,15 +307,15 @@ void ZMain::Draw(HDC toDrawDC, bool bEraseBg)
 	m_fCenterX = (float)((currentScreenRect.right/2.0f) - (float)drawRect.left) / (float)(drawRect.right-drawRect.left);
 	m_fCenterY = (float)((currentScreenRect.bottom/2.0f) - (float)drawRect.top) / (float)(drawRect.bottom-drawRect.top);
 
-	DebugPrintf(TEXT("center(%f,%f) on Dtaw()"), m_fCenterX, m_fCenterY);
+	//DebugPrintf(TEXT("center(%f,%f) on Draw()"), m_fCenterX, m_fCenterY);
 
 #ifdef _DEBUG
-	DWORD dwStart = GetTickCount();
+//	DWORD dwStart = GetTickCount();
 #endif
 	m_currentImage.Draw(mainDC, drawRect);
 #ifdef _DEBUG
-	DWORD dwDiff = GetTickCount() - dwStart;
-	DebugPrintf(TEXT("freeImagePlus.Draw spend time : %d"), dwDiff);
+//	DWORD dwDiff = GetTickCount() - dwStart;
+	//DebugPrintf(TEXT("freeImagePlus.Draw spend time : %d"), dwDiff);
 #endif
 
 	ReleaseDC(m_hMainDlg, mainDC);
@@ -423,7 +423,9 @@ void ZMain::RescanFolder()
 
 	strToFindFolder += TEXT("*.*");
 
+	TIMECHECK_START("--- rescan folder");
 	_GetFileListAndSort(strToFindFolder, m_vFile);
+	TIMECHECK_END();
 
 	// Cache Thread 에 전달한다.
 	ZCacheImage::GetInstance().SetImageVector(m_vFile);
@@ -1159,7 +1161,7 @@ void ZMain::OnDrag(int x, int y)
 	if ( m_iShowingY <= 0 ) m_iShowingY = 0;
 	if ( m_iShowingY + rt.bottom >= iZoomedHeight ) m_iShowingY = iZoomedHeight - rt.bottom;
 
-	DebugPrintf(TEXT("ShowingX(%d), ShowingY(%d)"), m_iShowingX, m_iShowingY);
+	//DebugPrintf(TEXT("ShowingX(%d), ShowingY(%d)"), m_iShowingX, m_iShowingY);
 	/// 보여주는 X 좌표나 Y 좌표 둘 중 하나라도 변경되었으면, 드래그된 것이므로 다시 그린다.
 	if ( m_iShowingX != iNowShowingX || m_iShowingY != iNowShowingY )
 	{
@@ -1185,6 +1187,8 @@ void ZMain::ReLoadFileList()
 
 void ZMain::_ProcAfterRemoveThisFile()
 {
+	m_bCurrentImageLoaded = false;
+
 	// 현재 파일이 마지막 파일인가?
 	if ( m_vFile.size() <= 1 )
 	{
@@ -1262,6 +1266,7 @@ void ZMain::_ProcAfterRemoveThisFile()
 			Draw(NULL, true);
 		}
 	}
+	ZCacheImage::GetInstance().SetImageVector(m_vFile);
 }
 
 
@@ -1352,7 +1357,7 @@ void ZMain::ShowFileExtDlg()
 void ZMain::DeleteThisFile()
 {
 	/// 현재 보고 있는 파일이 없으면 바로 리턴한다.
-	if ( m_strCurrentFilename.empty() )
+	if ( m_strCurrentFilename.empty() || m_bCurrentImageLoaded == false )
 	{
 		return;
 	}
@@ -1366,6 +1371,7 @@ void ZMain::DeleteThisFile()
 	{
 		if ( 0 == _tunlink(m_strCurrentFilename.c_str()) )
 		{
+			DebugPrintf(TEXT("-- %s deleted --"), m_strCurrentFilename.c_str());
 			_ProcAfterRemoveThisFile();
 		}
 		else

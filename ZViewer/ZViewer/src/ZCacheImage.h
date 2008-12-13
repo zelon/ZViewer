@@ -15,6 +15,9 @@
 #include "../../commonSrc/ZImage.h"
 #include "../../commonSrc/LockUtil.h"
 
+#include "CachedData.h"
+
+
 /// 캐시를 어느 방향부터 먼저할 것인지, 우선시할 것인지를 위해...
 /**
  예를 들어 사용자가 PageDown 으로 다음 이미지들을 보고 있다면 다음 이미지들을 좀 더 캐쉬해놓고,
@@ -40,7 +43,7 @@ public:
 
 	void CleanUp()
 	{
-		m_cacheData.clear();
+		m_cacheData.Clear();
 	}
 
 	inline void LogCacheHit() { ++m_iLogCacheHit; }
@@ -77,7 +80,7 @@ public:
 	// 현재 캐시되어 있는 파일들을 output 윈도우로 뿌려준다.
 	void ShowCachedImageToOutputWindow();
 
-	size_t GetNumOfCacheImage() const { return m_cacheData.size(); 	}
+	size_t GetNumOfCacheImage() const { return m_cacheData.Size(); 	}
 
 	static DWORD WINAPI ThreadFuncProxy(LPVOID p);
 	void ThreadFunc();
@@ -85,7 +88,7 @@ public:
 	void SetImageVector(const std::vector < FileData > & v);
 	bool hasCachedData(const tstring & strFilename, int iIndex);	///< 이 파일에 해당하는 정보를 캐쉬해서 가지고 있는지 체크하는 함수
 	void getCachedData(const tstring & strFilename, ZImage & image);	///< 이 파일에 해당하는 ZImage 정보를 받아오는 함수
-	void AddCacheData(const tstring & strFilename, ZImage & image);		///< 이 파일에 해당하는 ZImage 정보를 새로 추가해라.
+	void AddCacheData(const tstring & strFilename, ZImage & image, bool bForceCache = false);		///< 이 파일에 해당하는 ZImage 정보를 새로 추가해라.
 
 	void SetLastActionDirection(eLastActionDirection last)
 	{
@@ -118,13 +121,9 @@ private:
 	/// threadfunc 를 계속 실행시킬 것인가. 프로그램이 끝날 때 false 로 해주면 캐쉬 쓰레드를 최대한 빨리 끝낼 때 쓰임
 	volatile bool m_bCacheGoOn;
 
-	std::map < tstring, ZImage > m_cacheData;		///< 실제로 캐쉬된 데이터를 가지고 있는 맵
-	typedef std::map < tstring, ZImage >::iterator CacheMapIterator;
+	CachedData m_cacheData;
 
 	size_t m_numImageVectorSize;
-
-	std::map < int , tstring > m_imageIndex2FilenameMap;	///< 이미지 파일의 인덱스 번호,파일이름 맵
-	std::map < tstring, int > m_imageFilename2IndexMap;		///< 이미지 파일이름,인덱스 번호 맵
 
 	/// 현재보고 있는 index;
 	volatile int m_iCurrentIndex;
@@ -137,22 +136,9 @@ private:
 	/// 캐시 이벤트
 	CEventObj m_hCacheEvent;
 
-	/// 지정된 번호의 파일을 캐시할 수 있으면 캐시한다.
+	/// 지정된 번호의 파일을 캐시할 수 있으면 캐시한다. 반환값은 캐쉬성공이면 true
 	bool _CacheIndex(int iIndex);
 
-	/// 캐시되어 있는 데이터들 중 현재 인덱스로부터 가장 멀리있는 인덱스를 얻는다.
-	int _GetFarthestIndexFromCurrentIndex();
-
-	/*
-	/// 현재 캐시 쓰레드에서 읽고 있는 파일이름
-	tstring m_cacheThreadReadingFileName;
-	CLockObj m_cacheThreadReadingFileNameLock;	///< m_cacheThreadReadingFileName 를 위한 lock 객체
-
-	/// 현재 메인 쓰레드에서 읽고 있는 파일이름
-	tstring m_mainThreadReadingFileName;
-	CLockObj m_mainThreadReadingFileNameLock;	///< m_mainThreadReadingFileName 를 위한 lock 객체
-	*/
-
+	/// 현재 읽고 있는 파일의 데이터를 저장하는 버퍼
 	std::vector < BYTE > m_vBuffer;
 };
-

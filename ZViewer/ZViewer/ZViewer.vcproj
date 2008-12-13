@@ -419,11 +419,23 @@
 				>
 			</File>
 			<File
+				RelativePath=".\src\CachedData.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\CachedData.h"
+				>
+			</File>
+			<File
 				RelativePath=".\src\ExifDlg.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\src\ExifDlg.h"
+				>
+			</File>
+			<File
+				RelativePath="..\lib\freeimage\FreeImage.h"
 				>
 			</File>
 			<File
@@ -533,10 +545,6 @@
 			<Filter
 				Name="freeimage"
 				>
-				<File
-					RelativePath="..\lib\freeimage\FreeImage.h"
-					>
-				</File>
 				<File
 					RelativePath="..\lib\freeimage\FreeImagePlus.h"
 					>
