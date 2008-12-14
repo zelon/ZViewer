@@ -154,7 +154,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,HINSTANCE /*hPrevInstance */,LPTSTR l
 
 	CMainWindow aWindow;
 
-	HWND hWnd = aWindow.Create(hInstance, HWND_DESKTOP, nCmdShow);
+	aWindow.Create(hInstance, HWND_DESKTOP, nCmdShow);
 
 	WPARAM wParam = aWindow.DoModal();
 
@@ -167,8 +167,8 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,HINSTANCE /*hPrevInstance */,LPTSTR l
 		}
 	}
 
-	ZCacheImage::GetInstance().CleanUp();
-	ZCacheImage::GetInstance().WaitCacheLock();	///< cacheimage 를 cleanup 한 후 lock 을 기다려 제대로 끝난지를 기다린다.
+	ZCacheImage::GetInstance().CleanUpCache();
+	ZCacheImage::GetInstance().WaitCacheLock();	///< cacheimage 를 cleanup 한 후 lock 을 기다려 제대로 끝나기를 기다린다.
 
 	CLogManager::getInstance().CleanUp();
 	ZImage::CleanupLibrary();
