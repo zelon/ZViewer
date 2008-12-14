@@ -81,7 +81,7 @@ bool CSaveAs::showDialog()
 	// Set lpstrFile[0] to '\0' so that GetOpenFileName does not 
 	// use the contents of szFile to initialize itself.
 	//
-	m_ofn.lpstrFile[0] = '\0';
+//	m_ofn.lpstrFile[0] = '\0';
 	m_ofn.nMaxFile = FILENAME_MAX;
 	m_ofn.lpstrFilter = ExtInfoManager::GetInstance().GetFileDlgFilter();
 	m_ofn.nFilterIndex = 1;
