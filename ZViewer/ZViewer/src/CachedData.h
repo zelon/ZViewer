@@ -13,17 +13,20 @@
 
 #include "../../commonSrc/ZImage.h"
 
-typedef std::map < tstring, ZImage >::iterator CacheMapIterator;
-typedef std::map < tstring, ZImage >::const_iterator CacheMapIterator_const;
+typedef std::map < tstring, ZImage * >::iterator CacheMapIterator;
+typedef std::map < tstring, ZImage * >::const_iterator CacheMapIterator_const;
 
 
 class CachedData
 {
 public:
 	CachedData() {}
-	virtual ~CachedData(){}
+	virtual ~CachedData()
+	{
+		Clear();
+	}
 
-	void Clear() { m_cacheData.clear(); }
+	void Clear();
 	size_t Size() const { return m_cacheData.size(); }
 
 	void PrintCachedData() const;
@@ -34,9 +37,10 @@ public:
 		return false;
 	}
 
-	void InsertData(const tstring & strFilename, ZImage & image)
+	void InsertData(const tstring & strFilename, ZImage * pImage)
 	{
-		m_cacheData[strFilename] = image;
+		assert(HasCachedData(strFilename) == false);
+		m_cacheData[strFilename] = pImage;
 	}
 
 	void ShowCacheInfo() const;
@@ -51,7 +55,7 @@ public:
 	size_t GetIndex2FilenameMapSize() const { return m_imageIndex2FilenameMap.size(); }
 	void SetNewFileList(const std::vector < FileData > & v, const size_t & numImageVectorSize);
 
-	bool GetCachedData(const tstring & strFilename, ZImage & image) const;
+	bool GetCachedData(const tstring & strFilename, ZImage * & pImage) const;
 	bool ClearFarthestDataFromCurrent(const int iFarthestIndex, long & cacheSize);
 
 	/// 캐시되어 있는 데이터들 중 현재 인덱스로부터 가장 멀리있는 인덱스를 얻는다.
@@ -60,7 +64,7 @@ public:
 	tstring GetFilenameFromIndex(const int iIndex) { return m_imageIndex2FilenameMap[iIndex]; }
 
 protected:
-	std::map < tstring, ZImage > m_cacheData;		///< 실제로 캐쉬된 데이터를 가지고 있는 맵
+	std::map < tstring, ZImage * > m_cacheData;		///< 실제로 캐쉬된 데이터를 가지고 있는 맵
 	std::map < int , tstring > m_imageIndex2FilenameMap;	///< 이미지 파일의 인덱스 번호,파일이름 맵
 	std::map < tstring, int > m_imageFilename2IndexMap;		///< 이미지 파일이름,인덱스 번호 맵
 

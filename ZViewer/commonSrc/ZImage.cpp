@@ -16,18 +16,6 @@
 
 using namespace std;
 
-ZImage & ZImage::operator=(const ZImage & image)
-{
-	if ( this == &image) return *this;
-
-	m_image = image.m_image;
-	m_originalWidth = image.m_originalWidth;
-	m_originalHeight = image.m_originalHeight;
-	m_originalSize = image.m_originalSize;
-
-	return (*this);
-}
-
 void ZImage::GetExifList(std::list < TagData > & exifList)
 {
 #ifdef _DEBUG

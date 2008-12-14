@@ -239,7 +239,7 @@ private:
 	double m_fCurrentZoomRate;
 
 	/// 현재 보여주고 있는 이미지
-	ZImage m_currentImage;
+	ZImage * m_pCurrentImage;
 
 	///< 현재 이미지를 로딩하는 데 걸린 시간
 	DWORD m_dwLoadingTime;
@@ -298,5 +298,6 @@ private:
 	/// Zoom in & out 전의 센터 위치로 그림을 드래그함. ZoomOut, ZoomIn 중에 호출됨
 	void _PositionPreviousCenter();
 
+	/// 현재 이미지가 로딩되었나
 	bool m_bCurrentImageLoaded;
 };

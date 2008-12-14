@@ -57,7 +57,6 @@ void ZOption::SetSaveOptions()
 	_InsertSaveOptionSetting(L"maximumcachememoryMB", &m_iMaximumCacheMemoryMB);
 	_InsertSaveOptionSetting(L"maximumcachefilenum", &m_iMaxCacheImageNum);
 
-	_InsertSaveOptionSetting(L"use_cache", &m_bUseCache);
 	_InsertSaveOptionSetting(L"loop_view", &m_bLoopImages);
 
 	_InsertSaveOptionSetting(L"stretch_small_to_big", &m_bSmallToBigStretchImage);
@@ -80,7 +79,6 @@ void ZOption::SetDefaultOption()
 	m_bSlideMode = false;
 	m_iSlideModePeriodMiliSeconds = 5000;	///< Default slide mode period is 5 seconds
 	m_bLoopImages = false;
-	m_bUseCache = true;
 	m_bUseAutoRotation = true;
 	m_bFullScreen = false;
 	m_bUseDebug = false;

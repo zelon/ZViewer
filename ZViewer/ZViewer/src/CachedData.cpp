@@ -11,15 +11,33 @@
 
 #include "CachedData.h"
 
+void CachedData::Clear()
+{
+	CacheMapIterator it;
+
+	for ( ; ; )
+	{
+		if ( m_cacheData.empty() ) break;
+		it = m_cacheData.begin();
+		if ( it->second )
+		{
+			delete it->second;
+		}
+		m_cacheData.erase(it);
+	}
+
+	m_cacheData.clear();
+}
+
 void CachedData::ShowCacheInfo() const
 {
 	CacheMapIterator_const it;
 
 	for ( it = m_cacheData.begin(); it != m_cacheData.end(); ++it )
 	{
-		const ZImage & image = it->second;
+		const ZImage * pImage = it->second;
 
-		DebugPrintf(TEXT("[%s] width(%d) height(%d)"), it->first.c_str(), image.GetWidth(), image.GetHeight());
+		DebugPrintf(TEXT("[%s] %dbyte"), it->first.c_str(), pImage->GetImageSize());
 	}
 }
 
@@ -96,7 +114,7 @@ void CachedData::SetNewFileList(const std::vector < FileData > & v, const size_t
 	DebugPrintf(TEXT("imageIndex2FilenameMapSize : %d"), m_imageIndex2FilenameMap.size());
 }
 
-bool CachedData::GetCachedData(const tstring & strFilename, ZImage & image) const
+bool CachedData::GetCachedData(const tstring & strFilename, ZImage * & pImage) const
 {
 	CacheMapIterator_const it;
 
@@ -112,7 +130,7 @@ bool CachedData::GetCachedData(const tstring & strFilename, ZImage & image) cons
 	}
 
 	TIMECHECK_START("GetCacheData");
-	image = it->second;
+	pImage = it->second;
 	TIMECHECK_END();
 
 	return true;
@@ -125,7 +143,14 @@ bool CachedData::ClearFarthestDataFromCurrent(const int iFarthestIndex, long & c
 
 	if ( it != m_cacheData.end() )
 	{
-		cacheSize -= it->second.GetImageSize();
+		if ( NULL == it->second )
+		{
+			assert(it->second);
+			return false;
+		}
+		cacheSize -= it->second->GetImageSize();
+		
+		delete (it->second);
 		m_cacheData.erase(it);
 
 		DebugPrintf(TEXT("Farthest one clear"));

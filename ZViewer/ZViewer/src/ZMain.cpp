@@ -52,7 +52,7 @@ ZMain::ZMain(void)
 //	m_bLastCacheHit = false;
 
 	m_bCurrentImageLoaded = false;
-	m_currentImage.Clear();
+	m_pCurrentImage = NULL;
 	m_bgBrush = CreateSolidBrush(RGB(128,128,128));
 	m_hEraseRgb = CreateRectRgn(0,0,1,1);
 
@@ -191,14 +191,18 @@ void ZMain::OpenFileDialog()
 /// 현재 파일을 다른 형식으로 저장하는 파일 다이얼로그를 연다.
 void ZMain::SaveFileDialog()
 {
+	if ( NULL == m_pCurrentImage || m_bCurrentImageLoaded == false )
+	{
+		return;
+	}
 	CSaveAs::getInstance().setParentHWND(m_hMainDlg);
 	CSaveAs::getInstance().setDefaultSaveFilename(m_strCurrentFolder, m_strCurrentFilename);
 
-	if ( CSaveAs::getInstance().showDialog() )
+	if ( true == CSaveAs::getInstance().showDialog() )
 	{
 		tstring strSaveFilename = CSaveAs::getInstance().getSaveFileName();
 
-		if ( false == m_currentImage.SaveToFile(strSaveFilename, 0) )
+		if ( false == m_pCurrentImage->SaveToFile(strSaveFilename, 0) )
 		{
 			ShowMessageBox(GetMessage(TEXT("CANNOT_SAVE_AS_FILE")));
 		}
@@ -213,8 +217,6 @@ void ZMain::OnInit()
 	if ( m_strInitArg.empty() )
 	{
 		RescanFolder();
-
-		//m_currentImage = m_bannerImage;
 	}
 	else
 	{
@@ -226,16 +228,27 @@ void ZMain::OnInit()
 /// 현재 보고 있는 파일의 Exif 정보를 보여준다.
 void ZMain::ShowExif()
 {
+	if ( NULL == m_pCurrentImage || m_bCurrentImageLoaded == false )
+	{
+		assert(m_pCurrentImage);
+		return;
+	}
 	ExifDlg aDlg;
 	aDlg.Create(m_hMainInstance, m_hMainDlg, SW_SHOW, TEXT("ExifDlg"), NULL);
-	aDlg.MakeExifMap(m_currentImage);
+	aDlg.MakeExifMap(*m_pCurrentImage);
 	aDlg.DoResource(m_hMainDlg);
 }
 
 void ZMain::Draw(HDC toDrawDC, bool bEraseBg)
 {
+	if ( NULL == m_pCurrentImage || m_bCurrentImageLoaded == false )
+	{
+		//assert(m_pCurrentImage);
+		return;
+	}
+
 	DebugPrintf(TEXT("ZMain::Draw()"));
-	if ( m_currentImage.IsValid() == FALSE ) return;
+	if ( m_pCurrentImage->IsValid() == FALSE ) return;
 	if ( m_hMainDlg == NULL ) return;
 
 	RECT currentScreenRect;
@@ -270,8 +283,8 @@ void ZMain::Draw(HDC toDrawDC, bool bEraseBg)
 		return;
 	}
 
-	const WORD zoomedImageWidth = (WORD)(m_currentImage.GetWidth() * m_fCurrentZoomRate);
-	const WORD zoomedImageHeight = (WORD)(m_currentImage.GetHeight() * m_fCurrentZoomRate);
+	const WORD zoomedImageWidth = (WORD)(m_pCurrentImage->GetWidth() * m_fCurrentZoomRate);
+	const WORD zoomedImageHeight = (WORD)(m_pCurrentImage->GetHeight() * m_fCurrentZoomRate);
 
 	/// 그릴 그림이 현재 화면보다, 가로 & 세로 모두 크면 배경을 지우지 않아도 됨.
 	if ( zoomedImageWidth >= currentScreenRect.right && zoomedImageHeight >= currentScreenRect.bottom )
@@ -312,7 +325,7 @@ void ZMain::Draw(HDC toDrawDC, bool bEraseBg)
 #ifdef _DEBUG
 //	DWORD dwStart = GetTickCount();
 #endif
-	m_currentImage.Draw(mainDC, drawRect);
+	m_pCurrentImage->Draw(mainDC, drawRect);
 #ifdef _DEBUG
 //	DWORD dwDiff = GetTickCount() - dwStart;
 	//DebugPrintf(TEXT("freeImagePlus.Draw spend time : %d"), dwDiff);
@@ -647,8 +660,6 @@ void ZMain::OpenFile(const tstring & strFilename)
 		m_strCurrentFilename = strFilename;
 
 		LoadCurrent();
-
-		Draw();
 	}
 }
 
@@ -664,6 +675,7 @@ bool ZMain::MoveIndex(int iIndex)
 	m_iCurretFileIndex = iIndex;
 	m_strCurrentFilename = m_vFile[m_iCurretFileIndex].m_strFileName;
 	m_bCurrentImageLoaded = false;
+	m_pCurrentImage = NULL;
 	LoadCurrent();
 
 	return true;
@@ -714,15 +726,21 @@ bool ZMain::LastImage()
 
 void ZMain::OnChangeCurrentSize(int iWidth, int iHeight)
 {
-	if ( m_iShowingX + iWidth > m_currentImage.GetWidth() )
+	if ( NULL == m_pCurrentImage || m_bCurrentImageLoaded == false )
 	{
-		m_iShowingX -= (m_iShowingX + iWidth - m_currentImage.GetWidth());
+//		assert(m_pCurrentImage);
+		return;
+	}
+
+	if ( m_iShowingX + iWidth > m_pCurrentImage->GetWidth() )
+	{
+		m_iShowingX -= (m_iShowingX + iWidth - m_pCurrentImage->GetWidth());
 
 		if ( m_iShowingX < 0 ) m_iShowingX = 0;
 	}
-	if ( m_iShowingY + iHeight > m_currentImage.GetHeight() )
+	if ( m_iShowingY + iHeight > m_pCurrentImage->GetHeight() )
 	{
-		m_iShowingY -= (m_iShowingY + iHeight - m_currentImage.GetHeight());
+		m_iShowingY -= (m_iShowingY + iHeight - m_pCurrentImage->GetHeight());
 		if ( m_iShowingY < 0 ) m_iShowingY = 0;
 	}
 }
@@ -765,7 +783,11 @@ void ZMain::StopTimer()
 	if ( m_timerPtr != 0 )
 	{
 		BOOL bRet = KillTimer(m_hMainDlg, eTimerValue);
-		assert(bRet);
+
+		if ( FALSE == bRet )
+		{
+			assert(bRet);
+		}
 	}
 }
 
@@ -922,6 +944,12 @@ void ZMain::ToggleLoopImage()
 
 void ZMain::SetStatusBarText()
 {
+	if ( NULL == m_pCurrentImage || m_bCurrentImageLoaded == false )
+	{
+		assert(m_pCurrentImage);
+		return;
+	}
+
 	TCHAR szTemp[COMMON_BUFFER_SIZE];
 	tstring strTemp;
 
@@ -958,7 +986,7 @@ void ZMain::SetStatusBarText()
 		SendMessage(m_hStatusBar, SB_SETTEXT, 0, (LPARAM)szTemp);
 
 		// 해상도 정보
-		SPrintf(szTemp, COMMON_BUFFER_SIZE, TEXT("%dx%dx%dbpp"), m_currentImage.GetOriginalWidth(), m_currentImage.GetOriginalHeight(), m_currentImage.GetBPP());
+		SPrintf(szTemp, COMMON_BUFFER_SIZE, TEXT("%dx%dx%dbpp"), m_pCurrentImage->GetOriginalWidth(), m_pCurrentImage->GetOriginalHeight(), m_pCurrentImage->GetBPP());
 		SendMessage(m_hStatusBar, SB_SETTEXT, 1, (LPARAM)szTemp);
 
 		// image size
@@ -1049,19 +1077,13 @@ void ZMain::LoadCurrent()
 	if ( ZCacheImage::GetInstance().hasCachedData(m_strCurrentFilename, m_iCurretFileIndex) )
 	{
 		{/// 캐시된 데이터를 읽어온다.
-			ZCacheImage::GetInstance().getCachedData(m_strCurrentFilename, m_currentImage);
+			ZCacheImage::GetInstance().GetCachedData(m_strCurrentFilename, m_pCurrentImage);
 			m_bCurrentImageLoaded = true;
 		}
 
 		DebugPrintf(TEXT("Cache Hit!!!!!!!!!!!!!"));
 
 		ZCacheImage::GetInstance().LogCacheHit();
-
-		/// 옵션에 따라 자동 회전을 시킨다.
-		if ( ZOption::GetInstance().IsUseAutoRotation() )
-		{
-			m_currentImage.AutoRotate();
-		}
 
 		m_dwLoadingTime = GetTickCount() - start;
 		SetTitle();			///< 파일명을 윈도우 타이틀바에 적는다.
@@ -1075,9 +1097,9 @@ void ZMain::LoadCurrent()
 			RECT rt;
 			getCurrentScreenRect(rt);
 
-			if ( m_currentImage.GetWidth() > rt.right )
+			if ( m_pCurrentImage->GetWidth() > rt.right )
 			{
-				m_iShowingX = m_currentImage.GetWidth() - rt.right;
+				m_iShowingX = m_pCurrentImage->GetWidth() - rt.right;
 			}
 		}
 
@@ -1093,11 +1115,11 @@ void ZMain::LoadCurrent()
 			if ( ZOption::GetInstance().IsBigToSmallStretchImage() || ZOption::GetInstance().IsSmallToBigStretchImage() )
 			{
 				RECT toRect;
-				SetRect(&toRect, 0, 0, m_currentImage.GetWidth(), m_currentImage.GetHeight());
+				SetRect(&toRect, 0, 0, m_pCurrentImage->GetWidth(), m_pCurrentImage->GetHeight());
 
 				if ( ZOption::GetInstance().IsBigToSmallStretchImage() )
 				{
-					if ( m_currentImage.GetWidth() > (currentScreenRect.right - currentScreenRect.left) || m_currentImage.GetHeight() > (currentScreenRect.bottom - currentScreenRect.top) )
+					if ( m_pCurrentImage->GetWidth() > (currentScreenRect.right - currentScreenRect.left) || m_pCurrentImage->GetHeight() > (currentScreenRect.bottom - currentScreenRect.top) )
 					{
 						toRect = GetResizedRectForBigToSmall(currentScreenRect, toRect);
 					}
@@ -1105,12 +1127,12 @@ void ZMain::LoadCurrent()
 
 				if ( ZOption::GetInstance().IsSmallToBigStretchImage() )
 				{
-					if ( m_currentImage.GetWidth() < (currentScreenRect.right - currentScreenRect.left) && m_currentImage.GetHeight() < (currentScreenRect.bottom - currentScreenRect.top) )
+					if ( m_pCurrentImage->GetWidth() < (currentScreenRect.right - currentScreenRect.left) && m_pCurrentImage->GetHeight() < (currentScreenRect.bottom - currentScreenRect.top) )
 					{
 						toRect = GetResizedRectForSmallToBig(currentScreenRect, toRect);
 					}
 				}
-				m_fCurrentZoomRate = (float)(toRect.right - toRect.left) / (float)(m_currentImage.GetWidth());
+				m_fCurrentZoomRate = (float)(toRect.right - toRect.left) / (float)(m_pCurrentImage->GetWidth());
 			}
 		}
 
@@ -1140,8 +1162,14 @@ void ZMain::LoadCurrent()
 
 void ZMain::OnDrag(int x, int y)
 {
-//	DebugPrintf(TEXT("Drag (%d,%d)"), x, y);
-	if ( !m_currentImage.IsValid()) return;
+	if ( NULL == m_pCurrentImage || m_bCurrentImageLoaded == false )
+	{
+		assert(m_pCurrentImage);
+		return;
+	}
+
+	//	DebugPrintf(TEXT("Drag (%d,%d)"), x, y);
+	if ( !m_pCurrentImage->IsValid()) return;
 
 	RECT rt;
 	getCurrentScreenRect(rt);
@@ -1149,8 +1177,8 @@ void ZMain::OnDrag(int x, int y)
 	int iNowShowingX = m_iShowingX;
 	int iNowShowingY = m_iShowingY;
 
-	int iZoomedWidth = (int)(m_currentImage.GetWidth() * m_fCurrentZoomRate);
-	int iZoomedHeight = (int)(m_currentImage.GetHeight() * m_fCurrentZoomRate);
+	int iZoomedWidth = (int)(m_pCurrentImage->GetWidth() * m_fCurrentZoomRate);
+	int iZoomedHeight = (int)(m_pCurrentImage->GetHeight() * m_fCurrentZoomRate);
 
 	m_iShowingX += x;
 
@@ -1492,15 +1520,21 @@ void ZMain::CopyThisFile()
 
 void ZMain::Rotate(bool bClockWise)
 {
-	if ( m_currentImage.IsValid() )
+	if ( NULL == m_pCurrentImage || m_bCurrentImageLoaded == false )
+	{
+		assert(m_pCurrentImage);
+		return;
+	}
+
+	if ( m_pCurrentImage->IsValid() )
 	{
 		if ( bClockWise )
 		{
-			m_currentImage.Rotate(-90);
+			m_pCurrentImage->Rotate(-90);
 		}
 		else
 		{
-			m_currentImage.Rotate(90);
+			m_pCurrentImage->Rotate(90);
 		}
 
 		m_iShowingX = 0;
@@ -1514,6 +1548,12 @@ void ZMain::Rotate(bool bClockWise)
 
 void ZMain::SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyle style)
 {
+	if ( NULL == m_pCurrentImage || m_bCurrentImageLoaded == false )
+	{
+		assert(m_pCurrentImage);
+		return;
+	}
+
 	// 현재보고 있는 파일을 윈도우 폴더에 저장한다.
 	TCHAR szSystemFolder[_MAX_PATH] = { 0 };
 
@@ -1531,7 +1571,7 @@ void ZMain::SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyle style)
 	strSaveFileName += szFileName;
 	strSaveFileName += TEXT(".bmp");
 
-	if ( FALSE == m_currentImage.SaveToFile(strSaveFileName, BMP_DEFAULT) )
+	if ( FALSE == m_pCurrentImage->SaveToFile(strSaveFileName, BMP_DEFAULT) )
 	{
 		assert(false);
 		return;
@@ -1567,7 +1607,7 @@ void ZMain::OnWindowResized()
 void ZMain::CreateStatusBar()
 {
 	// StatusBar 를 생성한다.
-	m_hStatusBar = CreateStatusWindow(WS_CHILD | WS_VISIBLE, TEXT("Status line"), m_hMainDlg, 0);
+	m_hStatusBar = CreateStatusWindow(WS_CHILD | WS_VISIBLE, TEXT("No Image"), m_hMainDlg, 0);
 
 	// StatusBar 를 split 한다. 아래의 숫자는 크기가 아니라 절대 위치라는 것을 명심!!!!!!!
 	enum
@@ -1651,10 +1691,16 @@ void ZMain::_eraseBackground(HDC mainDC, LONG right, LONG bottom)
 /// Zoom in & out 전의 센터 위치로 그림을 드래그함. ZoomOut, ZoomIn 중에 호출됨
 void ZMain::_PositionPreviousCenter()
 {
+	if ( NULL == m_pCurrentImage || m_bCurrentImageLoaded == false )
+	{
+		assert(m_pCurrentImage);
+		return;
+	}
+
 	RECT cr;
 	getCurrentScreenRect(cr);
-	int moveX = (int)(m_currentImage.GetWidth() * m_fCurrentZoomRate * m_fCenterX - (cr.right / 2));
-	int moveY = (int)(m_currentImage.GetHeight() * m_fCurrentZoomRate * m_fCenterY - (cr.bottom / 2));
+	int moveX = (int)(m_pCurrentImage->GetWidth() * m_fCurrentZoomRate * m_fCenterX - (cr.right / 2));
+	int moveY = (int)(m_pCurrentImage->GetHeight() * m_fCurrentZoomRate * m_fCenterY - (cr.bottom / 2));
 	OnDrag(moveX, moveY);
 }
 
@@ -1737,9 +1783,15 @@ void ZMain::ZoomNone()
 /// 현재보는 이미지를 클립보드에 복사한다.
 void ZMain::CopyToClipboard()
 {
-	if ( m_currentImage.IsValid() )
+	if ( NULL == m_pCurrentImage || m_bCurrentImageLoaded == false )
 	{
-		m_currentImage.CopyToClipboard(m_hMainDlg);
+		assert(m_pCurrentImage);
+		return;
+	}
+
+	if ( m_pCurrentImage->IsValid() )
+	{
+		m_pCurrentImage->CopyToClipboard(m_hMainDlg);
 	}
 	else
 	{

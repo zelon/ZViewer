@@ -41,7 +41,7 @@ public:
 
 	~ZCacheImage();
 
-	void CleanUp()
+	void CleanUpCache()
 	{
 		m_cacheData.Clear();
 	}
@@ -87,8 +87,8 @@ public:
 
 	void SetImageVector(const std::vector < FileData > & v);
 	bool hasCachedData(const tstring & strFilename, int iIndex);	///< 이 파일에 해당하는 정보를 캐쉬해서 가지고 있는지 체크하는 함수
-	void getCachedData(const tstring & strFilename, ZImage & image);	///< 이 파일에 해당하는 ZImage 정보를 받아오는 함수
-	void AddCacheData(const tstring & strFilename, ZImage & image, bool bForceCache = false);		///< 이 파일에 해당하는 ZImage 정보를 새로 추가해라.
+	void GetCachedData(const tstring & strFilename, ZImage * & pImage);	///< 이 파일에 해당하는 ZImage 정보를 받아오는 함수
+	void AddCacheData(const tstring & strFilename, ZImage * image, bool bForceCache = false);		///< 이 파일에 해당하는 ZImage 정보를 새로 추가해라.
 
 	void SetLastActionDirection(eLastActionDirection last)
 	{

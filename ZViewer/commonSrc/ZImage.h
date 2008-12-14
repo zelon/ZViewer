@@ -21,7 +21,13 @@
 /// FreeImagePlus 의 클래스인 fipWinImage 를 래핑하여 함수 등을 쓰기 쉽게 하는 클래스
 class ZImage
 {
+private:
+	ZImage & operator=(const ZImage & );	///< 대입 연산자 금지
+	ZImage(const ZImage & );				///< 복사 생성자 금지
+
 public:
+	ZImage(){}
+
 	static bool StartupLibrary(){ return true; }
 	static bool CleanupLibrary(){ return true; }
 	static const tstring GetLibraryVersion()
@@ -32,8 +38,6 @@ public:
 		return tstring(FreeImage_GetVersion());
 #endif
 	}
-
-	ZImage & operator=(const ZImage & image);
 
 	void Clear()
 	{
@@ -67,24 +71,23 @@ public:
 	{
 		//DebugPrintf("LoadFromFile : %s", strFilename.c_str());
 
+#ifndef _DEBUG
 		try
 		{
-#ifdef _UNICODE
-			if ( m_image.loadU(strFilename.c_str()) == TRUE )
-#else
-			if ( m_image.load(strFilename.c_str()) == TRUE )
 #endif
+			if ( m_image.loadU(strFilename.c_str()) == TRUE )
 			{
 				_ProcAfterLoad(strFilename);
 				return true;
 			}
+#ifndef _DEBUG
 		}
 		catch ( ... )
 		{
-#pragma message("TODO : 이 부분에 exception 이 발생하는 이유를 찾아야함...")
 			assert(false);
 			return false;
 		}
+#endif
 		return false;
 	}
 

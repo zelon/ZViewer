@@ -67,8 +67,6 @@ public:
 	const bool IsSmallToBigStretchImage() const { return m_bSmallToBigStretchImage; }
 	void ToggleSmallToBigStretchImage() { m_bSmallToBigStretchImage = !m_bSmallToBigStretchImage; }
 
-	const bool IsUseCache() const { return m_bUseCache; }
-
 	const bool IsUseAutoRotation() const { return m_bUseAutoRotation; }
 	void SetAutoRotation(const bool bUseAutoRotation) { m_bUseAutoRotation = bUseAutoRotation; }
 
@@ -107,9 +105,6 @@ private:
 
 	/// exif 정보에 따른 자동 회전을 할 것인가.
 	bool m_bUseAutoRotation;
-
-	/// 캐쉬 시스템을 쓸것인가... 메모리가 적은 컴퓨터에서는 끌 수 있도록 하기 위해서
-	bool m_bUseCache;
 
 	/// 마지막 그림 파일에서 다음으로 가면 처음 그림 파일로 갈 것인가?
 	bool m_bLoopImages;
