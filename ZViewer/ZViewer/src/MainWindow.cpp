@@ -190,6 +190,10 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 				}
 				break;
 
+			case 'n':
+				{
+				}
+				break;
 			case 'm':
 				{
 					fipMultiPage image;
@@ -342,13 +346,11 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 		}
 		break;
 
-	case WM_MOUSEWHEEL:		// WM_MOUSEWHEEL
+	case WM_MOUSEWHEEL:
 		{
 			short zDelta = GET_WHEEL_DELTA_WPARAM(wParam);
 
 			//DebugPrintf("Wheel Delta : %d", zDelta);
-
-#pragma message("ToDo : 휠이 급격히 돌아갈 때는 여러개의 이미지를 뛰어넘게")
 
 			bool bDraw = false;
 			if ( zDelta < 0 )
