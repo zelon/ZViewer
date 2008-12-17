@@ -84,12 +84,11 @@ void ZCacheImage::ShowCachedImageToOutputWindow()
 {
 #ifndef _DEBUG
 	return; // 릴리즈 모드에서는 그냥 리턴
-#endif
-
+#else
 	CLockObjUtil lock(m_cacheLock);
 
 	m_cacheData.PrintCachedData();
-
+#endif
 }
 
 DWORD ZCacheImage::ThreadFuncProxy(LPVOID )
@@ -150,7 +149,7 @@ bool ZCacheImage::_CacheIndex(int iIndex)
 			{
 				readBufferSize = 2048
 			};
-			
+
 			BYTE readBuffer[readBufferSize];
 
 			DWORD dwReadBytes;
@@ -187,7 +186,7 @@ bool ZCacheImage::_CacheIndex(int iIndex)
 					{
 						break;
 					}
-					else /// 
+					else ///
 					{
 						m_vBuffer.resize(m_vBuffer.size() + dwReadBytes);
 
@@ -201,7 +200,7 @@ bool ZCacheImage::_CacheIndex(int iIndex)
 
 			/// todo: 아래 내용을 멤버 변수로 바꾸면 더 좋아질까
 			fipMemoryIO mem(&m_vBuffer[0], (DWORD)m_vBuffer.size());
-			
+
 			DebugPrintf(TEXT("----- start decode(%s)"), strFileName.c_str());
 			TIMECHECK_START("decode time");
 			bLoadOK = pCacheReadyImage->LoadFromMemory(mem, strFileName);
@@ -330,7 +329,6 @@ bool ZCacheImage::_CacheIndex(int iIndex)
 				do
 				{
 					// 캐시되어 있는 것들 중 가장 현재 index 에서 먼것을 찾는다.
-					
 					{
 						CLockObjUtil lock(m_cacheLock);
 						iFarthestIndex = m_cacheData.GetFarthestIndexFromCurrentIndex(m_iCurrentIndex);
