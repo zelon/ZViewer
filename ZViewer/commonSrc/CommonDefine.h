@@ -58,8 +58,8 @@ public:
 		/*
 		// 파일명 비교를 할 때 모두 소문자로 바꿔서 비교한다.
 		char szTempA[FILENAME_MAX], szTempB[FILENAME_MAX];
-		_snprintf(szTempA, sizeof(szTempA), GetOnlyFileName(a.m_strFileName).c_str());
-		_snprintf(szTempB, sizeof(szTempB), GetOnlyFileName(b.m_strFileName).c_str());
+		_snprintf(szTempA, sizeof(szTempA), GetOnlyFileNameWithoutExt(a.m_strFileName).c_str());
+		_snprintf(szTempB, sizeof(szTempB), GetOnlyFileNameWithoutExt(b.m_strFileName).c_str());
 		strlwr(szTempA);
 		strlwr(szTempB);
 
@@ -77,8 +77,8 @@ public:
 		/*
 		// 파일명 비교를 할 때 모두 소문자로 바꿔서 비교한다.
 		char szTempA[FILENAME_MAX], szTempB[FILENAME_MAX];
-		_snprintf(szTempA, sizeof(szTempA), GetOnlyFileName(a.m_strFileName).c_str());
-		_snprintf(szTempB, sizeof(szTempB), GetOnlyFileName(b.m_strFileName).c_str());
+		_snprintf(szTempA, sizeof(szTempA), GetOnlyFileNameWithoutExt(a.m_strFileName).c_str());
+		_snprintf(szTempB, sizeof(szTempB), GetOnlyFileNameWithoutExt(b.m_strFileName).c_str());
 		strlwr(szTempA);
 		strlwr(szTempB);
 

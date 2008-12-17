@@ -1,4 +1,4 @@
-I/********************************************************************
+/********************************************************************
 *
 * Created by zelon(Kim, Jinwook Korea)
 * 
@@ -37,7 +37,7 @@ void DebugPrintf( const TCHAR * , ...){}
 #endif
 
 
-const tstring GetOnlyFileName(const tstring & strFullFileName)
+const tstring GetOnlyFileNameWithoutExt(const tstring & strFullFileName)
 {
 	TCHAR szFile[FILENAME_MAX] = { 0 };
 	SplitPath(strFullFileName.c_str(), NULL,0 , NULL, 0, szFile,FILENAME_MAX, NULL, 0);

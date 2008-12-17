@@ -23,7 +23,7 @@ enum eOSKind
 	eOSKind_XP,
 };
 
-const tstring GetOnlyFileName(const tstring & strFullFileName);
+const tstring GetOnlyFileNameWithoutExt(const tstring & strFullFileName);
 
 class CStringCompareIgnoreCase
 {

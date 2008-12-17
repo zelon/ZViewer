@@ -14,7 +14,7 @@
 #include <list>
 
 
-#include "freeimage/FreeImagePlus.h"
+#include "../lib/freeimage/FreeImagePlus.h"
 #include "CommonFunc.h"
 #include "CommonDefine.h"
 
@@ -26,7 +26,8 @@ private:
 	ZImage(const ZImage & );				///< 복사 생성자 금지
 
 public:
-	ZImage(){}
+	ZImage();
+	~ZImage();
 
 	static bool StartupLibrary(){ return true; }
 	static bool CleanupLibrary(){ return true; }

@@ -16,6 +16,14 @@
 
 using namespace std;
 
+ZImage::ZImage()
+{
+}
+
+ZImage::~ZImage()
+{
+}
+
 void ZImage::GetExifList(std::list < TagData > & exifList)
 {
 #ifdef _DEBUG
