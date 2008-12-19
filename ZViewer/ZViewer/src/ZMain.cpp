@@ -271,17 +271,22 @@ void ZMain::Draw(HDC toDrawDC, bool bEraseBg)
 	}
 	assert(mainDC != NULL);
 
-	/// ShowWindow 부분만 그리도록 클리핑 영역을 설정한다.
-	HRGN hrgn = CreateRectRgn(currentScreenRect.left, currentScreenRect.top, currentScreenRect.right, currentScreenRect.bottom);
-	SelectClipRgn(mainDC, hrgn);
-
 	/// 파일이 하나도 없을 때는 배경만 지우고 바로 리턴한다.
 	if ( m_vFile.size() <= 0 )
 	{
 		_eraseBackground(mainDC, currentScreenRect.right, currentScreenRect.bottom);
-		ReleaseDC(m_hMainDlg, mainDC);
+		
+		if ( NULL == toDrawDC )
+		{
+			ReleaseDC(m_hMainDlg, mainDC);
+		}
+
 		return;
 	}
+
+	/// ShowWindow 부분만 그리도록 클리핑 영역을 설정한다.
+	HRGN hrgn = CreateRectRgn(currentScreenRect.left, currentScreenRect.top, currentScreenRect.right, currentScreenRect.bottom);
+	SelectClipRgn(mainDC, hrgn);
 
 	const WORD zoomedImageWidth = (WORD)(m_pCurrentImage->GetWidth() * m_fCurrentZoomRate);
 	const WORD zoomedImageHeight = (WORD)(m_pCurrentImage->GetHeight() * m_fCurrentZoomRate);
@@ -308,12 +313,14 @@ void ZMain::Draw(HDC toDrawDC, bool bEraseBg)
 
 	if ( bEraseBg )	// 배경을 지워야 하면 지운다. 그림이 그려지는 부분을 제외하고 지운다.
 	{
-		CombineRgn(m_hEraseRgb,
-			CreateRectRgn(currentScreenRect.left, currentScreenRect.top, currentScreenRect.right, currentScreenRect.bottom),
-			CreateRectRgn(drawRect.left, drawRect.top, drawRect.right, drawRect.bottom),
-			RGN_DIFF);
+		HRGN hScreenRGN = CreateRectRgn(currentScreenRect.left, currentScreenRect.top, currentScreenRect.right, currentScreenRect.bottom);
+		HRGN hDrawRGN = CreateRectRgn(drawRect.left, drawRect.top, drawRect.right, drawRect.bottom);
+		CombineRgn(m_hEraseRgb, hScreenRGN, hDrawRGN, RGN_DIFF);
 
 		FillRgn(mainDC, m_hEraseRgb, m_bgBrush);
+
+		DeleteObject(hScreenRGN);
+		DeleteObject(hDrawRGN);
 	}
 
 	/// 추후 확대/축소 후의 화면 위치등을 위해서
@@ -351,6 +358,13 @@ void ZMain::Draw(HDC toDrawDC, bool bEraseBg)
 	{
 		PostMessage(m_hStatusBar, WM_PAINT, 0, 0);
 	}
+
+	DeleteObject(hrgn);
+	if ( NULL == toDrawDC )
+	{
+		ReleaseDC(m_hMainDlg, mainDC);
+	}
+
 }
 
 void ZMain::FindFile(const TCHAR * path, std::vector< FileData > & foundStorage, bool bFindRecursive)
