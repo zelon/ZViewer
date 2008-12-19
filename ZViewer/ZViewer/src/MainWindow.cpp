@@ -196,29 +196,69 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 				break;
 			case 'm':
 				{
-					fipMultiPage image;
-					image.open("C:\\IMG_3854.jpg", FALSE, TRUE);
+					fipMultiPage mimage;
+					mimage.open("C:\\b.gif", FALSE, TRUE);
 
-					image.close();
+					int iCount = mimage.getPageCount();
 
-					if ( image.isValid() )
+					for ( int i=0; i<iCount; ++i )
 					{
-						DebugPrintf(TEXT("isvalid true"));
+						DebugPrintf(TEXT("-- pregress gif --"));
+						fipWinImage k;
+
+						fipImage pp;
+
+						FIBITMAP* pDatap = mimage.lockPage(i);
+
+						fipImage pre;
+						if ( pDatap )
+						{
+							pp = pDatap;
+							if ( pp.isValid() )
+							{
+								if ( i == 0 )
+								{
+									pre = pp;
+									k = pp;
+									k.convertTo32Bits();
+								}
+								else
+								{
+									BOOL bRet = k.pasteSubImage(pp, 0, 0);
+
+									if ( bRet )
+									{
+										DebugPrintf(TEXT("pastesubimage ok"));
+									}
+									else
+									{
+										DebugPrintf(TEXT("pastesubimage failed"));
+									}
+									k = pp;
+									//k.get
+								}
+								RECT r = { 0, 0, 100, 100 };
+								r.right = k.getWidth();
+								r.bottom = k.getHeight();
+								//k.pas
+								//RGBQUAD quad;
+								//k.getFileBkColor(&quad);
+								//COLORREF col = RGB( quad.rgbRed, quad.rgbGreen, quad.rgbBlue );
+								//::SetBkColor(GetDC(hWnd), col);
+								//::SetBkColor(GetDC(hWnd), RGB( 255,255,255 ));
+								//SetBkMode(GetDC(hWnd), TRANSPARENT);
+								//k.rotate(90);
+								//k.draw(GetDC(hWnd), r);
+								//k.drawEx(GetDC(hWnd), r, TRUE, &quad);
+								k.drawEx(GetDC(hWnd), r, FALSE, NULL, (FIBITMAP*)pre);
+								
+								mimage.unlockPage(pp, FALSE);
+							}
+						}
 					}
-					else
-					{
-						DebugPrintf(TEXT("isvalid false"));
-					}
-//					int iGetPageCount = image.getPageCount();
 
-					FIBITMAP * pBitmap = FreeImage_Clone(image.lockPage(0));
+					mimage.close(0);
 
-					fipImage a;
-					a = pBitmap;
-
-
-					int k = 0;
-					++k;
 				}
 				break;
 #endif
