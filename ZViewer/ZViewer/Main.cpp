@@ -52,6 +52,12 @@
 #include "vld/vld.h"
 #endif
 
+void FreeImageMsg(FREE_IMAGE_FORMAT fif, const char * szMsg)
+{
+	tstring strMsg = getWStringFromString(szMsg);
+	DebugPrintf(strMsg.c_str());
+}
+
 /// Entry point
 int APIENTRY _tWinMain(HINSTANCE hInstance,HINSTANCE /*hPrevInstance */,LPTSTR lpszCmdParam,int nCmdShow)
 {
@@ -130,6 +136,15 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,HINSTANCE /*hPrevInstance */,LPTSTR l
 		}
 	}
 
+#ifdef _DEBUG
+	if ( strCmdString.empty() )
+	{
+		strCmdString = GetProgramFolder();
+		strCmdString += TEXT("..\\SampleImages\\GwangAn.jpg");
+	}
+	//strInitArg = "C:\\A.bmp";
+#endif
+
 	// ~1 형식으로 긴 파일명이 온다면, 원래 긴 패스를 얻는다.
 	TCHAR szTemp[MAX_PATH] = { 0 };
 	GetLongPathName(strCmdString.c_str(), szTemp, MAX_PATH);
@@ -140,19 +155,15 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,HINSTANCE /*hPrevInstance */,LPTSTR l
 
 	//MessageBox(HWND_DESKTOP, strInitArg.c_str(), "sf", MB_OK);
 
-#ifdef _DEBUG
-	if ( strInitArg.empty() )
-	{
-		strInitArg = TEXT("..\\SampleImages\\GwangAn.jpg");
-	}
-	//strInitArg = "C:\\A.bmp";
-#endif
 	ZImage::StartupLibrary();
 
 	ZMain::GetInstance().SetInitArg(strInitArg);
 	ZMain::GetInstance().SetInstance(hInstance);
 
 	CMainWindow aWindow;
+#ifdef _DEBUG
+	FreeImage_SetOutputMessage(FreeImageMsg);
+#endif
 
 	aWindow.Create(hInstance, HWND_DESKTOP, nCmdShow);
 
