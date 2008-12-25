@@ -392,18 +392,14 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 
 			//DebugPrintf("Wheel Delta : %d", zDelta);
 
-			bool bDraw = false;
 			if ( zDelta < 0 )
 			{
-				bDraw = ZMain::GetInstance().NextImage();
+				ZMain::GetInstance().NextImage();
 			}
 			else
 			{
-				bDraw = ZMain::GetInstance().PrevImage();
+				ZMain::GetInstance().PrevImage();
 			}
-
-			// 이미지를 넘기지 않았으면 새로 그리지 않는다.
-			if ( bDraw ) ZMain::GetInstance().Draw();
 		}
 		break;
 
@@ -495,21 +491,11 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 				break;
 
 			case ID_MOVE_NEXTIMAGE:
-				{
-					if ( ZMain::GetInstance().NextImage() )
-					{
-						ZMain::GetInstance().Draw();
-					}
-				}
+				ZMain::GetInstance().NextImage();
 				break;
 
 			case ID_MOVE_PREVIMAGE:
-				{
-					if ( ZMain::GetInstance().PrevImage() )
-					{
-						ZMain::GetInstance().Draw();
-					}
-				}
+				ZMain::GetInstance().PrevImage();
 				break;
 
 			case ID_MOVE_NEXT_JUMP:
