@@ -133,7 +133,7 @@ void ZMain::onTimer()
 /// ZViewer 전용 메시지 박스
 int ZMain::ShowMessageBox(const TCHAR * msg, UINT button)
 {
-	return ::MessageBox(m_hMainDlg, GetMessage(msg), TEXT("ZViewer"), button);
+	return ::MessageBox(m_hMainDlg, msg, TEXT("ZViewer"), button);
 }
 
 int ZMain::GetLogCacheHitRate() const
@@ -241,6 +241,7 @@ void ZMain::ShowExif()
 
 void ZMain::Draw(HDC toDrawDC, bool bEraseBg)
 {
+	TIMECHECK_START("StartDraw");
 	if ( NULL == m_pCurrentImage || m_bCurrentImageLoaded == false )
 	{
 		//assert(m_pCurrentImage);
@@ -364,7 +365,7 @@ void ZMain::Draw(HDC toDrawDC, bool bEraseBg)
 	{
 		ReleaseDC(m_hMainDlg, mainDC);
 	}
-
+	TIMECHECK_END();
 }
 
 void ZMain::FindFile(const TCHAR * path, std::vector< FileData > & foundStorage, bool bFindRecursive)
@@ -645,6 +646,9 @@ void ZMain::OpenFolder(const tstring & strFolder)
 
 void ZMain::OpenFile(const tstring & strFilename)
 {
+	m_bCurrentImageLoaded = false;
+	m_pCurrentImage = NULL;
+
 	m_strCurrentFolder = GetFolderNameFromFullFileName(strFilename);
 	RescanFolder();
 
@@ -1170,8 +1174,6 @@ void ZMain::LoadCurrent()
 		//m_fCurrentZoomRate = 1.0f;
 		//Draw();
 	}
-
-
 }
 
 void ZMain::OnDrag(int x, int y)
