@@ -128,7 +128,7 @@ LONG MiniDumper::TopLevelFilter( struct _EXCEPTION_POINTERS *pExceptionInfo )
 					if (bOK)
 					{
 						TCHAR szErrorReason[256];
-						SPrintf(szErrorReason, 256, TEXT("Error : %s"), GetFaultReason(pExceptionInfo).c_str());
+						SPrintf(szErrorReason, 256, TEXT("ZViewer Error : %s"), GetFaultReason(pExceptionInfo).c_str());
 						MessageBox(HWND_DESKTOP, szErrorReason, TEXT("ZViewer"), MB_OK);
 
 						MessageBox(HWND_DESKTOP, pThis->m_szDumpMsg, TEXT("ZViewer"), MB_OK);
