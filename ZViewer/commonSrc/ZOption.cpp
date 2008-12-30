@@ -81,7 +81,7 @@ void ZOption::SetDefaultOption()
 	m_bLoopImages = false;
 	m_bUseAutoRotation = true;
 	m_bFullScreen = false;
-	m_bUseDebug = false;
+	m_bUseDebug = true;
 	m_bBigToSmallStretchImage = false;
 	m_bSmallToBigStretchImage = false;
 	m_iMaximumCacheMemoryMB = 50;
