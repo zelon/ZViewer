@@ -194,23 +194,33 @@ bool ZCacheImage::_CacheIndex(int iIndex)
 					}
 				}
 			}
-			DWORD dwEnd = GetTickCount();
-			DebugPrintf(TEXT("----- readfile(%s) time(%d)"), strFileName.c_str(), dwEnd - dwStart);
-			CloseHandle(hFile);	///< 파일에서 읽기가 끝나서 파일을 닫아준다.
 
-			/// todo: 아래 내용을 멤버 변수로 바꾸면 더 좋아질까
-			fipMemoryIO mem(&m_vBuffer[0], (DWORD)m_vBuffer.size());
-
-			DebugPrintf(TEXT("----- start decode(%s)"), strFileName.c_str());
-			TIMECHECK_START("decode time");
-			bLoadOK = pCacheReadyImage->LoadFromMemory(mem, strFileName);
-			DebugPrintf(TEXT("----- end of decode(%s)"), strFileName.c_str());
-			TIMECHECK_END();
-
-			/// 옵션에 따라 자동 회전을 시킨다.
-			if ( ZOption::GetInstance().IsUseAutoRotation() )
+			if ( m_vBuffer.size() < 5 )
 			{
-				pCacheReadyImage->AutoRotate();
+				/// 파일 크기가 너무 작음
+				bLoadOK = false;
+			}
+			else
+			{
+				DWORD dwEnd = GetTickCount();
+				DebugPrintf(TEXT("----- readfile(%s) time(%d)"), strFileName.c_str(), dwEnd - dwStart);
+				CloseHandle(hFile);	///< 파일에서 읽기가 끝나서 파일을 닫아준다.
+
+				assert(m_vBuffer.size() > 0);
+				/// todo: 아래 내용을 멤버 변수로 바꾸면 더 좋아질까
+				fipMemoryIO mem(&m_vBuffer[0], (DWORD)m_vBuffer.size());
+
+				DebugPrintf(TEXT("----- start decode(%s)"), strFileName.c_str());
+				TIMECHECK_START("decode time");
+				bLoadOK = pCacheReadyImage->LoadFromMemory(mem, strFileName);
+				DebugPrintf(TEXT("----- end of decode(%s)"), strFileName.c_str());
+				TIMECHECK_END();
+
+				/// 옵션에 따라 자동 회전을 시킨다.
+				if ( ZOption::GetInstance().IsUseAutoRotation() )
+				{
+					pCacheReadyImage->AutoRotate();
+				}
 			}
 		}
 
@@ -220,7 +230,11 @@ bool ZCacheImage::_CacheIndex(int iIndex)
 
 			tstring strErrorFilename = GetProgramFolder();
 			strErrorFilename += TEXT("LoadError.png");
-			if ( !pCacheReadyImage->LoadFromFile(strErrorFilename) )
+			if ( pCacheReadyImage->LoadFromFile(strErrorFilename) )
+			{
+				bLoadOK = true; ///< error image 라도 load ok
+			}
+			else
 			{
 				MessageBox(HWND_DESKTOP, TEXT("Please check LoadError.png in ZViewer installed folder"), TEXT("ZViewer"), MB_OK);
 
