@@ -52,7 +52,7 @@
 #include "vld/vld.h"
 #endif
 
-void FreeImageMsg(FREE_IMAGE_FORMAT fif, const char * szMsg)
+void FreeImageMsg(FREE_IMAGE_FORMAT /*fif*/, const char * szMsg)
 {
 	tstring strMsg = getWStringFromString(szMsg);
 	DebugPrintf(strMsg.c_str());
