@@ -54,7 +54,10 @@ public:
 	WORD GetBPP() const { return m_image.getBitsPerPixel(); }
 	BYTE * GetData() { return m_image.accessPixels(); }
 	BITMAPINFO * GetBitmapInfo() { return m_image.getInfo(); }
-	bool IsValid() const { return (m_image.isValid() == TRUE); }
+	bool IsValid() const
+	{
+		return (m_image.isValid() == TRUE);
+	}
 
 	bool CopyFromBitmap(HBITMAP hBitmap) { return (TRUE == m_image.copyFromBitmap(hBitmap)); }
 
