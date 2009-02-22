@@ -74,6 +74,7 @@ void CachedData::PrintCachedData() const
 /// 캐시되어 있는 데이터들 중 현재 인덱스로부터 가장 멀리있는 인덱스를 얻는다.
 int CachedData::GetFarthestIndexFromCurrentIndex(volatile const int & iCurrentIndex)
 {
+	assert(m_imageFilename2IndexMap.size() == m_imageIndex2FilenameMap.size());
 	CacheMapIterator it, endIt = m_cacheData.end();
 
 	int iFarthestIndex = iCurrentIndex;
