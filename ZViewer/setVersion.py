@@ -114,25 +114,25 @@ def getCurrentVersionFromNSIS():
 def doVersionUp():
 
 	print("Major is [A].B.Cxxx");
-	print("Enter Major : "),
-	vMajor = input()
+	print("Enter Major : ", end="")
+	vMajor = eval(input())
 
 	print("\nMinor is A.[B].Cxxx");
-	print("Enter Minor : "),
-	vMinor = input()
+	print("Enter Minor : ", end="")
+	vMinor = eval(input())
 
 	print("\nPatch is A.B.[C]xxx");
-	print("Enter patch : "),
-	vPatch = input()
+	print("Enter patch : ", end="")
+	vPatch = eval(input())
 
 	print("\nPostfix is A.B.C[xxx]");
-	print("Enter postfix : "),
-	vPostfix = raw_input()
+	print("Enter postfix : ", end="")
+	vPostfix = input()
 
 	strNewVersion = str(vMajor) + "." + str(vMinor) + "." + str(vPatch) + str(vPostfix)
 	print("New version : " + strNewVersion)
-	print("Is it right? (y/N) : "),
-	strYesNo = raw_input()
+	print("Is it right? (y/N) : ", end="")
+	strYesNo = input()
 
 	if strYesNo != "y":
 		print ("Canceled by user input")
