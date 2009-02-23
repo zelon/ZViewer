@@ -25,7 +25,7 @@ def testmain():
 	for file in files:
 		strCmd = strCmd + file + " "
 
-	print strCmd
+	print(strCmd)
 	os.system(strCmd)
 
 if __name__ == "__main__":
