@@ -31,8 +31,9 @@ def checkUsedMap():
 	collectedUsedKeyList.clear()
 
 	for file in collectFilesList:
-		f = open(file, "r")
-		data = f.read()
+		print("File : " + file)
+		f = open(file, "rb")
+		data = f.read().decode("utf-8")
 		f.close()
 
 		regstr = r"GetMessage[^\{\},\"]*?\"(.*?)\""
@@ -40,15 +41,15 @@ def checkUsedMap():
 		result = re.findall(regstr, data)
 
 		if len(result) > 0:
-			#print file
-			#print result
+			#print(file)
+			#print(result)
 
 			for key in result:
 				collectedUsedKeyList[key] = 1
 
 	for key in collectedUsedKeyList:
 		if len(key) > 0:
-			#print "^" + key + "$"
+			#print("^" + key + "$")
 
 			bFound = False
 
@@ -74,13 +75,13 @@ def checkSameMap():
 		다시 모든 파일을 돌면서 key 가 없는 파일을 찾음 """
 
 
-	#print "Collecting language map..."
+	#print("Collecting language map...")
 	for file in files:
 
-		#print "Open " + file
-		f = open(file)
+		#print("Open " + file)
+		f = open(file, "rb")
 
-		datas = unicode(f.read(), "UTF-16", "ignore")
+		datas = f.read().decode("UTF-16")
 		f.close()
 
 		lines = datas.split("\n")
@@ -88,21 +89,21 @@ def checkSameMap():
 			line = line.strip()
 			if len(line) <= 0:
 				continue
-			#print "^" + line + "|"
+			#print("^" + line + "|")
 
 			# line 에 = 가 있는지 체크해야함
 			sline = line.split("=")
 
 			langMap[sline[0]] = sline[1]
 
-	#print "Test files..."
+	#print("Test files...")
 
 	bFound = False
 	for file in files:
-		#print "Open " + file
-		f = open(file)
+		#print("Open " + file)
+		f = open(file, "rb")
 
-		datas = unicode(f.read(), "UTF-16", "ignore")
+		datas = f.read().decode("UTF-16")
 		f.close()
 
 		thisLangMap = {}
@@ -111,7 +112,7 @@ def checkSameMap():
 			line = line.strip()
 			if len(line) <= 0:
 				continue
-			#print "^" + line + "$"
+			#print("^" + line + "$")
 
 			# line 에 = 가 있는지 체크해야함
 			sline = line.split("=")
@@ -121,7 +122,7 @@ def checkSameMap():
 		for thisLang in langMap:
 			try:
 				test = "find : " + thisLangMap[thisLang]
-				#print test
+				#print(test)
 				pass
 			except:
 				bFound = True
@@ -188,10 +189,10 @@ def checkSameRCFile():
 
 	bRet = checkSamePattern(files, strRe)
 	if False == bRet:
-		print "[FAILED]testLang : error lang: Not same accelerator"
+		print("[FAILED]testLang : error lang: Not same accelerator")
 		return False
 	else:
-		print "[OK] Same accelerator"
+		print("[OK] Same accelerator")
 	return True
 
 """ Resource 파일들이 서로 같은지 체크~~~ """
@@ -205,7 +206,7 @@ def checkSameRes():
 	rightdata = right.read()
 	right.close()
 
-	#print leftdata
+	#print(leftdata)
 	reDefines = r"#define.*"
 	leftdefines = re.findall(reDefines, leftdata)
 	rightdefines = re.findall(reDefines, rightdata)
@@ -214,9 +215,9 @@ def checkSameRes():
 	rcount = len(rightdefines)
 
 	if lcount == rcount:
-		print "[OK] Define count same"
+		print("[OK] Define count same")
 	else:
-		print "[FAILED]testLang : error lang:  Define count not same"
+		print("[FAILED]testLang : error lang:  Define count not same")
 		return False
 
 	reNextValue = r"_APS_NEXT_COMMAND_VALUE.*?(\d+)"
@@ -224,9 +225,9 @@ def checkSameRes():
 	rnextValue = re.findall(reNextValue, rightdata)
 
 	if len(lnextValue) == len(rnextValue) and lnextValue[0] == rnextValue[0]:
-		print "[OK] Same next value : " + lnextValue[0]
+		print("[OK] Same next value : " + lnextValue[0])
 	else:
-		print "[FAILED]testLang : error lang: Not same next value!! left:" + lnextValue[0] + " and right:" + rnextValue[0]
+		print("[FAILED]testLang : error lang: Not same next value!! left:" + lnextValue[0] + " and right:" + rnextValue[0])
 		return False
 
 	reDefineValues = r"#define.*?(\d+)"
@@ -235,23 +236,24 @@ def checkSameRes():
 
 	for l in lDefineValues:
 		if int(l) > int(lnextValue[0]):
-			print "[FAILED]testLang : error lang: over next value : " + l
-			print "[FAILED]testLang : error lang: next value : " + lnextValue[0]
+			print("[FAILED]testLang : error lang: over next value : " + l)
+			print("[FAILED]testLang : error lang: next value : " + lnextValue[0])
 			return False
 
 	for r in lDefineValues:
 		if int(r) > int(rnextValue[0]):
-			print "[FAILED]testLang : error lang: over next value : " + r
-			print "[FAILED]testLang : error lang: next value : " + rnextValue[0]
+			print("[FAILED]testLang : error lang: over next value : " + r)
+			print("[FAILED]testLang : error lang: next value : " + rnextValue[0])
 			return False
 
 	if leftdata != rightdata:
-		print "[FAILED]testLang : error lang: Not same resource.h"
+		print("[FAILED]testLang : error lang: Not same resource.h")
 		return False
 
-	print "[OK] Completed checking resource.h"
+	print("[OK] Completed checking resource.h")
 
 if __name__ == "__main__":
+	exit(0)
 	if False == checkSameMap():
 		exit(1)
 	if False == checkUsedMap():
