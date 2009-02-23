@@ -242,22 +242,6 @@ void ZMain::ShowExif()
 void ZMain::Draw(HDC toDrawDC, bool bEraseBg)
 {
 	TIMECHECK_START("StartDraw");
-	if ( NULL == m_pCurrentImage || m_bCurrentImageLoaded == false )
-	{
-		//assert(m_pCurrentImage);
-		return;
-	}
-
-	DebugPrintf(TEXT("ZMain::Draw()"));
-	if ( m_pCurrentImage->IsValid() == FALSE ) return;
-	if ( m_hMainDlg == NULL ) return;
-
-	RECT currentScreenRect;
-	if ( false == getCurrentScreenRect(currentScreenRect) )
-	{
-		assert(false);
-		return;
-	}
 
 	HDC mainDC;
 
@@ -272,6 +256,13 @@ void ZMain::Draw(HDC toDrawDC, bool bEraseBg)
 	}
 	assert(mainDC != NULL);
 
+	RECT currentScreenRect;
+	if ( false == getCurrentScreenRect(currentScreenRect) )
+	{
+		assert(false);
+		return;
+	}
+
 	/// 파일이 하나도 없을 때는 배경만 지우고 바로 리턴한다.
 	if ( m_vFile.size() <= 0 )
 	{
@@ -284,6 +275,16 @@ void ZMain::Draw(HDC toDrawDC, bool bEraseBg)
 
 		return;
 	}
+
+	if ( NULL == m_pCurrentImage || m_bCurrentImageLoaded == false )
+	{
+		//assert(m_pCurrentImage);
+		return;
+	}
+
+	DebugPrintf(TEXT("ZMain::Draw()"));
+	if ( m_pCurrentImage->IsValid() == FALSE ) return;
+	if ( m_hMainDlg == NULL ) return;
 
 	/// ShowWindow 부분만 그리도록 클리핑 영역을 설정한다.
 	HRGN hrgn = CreateRectRgn(currentScreenRect.left, currentScreenRect.top, currentScreenRect.right, currentScreenRect.bottom);
@@ -962,16 +963,10 @@ void ZMain::ToggleLoopImage()
 
 void ZMain::SetStatusBarText()
 {
-	if ( NULL == m_pCurrentImage || m_bCurrentImageLoaded == false )
-	{
-		assert(m_pCurrentImage);
-		return;
-	}
-
 	TCHAR szTemp[COMMON_BUFFER_SIZE];
 	tstring strTemp;
 
-	if ( m_vFile.size() == 0 || m_strCurrentFilename.empty() ) // 보고 있는 파일이 없으면
+	if ( NULL == m_pCurrentImage || m_bCurrentImageLoaded == false || m_vFile.size() == 0 || m_strCurrentFilename.empty() ) // 보고 있는 파일이 없으면
 	{
 		// File Index
 		SendMessage(m_hStatusBar, SB_SETTEXT, 0, (LPARAM)_T("No File"));
@@ -1075,6 +1070,9 @@ void ZMain::SetTitle()
 
 void ZMain::LoadCurrent()
 {
+	/// 파일 목록이 하나도 없으면 로딩을 시도하지 않는다.
+	if ( m_vFile.empty() ) return;
+
 	static bool bFirst = true;
 
 	if ( bFirst )
@@ -1096,6 +1094,10 @@ void ZMain::LoadCurrent()
 	{
 		{/// 캐시된 데이터를 읽어온다.
 			ZCacheImage::GetInstance().GetCachedData(m_strCurrentFilename, m_pCurrentImage);
+
+			assert(m_pCurrentImage);
+			assert(m_pCurrentImage->IsValid());
+
 			m_bCurrentImageLoaded = true;
 		}
 
@@ -1180,7 +1182,7 @@ void ZMain::OnDrag(int x, int y)
 {
 	if ( NULL == m_pCurrentImage || m_bCurrentImageLoaded == false )
 	{
-		assert(m_pCurrentImage);
+		//assert(m_pCurrentImage);
 		return;
 	}
 
@@ -1232,6 +1234,8 @@ void ZMain::ReLoadFileList()
 void ZMain::_ProcAfterRemoveThisFile()
 {
 	m_bCurrentImageLoaded = false;
+	m_pCurrentImage = NULL;
+	m_strCurrentFilename.resize(0);
 
 	// 현재 파일이 마지막 파일인가?
 	if ( m_vFile.size() <= 1 )
@@ -1240,6 +1244,9 @@ void ZMain::_ProcAfterRemoveThisFile()
 		m_strCurrentFilename = TEXT("");
 
 		m_vFile.resize(0);
+
+		// Cache Thread 에 전달한다.
+		ZCacheImage::GetInstance().SetImageVector(m_vFile);
 
 		SetTitle();
 		SetStatusBarText();
@@ -1267,9 +1274,13 @@ void ZMain::_ProcAfterRemoveThisFile()
 				assert(!"Can't find the file");
 				return;
 			}
-			NextImage();
 
 			m_vFile.erase(it);
+
+			// Cache Thread 에 전달한다.
+			ZCacheImage::GetInstance().SetImageVector(m_vFile);
+
+			NextImage();
 
 			// 지웠으므로 현재 인덱스를 1줄인다.
 			m_iCurretFileIndex -= 1;
@@ -1302,9 +1313,14 @@ void ZMain::_ProcAfterRemoveThisFile()
 				assert(!"Can't find the file");
 				return;
 			}
-			PrevImage();
 
 			m_vFile.erase(it);
+
+			// Cache Thread 에 전달한다.
+			ZCacheImage::GetInstance().SetImageVector(m_vFile);
+
+			PrevImage();
+
 			SetTitle();
 			SetStatusBarText();
 			Draw(NULL, true);
@@ -1400,6 +1416,9 @@ void ZMain::ShowFileExtDlg()
 
 void ZMain::DeleteThisFile()
 {
+	DeleteThisFileToRecycleBin();
+	return;
+
 	/// 현재 보고 있는 파일이 없으면 바로 리턴한다.
 	if ( m_strCurrentFilename.empty() || m_bCurrentImageLoaded == false )
 	{
@@ -1417,6 +1436,50 @@ void ZMain::DeleteThisFile()
 		{
 			DebugPrintf(TEXT("-- %s deleted --"), m_strCurrentFilename.c_str());
 			_ProcAfterRemoveThisFile();
+		}
+		else
+		{
+			ShowMessageBox(GetMessage(TEXT("CANNOT_DELETE_THIS_FILE")));
+		}
+	}
+}
+
+void ZMain::DeleteThisFileToRecycleBin()
+{
+	/// 현재 보고 있는 파일이 없으면 바로 리턴한다.
+	if ( m_strCurrentFilename.empty() || m_bCurrentImageLoaded == false )
+	{
+		return;
+	}
+
+	/*
+	TCHAR szDeleteMsg[COMMON_BUFFER_SIZE];
+
+	SPrintf(szDeleteMsg, COMMON_BUFFER_SIZE, GetMessage(TEXT("DELETE_THIS_FILE")), GetFileNameFromFullFileName(m_strCurrentFilename).c_str());
+	int iRet = ::MessageBox(m_hMainDlg, szDeleteMsg, TEXT("ZViewer"), MB_YESNO);
+	*/
+
+	//if ( iRet == IDYES )
+	{
+		SHFILEOPSTRUCT fo;
+		fo.hwnd = m_hMainDlg;
+		fo.wFunc = FO_DELETE;
+
+		TCHAR szFilename[_MAX_PATH];
+		SPrintf(szFilename, _MAX_PATH, _T("%s"), m_strCurrentFilename.c_str());
+		szFilename[m_strCurrentFilename.size()+1] = 0;
+
+		fo.pFrom = szFilename;
+		fo.pTo = NULL;
+		fo.fFlags = FOF_ALLOWUNDO;
+
+		if ( 0 == SHFileOperation(&fo))
+		{
+			if ( fo.fAnyOperationsAborted == FALSE )
+			{
+				DebugPrintf(TEXT("-- %s deleted --"), m_strCurrentFilename.c_str());
+				_ProcAfterRemoveThisFile();
+			}
 		}
 		else
 		{

@@ -13,7 +13,6 @@
 #include <vector>
 
 #include "../../commonSrc/ZImage.h"
-#include "../../commonSrc/LockUtil.h"
 
 #include "CachedData.h"
 
@@ -43,7 +42,7 @@ public:
 
 	void CleanUpCache()
 	{
-		m_cacheData.Clear();
+		m_cacheData.ClearCachedImageData();
 	}
 
 	inline void LogCacheHit() { ++m_iLogCacheHit; }
@@ -54,7 +53,7 @@ public:
 
 	void WaitCacheLock()
 	{
-		CLockObjUtil lock(m_cacheLock);
+		m_cacheData.WaitCacheLock();
 	}
 
 	void debugShowCacheInfo();		///< 현재 캐쉬 정보를 디버그 콘솔에 보여준다. 디버깅모드 전용
@@ -105,9 +104,6 @@ private:
 	/// 캐쉬의 효율성을 위해서 사용자가 마지막으로 어느 방향으로 움직였는지를 기억해놓는다.
 	eLastActionDirection m_lastActionDirection;
 
-	/// 캐시된 데이터 용량
-	long m_lCacheSize;
-
 	/// 캐시가 hit 한 횟수. 통계용
 	unsigned int m_iLogCacheHit;
 
@@ -116,14 +112,10 @@ private:
 
 	volatile bool m_bNewChange;
 
-	mutable CLockObj m_cacheLock;
-
 	/// threadfunc 를 계속 실행시킬 것인가. 프로그램이 끝날 때 false 로 해주면 캐쉬 쓰레드를 최대한 빨리 끝낼 때 쓰임
 	volatile bool m_bCacheGoOn;
 
 	CachedData m_cacheData;
-
-	size_t m_numImageVectorSize;
 
 	/// 현재보고 있는 index;
 	volatile int m_iCurrentIndex;

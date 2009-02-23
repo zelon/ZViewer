@@ -143,6 +143,9 @@ public:
 
 	int GetLogCacheHitRate() const;
 
+	/// 현재 파일을 휴지통으로 삭제한다.
+	void DeleteThisFileToRecycleBin();
+
 	/// 현재 파일을 삭제한다.
 	void DeleteThisFile();
 
@@ -230,7 +233,9 @@ private:
 	tstring m_strCurrentFolder;		///< 현재 폴더
 	tstring m_strCurrentFilename;	///< 현재 보여주고 있는 파일이름
 
-	FileListVector m_vFile;
+	/// TODO: 이 파일을 따로 클래스로 빼내어야 함. 왜냐하면 이 클래스 변동에 따라서 ZCacheImage 에 전달해줘야하기 때문임.
+	FileListVector m_vFile;			///< 현재 폴더의 파일들 목록
+
 	eFileSortOrder m_sortOrder;
 
 	int m_iCurretFileIndex;

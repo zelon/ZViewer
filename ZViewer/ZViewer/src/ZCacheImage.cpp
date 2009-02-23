@@ -27,8 +27,6 @@ ZCacheImage::ZCacheImage()
 :	m_bCacheGoOn(true)
 ,	m_iLogCacheHit(0)
 ,	m_iLogCacheMiss(0)
-,	m_lCacheSize(0)
-,	m_numImageVectorSize(0)
 ,	m_lastActionDirection(eLastActionDirection_FORWARD)
 {
 	m_bNowCaching = false;
@@ -55,16 +53,7 @@ ZCacheImage::~ZCacheImage()
 
 void ZCacheImage::SetImageVector(const std::vector < FileData > & v)
 {
-	CLockObjUtil lock(m_cacheLock);
-
-	m_numImageVectorSize = v.size();
-
-	m_cacheData.SetNewFileList(v, m_numImageVectorSize);
-
-	m_cacheData.Clear();
-	m_lCacheSize = 0;
-
-	DebugPrintf(TEXT("imageVecSize : %d"), m_numImageVectorSize);
+	m_cacheData.SetImageVector(v);
 }
 
 void ZCacheImage::StartThread()
@@ -85,8 +74,6 @@ void ZCacheImage::ShowCachedImageToOutputWindow()
 #ifndef _DEBUG
 	return; // 릴리즈 모드에서는 그냥 리턴
 #else
-	CLockObjUtil lock(m_cacheLock);
-
 	m_cacheData.PrintCachedData();
 #endif
 }
@@ -109,8 +96,17 @@ bool ZCacheImage::_CacheIndex(int iIndex)
 	}
 	*/
 
-	if ( iIndex < 0 ) iIndex = 0;
-	if ( iIndex >= (int)m_numImageVectorSize ) iIndex = (int)m_numImageVectorSize - 1;
+	if ( iIndex < 0 )///< 캐시 매니저에서 현재 파일의 뒤를 캐시하려고 시도하기 때문에 이 if 문에 들어오게 된다. assert 상황이 아니다.
+	{
+		iIndex = 0;
+	}
+	if ( iIndex >= (int)m_cacheData.GetImageVectorSize() )///< 캐시 매니저에서 현재 파일의 앞을 캐시하려고 시도하기 때문에 이 if 문에 들어오게 된다. assert 상황이 아니다.
+	{
+		iIndex = (int)(m_cacheData.GetImageVectorSize()) - 1;
+	}
+
+	/// 이 상황은 현재 파일 목록이 하나도 없는 상황이다.
+	if ( iIndex < 0 ) return false;
 
 	// 이미 캐시되어 있는지 찾는다.
 	bool bFound = false;
@@ -118,10 +114,11 @@ bool ZCacheImage::_CacheIndex(int iIndex)
 
 	strFileName = m_cacheData.GetFilenameFromIndex(iIndex); ;//m_imageIndex2FilenameMap[iIndex];
 
+	if ( strFileName.size() <= 0 ) return false;
+
 	if ( strFileName.length() <= 0 ) return false;
 
 	{
-		CLockObjUtil lock(m_cacheLock);
 		if ( m_cacheData.HasCachedData(strFileName) )
 		{
 			// found!
@@ -140,7 +137,7 @@ bool ZCacheImage::_CacheIndex(int iIndex)
 
 		if ( INVALID_HANDLE_VALUE == hFile )
 		{
-			assert(false);
+			//assert(false);
 			bLoadOK = false;
 		}
 		else
@@ -335,7 +332,7 @@ bool ZCacheImage::_CacheIndex(int iIndex)
 				return true;
 			}
 			// 읽은 이미지를 넣을 공간이 없으면
-			else if ( (m_lCacheSize + CachedImageSize) / 1024 / 1024 > ZOption::GetInstance().GetMaxCacheMemoryMB() )
+			else if ( (m_cacheData.GetCachedTotalSize() + CachedImageSize) / 1024 / 1024 > ZOption::GetInstance().GetMaxCacheMemoryMB() )
 			{
 				int iTemp = 100;
 				int iFarthestIndex = -1;
@@ -344,7 +341,6 @@ bool ZCacheImage::_CacheIndex(int iIndex)
 				{
 					// 캐시되어 있는 것들 중 가장 현재 index 에서 먼것을 찾는다.
 					{
-						CLockObjUtil lock(m_cacheLock);
 						iFarthestIndex = m_cacheData.GetFarthestIndexFromCurrentIndex(m_iCurrentIndex);
 					}
 					assert(iFarthestIndex >= 0 );
@@ -387,12 +383,11 @@ bool ZCacheImage::_CacheIndex(int iIndex)
 
 					// 가장 먼 것을 clear 한다.
 					{
-						CLockObjUtil lock(m_cacheLock);
-						m_cacheData.ClearFarthestDataFromCurrent(iFarthestIndex, m_lCacheSize);
+						m_cacheData.ClearFarthestDataFromCurrent(iFarthestIndex);
 					}
 
 					// 이제 어느 정도 용량을 확보했으니 다시 이 이미지를 넣을 수 있는 지 캐시를 체크한다.
-					if ( (m_lCacheSize + CachedImageSize) / 1024 / 1024 <= ZOption::GetInstance().GetMaxCacheMemoryMB() )
+					if ( (m_cacheData.GetCachedTotalSize() + CachedImageSize) / 1024 / 1024 <= ZOption::GetInstance().GetMaxCacheMemoryMB() )
 					{
 						AddCacheData(strFileName, pCacheReadyImage);
 						return true;
@@ -429,17 +424,16 @@ void ZCacheImage::ThreadFunc()
 	{
 		m_bNowCaching = true;
 		iPos = 0;
-		assert((int)m_numImageVectorSize == (int)m_cacheData.GetIndex2FilenameMapSize());
+		assert((int)m_cacheData.GetImageVectorSize() == (int)m_cacheData.GetIndex2FilenameMapSize());
 		assert(m_iCurrentIndex <= (int)m_cacheData.GetIndex2FilenameMapSize());
-		assert(m_iCurrentIndex <= (int)m_numImageVectorSize);
+		assert(m_iCurrentIndex <= (int)m_cacheData.GetImageVectorSize());
 
 #ifdef _DEBUG
 
 		{
-			CLockObjUtil lock(m_cacheLock);
 			if ( m_cacheData.IsEmpty() )
 			{
-				assert(m_lCacheSize == 0);
+				assert(m_cacheData.GetCachedTotalSize() == 0);
 			}
 		}
 #endif
@@ -504,8 +498,6 @@ bool ZCacheImage::hasCachedData(const tstring & strFilename, int iIndex)
 	m_hCacheEvent.setEvent();
 
 	{
-		CLockObjUtil lock(m_cacheLock);
-
 		if ( m_cacheData.HasCachedData(strFilename) ) return true;
 	}
 	return false;
@@ -513,8 +505,6 @@ bool ZCacheImage::hasCachedData(const tstring & strFilename, int iIndex)
 
 void ZCacheImage::GetCachedData(const tstring & strFilename, ZImage * & pImage)
 {
-	CLockObjUtil lock(m_cacheLock);
-
 	m_cacheData.GetCachedData(strFilename, pImage);
 
 	assert(pImage);
@@ -529,53 +519,14 @@ void ZCacheImage::AddCacheData(const tstring & strFilename, ZImage * pImage, boo
 		return;
 	}
 
-	long imageSize = pImage->GetImageSize();
-
-	CLockObjUtil lock(m_cacheLock);
-
-	/// 이미 캐시되어 있으면 캐시하지 않는다.
-	if ( m_cacheData.HasCachedData(strFilename) )
-	{
-		assert(false);
-		delete pImage;
-		return;
-	}
-
-	if ( false == bForceCache )
-	{
-		/// 용량을 체크해서 이 이미지를 캐시했을 때 제한을 넘어섰으면 캐시하지 않는다.
-		if ( (m_lCacheSize + imageSize) /1024/1024 > ZOption::GetInstance().GetMaxCacheMemoryMB() ) return;
-	}
-
 	if ( false == m_bCacheGoOn ) return;
 
-#ifndef _DEBUG
-	try
-	{
-#endif
-		DWORD dwStart = GetTickCount();
-
-		m_cacheData.InsertData(strFilename, pImage);
-		m_lCacheSize += imageSize;
-
-		DebugPrintf(TEXT("%s added to cache"), strFilename.c_str());
-		DWORD dwEnd = GetTickCount();
-		DebugPrintf(TEXT("Cache insert time : %d filename(%s)"), dwEnd - dwStart, strFilename.c_str());
-
-#ifndef _DEBUG
-	}
-	catch ( ... )
-	{
-		return;
-	}
-#endif
+	m_cacheData.InsertData(strFilename, pImage, bForceCache);
 }
 
 /// 다음 파일이 캐쉬되었나를 체크해서 돌려준다.
 bool ZCacheImage::IsNextFileCached() const
 {
-	CLockObjUtil lock(m_cacheLock);
-
 	int iNextIndex = m_iCurrentIndex;
 
 	if ( m_lastActionDirection == eLastActionDirection_FORWARD )
@@ -603,21 +554,18 @@ void ZCacheImage::debugShowCacheInfo()
 	}
 	DebugPrintf(TEXT("CurrentScreenSize : %d, %d"), rt.right, rt.bottom);
 
-	CLockObjUtil lock(m_cacheLock);
 	m_cacheData.ShowCacheInfo();
 }
 
 
 void ZCacheImage::clearCache()
 {
-	CLockObjUtil lock(m_cacheLock);
-	m_cacheData.Clear();
-	m_lCacheSize = 0;
+	m_cacheData.ClearCachedImageData();
 	DebugPrintf(TEXT("Clear cache data"));
 }
 
 
 long ZCacheImage::GetCachedKByte() const
 {
-	return (m_lCacheSize/1024);
+	return (m_cacheData.GetCachedTotalSize()/1024);
 }
