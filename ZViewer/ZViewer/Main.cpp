@@ -52,6 +52,10 @@
 #include "vld/vld.h"
 #endif
 
+#if _MSC_VER >= 1400
+#include <crtdbg.h>
+#endif
+
 void FreeImageMsg(FREE_IMAGE_FORMAT /*fif*/, const char * szMsg)
 {
 	tstring strMsg = getWStringFromString(szMsg);
