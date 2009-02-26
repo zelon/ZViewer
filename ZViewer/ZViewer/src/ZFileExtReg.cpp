@@ -1,4 +1,4 @@
-/********************************************************************
+ï»¿/********************************************************************
 *
 * Created by zelon(Kim, Jinwook Korea)
 * 
@@ -39,7 +39,7 @@ bool ZFileExtReg::RegSetExtension()
 		SetRegistryValue(HKEY_CLASSES_ROOT, strKey, TEXT(""), m_strShellOpenCommand);
 	}
 
-	// È®ÀåÀÚ¿¡ µû¸¥ ±âº» ÇÁ·Î±×·¥À» Á¤ÇÑ´Ù.
+	// í™•ì¥ìì— ë”°ë¥¸ ê¸°ë³¸ í”„ë¡œê·¸ë¨ì„ ì •í•œë‹¤.
 	strKey = TEXT("SoftWare\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FileExts\\.");
 	strKey += m_strExtension;
 	SetRegistryValue(HKEY_CURRENT_USER, strKey, TEXT("ProgID"), m_strDocumentClassName);
@@ -59,7 +59,7 @@ bool  ZFileExtReg::RegSetDocumentType()
 
 	SetRegistryValue(HKEY_CLASSES_ROOT, strKey, TEXT(""), m_strDocumentDescription);
 
-	// ±âº» ¾ÆÀÌÄÜ µî·Ï
+	// ê¸°ë³¸ ì•„ì´ì½˜ ë“±ë¡
 	if( !m_strDocumentDefaultIcon.empty() )
 	{
 		strKey  = m_strDocumentClassName;
@@ -67,7 +67,7 @@ bool  ZFileExtReg::RegSetDocumentType()
 		SetRegistryValue(HKEY_CLASSES_ROOT, strKey, TEXT(""), m_strDocumentDefaultIcon);
 	}
 
-	// ´õºí Å¬¸¯ÇßÀ» ¶§ ½ÇÇà ½ÃÅ³ ¸í·É
+	// ë”ë¸” í´ë¦­í–ˆì„ ë•Œ ì‹¤í–‰ ì‹œí‚¬ ëª…ë ¹
 	if( !m_strShellOpenCommand.empty() )
 	{
 		strKey  = m_strDocumentClassName;

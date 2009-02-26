@@ -1,4 +1,4 @@
-/********************************************************************
+ï»¿/********************************************************************
 *
 * Created by zelon(Kim, Jinwook Korea)
 * 
@@ -21,7 +21,7 @@ ZOption & ZOption::GetInstance()
 
 ZOption::ZOption()
 {
-	/// ¾Æ·¡ °ªÀº ZViewerAgent ¿¡¼­¸¸ true ÀÌ´Ù
+	/// ì•„ë˜ ê°’ì€ ZViewerAgent ì—ì„œë§Œ true ì´ë‹¤
 	m_bDontSaveInstance = false;
 }
 
@@ -29,7 +29,7 @@ void ZOption::LoadOption()
 {
 	TCHAR buffer[256];
 
-	/// C:\Documents and Settings\USERID\Local Settings\Application Data ÀÇ À§Ä¡¸¦ ¾ò¾î¿Â´Ù.
+	/// C:\Documents and Settings\USERID\Local Settings\Application Data ì˜ ìœ„ì¹˜ë¥¼ ì–»ì–´ì˜¨ë‹¤.
 	if ( S_OK != SHGetFolderPath(NULL, CSIDL_LOCAL_APPDATA, NULL, SHGFP_TYPE_CURRENT, buffer) )
 	{
 		m_strOptionFilename = GetProgramFolder();
@@ -42,16 +42,16 @@ void ZOption::LoadOption()
 	m_strOptionFilename += TEXT("\\zviewer.ini");
 	m_bOptionChanged = false;
 
-	/// ±âº»ÀûÀÎ ¿É¼ÇÀº ¼³Á¤ÇØµĞ´Ù.
+	/// ê¸°ë³¸ì ì¸ ì˜µì…˜ì€ ì„¤ì •í•´ë‘”ë‹¤.
 	SetDefaultOption();
 
 	SetSaveOptions();
 
-	/// ±âº»ÀûÀÎ ¿É¼Ç¿¡¼­ ÆÄÀÏ¿¡¼­ ºÒ·¯¿Â ¼³Á¤À» µ¤¾î¾º¿î´Ù.
+	/// ê¸°ë³¸ì ì¸ ì˜µì…˜ì—ì„œ íŒŒì¼ì—ì„œ ë¶ˆëŸ¬ì˜¨ ì„¤ì •ì„ ë®ì–´ì”Œìš´ë‹¤.
 	LoadFromFile();
 }
 
-/// ÀÌ ¸â¹öµéÀº ÀÌ ÀÌ¸§À¸·Î ÀúÀåµÇ°í, ºÒ·ÁÁ® ¿Â´Ù¶ó°í ¼³Á¤
+/// ì´ ë©¤ë²„ë“¤ì€ ì´ ì´ë¦„ìœ¼ë¡œ ì €ì¥ë˜ê³ , ë¶ˆë ¤ì ¸ ì˜¨ë‹¤ë¼ê³  ì„¤ì •
 void ZOption::SetSaveOptions()
 {
 	_InsertSaveOptionSetting(L"maximumcachememoryMB", &m_iMaximumCacheMemoryMB);
@@ -70,7 +70,7 @@ void ZOption::SetSaveOptions()
 	_InsertSaveOptionSetting(L"use_auto_rotation", &m_bUseAutoRotation);
 }
 
-/// ±âº»ÀûÀÎ ¿É¼ÇÀ» ¼³Á¤ÇØµĞ´Ù. ¼³Ä¡ ÈÄ Ã³À½ ½ÇÇàµÇ¾úÀ» ¶§ ÀÌ °ªÀ» ±âÁØÀ¸·Î zviewer.ini ÆÄÀÏÀÌ ¸¸µé¾îÁø´Ù.
+/// ê¸°ë³¸ì ì¸ ì˜µì…˜ì„ ì„¤ì •í•´ë‘”ë‹¤. ì„¤ì¹˜ í›„ ì²˜ìŒ ì‹¤í–‰ë˜ì—ˆì„ ë•Œ ì´ ê°’ì„ ê¸°ì¤€ìœ¼ë¡œ zviewer.ini íŒŒì¼ì´ ë§Œë“¤ì–´ì§„ë‹¤.
 void ZOption::SetDefaultOption()
 {
 	m_bUsePreviewInShell = true;
@@ -100,7 +100,7 @@ void ZOption::LoadFromFile()
 {
 	iniMap data;
 
-	/// ÆÄÀÏ·ÎºÎÅÍ ¼³Á¤ ºÒ·¯¿À±â°¡ ¼º°øÇßÀ» ¶§¸¸ ¼³Á¤À» ÇÑ´Ù.
+	/// íŒŒì¼ë¡œë¶€í„° ì„¤ì • ë¶ˆëŸ¬ì˜¤ê¸°ê°€ ì„±ê³µí–ˆì„ ë•Œë§Œ ì„¤ì •ì„ í•œë‹¤.
 	if ( COptionFile::LoadFromFile(m_strOptionFilename, data) )
 	{
 		for ( size_t i=0; i<m_saveOptions.size(); ++i )
@@ -115,14 +115,14 @@ void ZOption::LoadFromFile()
 
 void ZOption::SaveToFile()
 {
-	/// ZViewerAgent ¿¡¼­ ¸¶Ä¥ ¶§´Â ÀúÀåÀ» ÇÏÁö ¾Ê±â À§ÇØ
+	/// ZViewerAgent ì—ì„œ ë§ˆì¹  ë•ŒëŠ” ì €ì¥ì„ í•˜ì§€ ì•Šê¸° ìœ„í•´
 	if ( m_bDontSaveInstance ) return;
 
 	iniMap data;
 
 	m_bOptionChanged = true;
 
-	// ÀúÀåÇØ¾ßÇÏ´Â ¿É¼Ç Áß º¯°æµÈ °ÍÀÌ ÀÖÀ¸¸é
+	// ì €ì¥í•´ì•¼í•˜ëŠ” ì˜µì…˜ ì¤‘ ë³€ê²½ëœ ê²ƒì´ ìˆìœ¼ë©´
 	if ( m_bOptionChanged )
 	{
 		for ( size_t i=0; i<m_saveOptions.size(); ++i )

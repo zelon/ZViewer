@@ -1,4 +1,4 @@
-/********************************************************************
+ï»¿/********************************************************************
 *
 * Created by zelon(Kim, Jinwook Korea)
 *
@@ -18,12 +18,12 @@
 #include "CommonFunc.h"
 #include "CommonDefine.h"
 
-/// FreeImagePlus ÀÇ Å¬·¡½ºÀÎ fipWinImage ¸¦ ·¡ÇÎÇÏ¿© ÇÔ¼ö µîÀ» ¾²±â ½±°Ô ÇÏ´Â Å¬·¡½º
+/// FreeImagePlus ì˜ í´ë˜ìŠ¤ì¸ fipWinImage ë¥¼ ë˜í•‘í•˜ì—¬ í•¨ìˆ˜ ë“±ì„ ì“°ê¸° ì‰½ê²Œ í•˜ëŠ” í´ë˜ìŠ¤
 class ZImage
 {
 private:
-	ZImage & operator=(const ZImage & );	///< ´ëÀÔ ¿¬»êÀÚ ±İÁö
-	ZImage(const ZImage & );				///< º¹»ç »ı¼ºÀÚ ±İÁö
+	ZImage & operator=(const ZImage & );	///< ëŒ€ì… ì—°ì‚°ì ê¸ˆì§€
+	ZImage(const ZImage & );				///< ë³µì‚¬ ìƒì„±ì ê¸ˆì§€
 
 public:
 	ZImage();

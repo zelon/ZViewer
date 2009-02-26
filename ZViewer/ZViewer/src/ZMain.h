@@ -1,4 +1,4 @@
-/********************************************************************
+ï»¿/********************************************************************
 *
 * Created by zelon(Kim, Jinwook - Korea)
 *
@@ -14,7 +14,7 @@
 #include "../commonSrc/ZImage.h"
 #include "src/ZCacheImage.h"
 
-/// ÆÄÀÏÀ» º¸¿©ÁÙ ¶§ÀÇ Á¤·Ä ¼ø¼­
+/// íŒŒì¼ì„ ë³´ì—¬ì¤„ ë•Œì˜ ì •ë ¬ ìˆœì„œ
 enum eFileSortOrder
 {
 	eFileSortOrder_FILENAME,
@@ -22,7 +22,7 @@ enum eFileSortOrder
 	eFileSortOrder_FILESIZE,
 };
 
-/// ´ëºÎºĞÀÇ ÀÛ¾÷À» Ã³¸®ÇÏ´Â ¸ŞÀÎ Å¬·¡½º
+/// ëŒ€ë¶€ë¶„ì˜ ì‘ì—…ì„ ì²˜ë¦¬í•˜ëŠ” ë©”ì¸ í´ë˜ìŠ¤
 class ZMain
 {
 	ZMain(void);
@@ -32,16 +32,16 @@ public:
 
 	void StartSlideMode();
 
-	/// Timer ¸¦ ¹Ş¾ÒÀ» ¶§
+	/// Timer ë¥¼ ë°›ì•˜ì„ ë•Œ
 	void onTimer();
 
-	/// ZViewer Àü¿ë ¸Ş½ÃÁö ¹Ú½º
+	/// ZViewer ì „ìš© ë©”ì‹œì§€ ë°•ìŠ¤
 	int ShowMessageBox(const TCHAR * msg, UINT button = MB_OK);
 
-	/// ÇöÀç È­¸éÀÇ ±×¸± ¼ö ÀÖ´Â ¿µ¿ªÀÇ Å©±â¸¦ ¹Ş¾Æ¿Â´Ù.
+	/// í˜„ì¬ í™”ë©´ì˜ ê·¸ë¦´ ìˆ˜ ìˆëŠ” ì˜ì—­ì˜ í¬ê¸°ë¥¼ ë°›ì•„ì˜¨ë‹¤.
 	bool getCurrentScreenRect(RECT & rect);
 
-	/// ÇöÀç Å©±â¿¡ ¸Â´Â ShowWindow Å©±â¸¦ Á¤ÇÑ´Ù.
+	/// í˜„ì¬ í¬ê¸°ì— ë§ëŠ” ShowWindow í¬ê¸°ë¥¼ ì •í•œë‹¤.
 	void AdjustShowWindowScreen();
 
 	/// On Window is resized
@@ -51,59 +51,59 @@ public:
 	void SetHandCursor(bool bHandCursor) { m_bHandCursor = bHandCursor; }
 
 	void SetInitArg(const tstring & strArg) { m_strInitArg = strArg; }
-	void RescanFolder();			///< ÆÄÀÏ¸ñ·ÏÀ» ´Ù½Ã ÀĞ¾îµéÀÎ´Ù.
+	void RescanFolder();			///< íŒŒì¼ëª©ë¡ì„ ë‹¤ì‹œ ì½ì–´ë“¤ì¸ë‹¤.
 
 	void OnInit();
 
-	/// ÇöÀç º¸°í ÀÖ´Â ÆÄÀÏÀÇ Exif Á¤º¸¸¦ º¸¿©ÁØ´Ù.
+	/// í˜„ì¬ ë³´ê³  ìˆëŠ” íŒŒì¼ì˜ Exif ì •ë³´ë¥¼ ë³´ì—¬ì¤€ë‹¤.
 	void ShowExif();
 
 	void Draw(HDC toDrawDC = NULL, bool bEraseBg = true);
 
-	/// ÇöÀçº¸°í ÀÖ´Â ÀÌ¹ÌÁö¸¦ À©µµ¿ì ¹ÙÅÁÈ­¸éÀÇ ¹è°æÀ¸·Î ÁöÁ¤ÇÑ´Ù.
+	/// í˜„ì¬ë³´ê³  ìˆëŠ” ì´ë¯¸ì§€ë¥¼ ìœˆë„ìš° ë°”íƒ•í™”ë©´ì˜ ë°°ê²½ìœ¼ë¡œ ì§€ì •í•œë‹¤.
 	void SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyle style);
 
-	/// ÇöÀç À§Ä¡ÀÇ Æú´õ ÀÌ¿ô Æú´õ - »óÀ§ Æú´õÀÇ ÇÏÀ§ Æú´õµé - ¸¦ ¾ò¾î¿Â´Ù.
+	/// í˜„ì¬ ìœ„ì¹˜ì˜ í´ë” ì´ì›ƒ í´ë” - ìƒìœ„ í´ë”ì˜ í•˜ìœ„ í´ë”ë“¤ - ë¥¼ ì–»ì–´ì˜¨ë‹¤.
 	bool GetNeighborFolders(std::vector < tstring > & vFolders);
 
-	/// ´ÙÀ½ Æú´õ·Î ÀÌµ¿
+	/// ë‹¤ìŒ í´ë”ë¡œ ì´ë™
 	void NextFolder();
 
-	/// ÀÌÀü Æú´õ·Î ÀÌµ¿
+	/// ì´ì „ í´ë”ë¡œ ì´ë™
 	void PrevFolder();
 
-	/// Æ¯Á¤ À§Ä¡ÀÇ ÀÌ¹ÌÁö ÆÄÀÏ·Î °Ç³Ê¶Ú´Ù.
+	/// íŠ¹ì • ìœ„ì¹˜ì˜ ì´ë¯¸ì§€ íŒŒì¼ë¡œ ê±´ë„ˆë›´ë‹¤.
 	bool MoveIndex(int iIndex);
 
-	int GetCalculatedMovedIndex(int iIndex);	///< »õ·Î ÀÌµ¿ÇÒ ÀÎµ¦½º ¹øÈ£¸¦ ÁÖ¸é Áö±İ »óÈ²¿¡ ¸Â´Â ÀÎµ¦½º ¹øÈ£¸¦ µ¹·ÁÁØ´Ù.
+	int GetCalculatedMovedIndex(int iIndex);	///< ìƒˆë¡œ ì´ë™í•  ì¸ë±ìŠ¤ ë²ˆí˜¸ë¥¼ ì£¼ë©´ ì§€ê¸ˆ ìƒí™©ì— ë§ëŠ” ì¸ë±ìŠ¤ ë²ˆí˜¸ë¥¼ ëŒë ¤ì¤€ë‹¤.
 
-	/// ÇöÀç À§Ä¡¿¡¼­ ÆÄÀÏÀ» ÀÌµ¿ÇÑ´Ù.
+	/// í˜„ì¬ ìœ„ì¹˜ì—ì„œ íŒŒì¼ì„ ì´ë™í•œë‹¤.
 	bool MoveRelateIndex(int iRelateIndex)
 	{
 		return MoveIndex(m_iCurretFileIndex + iRelateIndex);
 	}
 
-	/// ´ÙÀ½ ÀÌ¹ÌÁö ÆÄÀÏ·Î ÀÌµ¿
+	/// ë‹¤ìŒ ì´ë¯¸ì§€ íŒŒì¼ë¡œ ì´ë™
 	bool NextImage()
 	{
 		ZCacheImage::GetInstance().SetLastActionDirection(eLastActionDirection_FORWARD);
 		return MoveRelateIndex(+1);
 	}
 
-	/// ÀÌÀü ÀÌ¹ÌÁö ÆÄÀÏ·Î ÀÌµ¿
+	/// ì´ì „ ì´ë¯¸ì§€ íŒŒì¼ë¡œ ì´ë™
 	bool PrevImage()
 	{
 		ZCacheImage::GetInstance().SetLastActionDirection(eLastActionDirection_BACKWARD);
 		return MoveRelateIndex(-1);
 	}
 
-	/// Ã¹¹øÂ° ÀÌ¹ÌÁö ÆÄÀÏ·Î ÀÌµ¿
+	/// ì²«ë²ˆì§¸ ì´ë¯¸ì§€ íŒŒì¼ë¡œ ì´ë™
 	bool FirstImage();
 
-	/// ¸¶Áö¸· ÀÌ¹ÌÁö ÆÄÀÏ·Î ÀÌµ¿
+	/// ë§ˆì§€ë§‰ ì´ë¯¸ì§€ íŒŒì¼ë¡œ ì´ë™
 	bool LastImage();
 
-	/// ÇöÀçº¸°í ÀÖ´Â ÀÌ¹ÌÁö ÆÄÀÏÀ» 90µµ È¸Àü½ÃÅ´
+	/// í˜„ì¬ë³´ê³  ìˆëŠ” ì´ë¯¸ì§€ íŒŒì¼ì„ 90ë„ íšŒì „ì‹œí‚´
 	void Rotate(bool bClockWise);
 
 
@@ -126,33 +126,33 @@ public:
 	void StartTimer();
 	void StopTimer();
 
-	/// Cache status ¸¦ »óÅÂ Ç¥½ÃÁÙ¿¡ Ç¥½ÃÇÑ´Ù.
+	/// Cache status ë¥¼ ìƒíƒœ í‘œì‹œì¤„ì— í‘œì‹œí•œë‹¤.
 	void ShowCacheStatus();
 
 	void ToggleAutoRotation();
 	void ToggleAlwaysOnTop();
 
-	/// ÀüÃ¼È­¸é ¸ğµå¸¦ Åä±ÛÇÑ´Ù.
+	/// ì „ì²´í™”ë©´ ëª¨ë“œë¥¼ í† ê¸€í•œë‹¤.
 	void ToggleFullScreen();
 
 	void ToggleBigToScreenStretch();
 	void ToggleSmallToScreenStretch();
 
-	/// Loop Image ¸¦ Åä±ÛÇÑ´Ù.
+	/// Loop Image ë¥¼ í† ê¸€í•œë‹¤.
 	void ToggleLoopImage();
 
 	int GetLogCacheHitRate() const;
 
-	/// ÇöÀç ÆÄÀÏÀ» ÈŞÁöÅëÀ¸·Î »èÁ¦ÇÑ´Ù.
+	/// í˜„ì¬ íŒŒì¼ì„ íœ´ì§€í†µìœ¼ë¡œ ì‚­ì œí•œë‹¤.
 	void DeleteThisFileToRecycleBin();
 
-	/// ÇöÀç ÆÄÀÏÀ» »èÁ¦ÇÑ´Ù.
+	/// í˜„ì¬ íŒŒì¼ì„ ì‚­ì œí•œë‹¤.
 	void DeleteThisFile();
 
-	/// ÇöÀç ÆÄÀÏÀ» ÀÌµ¿ÇÑ´Ù.
+	/// í˜„ì¬ íŒŒì¼ì„ ì´ë™í•œë‹¤.
 	void MoveThisFile();
 
-	/// ÇöÀç ÆÄÀÏÀ» º¹»çÇÑ´Ù.
+	/// í˜„ì¬ íŒŒì¼ì„ ë³µì‚¬í•œë‹¤.
 	void CopyThisFile();
 
 	void SetInstance(HINSTANCE hInstance) { m_hMainInstance = hInstance; }
@@ -165,14 +165,14 @@ public:
 
 	void OnRightTopFirstDraw();
 
-	/// Æ¯Á¤ ÆÄÀÏÀ» ¿¬´Ù.
+	/// íŠ¹ì • íŒŒì¼ì„ ì—°ë‹¤.
 	void OpenFile(const tstring & strFilename);
 
-	/// Æ¯Á¤ Æú´õÀÇ Ã¹¹øÂ° ÆÄÀÏÀ» ¿¬´Ù.
+	/// íŠ¹ì • í´ë”ì˜ ì²«ë²ˆì§¸ íŒŒì¼ì„ ì—°ë‹¤.
 	void OpenFolder(const tstring & strFolder);
 	void OpenFileDialog();
 
-	/// ÇöÀç ÆÄÀÏÀ» ´Ù¸¥ Çü½ÄÀ¸·Î ÀúÀåÇÏ´Â ÆÄÀÏ ´ÙÀÌ¾ó·Î±×¸¦ ¿¬´Ù.
+	/// í˜„ì¬ íŒŒì¼ì„ ë‹¤ë¥¸ í˜•ì‹ìœ¼ë¡œ ì €ì¥í•˜ëŠ” íŒŒì¼ ë‹¤ì´ì–¼ë¡œê·¸ë¥¼ ì—°ë‹¤.
 	void SaveFileDialog();
 
 	void Undo();
@@ -185,13 +185,13 @@ public:
 
 	void LoadCurrent();
 
-	/// ±×¸²À» º¸¿©ÁÙ À©µµ¿ì¸¦ ¸¸µç´Ù.
+	/// ê·¸ë¦¼ì„ ë³´ì—¬ì¤„ ìœˆë„ìš°ë¥¼ ë§Œë“ ë‹¤.
 	void CreateShowWindow();
 
-	/// »óÅÂ Ç¥½Ã À©µµ¿ì¸¦ ¸¸µç´Ù.
+	/// ìƒíƒœ í‘œì‹œ ìœˆë„ìš°ë¥¼ ë§Œë“ ë‹¤.
 	void CreateStatusBar();
 
-	/// ¸Ş´º Áß Ã¼Å©Ç¥½Ã µÇ´Â °ÍÀ» È®ÀÎÇÏ¿© ¼³Á¤ÇØÁØ´Ù.
+	/// ë©”ë‰´ ì¤‘ ì²´í¬í‘œì‹œ ë˜ëŠ” ê²ƒì„ í™•ì¸í•˜ì—¬ ì„¤ì •í•´ì¤€ë‹¤.
 	void SetCheckMenus();
 
 	void ZoomIn();
@@ -201,11 +201,11 @@ public:
 
 	HWND GetShowWindow() const { return m_hShowWindow; }
 
-	/// ÇöÀçº¸´Â ÀÌ¹ÌÁö¸¦ Å¬¸³º¸µå¿¡ º¹»çÇÑ´Ù.
+	/// í˜„ì¬ë³´ëŠ” ì´ë¯¸ì§€ë¥¼ í´ë¦½ë³´ë“œì— ë³µì‚¬í•œë‹¤.
 	void CopyToClipboard();
 private:
 
-	/// ÇöÀç ÀÌ¹ÌÁö¸¦ µå·¡±×ÇÒ ¼ö ÀÖ¾î¼­, ¼Õ¸ğ¾çÀÇ Ä¿¼­ÀÎ°¡
+	/// í˜„ì¬ ì´ë¯¸ì§€ë¥¼ ë“œë˜ê·¸í•  ìˆ˜ ìˆì–´ì„œ, ì†ëª¨ì–‘ì˜ ì»¤ì„œì¸ê°€
 	bool m_bHandCursor;
 
 	void SetStatusBarText();
@@ -219,51 +219,51 @@ private:
 
 	void _GetFileListAndSort(const tstring & strFolderPathAndWildCard, FileListVector & vFileList);
 
-	/// ÇöÀç ÆÄÀÏÀÌ Áö¿öÁ³À» ¶§ ÈÄÀÇ Ã³¸®. ÆÄÀÏ »èÁ¦, ÀÌµ¿ ÈÄ¿¡ ºÒ¸®´Â ÇÔ¼öÀÌ´Ù.
+	/// í˜„ì¬ íŒŒì¼ì´ ì§€ì›Œì¡Œì„ ë•Œ í›„ì˜ ì²˜ë¦¬. íŒŒì¼ ì‚­ì œ, ì´ë™ í›„ì— ë¶ˆë¦¬ëŠ” í•¨ìˆ˜ì´ë‹¤.
 	void _ProcAfterRemoveThisFile();
 
-	/// ¸Ş´º, »óÅÂ Ç¥½ÃÁÙµîÀ» º¸¿©ÁØ´Ù.
+	/// ë©”ë‰´, ìƒíƒœ í‘œì‹œì¤„ë“±ì„ ë³´ì—¬ì¤€ë‹¤.
 	void FormShow();
 
-	/// ¸Ş´º, »óÅÂ Ç¥½ÃÁÙµîÀ» ¼û±ä´Ù.
+	/// ë©”ë‰´, ìƒíƒœ í‘œì‹œì¤„ë“±ì„ ìˆ¨ê¸´ë‹¤.
 	void FormHide();
 
-	tstring m_strInitArg;			///< ÇÁ·Î±×·¥ ½ÃÀÛ ÀÎÀÚ.
+	tstring m_strInitArg;			///< í”„ë¡œê·¸ë¨ ì‹œì‘ ì¸ì.
 
-	tstring m_strCurrentFolder;		///< ÇöÀç Æú´õ
-	tstring m_strCurrentFilename;	///< ÇöÀç º¸¿©ÁÖ°í ÀÖ´Â ÆÄÀÏÀÌ¸§
+	tstring m_strCurrentFolder;		///< í˜„ì¬ í´ë”
+	tstring m_strCurrentFilename;	///< í˜„ì¬ ë³´ì—¬ì£¼ê³  ìˆëŠ” íŒŒì¼ì´ë¦„
 
-	/// TODO: ÀÌ ÆÄÀÏÀ» µû·Î Å¬·¡½º·Î »©³»¾î¾ß ÇÔ. ¿Ö³ÄÇÏ¸é ÀÌ Å¬·¡½º º¯µ¿¿¡ µû¶ó¼­ ZCacheImage ¿¡ Àü´ŞÇØÁà¾ßÇÏ±â ¶§¹®ÀÓ.
-	FileListVector m_vFile;			///< ÇöÀç Æú´õÀÇ ÆÄÀÏµé ¸ñ·Ï
+	/// TODO: ì´ íŒŒì¼ì„ ë”°ë¡œ í´ë˜ìŠ¤ë¡œ ë¹¼ë‚´ì–´ì•¼ í•¨. ì™œëƒí•˜ë©´ ì´ í´ë˜ìŠ¤ ë³€ë™ì— ë”°ë¼ì„œ ZCacheImage ì— ì „ë‹¬í•´ì¤˜ì•¼í•˜ê¸° ë•Œë¬¸ì„.
+	FileListVector m_vFile;			///< í˜„ì¬ í´ë”ì˜ íŒŒì¼ë“¤ ëª©ë¡
 
 	eFileSortOrder m_sortOrder;
 
 	int m_iCurretFileIndex;
 
-	/// ÇöÀç º¸´Â È­¸é ¹èÀ². 1 ÀÌ¸é 100%, 2 ÀÌ¸é 200%, 0.1 ÀÌ¸é 10%ÀÇ Å©±â·Î º»´Ù. ±×¸²À» m_currentImage ·Î ÇßÀ» ¶§ ¿É¼Ç¿¡ µû¶ó¼­ ¹èÀ²À» °áÁ¤ÇÑ´Ù.
+	/// í˜„ì¬ ë³´ëŠ” í™”ë©´ ë°°ìœ¨. 1 ì´ë©´ 100%, 2 ì´ë©´ 200%, 0.1 ì´ë©´ 10%ì˜ í¬ê¸°ë¡œ ë³¸ë‹¤. ê·¸ë¦¼ì„ m_currentImage ë¡œ í–ˆì„ ë•Œ ì˜µì…˜ì— ë”°ë¼ì„œ ë°°ìœ¨ì„ ê²°ì •í•œë‹¤.
 	double m_fCurrentZoomRate;
 
-	/// ÇöÀç º¸¿©ÁÖ°í ÀÖ´Â ÀÌ¹ÌÁö
+	/// í˜„ì¬ ë³´ì—¬ì£¼ê³  ìˆëŠ” ì´ë¯¸ì§€
 	ZImage * m_pCurrentImage;
 
-	///< ÇöÀç ÀÌ¹ÌÁö¸¦ ·ÎµùÇÏ´Â µ¥ °É¸° ½Ã°£
+	///< í˜„ì¬ ì´ë¯¸ì§€ë¥¼ ë¡œë”©í•˜ëŠ” ë° ê±¸ë¦° ì‹œê°„
 	DWORD m_dwLoadingTime;
 
-	/// ¸ŞÀÎ À©µµ¿ì¿¡ ´ëÇÑ ÇÚµé
+	/// ë©”ì¸ ìœˆë„ìš°ì— ëŒ€í•œ í•¸ë“¤
 	HWND m_hMainDlg;
 
-	/// Ã¢ ¾Æ·¡ÀÇ »óÅÂ Ç¥½ÃÁÙ¿¡ ´ëÇÑ ÇÚµé
+	/// ì°½ ì•„ë˜ì˜ ìƒíƒœ í‘œì‹œì¤„ì— ëŒ€í•œ í•¸ë“¤
 	HWND m_hStatusBar;
 
-	HINSTANCE m_hMainInstance;			///< ¸ŞÀÎ ÀÎ½ºÅÏ½º ÇÚµé
+	HINSTANCE m_hMainInstance;			///< ë©”ì¸ ì¸ìŠ¤í„´ìŠ¤ í•¸ë“¤
 
-	HMENU m_hMainMenu;					///< ¸ŞÀÎ ¸Ş´º¿¡ ´ëÇÑ ÇÚµé
-	HMENU m_hPopupMenu;					///< ÆË¾÷ ¸Ş´º¿¡ ´ëÇÑ ÇÚµé
+	HMENU m_hMainMenu;					///< ë©”ì¸ ë©”ë‰´ì— ëŒ€í•œ í•¸ë“¤
+	HMENU m_hPopupMenu;					///< íŒì—… ë©”ë‰´ì— ëŒ€í•œ í•¸ë“¤
 
-	int m_iShowingX;					///< ±×¸² Áß ¾îµğ¸¦ Âï±â ½ÃÀÛÇÏ³ª.
-	int m_iShowingY;					///< ±×¸² Áß ¾îµğ¸¦ Âï±â ½ÃÀÛÇÏ³ª.
+	int m_iShowingX;					///< ê·¸ë¦¼ ì¤‘ ì–´ë””ë¥¼ ì°ê¸° ì‹œì‘í•˜ë‚˜.
+	int m_iShowingY;					///< ê·¸ë¦¼ ì¤‘ ì–´ë””ë¥¼ ì°ê¸° ì‹œì‘í•˜ë‚˜.
 
-	RECT m_lastPosition;				///< Full Screen À» toggle ÇÒ ¶§ full screen ÀüÀÇ Ã¢ À§Ä¡
+	RECT m_lastPosition;				///< Full Screen ì„ toggle í•  ë•Œ full screen ì „ì˜ ì°½ ìœ„ì¹˜
 
 	static void FindFile(const TCHAR *path, std::vector< FileData > & foundStorage, bool bFindRecursive);
 	static void FindFolders(const TCHAR *path, std::vector<tstring> & foundStorage, bool bFindRecursive = false);
@@ -271,7 +271,7 @@ private:
 	/// For Open File Dialog
 	OPENFILENAME ofn;
 	TCHAR szFile[MAX_PATH];       // buffer for file name
-	//bool m_bOpeningFileDialog;	// ÀüÃ¼È­¸éÀÏ ¶§ ÆÄÀÏ ´ÙÀÌ¾ó·Î±×¸¦ ¿­¸é ±ôºı°Å¸²À» ¸·±â À§ÇØ
+	//bool m_bOpeningFileDialog;	// ì „ì²´í™”ë©´ì¼ ë•Œ íŒŒì¼ ë‹¤ì´ì–¼ë¡œê·¸ë¥¼ ì—´ë©´ ê¹œë¹¡ê±°ë¦¼ì„ ë§‰ê¸° ìœ„í•´
 
 	// For Undo/Redo
 	ZHistory m_history;
@@ -281,28 +281,28 @@ private:
 
 	UINT_PTR m_timerPtr;		///< for timer
 
-	/// ¹öÆÛ·Î ¾²ÀÌ´Â DC ¸¦ ¸±¸®ÁîÇÑ´Ù.
+	/// ë²„í¼ë¡œ ì“°ì´ëŠ” DC ë¥¼ ë¦´ë¦¬ì¦ˆí•œë‹¤.
 	void _releaseBufferDC();
 
 	/// Brush for Background
 	HBRUSH m_bgBrush;
 
-	/// ¹è°æÀ» Áö¿î´Ù.
+	/// ë°°ê²½ì„ ì§€ìš´ë‹¤.
 	void _eraseBackground(HDC mainDC, LONG right, LONG bottom);
 
-	/// ½ÇÁ¦·Î ±×¸²À» ±×¸± È­¸éÃ¢
+	/// ì‹¤ì œë¡œ ê·¸ë¦¼ì„ ê·¸ë¦´ í™”ë©´ì°½
 	HWND m_hShowWindow;
 
-	/// ¹è°æÀ» Áö¿ï ¶§ ¾²ÀÏ Region
+	/// ë°°ê²½ì„ ì§€ìš¸ ë•Œ ì“°ì¼ Region
 	HRGN m_hEraseRgb;
 
-	/// ÇöÀçº¸°í ÀÖ´Â È­¸éÀÇ ¼¾ÅÍ´Â ±×¸²ÀÇ ¸î % ÁöÁ¡ÀÎ°¡ ±â·Ï
+	/// í˜„ì¬ë³´ê³  ìˆëŠ” í™”ë©´ì˜ ì„¼í„°ëŠ” ê·¸ë¦¼ì˜ ëª‡ % ì§€ì ì¸ê°€ ê¸°ë¡
 	float m_fCenterX;
 	float m_fCenterY;
 
-	/// Zoom in & out ÀüÀÇ ¼¾ÅÍ À§Ä¡·Î ±×¸²À» µå·¡±×ÇÔ. ZoomOut, ZoomIn Áß¿¡ È£ÃâµÊ
+	/// Zoom in & out ì „ì˜ ì„¼í„° ìœ„ì¹˜ë¡œ ê·¸ë¦¼ì„ ë“œë˜ê·¸í•¨. ZoomOut, ZoomIn ì¤‘ì— í˜¸ì¶œë¨
 	void _PositionPreviousCenter();
 
-	/// ÇöÀç ÀÌ¹ÌÁö°¡ ·ÎµùµÇ¾ú³ª
+	/// í˜„ì¬ ì´ë¯¸ì§€ê°€ ë¡œë”©ë˜ì—ˆë‚˜
 	bool m_bCurrentImageLoaded;
 };

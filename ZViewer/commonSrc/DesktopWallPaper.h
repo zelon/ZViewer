@@ -1,4 +1,4 @@
-/********************************************************************
+ï»¿/********************************************************************
 *
 * Created by zelon(Kim, Jinwook Korea)
 * 
@@ -10,7 +10,7 @@
 #pragma once
 
 
-/// À©µµ¿ìÀÇ ¹ÙÅÁÈ­¸éÀ¸·ÎÀÇ ÁöÁ¤µîÀ» ½±°Ô µµ¿ÍÁÖ´Â Å¬·¡½º
+/// ìœˆë„ìš°ì˜ ë°”íƒ•í™”ë©´ìœ¼ë¡œì˜ ì§€ì •ë“±ì„ ì‰½ê²Œ ë„ì™€ì£¼ëŠ” í´ë˜ìŠ¤
 class CDesktopWallPaper
 {
 public:
@@ -22,14 +22,14 @@ public:
 	};
 
 public:
-	/// ½ÇÁ¦·Î ¹ÙÅÁÈ­¸éÀ» ¹Ù²Û´Ù.
+	/// ì‹¤ì œë¡œ ë°”íƒ•í™”ë©´ì„ ë°”ê¾¼ë‹¤.
 	static void SetDesktopWallPaper(const tstring & strBitmapFileName, eDesktopWallPaperStyle style);
 
-	/// ¹ÙÅÁÈ­¸éÀÇ ¹è°æÈ­¸éÀ» Áö¿î´Ù.
+	/// ë°”íƒ•í™”ë©´ì˜ ë°°ê²½í™”ë©´ì„ ì§€ìš´ë‹¤.
 	static void ClearDesktopWallPaper();
 
 protected:
-	/// ¹ÙÅÁÈ­¸éÀ¸·Î ÁöÁ¤µÉ ÆÄÀÏÀÌ¸§. bmp ¿©¾ß ÇÑ´Ù.
+	/// ë°”íƒ•í™”ë©´ìœ¼ë¡œ ì§€ì •ë  íŒŒì¼ì´ë¦„. bmp ì—¬ì•¼ í•œë‹¤.
 	tstring m_strFileName;
 	eDesktopWallPaperStyle m_eStyle;
 };

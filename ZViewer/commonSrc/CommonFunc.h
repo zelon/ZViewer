@@ -1,4 +1,4 @@
-/********************************************************************
+ï»¿/********************************************************************
 *
 * Created by zelon(Kim, Jinwook Korea)
 * 
@@ -14,7 +14,7 @@
 #endif
 #include "CommonDefine.h"
 
-/// OS Á¾·ù¸¦ ÆÇ´ÜÇÒ ¶§ ¾²ÀÏ enum
+/// OS ì¢…ë¥˜ë¥¼ íŒë‹¨í•  ë•Œ ì“°ì¼ enum
 enum eOSKind
 {
 	eOSKind_UNKNOWN,
@@ -31,7 +31,7 @@ public:
 	bool operator()(const tstring & a, const tstring & b)
 	{
 		/*
-		// ¹®ÀÚ¿­ ºñ±³¸¦ ÇÒ ¶§ ¸ğµÎ ¼Ò¹®ÀÚ·Î ¹Ù²ã¼­ ºñ±³ÇÑ´Ù.
+		// ë¬¸ìì—´ ë¹„êµë¥¼ í•  ë•Œ ëª¨ë‘ ì†Œë¬¸ìë¡œ ë°”ê¿”ì„œ ë¹„êµí•œë‹¤.
 		char szTempA[FILENAME_MAX], szTempB[FILENAME_MAX];
 		_snprintf(szTempA, sizeof(szTempA), a.c_str());
 		_snprintf(szTempB, sizeof(szTempB), b.c_str());
@@ -49,7 +49,7 @@ class CStringCompareIgnoreCase_LengthFirst
 public:
 	bool operator()(const tstring & a, tstring & b)
 	{
-		// ±æÀÌ¸¦ ¿ì¼±.
+		// ê¸¸ì´ë¥¼ ìš°ì„ .
 		if ( a.size() < b.size() )
 		{
 			return true;
@@ -61,7 +61,7 @@ public:
 		}
 
 		/*
-		// ¹®ÀÚ¿­ ºñ±³¸¦ ÇÒ ¶§ ¸ğµÎ ¼Ò¹®ÀÚ·Î ¹Ù²ã¼­ ºñ±³ÇÑ´Ù.
+		// ë¬¸ìì—´ ë¹„êµë¥¼ í•  ë•Œ ëª¨ë‘ ì†Œë¬¸ìë¡œ ë°”ê¿”ì„œ ë¹„êµí•œë‹¤.
 		char szTempA[FILENAME_MAX], szTempB[FILENAME_MAX];
 		_snprintf(szTempA, sizeof(szTempA), a.c_str());
 		_snprintf(szTempB, sizeof(szTempB), b.c_str());
@@ -79,37 +79,37 @@ void DebugPrintf( const TCHAR *fmt, ... );
 
 bool SetRegistryValue(HKEY hOpenKey, const tstring & strKey,LPCTSTR szValue, const tstring & strData);
 
-/// ÃÖ´ë Å©±â¸¦ ³ÑÁö ¾Ê´Â Àû´çÇÑ ¸®»çÀÌÁî Å©±â¸¦ µ¹·ÁÁØ´Ù.
+/// ìµœëŒ€ í¬ê¸°ë¥¼ ë„˜ì§€ ì•ŠëŠ” ì ë‹¹í•œ ë¦¬ì‚¬ì´ì¦ˆ í¬ê¸°ë¥¼ ëŒë ¤ì¤€ë‹¤.
 RECT GetResizedRectForBigToSmall(const RECT & MaximumSize, const RECT & originalSize);
 
-/// ÃÖ´ë Å©±â¸¦ ³ÑÁö ¾Ê´Â Àû´çÇÑ ¸®»çÀÌÁî Å©±â¸¦ µ¹·ÁÁØ´Ù.
+/// ìµœëŒ€ í¬ê¸°ë¥¼ ë„˜ì§€ ì•ŠëŠ” ì ë‹¹í•œ ë¦¬ì‚¬ì´ì¦ˆ í¬ê¸°ë¥¼ ëŒë ¤ì¤€ë‹¤.
 RECT GetResizedRectForSmallToBig(const RECT & MaximumSize, const RECT & originalSize);
 
-/// int ¸¦ tstring type À¸·Î µ¹·ÁÁØ´Ù.
+/// int ë¥¼ tstring type ìœ¼ë¡œ ëŒë ¤ì¤€ë‹¤.
 tstring toString(int i);
 
-/// Æú´õ¸¦ ¼±ÅÃÇÏ´Â ´ÙÀÌ¾ó·Î±×¸¦ ¶ç¿î´Ù.
+/// í´ë”ë¥¼ ì„ íƒí•˜ëŠ” ë‹¤ì´ì–¼ë¡œê·¸ë¥¼ ë„ìš´ë‹¤.
 bool SelectFolder(HWND hWnd, TCHAR * szFolder);
 
-/// µå¶óÀÌºê¿Í Æú´õ¸í°ú ÆÄÀÏ¸íÀ¸·Î ÀÌ·ç¾îÁø ¹®ÀÚ¿­À» ÁÖ¸é, µå¶óÀÌºê¿Í Æú´õ¸í±îÁö¸¸ ¹İÈ¯ÇÑ´Ù.
+/// ë“œë¼ì´ë¸Œì™€ í´ë”ëª…ê³¼ íŒŒì¼ëª…ìœ¼ë¡œ ì´ë£¨ì–´ì§„ ë¬¸ìì—´ì„ ì£¼ë©´, ë“œë¼ì´ë¸Œì™€ í´ë”ëª…ê¹Œì§€ë§Œ ë°˜í™˜í•œë‹¤.
 tstring GetFolderNameFromFullFileName(const tstring & strFullFilename);
 
-/// µå¶óÀÌºê¿Í Æú´õ¸í°ú ÆÄÀÏ¸íÀ¸·Î µÈ ¹®ÀÚ¿­À» ÁÖ¸é, ÆÄÀÏ¸í¸¸ ÁØ´Ù.
+/// ë“œë¼ì´ë¸Œì™€ í´ë”ëª…ê³¼ íŒŒì¼ëª…ìœ¼ë¡œ ëœ ë¬¸ìì—´ì„ ì£¼ë©´, íŒŒì¼ëª…ë§Œ ì¤€ë‹¤.
 tstring GetFileNameFromFullFileName(const tstring & strFullFilename);
 
-/// ÇöÀç ½ÇÇà ÁßÀÎ OS ÀÇ ¹öÁ¯À» ¹İÈ¯ÇÑ´Ù.
+/// í˜„ì¬ ì‹¤í–‰ ì¤‘ì¸ OS ì˜ ë²„ì ¼ì„ ë°˜í™˜í•œë‹¤.
 eOSKind getOSVersion();
 
-/// string À» wstring À¸·Î º¯È¯
+/// string ì„ wstring ìœ¼ë¡œ ë³€í™˜
 std::wstring getWStringFromString(const std::string & str);
 
 /// Make dump file name
 tstring GetDumpFilename();
 
-/// ÇöÀç ½ÇÇà ÆÄÀÏÀÌ ÀÖ´Â Æú´õ¸¦ ¾ò´Â´Ù.
+/// í˜„ì¬ ì‹¤í–‰ íŒŒì¼ì´ ìˆëŠ” í´ë”ë¥¼ ì–»ëŠ”ë‹¤.
 tstring GetProgramFolder();
 
-/// ÄÄÆÄÀÏ·¯ ¹öÁ¯¿¡ ¸Â°Ô ÇÔ¼ö Á¤ÀÇ
+/// ì»´íŒŒì¼ëŸ¬ ë²„ì ¼ì— ë§ê²Œ í•¨ìˆ˜ ì •ì˜
 void SplitPath(const TCHAR * path, TCHAR * drive, size_t driveNumberOfElements, TCHAR * dir, size_t dirNumberOfElements,
 				TCHAR * fname, size_t nameNumberOfElements, TCHAR * ext, size_t extNumberOfElements);
 

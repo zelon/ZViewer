@@ -1,4 +1,4 @@
-/********************************************************************
+ï»¿/********************************************************************
 *
 * Created by zelon(Kim, Jinwook Korea)
 * 
@@ -8,7 +8,7 @@
 *                                       http://www.wimy.com
 *********************************************************************/
 /*
- ÀÌ ÄÚµå´Â http://www.codeproject.com/shell/cgfiletype.asp À» ÂüÁ¶Çß½À´Ï´Ù.
+ ì´ ì½”ë“œëŠ” http://www.codeproject.com/shell/cgfiletype.asp ì„ ì°¸ì¡°í–ˆìŠµë‹ˆë‹¤.
 */
 
 
@@ -17,7 +17,7 @@
 #include <windows.h>
 #include <string>
 
-/// È®ÀåÀÚ ¾ÆÀÌÄÜ, ´õºí Å¬¸¯½Ã ½ÇÇà¿¡ °üÇÑ ³»¿ëÀ» ·¹Áö½ºÆ®¸®¿¡ µî·ÏÇÏ´Â Å¬·¡½º
+/// í™•ì¥ì ì•„ì´ì½˜, ë”ë¸” í´ë¦­ì‹œ ì‹¤í–‰ì— ê´€í•œ ë‚´ìš©ì„ ë ˆì§€ìŠ¤íŠ¸ë¦¬ì— ë“±ë¡í•˜ëŠ” í´ë˜ìŠ¤
 class ZFileExtReg
 {
 public:
@@ -30,8 +30,8 @@ public:
 
 	bool SetRegistries();
 
-	bool RegSetExtension();			/// HKEY_CLASSES_ROOT\.<Extension> ¸¦ µî·ÏÇÑ´Ù.
-	bool RegSetDocumentType();		/// DocumentType À» µî·ÏÇÑ´Ù.
+	bool RegSetExtension();			/// HKEY_CLASSES_ROOT\.<Extension> ë¥¼ ë“±ë¡í•œë‹¤.
+	bool RegSetDocumentType();		/// DocumentType ì„ ë“±ë¡í•œë‹¤.
 
 	tstring		m_strExtension;
 	tstring		m_strContentType;

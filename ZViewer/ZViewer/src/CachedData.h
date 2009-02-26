@@ -1,4 +1,4 @@
-/* ------------------------------------------------------------------------
+ï»¿/* ------------------------------------------------------------------------
  *
  * CachdeData.h
  *
@@ -74,7 +74,7 @@ public:
 	bool GetCachedData(const tstring & strFilename, ZImage * & pImage) const;
 	bool ClearFarthestDataFromCurrent(const int iFarthestIndex);
 
-	/// Ä³½ÃµÇ¾î ÀÖ´Â µ¥ÀÌÅÍµé Áß ÇöÀç ÀÎµ¦½º·ÎºÎÅÍ °¡Àå ¸Ö¸®ÀÖ´Â ÀÎµ¦½º¸¦ ¾ò´Â´Ù.
+	/// ìºì‹œë˜ì–´ ìˆëŠ” ë°ì´í„°ë“¤ ì¤‘ í˜„ì¬ ì¸ë±ìŠ¤ë¡œë¶€í„° ê°€ì¥ ë©€ë¦¬ìˆëŠ” ì¸ë±ìŠ¤ë¥¼ ì–»ëŠ”ë‹¤.
 	int GetFarthestIndexFromCurrentIndex(volatile const int & iCurrentIndex);
 
 	tstring GetFilenameFromIndex(const int iIndex)
@@ -113,19 +113,19 @@ public:
 	}
 
 protected:
-	std::map < tstring, ZImage * > m_cacheData;		///< ½ÇÁ¦·Î Ä³½¬µÈ µ¥ÀÌÅÍ¸¦ °¡Áö°í ÀÖ´Â ¸Ê
-	std::map < int , tstring > m_imageIndex2FilenameMap;	///< ÀÌ¹ÌÁö ÆÄÀÏÀÇ ÀÎµ¦½º ¹øÈ£,ÆÄÀÏÀÌ¸§ ¸Ê
-	std::map < tstring, int > m_imageFilename2IndexMap;		///< ÀÌ¹ÌÁö ÆÄÀÏÀÌ¸§,ÀÎµ¦½º ¹øÈ£ ¸Ê
+	std::map < tstring, ZImage * > m_cacheData;		///< ì‹¤ì œë¡œ ìºì‰¬ëœ ë°ì´í„°ë¥¼ ê°€ì§€ê³  ìˆëŠ” ë§µ
+	std::map < int , tstring > m_imageIndex2FilenameMap;	///< ì´ë¯¸ì§€ íŒŒì¼ì˜ ì¸ë±ìŠ¤ ë²ˆí˜¸,íŒŒì¼ì´ë¦„ ë§µ
+	std::map < tstring, int > m_imageFilename2IndexMap;		///< ì´ë¯¸ì§€ íŒŒì¼ì´ë¦„,ì¸ë±ìŠ¤ ë²ˆí˜¸ ë§µ
 
 	size_t m_numImageVectorSize;
 
-	/// Ä³½ÃµÈ µ¥ÀÌÅÍ ¿ë·®
+	/// ìºì‹œëœ ë°ì´í„° ìš©ëŸ‰
 	long m_lCacheSize;
 
 	mutable CLockObj m_cacheLock;
 
 private:
-	/// º¹»ç »ı¼ºÀÚ¿Í = ¿¬»êÀÚ ±İÁö
+	/// ë³µì‚¬ ìƒì„±ìì™€ = ì—°ì‚°ì ê¸ˆì§€
 	CachedData & operator=(const CachedData &);
 	CachedData(const CachedData &);
 };

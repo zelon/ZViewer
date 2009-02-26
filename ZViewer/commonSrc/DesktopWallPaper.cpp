@@ -1,4 +1,4 @@
-/********************************************************************
+ï»¿/********************************************************************
 *
 * Created by zelon(Kim, Jinwook Korea)
 * 
@@ -12,7 +12,7 @@
 #include "DesktopWallPaper.h"
 #include "CommonFunc.h"
 
-/// ½ÇÁ¦·Î ¹ÙÅÁÈ­¸éÀ» ¹Ù²Û´Ù.
+/// ì‹¤ì œë¡œ ë°”íƒ•í™”ë©´ì„ ë°”ê¾¼ë‹¤.
 void CDesktopWallPaper::SetDesktopWallPaper(const tstring & strBitmapFileName, eDesktopWallPaperStyle style)
 {
 	tstring strStyle = TEXT("0");
@@ -46,14 +46,14 @@ void CDesktopWallPaper::SetDesktopWallPaper(const tstring & strBitmapFileName, e
 		SetRegistryValue(HKEY_CURRENT_USER, TEXT("Control Panel\\Desktop"), TEXT("TileWallpaper"), TEXT("0"));
 	}
 
-	// ½ÇÁ¦·Î Àû¿ë½ÃÅ²´Ù.
+	// ì‹¤ì œë¡œ ì ìš©ì‹œí‚¨ë‹¤.
 	if ( 0 == SystemParametersInfo(SPI_SETDESKWALLPAPER, 0, (PVOID)strBitmapFileName.c_str(), SPIF_SENDCHANGE) )
 	{
 		assert(false);
 	}
 }
 
-/// ¹ÙÅÁÈ­¸éÀÇ ¹è°æÈ­¸éÀ» Áö¿î´Ù.
+/// ë°”íƒ•í™”ë©´ì˜ ë°°ê²½í™”ë©´ì„ ì§€ìš´ë‹¤.
 void CDesktopWallPaper::ClearDesktopWallPaper()
 {
 	CDesktopWallPaper::SetDesktopWallPaper(TEXT(""), eDesktopWallPaperStyle_CENTER);

@@ -1,4 +1,4 @@
-/* ------------------------------------------------------------------------
+ï»¿/* ------------------------------------------------------------------------
  *
  * 2008. 8. 10 KIM JINWOOK
  *
@@ -94,8 +94,8 @@ bool ExtInfoManager::IsValidImageFileExt(const TCHAR * szFilename)
 
 const TCHAR * ExtInfoManager::GetFileDlgFilter()
 {
-	// ¿À¸¥ÂÊ°ú °°Àº Çü½ÄÀÇ ¹®ÀÚ¿­À» ¸¸µé¾î ¹İÈ¯ÇÑ´Ù. g_strFileFilter TEXT("ImageFiles(jpg,jpeg2000,gif,png,bmp,wbmp,psd,tga,tif,ico)\0*.jpg;*.jpeg;*.jp2;*.j2k;*.gif;*.png;*.bmp;*.wbmp;*.psd,*.tga;*.tif;*.ico\0All(*.*)\0*.*\0")	
-	// \0 À» ³Ö±â À§ÇØ ÀÏ´Ü # À» ³Ö°í ³ªÁß¿¡ Ä¡È¯ÇÑ´Ù.
+	// ì˜¤ë¥¸ìª½ê³¼ ê°™ì€ í˜•ì‹ì˜ ë¬¸ìì—´ì„ ë§Œë“¤ì–´ ë°˜í™˜í•œë‹¤. g_strFileFilter TEXT("ImageFiles(jpg,jpeg2000,gif,png,bmp,wbmp,psd,tga,tif,ico)\0*.jpg;*.jpeg;*.jp2;*.j2k;*.gif;*.png;*.bmp;*.wbmp;*.psd,*.tga;*.tif;*.ico\0All(*.*)\0*.*\0")	
+	// \0 ì„ ë„£ê¸° ìœ„í•´ ì¼ë‹¨ # ì„ ë„£ê³  ë‚˜ì¤‘ì— ì¹˜í™˜í•œë‹¤.
 
 	tstring result;
 
@@ -106,7 +106,7 @@ const TCHAR * ExtInfoManager::GetFileDlgFilter()
 	{
 		result += m_extConnect[i].m_strExt;
 		
-		if ( i < m_extConnect.size()-1 )	///< ¸¶Áö¸· È®ÀåÀÚ µÚ¿¡´Â , °¡ ¾øÀ½
+		if ( i < m_extConnect.size()-1 )	///< ë§ˆì§€ë§‰ í™•ì¥ì ë’¤ì—ëŠ” , ê°€ ì—†ìŒ
 		{
 			result += TEXT(",");
 		}
@@ -119,7 +119,7 @@ const TCHAR * ExtInfoManager::GetFileDlgFilter()
 		result += TEXT("*.");
 		result += m_extConnect[i].m_strExt;
 		
-		if ( i < m_extConnect.size()-1 )	///< ¸¶Áö¸· È®ÀåÀÚ µÚ¿¡´Â ; °¡ ¾øÀ½
+		if ( i < m_extConnect.size()-1 )	///< ë§ˆì§€ë§‰ í™•ì¥ì ë’¤ì—ëŠ” ; ê°€ ì—†ìŒ
 		{
 			result += TEXT(";");
 		}
@@ -127,7 +127,7 @@ const TCHAR * ExtInfoManager::GetFileDlgFilter()
 
 	result += TEXT("#All(*.*)#*.*#");
 
-	for ( i=0; i<result.size(); ++i )	///< # À» \0 À¸·Î ±³Ã¼. \0 À» ¹Ù·Î ´õÇÏ±â ¾î·Á¿ö¼­...
+	for ( i=0; i<result.size(); ++i )	///< # ì„ \0 ìœ¼ë¡œ êµì²´. \0 ì„ ë°”ë¡œ ë”í•˜ê¸° ì–´ë ¤ì›Œì„œ...
 	{
 		if ( result[i] == TEXT('#') )
 		{

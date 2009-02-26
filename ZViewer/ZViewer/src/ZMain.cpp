@@ -1,4 +1,4 @@
-/********************************************************************
+ï»¿/********************************************************************
 *
 * Created by zelon(Kim, Jinwook Korea)
 *
@@ -86,7 +86,7 @@ ZMain::~ZMain(void)
 }
 
 
-/// ¹öÆÛ·Î ¾²ÀÌ´Â DC ¸¦ ¸±¸®ÁîÇÑ´Ù.
+/// ë²„í¼ë¡œ ì“°ì´ëŠ” DC ë¥¼ ë¦´ë¦¬ì¦ˆí•œë‹¤.
 void ZMain::_releaseBufferDC()
 {
 	if ( m_hBufferDC != NULL )
@@ -101,7 +101,7 @@ void ZMain::_releaseBufferDC()
 	}
 }
 
-/// Timer ¸¦ ¹Ş¾ÒÀ» ¶§
+/// Timer ë¥¼ ë°›ì•˜ì„ ë•Œ
 void ZMain::onTimer()
 {
 	if ( ZOption::GetInstance().m_bSlideMode )
@@ -130,7 +130,7 @@ void ZMain::onTimer()
 }
 
 
-/// ZViewer Àü¿ë ¸Ş½ÃÁö ¹Ú½º
+/// ZViewer ì „ìš© ë©”ì‹œì§€ ë°•ìŠ¤
 int ZMain::ShowMessageBox(const TCHAR * msg, UINT button)
 {
 	return ::MessageBox(m_hMainDlg, msg, TEXT("ZViewer"), button);
@@ -176,7 +176,7 @@ void ZMain::InitOpenFileDialog()
 
 void ZMain::OpenFileDialog()
 {
-	// ÇöÀç Æú´õ¸¦ ¼¼ÆÃÇØ ÁØ´Ù.
+	// í˜„ì¬ í´ë”ë¥¼ ì„¸íŒ…í•´ ì¤€ë‹¤.
 	ofn.lpstrInitialDir = m_strCurrentFolder.c_str();
 
 	//m_bOpeningFileDialog = true;
@@ -188,7 +188,7 @@ void ZMain::OpenFileDialog()
 	}
 }
 
-/// ÇöÀç ÆÄÀÏÀ» ´Ù¸¥ Çü½ÄÀ¸·Î ÀúÀåÇÏ´Â ÆÄÀÏ ´ÙÀÌ¾ó·Î±×¸¦ ¿¬´Ù.
+/// í˜„ì¬ íŒŒì¼ì„ ë‹¤ë¥¸ í˜•ì‹ìœ¼ë¡œ ì €ì¥í•˜ëŠ” íŒŒì¼ ë‹¤ì´ì–¼ë¡œê·¸ë¥¼ ì—°ë‹¤.
 void ZMain::SaveFileDialog()
 {
 	if ( NULL == m_pCurrentImage || m_bCurrentImageLoaded == false )
@@ -211,7 +211,7 @@ void ZMain::SaveFileDialog()
 
 void ZMain::OnInit()
 {
-	/// ºÒ·¯¿Â ÃÖÁ¾ ¿É¼ÇÀ» Á¡°ËÇÏ¿© ¸Ş´º Áß Ã¼Å©Ç¥½ÃÇÒ °ÍµéÀ» Ç¥½ÃÇÑ´Ù.
+	/// ë¶ˆëŸ¬ì˜¨ ìµœì¢… ì˜µì…˜ì„ ì ê²€í•˜ì—¬ ë©”ë‰´ ì¤‘ ì²´í¬í‘œì‹œí•  ê²ƒë“¤ì„ í‘œì‹œí•œë‹¤.
 	SetCheckMenus();
 
 	if ( m_strInitArg.empty() )
@@ -220,12 +220,12 @@ void ZMain::OnInit()
 	}
 	else
 	{
-		// ½ÃÀÛ ÀÎÀÚ°¡ ÀÖÀ¸¸é ±× ÆÄÀÏÀ» º¸¿©ÁØ´Ù.
+		// ì‹œì‘ ì¸ìê°€ ìˆìœ¼ë©´ ê·¸ íŒŒì¼ì„ ë³´ì—¬ì¤€ë‹¤.
 		OpenFile(m_strInitArg);
 	}
 }
 
-/// ÇöÀç º¸°í ÀÖ´Â ÆÄÀÏÀÇ Exif Á¤º¸¸¦ º¸¿©ÁØ´Ù.
+/// í˜„ì¬ ë³´ê³  ìˆëŠ” íŒŒì¼ì˜ Exif ì •ë³´ë¥¼ ë³´ì—¬ì¤€ë‹¤.
 void ZMain::ShowExif()
 {
 	if ( NULL == m_pCurrentImage || m_bCurrentImageLoaded == false )
@@ -251,7 +251,7 @@ void ZMain::Draw(HDC toDrawDC, bool bEraseBg)
 	}
 	else
 	{
-		/// ¹«È¿È­µÈ ºÎºĞ¸¸ ±×¸± ¶§ÀÇ DC ¸¦ ¾ò¾î¿À±â À§ÇØ
+		/// ë¬´íš¨í™”ëœ ë¶€ë¶„ë§Œ ê·¸ë¦´ ë•Œì˜ DC ë¥¼ ì–»ì–´ì˜¤ê¸° ìœ„í•´
 		mainDC = toDrawDC;
 	}
 	assert(mainDC != NULL);
@@ -263,7 +263,7 @@ void ZMain::Draw(HDC toDrawDC, bool bEraseBg)
 		return;
 	}
 
-	/// ÆÄÀÏÀÌ ÇÏ³ªµµ ¾øÀ» ¶§´Â ¹è°æ¸¸ Áö¿ì°í ¹Ù·Î ¸®ÅÏÇÑ´Ù.
+	/// íŒŒì¼ì´ í•˜ë‚˜ë„ ì—†ì„ ë•ŒëŠ” ë°°ê²½ë§Œ ì§€ìš°ê³  ë°”ë¡œ ë¦¬í„´í•œë‹¤.
 	if ( m_vFile.size() <= 0 )
 	{
 		_eraseBackground(mainDC, currentScreenRect.right, currentScreenRect.bottom);
@@ -286,14 +286,14 @@ void ZMain::Draw(HDC toDrawDC, bool bEraseBg)
 	if ( m_pCurrentImage->IsValid() == FALSE ) return;
 	if ( m_hMainDlg == NULL ) return;
 
-	/// ShowWindow ºÎºĞ¸¸ ±×¸®µµ·Ï Å¬¸®ÇÎ ¿µ¿ªÀ» ¼³Á¤ÇÑ´Ù.
+	/// ShowWindow ë¶€ë¶„ë§Œ ê·¸ë¦¬ë„ë¡ í´ë¦¬í•‘ ì˜ì—­ì„ ì„¤ì •í•œë‹¤.
 	HRGN hrgn = CreateRectRgn(currentScreenRect.left, currentScreenRect.top, currentScreenRect.right, currentScreenRect.bottom);
 	SelectClipRgn(mainDC, hrgn);
 
 	const WORD zoomedImageWidth = (WORD)(m_pCurrentImage->GetWidth() * m_fCurrentZoomRate);
 	const WORD zoomedImageHeight = (WORD)(m_pCurrentImage->GetHeight() * m_fCurrentZoomRate);
 
-	/// ±×¸± ±×¸²ÀÌ ÇöÀç È­¸éº¸´Ù, °¡·Î & ¼¼·Î ¸ğµÎ Å©¸é ¹è°æÀ» Áö¿ìÁö ¾Ê¾Æµµ µÊ.
+	/// ê·¸ë¦´ ê·¸ë¦¼ì´ í˜„ì¬ í™”ë©´ë³´ë‹¤, ê°€ë¡œ & ì„¸ë¡œ ëª¨ë‘ í¬ë©´ ë°°ê²½ì„ ì§€ìš°ì§€ ì•Šì•„ë„ ë¨.
 	if ( zoomedImageWidth >= currentScreenRect.right && zoomedImageHeight >= currentScreenRect.bottom )
 	{
 		bEraseBg = false;
@@ -301,19 +301,19 @@ void ZMain::Draw(HDC toDrawDC, bool bEraseBg)
 
 	if ( zoomedImageWidth <= currentScreenRect.right )
 	{
-		// °¡·Î ±æÀÌ°¡ È­¸éº¸´Ù ÀÛÀ» ¶§´Â Áß¾Ó¿¡ ¿À°Ô
+		// ê°€ë¡œ ê¸¸ì´ê°€ í™”ë©´ë³´ë‹¤ ì‘ì„ ë•ŒëŠ” ì¤‘ì•™ì— ì˜¤ê²Œ
 		m_iShowingX = -((currentScreenRect.right/2) - (zoomedImageWidth/2));
 	}
 
 	if ( zoomedImageHeight <= currentScreenRect.bottom )
 	{
-		// ¼¼·Î ±æÀÌ°¡ È­¸éº¸´Ù ÀÛÀ» ¶§´Â Áß¾Ó¿¡ ¿À°Ô
+		// ì„¸ë¡œ ê¸¸ì´ê°€ í™”ë©´ë³´ë‹¤ ì‘ì„ ë•ŒëŠ” ì¤‘ì•™ì— ì˜¤ê²Œ
 		m_iShowingY = -((currentScreenRect.bottom/2) - (zoomedImageHeight/2));
 	}
 
 	RECT drawRect = { -m_iShowingX, -m_iShowingY, zoomedImageWidth-m_iShowingX, zoomedImageHeight-m_iShowingY };
 
-	if ( bEraseBg )	// ¹è°æÀ» Áö¿ö¾ß ÇÏ¸é Áö¿î´Ù. ±×¸²ÀÌ ±×·ÁÁö´Â ºÎºĞÀ» Á¦¿ÜÇÏ°í Áö¿î´Ù.
+	if ( bEraseBg )	// ë°°ê²½ì„ ì§€ì›Œì•¼ í•˜ë©´ ì§€ìš´ë‹¤. ê·¸ë¦¼ì´ ê·¸ë ¤ì§€ëŠ” ë¶€ë¶„ì„ ì œì™¸í•˜ê³  ì§€ìš´ë‹¤.
 	{
 		HRGN hScreenRGN = CreateRectRgn(currentScreenRect.left, currentScreenRect.top, currentScreenRect.right, currentScreenRect.bottom);
 		HRGN hDrawRGN = CreateRectRgn(drawRect.left, drawRect.top, drawRect.right, drawRect.bottom);
@@ -325,7 +325,7 @@ void ZMain::Draw(HDC toDrawDC, bool bEraseBg)
 		DeleteObject(hDrawRGN);
 	}
 
-	/// ÃßÈÄ È®´ë/Ãà¼Ò ÈÄÀÇ È­¸é À§Ä¡µîÀ» À§ÇØ¼­
+	/// ì¶”í›„ í™•ëŒ€/ì¶•ì†Œ í›„ì˜ í™”ë©´ ìœ„ì¹˜ë“±ì„ ìœ„í•´ì„œ
 	m_fCenterX = (float)((currentScreenRect.right/2.0f) - (float)drawRect.left) / (float)(drawRect.right-drawRect.left);
 	m_fCenterY = (float)((currentScreenRect.bottom/2.0f) - (float)drawRect.top) / (float)(drawRect.bottom-drawRect.top);
 
@@ -342,20 +342,20 @@ void ZMain::Draw(HDC toDrawDC, bool bEraseBg)
 
 	ReleaseDC(m_hMainDlg, mainDC);
 
-	// ¸¶¿ì½º Ä¿¼­ ¸ğ¾ç
+	// ë§ˆìš°ìŠ¤ ì»¤ì„œ ëª¨ì–‘
 	if ( zoomedImageWidth > currentScreenRect.right || zoomedImageHeight > currentScreenRect.bottom )
 	{
-		// ¸¶¿ì½º Ä¿¼­¸¦ hand ·Î
+		// ë§ˆìš°ìŠ¤ ì»¤ì„œë¥¼ hand ë¡œ
 		SetHandCursor(true);
 	}
 	else
 	{
-		// ¸¶¿ì½º Ä¿¼­¸¦ ¿ø·¡´ë·Î
+		// ë§ˆìš°ìŠ¤ ì»¤ì„œë¥¼ ì›ë˜ëŒ€ë¡œ
 		SetHandCursor(false);
 	}
 	PostMessage(m_hMainDlg, WM_SETCURSOR, 0, 0);
 
-	// Ç® ½ºÅ©¸°ÀÌ ¾Æ´Ò ¶§´Â »óÅÂ Ç¥½ÃÁÙÀ» ´Ù½Ã ±×¸°´Ù.
+	// í’€ ìŠ¤í¬ë¦°ì´ ì•„ë‹ ë•ŒëŠ” ìƒíƒœ í‘œì‹œì¤„ì„ ë‹¤ì‹œ ê·¸ë¦°ë‹¤.
 	if ( false == ZOption::GetInstance().IsFullScreen() )
 	{
 		PostMessage(m_hStatusBar, WM_PAINT, 0, 0);
@@ -456,7 +456,7 @@ void ZMain::RescanFolder()
 	_GetFileListAndSort(strToFindFolder, m_vFile);
 	TIMECHECK_END();
 
-	// Cache Thread ¿¡ Àü´ŞÇÑ´Ù.
+	// Cache Thread ì— ì „ë‹¬í•œë‹¤.
 	ZCacheImage::GetInstance().SetImageVector(m_vFile);
 
 	if ( m_strCurrentFilename.empty() && !m_vFile.empty())
@@ -470,9 +470,9 @@ void ZMain::RescanFolder()
 
 bool ZMain::GetNeighborFolders(std::vector < tstring > & vFolders)
 {
-	// ÇöÀç Æú´õÀÇ »óÀ§ Æú´õ¸¦ °Ë»öÇÑ´Ù.
+	// í˜„ì¬ í´ë”ì˜ ìƒìœ„ í´ë”ë¥¼ ê²€ìƒ‰í•œë‹¤.
 	{
-		// ÇöÀç Æú´õ¿¡¼­ ¿À¸¥ÂÊºÎÅÍ 2¹øÂ°ÀÇ \ ¸¦ ¾ò´Â´Ù.
+		// í˜„ì¬ í´ë”ì—ì„œ ì˜¤ë¥¸ìª½ë¶€í„° 2ë²ˆì§¸ì˜ \ ë¥¼ ì–»ëŠ”ë‹¤.
 		size_t pos = m_strCurrentFolder.find_last_of(TEXT("\\"));
 
 		if ( pos == m_strCurrentFolder.npos )
@@ -494,7 +494,7 @@ bool ZMain::GetNeighborFolders(std::vector < tstring > & vFolders)
 		strParentFolder = strParentFolder.substr(0, pos);
 
 		strParentFolder += TEXT("\\*.*");
-		// »óÀ§ Æú´õÀÇ ÇÏÀ§ Æú´õµéÀ» ¾ò´Â´Ù.
+		// ìƒìœ„ í´ë”ì˜ í•˜ìœ„ í´ë”ë“¤ì„ ì–»ëŠ”ë‹¤.
 		FindFolders(strParentFolder.c_str(), vFolders, false);
 
 		if ( vFolders.size() <= 0 )
@@ -504,7 +504,7 @@ bool ZMain::GetNeighborFolders(std::vector < tstring > & vFolders)
 		}
 	}
 
-	// »óÀ§ Æú´õÀÇ ÇÏÀ§ Æú´õµéÀ» Á¤·ÄÇÑ´Ù.
+	// ìƒìœ„ í´ë”ì˜ í•˜ìœ„ í´ë”ë“¤ì„ ì •ë ¬í•œë‹¤.
 	if ( m_osKind == eOSKind_XP )
 	{
 		sort(vFolders.begin(), vFolders.end(), CStringCompareIgnoreCase_LengthFirst());
@@ -523,10 +523,10 @@ void ZMain::NextFolder()
 
 	if ( !GetNeighborFolders(vFolders) ) return;
 
-	// »óÀ§ Æú´õÀÇ ÇÏÀ§ Æú´õ Áß ÇöÀç Æú´õÀÇ ´ÙÀ½ Æú´õ°¡ ÀÖÀ¸¸é ´ÙÀ½ Æú´õ¸¦ °Ë»öÇÑ ÈÄ, Ã³À½ ÀÌ¹ÌÁö¸¦ ¿¬´Ù.
+	// ìƒìœ„ í´ë”ì˜ í•˜ìœ„ í´ë” ì¤‘ í˜„ì¬ í´ë”ì˜ ë‹¤ìŒ í´ë”ê°€ ìˆìœ¼ë©´ ë‹¤ìŒ í´ë”ë¥¼ ê²€ìƒ‰í•œ í›„, ì²˜ìŒ ì´ë¯¸ì§€ë¥¼ ì—°ë‹¤.
 	{
 		int iFoundIndex = -1;
-		// ÇöÀç Æú´õÀÇ index ¸¦ ªO´Â´Ù.
+		// í˜„ì¬ í´ë”ì˜ index ë¥¼ ì°¿ëŠ”ë‹¤.
 		for (unsigned int i=0; i<vFolders.size(); ++i)
 		{
 			if ( vFolders[i] + TEXT("\\") == m_strCurrentFolder )
@@ -540,7 +540,7 @@ void ZMain::NextFolder()
 
 		if ( (iFoundIndex + 1) >= (int)vFolders.size() )
 		{
-			// ¸¶Áö¸· Æú´õÀÌ´Ù.
+			// ë§ˆì§€ë§‰ í´ë”ì´ë‹¤.
 			ShowMessageBox(GetMessage(TEXT("LAST_DIRECTORY")));
 			return;
 		}
@@ -558,10 +558,10 @@ void ZMain::PrevFolder()
 
 	if ( !GetNeighborFolders(vFolders) ) return;
 
-	// »óÀ§ Æú´õÀÇ ÇÏÀ§ Æú´õ Áß ÇöÀç Æú´õÀÇ ´ÙÀ½ Æú´õ°¡ ÀÖÀ¸¸é ´ÙÀ½ Æú´õ¸¦ °Ë»öÇÑ ÈÄ, Ã³À½ ÀÌ¹ÌÁö¸¦ ¿¬´Ù.
+	// ìƒìœ„ í´ë”ì˜ í•˜ìœ„ í´ë” ì¤‘ í˜„ì¬ í´ë”ì˜ ë‹¤ìŒ í´ë”ê°€ ìˆìœ¼ë©´ ë‹¤ìŒ í´ë”ë¥¼ ê²€ìƒ‰í•œ í›„, ì²˜ìŒ ì´ë¯¸ì§€ë¥¼ ì—°ë‹¤.
 	{
 		int iFoundIndex = -1;
-		// ÇöÀç Æú´õÀÇ index ¸¦ ªO´Â´Ù.
+		// í˜„ì¬ í´ë”ì˜ index ë¥¼ ì°¿ëŠ”ë‹¤.
 		for (unsigned int i=0; i<vFolders.size(); ++i)
 		{
 			if ( vFolders[i] + TEXT("\\") == m_strCurrentFolder )
@@ -575,7 +575,7 @@ void ZMain::PrevFolder()
 
 		if ( (iFoundIndex-1 < 0 ) )
 		{
-			// ¸¶Áö¸· Æú´õÀÌ´Ù.
+			// ë§ˆì§€ë§‰ í´ë”ì´ë‹¤.
 			ShowMessageBox(GetMessage(TEXT("FIRST_FOLDER")));
 			return;
 		}
@@ -591,7 +591,7 @@ void ZMain::_GetFileListAndSort(const tstring & strFolderPathAndWildCard, FileLi
 	vFileList.resize(0);
 	FindFile(strFolderPathAndWildCard.c_str(), vFileList, false);
 
-	// ¾òÀº ÆÄÀÏÀ» Á¤·ÄÇÑ´Ù.
+	// ì–»ì€ íŒŒì¼ì„ ì •ë ¬í•œë‹¤.
 	switch ( m_sortOrder )
 	{
 	case eFileSortOrder_FILENAME:
@@ -622,7 +622,7 @@ void ZMain::_GetFileListAndSort(const tstring & strFolderPathAndWildCard, FileLi
 
 void ZMain::OpenFolder(const tstring & strFolder)
 {
-	// Æ¯Á¤ Æú´õÀÇ ÇÏÀ§ ÆÄÀÏµéÀ» °Ë»öÇØ¼­ Á¤·Ä ÈÄ Ã¹¹øÂ° ÆÄÀÏÀ» ¿¬´Ù.
+	// íŠ¹ì • í´ë”ì˜ í•˜ìœ„ íŒŒì¼ë“¤ì„ ê²€ìƒ‰í•´ì„œ ì •ë ¬ í›„ ì²«ë²ˆì§¸ íŒŒì¼ì„ ì—°ë‹¤.
 
 	tstring strTemp = strFolder;
 	strTemp += TEXT("\\*.*");
@@ -653,7 +653,7 @@ void ZMain::OpenFile(const tstring & strFilename)
 	m_strCurrentFolder = GetFolderNameFromFullFileName(strFilename);
 	RescanFolder();
 
-	// ½ºÄµÇÑ ÆÄÀÏ Áß ÇöÀç ÆÄÀÏÀ» Ã£´Â´Ù.
+	// ìŠ¤ìº”í•œ íŒŒì¼ ì¤‘ í˜„ì¬ íŒŒì¼ì„ ì°¾ëŠ”ë‹¤.
 	std::vector< FileData >::const_iterator it, endit = m_vFile.end();
 
 	for ( it = m_vFile.begin(); it != endit; ++it)
@@ -671,7 +671,7 @@ void ZMain::OpenFile(const tstring & strFilename)
 		return;
 	}
 
-	assert(it != m_vFile.end());	// ±× ÆÄÀÏÀÌ ¾øÀ»¸®°¡ ¾ø´Ù.
+	assert(it != m_vFile.end());	// ê·¸ íŒŒì¼ì´ ì—†ì„ë¦¬ê°€ ì—†ë‹¤.
 
 	if ( it != m_vFile.end() )
 	{
@@ -700,7 +700,7 @@ bool ZMain::MoveIndex(int iIndex)
 	return true;
 }
 
-/// »õ·Î ÀÌµ¿ÇÒ ÀÎµ¦½º ¹øÈ£¸¦ ÁÖ¸é Áö±İ »óÈ²¿¡ ¸Â´Â ÀÎµ¦½º ¹øÈ£¸¦ µ¹·ÁÁØ´Ù.
+/// ìƒˆë¡œ ì´ë™í•  ì¸ë±ìŠ¤ ë²ˆí˜¸ë¥¼ ì£¼ë©´ ì§€ê¸ˆ ìƒí™©ì— ë§ëŠ” ì¸ë±ìŠ¤ ë²ˆí˜¸ë¥¼ ëŒë ¤ì¤€ë‹¤.
 int ZMain::GetCalculatedMovedIndex(int iIndex)
 {
 	if ( iIndex < 0 )
@@ -731,14 +731,14 @@ int ZMain::GetCalculatedMovedIndex(int iIndex)
 
 bool ZMain::FirstImage()
 {
-	// ÇöÀçÀÇ À§Ä¡¸¦ History ¿¡ ÀúÀåÇØ³õ´Â´Ù.
+	// í˜„ì¬ì˜ ìœ„ì¹˜ë¥¼ History ì— ì €ì¥í•´ë†“ëŠ”ë‹¤.
 	m_history.push_lastImageIndex(m_iCurretFileIndex);
 	return MoveIndex(0);
 }
 
 bool ZMain::LastImage()
 {
-	// ÇöÀçÀÇ À§Ä¡¸¦ History ¿¡ ÀúÀåÇØ³õ´Â´Ù.
+	// í˜„ì¬ì˜ ìœ„ì¹˜ë¥¼ History ì— ì €ì¥í•´ë†“ëŠ”ë‹¤.
 	m_history.push_lastImageIndex(m_iCurretFileIndex);
 	return MoveIndex((int)m_vFile.size() - 1);
 }
@@ -810,7 +810,7 @@ void ZMain::StopTimer()
 	}
 }
 
-/// Cache status ¸¦ »óÅÂ Ç¥½ÃÁÙ¿¡ Ç¥½ÃÇÑ´Ù.
+/// Cache status ë¥¼ ìƒíƒœ í‘œì‹œì¤„ì— í‘œì‹œí•œë‹¤.
 void ZMain::ShowCacheStatus()
 {
 	static bool bLastActionIsCache = false;
@@ -821,23 +821,23 @@ void ZMain::ShowCacheStatus()
 	{
 		bLastActionIsCache = bNowActionIsCache;
 
-		static tstring strStatusMsg=TEXT("...");	///< PostMessage() ·Î È£ÃâÇÏ¹Ç·Î, ¸Ş¸ğ¸®°¡ ¾ø¾îÁöÁö ¾Ê°Ô ÇÏ±â À§ÇØ static
+		static tstring strStatusMsg=TEXT("...");	///< PostMessage() ë¡œ í˜¸ì¶œí•˜ë¯€ë¡œ, ë©”ëª¨ë¦¬ê°€ ì—†ì–´ì§€ì§€ ì•Šê²Œ í•˜ê¸° ìœ„í•´ static
 
 		if ( m_vFile.empty() )
 		{
 			strStatusMsg = TEXT("");
 		}
-		else if ( false == bNowActionIsCache ) ///< Ä³½¬°¡ ³¡³µÀ¸¸é
+		else if ( false == bNowActionIsCache ) ///< ìºì‰¬ê°€ ëë‚¬ìœ¼ë©´
 		{
 			strStatusMsg = TEXT("Cached");
 		}
-		else///< ¾ÆÁ÷ Ä³½¬ ÁßÀÌ¸é
+		else///< ì•„ì§ ìºì‰¬ ì¤‘ì´ë©´
 		{
-			if ( ZCacheImage::GetInstance().IsNextFileCached() )	///< ´ÙÀ½ ÆÄÀÏÀÇ Ä³½¬°¡ ³¡³µÀ¸¸é
+			if ( ZCacheImage::GetInstance().IsNextFileCached() )	///< ë‹¤ìŒ íŒŒì¼ì˜ ìºì‰¬ê°€ ëë‚¬ìœ¼ë©´
 			{
 				strStatusMsg = TEXT("Caching files");
 			}
-			else ///< ¾ÆÁ÷ ´ÙÀ½ ÆÄÀÏµµ Ä³½¬°¡ ¾È ³¡³µÀ¸¸é,
+			else ///< ì•„ì§ ë‹¤ìŒ íŒŒì¼ë„ ìºì‰¬ê°€ ì•ˆ ëë‚¬ìœ¼ë©´,
 			{
 				strStatusMsg = TEXT("Caching next");
 			}
@@ -884,28 +884,28 @@ void ZMain::ShowCacheStatus()
 
 void ZMain::ToggleFullScreen()
 {
-	if ( ZOption::GetInstance().IsFullScreen() )	// ÇöÀç Ç®½ºÅ©¸°ÀÌ¸é ¿ø·¡ È­¸éÀ¸·Î µ¹¾Æ°£´Ù.
+	if ( ZOption::GetInstance().IsFullScreen() )	// í˜„ì¬ í’€ìŠ¤í¬ë¦°ì´ë©´ ì›ë˜ í™”ë©´ìœ¼ë¡œ ëŒì•„ê°„ë‹¤.
 	{
 		ZOption::GetInstance().SetFullScreen(!ZOption::GetInstance().IsFullScreen());
 
-		TaskBar::ShellTrayShow();	// ¼û°ÜÁ³´ø ÀÛ¾÷ Ç¥½ÃÁÙÀ» º¸¿©ÁØ´Ù.
+		TaskBar::ShellTrayShow();	// ìˆ¨ê²¨ì¡Œë˜ ì‘ì—… í‘œì‹œì¤„ì„ ë³´ì—¬ì¤€ë‹¤.
 
-		FormShow();	// ¸Ş´º, »óÅÂ Ç¥½ÃÁÙµîÀ» º¸¿©ÁØ´Ù.
+		FormShow();	// ë©”ë‰´, ìƒíƒœ í‘œì‹œì¤„ë“±ì„ ë³´ì—¬ì¤€ë‹¤.
 
 		SetWindowPos(m_hMainDlg, HWND_TOP, m_lastPosition.left, m_lastPosition.top, m_lastPosition.right - m_lastPosition.left, m_lastPosition.bottom - m_lastPosition.top, SWP_SHOWWINDOW);
 	}
-	else	// ÇöÀç Ç®½ºÅ©¸°ÀÌ ¾Æ´Ï¸é Ç®½ºÅ©¸°À¸·Î ¸¸µç´Ù.
+	else	// í˜„ì¬ í’€ìŠ¤í¬ë¦°ì´ ì•„ë‹ˆë©´ í’€ìŠ¤í¬ë¦°ìœ¼ë¡œ ë§Œë“ ë‹¤.
 	{
 		ZOption::GetInstance().SetFullScreen(!ZOption::GetInstance().IsFullScreen());
-		// ÇöÀç Å©±â¸¦ ±â¾ïÇÑ´Ù.
+		// í˜„ì¬ í¬ê¸°ë¥¼ ê¸°ì–µí•œë‹¤.
 		GetWindowRect(m_hMainDlg, &m_lastPosition);
 
-		FormHide();// ¸Ş´º, »óÅÂ Ç¥½ÃÁÙµîÀ» ¼û±ä´Ù.
+		FormHide();// ë©”ë‰´, ìƒíƒœ í‘œì‹œì¤„ë“±ì„ ìˆ¨ê¸´ë‹¤.
 
 		const int screenWidth = ::GetSystemMetrics( SM_CXSCREEN );
 		const int screenHeight = ::GetSystemMetrics(SM_CYSCREEN);
 
-		// È­¸é µà¾ó ¸ğ´ÏÅÍ Ã³¸®¸¦ ÇØÁÜ. Ã³À½ À§Ä¡¿¡ µû¶ó¼­ full screen ÈÄ È­¸éÀÇ À§Ä¡¸¦ ¹Ù²ãÁØ´Ù.
+		// í™”ë©´ ë“€ì–¼ ëª¨ë‹ˆí„° ì²˜ë¦¬ë¥¼ í•´ì¤Œ. ì²˜ìŒ ìœ„ì¹˜ì— ë”°ë¼ì„œ full screen í›„ í™”ë©´ì˜ ìœ„ì¹˜ë¥¼ ë°”ê¿”ì¤€ë‹¤.
 		const int screenX = int(m_lastPosition.left / screenWidth) * screenWidth;
 		const int screenY = int(m_lastPosition.top / screenHeight) * screenHeight;
 
@@ -913,17 +913,17 @@ void ZMain::ToggleFullScreen()
 		MoveWindow(m_hMainDlg, screenX, screenY, screenWidth, screenHeight, TRUE);
 
 
-		/* patch Àû¿ëÇÏ±â ÀüÀÇ ¼Ò½º
+		/* patch ì ìš©í•˜ê¸° ì „ì˜ ì†ŒìŠ¤
 		SetWindowPos(m_hMainDlg, HWND_TOPMOST, 0, 0, ::GetSystemMetrics(SM_CXSCREEN),::GetSystemMetrics(SM_CYSCREEN), SWP_NOMOVE|SWP_NOSIZE);
 		MoveWindow(m_hMainDlg, 0,0,::GetSystemMetrics(SM_CXSCREEN),::GetSystemMetrics(SM_CYSCREEN), TRUE);
 		*/
 
-		// ÀÛ¾÷ Ç¥½ÃÁÙÀ» °¡·ÁÁØ´Ù.
+		// ì‘ì—… í‘œì‹œì¤„ì„ ê°€ë ¤ì¤€ë‹¤.
 		TaskBar::ShellTrayHide();
 
-		// Æ÷Ä¿½º¸¦ ÀÒÀ¸¸é ¿ø·¡´ë·Î µ¹¾Æ°¡¾ßÇÏ¹Ç·Î Ç®¾î³õ´Â´Ù.
+		// í¬ì»¤ìŠ¤ë¥¼ ìƒìœ¼ë©´ ì›ë˜ëŒ€ë¡œ ëŒì•„ê°€ì•¼í•˜ë¯€ë¡œ í’€ì–´ë†“ëŠ”ë‹¤.
 		SetWindowPos(m_hMainDlg, HWND_NOTOPMOST, screenX, screenY, screenWidth, screenHeight, SWP_NOMOVE|SWP_NOSIZE);
-		/* patch Àû¿ëÇÏ±â ÀüÀÇ ¼Ò½º
+		/* patch ì ìš©í•˜ê¸° ì „ì˜ ì†ŒìŠ¤
 		SetWindowPos(m_hMainDlg, HWND_NOTOPMOST, 0, 0, ::GetSystemMetrics(SM_CXSCREEN),::GetSystemMetrics(SM_CYSCREEN), SWP_NOMOVE|SWP_NOSIZE);
 		*/
 
@@ -970,27 +970,27 @@ void ZMain::SetStatusBarText()
 	TCHAR szTemp[COMMON_BUFFER_SIZE];
 	tstring strTemp;
 
-	if ( NULL == m_pCurrentImage || m_bCurrentImageLoaded == false || m_vFile.size() == 0 || m_strCurrentFilename.empty() ) // º¸°í ÀÖ´Â ÆÄÀÏÀÌ ¾øÀ¸¸é
+	if ( NULL == m_pCurrentImage || m_bCurrentImageLoaded == false || m_vFile.size() == 0 || m_strCurrentFilename.empty() ) // ë³´ê³  ìˆëŠ” íŒŒì¼ì´ ì—†ìœ¼ë©´
 	{
 		// File Index
 		SendMessage(m_hStatusBar, SB_SETTEXT, 0, (LPARAM)_T("No File"));
 
-		// ÇØ»óµµ Á¤º¸
+		// í•´ìƒë„ ì •ë³´
 		SendMessage(m_hStatusBar, SB_SETTEXT, 1, (LPARAM)TEXT(""));
 
-		// ÀÌ¹ÌÁö »çÀÌÁî
+		// ì´ë¯¸ì§€ ì‚¬ì´ì¦ˆ
 		SendMessage(m_hStatusBar, SB_SETTEXT, 2, (LPARAM)_T(""));
 
-		// ÀÓ½Ã·Î http://wimy.com
+		// ì„ì‹œë¡œ http://wimy.com
 		SendMessage(m_hStatusBar, SB_SETTEXT, 3, (LPARAM)TEXT(""));
 
-		// ÀÓ½Ã·Î http://wimy.com
+		// ì„ì‹œë¡œ http://wimy.com
 		SendMessage(m_hStatusBar, SB_SETTEXT, 4, (LPARAM)TEXT("http://wimy.com"));
 
-		// ·Îµù½Ã°£
+		// ë¡œë”©ì‹œê°„
 		SendMessage(m_hStatusBar, SB_SETTEXT, 5, (LPARAM)TEXT(""));
 
-		// Ä³½Ã ÁßÀÎ°¡
+		// ìºì‹œ ì¤‘ì¸ê°€
 		if ( m_vFile.size() == 0 )
 		{
 			SendMessage(m_hStatusBar, SB_SETTEXT, 6, (LPARAM)TEXT(""));
@@ -1000,7 +1000,7 @@ void ZMain::SetStatusBarText()
 			ShowCacheStatus(); ///< 6
 		}
 
-		// ÆÄÀÏ¸í
+		// íŒŒì¼ëª…
 		SendMessage(m_hStatusBar, SB_SETTEXT, 7, (LPARAM)TEXT("No File"));
 	}
 	else
@@ -1009,7 +1009,7 @@ void ZMain::SetStatusBarText()
 		SPrintf(szTemp, COMMON_BUFFER_SIZE, TEXT("%d/%d"), m_iCurretFileIndex+1, m_vFile.size());
 		SendMessage(m_hStatusBar, SB_SETTEXT, 0, (LPARAM)szTemp);
 
-		// ÇØ»óµµ Á¤º¸
+		// í•´ìƒë„ ì •ë³´
 		SPrintf(szTemp, COMMON_BUFFER_SIZE, TEXT("%dx%dx%dbpp"), m_pCurrentImage->GetOriginalWidth(), m_pCurrentImage->GetOriginalHeight(), m_pCurrentImage->GetBPP());
 		SendMessage(m_hStatusBar, SB_SETTEXT, 1, (LPARAM)szTemp);
 
@@ -1033,21 +1033,21 @@ void ZMain::SetStatusBarText()
 		}
 		SendMessage(m_hStatusBar, SB_SETTEXT, 2, (LPARAM)szTemp);
 
-		// ÀÌ¹ÌÁö ¹èÀ²
+		// ì´ë¯¸ì§€ ë°°ìœ¨
 		SPrintf(szTemp, COMMON_BUFFER_SIZE, TEXT("%d%%"), (int)(m_fCurrentZoomRate*100.0f));
 		//SPrintf(szTemp, COMMON_BUFFER_SIZE, TEXT("%f"), m_fCurrentZoomRate);
 		SendMessage(m_hStatusBar, SB_SETTEXT, 3, (LPARAM)szTemp);
 
-		// ÀÓ½Ã·Î http://wimy.com
+		// ì„ì‹œë¡œ http://wimy.com
 		SendMessage(m_hStatusBar, SB_SETTEXT, 4, (LPARAM)TEXT("http://wimy.com"));
 
-		// ·Îµù½Ã°£
+		// ë¡œë”©ì‹œê°„
 		SPrintf(szTemp, COMMON_BUFFER_SIZE, TEXT("%.3fsec"), (float)(m_dwLoadingTime / 1000.0));
 		SendMessage(m_hStatusBar, SB_SETTEXT, 5, (LPARAM)szTemp);
 
 		ShowCacheStatus(); ///< 6
 
-		// ÆÄÀÏ¸í
+		// íŒŒì¼ëª…
 		TCHAR szFilename[MAX_PATH], szFileExt[MAX_PATH];
 		SplitPath(m_strCurrentFilename.c_str(), NULL,0, NULL,0, szFilename,MAX_PATH, szFileExt,MAX_PATH);
 		SPrintf(szTemp, COMMON_BUFFER_SIZE, TEXT("%s%s"), szFilename, szFileExt);
@@ -1059,11 +1059,11 @@ void ZMain::SetTitle()
 {
 	TCHAR szTemp[MAX_PATH+256];
 
-	if ( m_strCurrentFilename.empty() )	// ÇöÀçº¸°í ÀÖ´Â ÆÄÀÏ¸íÀÌ ¾øÀ¸¸é
+	if ( m_strCurrentFilename.empty() )	// í˜„ì¬ë³´ê³  ìˆëŠ” íŒŒì¼ëª…ì´ ì—†ìœ¼ë©´
 	{
 		SPrintf(szTemp, MAX_PATH+256, TEXT("ZViewer v%s"), g_strVersion.c_str());
 	}
-	else // ÇöÀçº¸°í ÀÖ´Â ÆÄÀÏ¸íÀÌ ÀÖÀ¸¸é
+	else // í˜„ì¬ë³´ê³  ìˆëŠ” íŒŒì¼ëª…ì´ ìˆìœ¼ë©´
 	{
 		TCHAR szFileName[FILENAME_MAX] = { 0 };
 		TCHAR szFileExt[MAX_PATH] = { 0 };
@@ -1081,7 +1081,7 @@ void ZMain::SetTitle()
 
 void ZMain::LoadCurrent()
 {
-	/// ÆÄÀÏ ¸ñ·ÏÀÌ ÇÏ³ªµµ ¾øÀ¸¸é ·ÎµùÀ» ½ÃµµÇÏÁö ¾Ê´Â´Ù.
+	/// íŒŒì¼ ëª©ë¡ì´ í•˜ë‚˜ë„ ì—†ìœ¼ë©´ ë¡œë”©ì„ ì‹œë„í•˜ì§€ ì•ŠëŠ”ë‹¤.
 	if ( m_vFile.empty() ) return;
 
 	static bool bFirst = true;
@@ -1100,10 +1100,10 @@ void ZMain::LoadCurrent()
 
 	static tstring lastCheckFileName;
 
-	/// Ä³½ÃµÈ µ¥ÀÌÅÍ¿¡ ÀÖÀ¸¸é
+	/// ìºì‹œëœ ë°ì´í„°ì— ìˆìœ¼ë©´
 	if ( ZCacheImage::GetInstance().hasCachedData(m_strCurrentFilename, m_iCurretFileIndex) )
 	{
-		{/// Ä³½ÃµÈ µ¥ÀÌÅÍ¸¦ ÀĞ¾î¿Â´Ù.
+		{/// ìºì‹œëœ ë°ì´í„°ë¥¼ ì½ì–´ì˜¨ë‹¤.
 			ZCacheImage::GetInstance().GetCachedData(m_strCurrentFilename, m_pCurrentImage);
 
 			assert(m_pCurrentImage);
@@ -1117,13 +1117,13 @@ void ZMain::LoadCurrent()
 		ZCacheImage::GetInstance().LogCacheHit();
 
 		m_dwLoadingTime = GetTickCount() - start;
-		SetTitle();			///< ÆÄÀÏ¸íÀ» À©µµ¿ì Å¸ÀÌÆ²¹Ù¿¡ Àû´Â´Ù.
-		SetStatusBarText();	///< »óÅÂ Ç¥½ÃÁÙ ³»¿ëÀ» ¼³Á¤ÇÑ´Ù.
+		SetTitle();			///< íŒŒì¼ëª…ì„ ìœˆë„ìš° íƒ€ì´í‹€ë°”ì— ì ëŠ”ë‹¤.
+		SetStatusBarText();	///< ìƒíƒœ í‘œì‹œì¤„ ë‚´ìš©ì„ ì„¤ì •í•œë‹¤.
 
 		m_iShowingX = 0;
 		m_iShowingY = 0;
 
-		if ( ZOption::GetInstance().m_bRightTopFirstDraw )	// ¿ìÃø »ó´ÜºÎÅÍ ½ÃÀÛÇØ¾ßÇÏ¸é
+		if ( ZOption::GetInstance().m_bRightTopFirstDraw )	// ìš°ì¸¡ ìƒë‹¨ë¶€í„° ì‹œì‘í•´ì•¼í•˜ë©´
 		{
 			RECT rt;
 			getCurrentScreenRect(rt);
@@ -1134,7 +1134,7 @@ void ZMain::LoadCurrent()
 			}
 		}
 
-		/// ±âº»ÀûÀ¸·Î ±×¸²ÀÇ zoom rate ¸¦ ¼³Á¤ÇÑ´Ù.
+		/// ê¸°ë³¸ì ìœ¼ë¡œ ê·¸ë¦¼ì˜ zoom rate ë¥¼ ì„¤ì •í•œë‹¤.
 		m_fCurrentZoomRate = 1.0f;
 		RECT currentScreenRect;
 		if ( false == getCurrentScreenRect(currentScreenRect) )
@@ -1171,7 +1171,7 @@ void ZMain::LoadCurrent()
 	}
 	else
 	{
-		// Ä³½Ã¿¡¼­ Ã£À» ¼ö ¾øÀ¸¸é Áö±İ ÀĞ¾îµéÀÌ°í, Ä³½Ã¿¡ Ãß°¡ÇÑ´Ù.
+		// ìºì‹œì—ì„œ ì°¾ì„ ìˆ˜ ì—†ìœ¼ë©´ ì§€ê¸ˆ ì½ì–´ë“¤ì´ê³ , ìºì‹œì— ì¶”ê°€í•œë‹¤.
 		DebugPrintf(TEXT("Can't find in cache. load now..."));
 
 /*
@@ -1219,10 +1219,10 @@ void ZMain::OnDrag(int x, int y)
 	if ( m_iShowingY + rt.bottom >= iZoomedHeight ) m_iShowingY = iZoomedHeight - rt.bottom;
 
 	//DebugPrintf(TEXT("ShowingX(%d), ShowingY(%d)"), m_iShowingX, m_iShowingY);
-	/// º¸¿©ÁÖ´Â X ÁÂÇ¥³ª Y ÁÂÇ¥ µÑ Áß ÇÏ³ª¶óµµ º¯°æµÇ¾úÀ¸¸é, µå·¡±×µÈ °ÍÀÌ¹Ç·Î ´Ù½Ã ±×¸°´Ù.
+	/// ë³´ì—¬ì£¼ëŠ” X ì¢Œí‘œë‚˜ Y ì¢Œí‘œ ë‘˜ ì¤‘ í•˜ë‚˜ë¼ë„ ë³€ê²½ë˜ì—ˆìœ¼ë©´, ë“œë˜ê·¸ëœ ê²ƒì´ë¯€ë¡œ ë‹¤ì‹œ ê·¸ë¦°ë‹¤.
 	if ( m_iShowingX != iNowShowingX || m_iShowingY != iNowShowingY )
 	{
-		/// ¿©±â¼­ false ÀÎ ÀÌÀ¯´Â, µå·¡±×¸¦ ÇÒ ¼ö ÀÖÀ¸¸é, ¹è°æÀ» ´Ù½Ã Ä¥ÇÒ ÇÊ¿ä°¡ ¾ø±â ¶§¹®ÀÌ´Ù.
+		/// ì—¬ê¸°ì„œ false ì¸ ì´ìœ ëŠ”, ë“œë˜ê·¸ë¥¼ í•  ìˆ˜ ìˆìœ¼ë©´, ë°°ê²½ì„ ë‹¤ì‹œ ì¹ í•  í•„ìš”ê°€ ì—†ê¸° ë•Œë¬¸ì´ë‹¤.
 		Draw(NULL, false);
 	}
 }
@@ -1242,14 +1242,14 @@ void ZMain::ReLoadFileList()
 	OpenFile(strFileName);
 }
 
-/// ÇöÀç ÆÄÀÏÀÌ Áö¿öÁ³À» ¶§ ÈÄÀÇ Ã³¸®. ÆÄÀÏ »èÁ¦, ÀÌµ¿ ÈÄ¿¡ ºÒ¸®´Â ÇÔ¼öÀÌ´Ù.
+/// í˜„ì¬ íŒŒì¼ì´ ì§€ì›Œì¡Œì„ ë•Œ í›„ì˜ ì²˜ë¦¬. íŒŒì¼ ì‚­ì œ, ì´ë™ í›„ì— ë¶ˆë¦¬ëŠ” í•¨ìˆ˜ì´ë‹¤.
 void ZMain::_ProcAfterRemoveThisFile()
 {
 	m_bCurrentImageLoaded = false;
 	m_pCurrentImage = NULL;
 	m_strCurrentFilename.resize(0);
 
-	// ÇöÀç ÆÄÀÏÀÌ ¸¶Áö¸· ÆÄÀÏÀÎ°¡?
+	// í˜„ì¬ íŒŒì¼ì´ ë§ˆì§€ë§‰ íŒŒì¼ì¸ê°€?
 	if ( m_vFile.size() <= 1 )
 	{
 		m_iCurretFileIndex = 0;
@@ -1257,7 +1257,7 @@ void ZMain::_ProcAfterRemoveThisFile()
 
 		m_vFile.resize(0);
 
-		// Cache Thread ¿¡ Àü´ŞÇÑ´Ù.
+		// Cache Thread ì— ì „ë‹¬í•œë‹¤.
 		ZCacheImage::GetInstance().SetImageVector(m_vFile);
 
 		SetTitle();
@@ -1271,11 +1271,11 @@ void ZMain::_ProcAfterRemoveThisFile()
 		assert(m_vFile.size() > 1);
 		assert(m_iCurretFileIndex >= 0);
 
-		if ( m_iCurretFileIndex == (int)(m_vFile.size() - 1) )	///< ¸¶Áö¸· ÆÄÀÏÀÌ¸é ÀÌÀü ÆÄÀÏÀÌ°í,
+		if ( m_iCurretFileIndex == (int)(m_vFile.size() - 1) )	///< ë§ˆì§€ë§‰ íŒŒì¼ì´ë©´ ì´ì „ íŒŒì¼ì´ê³ ,
 		{
 			strNextFilename = m_vFile[m_iCurretFileIndex-1].m_strFileName;
 		}
-		else/// ¸¶Áö¸· ÆÄÀÏÀÌ ¾Æ´Ï¸é ´ÙÀ½ ÆÄÀÏÀ» º¸¿©ÁØ´Ù.
+		else/// ë§ˆì§€ë§‰ íŒŒì¼ì´ ì•„ë‹ˆë©´ ë‹¤ìŒ íŒŒì¼ì„ ë³´ì—¬ì¤€ë‹¤.
 		{
 			strNextFilename = m_vFile[m_iCurretFileIndex+1].m_strFileName;
 		}
@@ -1311,7 +1311,7 @@ void ZMain::OnFocusGet()
 		const int screenWidth = ::GetSystemMetrics( SM_CXSCREEN );
 		const int screenHeight = ::GetSystemMetrics(SM_CYSCREEN);
 
-		// È­¸é µà¾ó ¸ğ´ÏÅÍ Ã³¸®¸¦ ÇØÁÜ.
+		// í™”ë©´ ë“€ì–¼ ëª¨ë‹ˆí„° ì²˜ë¦¬ë¥¼ í•´ì¤Œ.
 		const int screenX = int(m_lastPosition.left / screenWidth) * screenWidth;
 		const int screenY = int(m_lastPosition.top / screenHeight) * screenHeight;
 
@@ -1334,7 +1334,7 @@ void ZMain::Undo()
 	{
 		int iLast = m_history.Undo();
 
-		// È¤½Ã³ª ¹üÀ§¸¦ ¹ş¾î³ª¸é ¾ÈµÊ
+		// í˜¹ì‹œë‚˜ ë²”ìœ„ë¥¼ ë²—ì–´ë‚˜ë©´ ì•ˆë¨
 		if ( iLast < 0 || iLast >= (int)m_vFile.size() )
 		{
 			assert(!"Over range...");
@@ -1374,7 +1374,7 @@ void ZMain::DeleteThisFile()
 	DeleteThisFileToRecycleBin();
 	return;
 
-	/// ÇöÀç º¸°í ÀÖ´Â ÆÄÀÏÀÌ ¾øÀ¸¸é ¹Ù·Î ¸®ÅÏÇÑ´Ù.
+	/// í˜„ì¬ ë³´ê³  ìˆëŠ” íŒŒì¼ì´ ì—†ìœ¼ë©´ ë°”ë¡œ ë¦¬í„´í•œë‹¤.
 	if ( m_strCurrentFilename.empty() || m_bCurrentImageLoaded == false )
 	{
 		return;
@@ -1401,7 +1401,7 @@ void ZMain::DeleteThisFile()
 
 void ZMain::DeleteThisFileToRecycleBin()
 {
-	/// ÇöÀç º¸°í ÀÖ´Â ÆÄÀÏÀÌ ¾øÀ¸¸é ¹Ù·Î ¸®ÅÏÇÑ´Ù.
+	/// í˜„ì¬ ë³´ê³  ìˆëŠ” íŒŒì¼ì´ ì—†ìœ¼ë©´ ë°”ë¡œ ë¦¬í„´í•œë‹¤.
 	if ( m_strCurrentFilename.empty() || m_bCurrentImageLoaded == false )
 	{
 		return;
@@ -1446,7 +1446,7 @@ void ZMain::DeleteThisFileToRecycleBin()
 
 void ZMain::MoveThisFile()
 {
-	/// ÇöÀç º¸°í ÀÖ´Â ÆÄÀÏÀÌ ¾øÀ¸¸é ¹Ù·Î ¸®ÅÏÇÑ´Ù.
+	/// í˜„ì¬ ë³´ê³  ìˆëŠ” íŒŒì¼ì´ ì—†ìœ¼ë©´ ë°”ë¡œ ë¦¬í„´í•œë‹¤.
 	if ( m_strCurrentFilename.empty() )
 	{
 		return;
@@ -1473,17 +1473,17 @@ void ZMain::MoveThisFile()
 	strToFileName += TEXT("\\");
 	strToFileName += filename;
 
-	// ¿Å°Ü°¥ Æú´õ¿¡ °°Àº ÆÄÀÏÀÌ ÀÖ´ÂÁö È®ÀÎÇÑ´Ù.
+	// ì˜®ê²¨ê°ˆ í´ë”ì— ê°™ì€ íŒŒì¼ì´ ìˆëŠ”ì§€ í™•ì¸í•œë‹¤.
 	if ( 0 != _taccess(aDlg.GetMoveToFolder().c_str(), 00) )
 	{
 		ShowMessageBox(GetMessage(TEXT("WRONG_DIRECTORY_NAME")));
 		return;
 	}
 
-	// °°Àº ÆÄÀÏÀÌ Á¸ÀçÇÏ´ÂÁö È®ÀÎÇÑ´Ù.
+	// ê°™ì€ íŒŒì¼ì´ ì¡´ì¬í•˜ëŠ”ì§€ í™•ì¸í•œë‹¤.
 	if ( 0 == _taccess(strToFileName.c_str(), 00) )
 	{
-		// ÀÌ¹Ì Á¸ÀçÇÏ¸é
+		// ì´ë¯¸ ì¡´ì¬í•˜ë©´
 		if ( IDNO == ShowMessageBox(GetMessage(TEXT("ASK_OVERWRITE_FILE")), MB_YESNO) )
 		{
 			return;
@@ -1498,10 +1498,10 @@ void ZMain::MoveThisFile()
 }
 
 
-/// ÇöÀç ÆÄÀÏÀ» º¹»çÇÑ´Ù.
+/// í˜„ì¬ íŒŒì¼ì„ ë³µì‚¬í•œë‹¤.
 void ZMain::CopyThisFile()
 {
-	/// ÇöÀç º¸°í ÀÖ´Â ÆÄÀÏÀÌ ¾øÀ¸¸é ¹Ù·Î ¸®ÅÏÇÑ´Ù.
+	/// í˜„ì¬ ë³´ê³  ìˆëŠ” íŒŒì¼ì´ ì—†ìœ¼ë©´ ë°”ë¡œ ë¦¬í„´í•œë‹¤.
 	if ( m_strCurrentFilename.empty() )
 	{
 		return;
@@ -1528,17 +1528,17 @@ void ZMain::CopyThisFile()
 	strToFileName += TEXT("\\");
 	strToFileName += filename;
 
-	// ¿Å°Ü°¥ Æú´õ¿¡ °°Àº ÆÄÀÏÀÌ ÀÖ´ÂÁö È®ÀÎÇÑ´Ù.
+	// ì˜®ê²¨ê°ˆ í´ë”ì— ê°™ì€ íŒŒì¼ì´ ìˆëŠ”ì§€ í™•ì¸í•œë‹¤.
 	if ( 0 != _taccess(aDlg.GetMoveToFolder().c_str(), 00) )
 	{
 		ShowMessageBox(GetMessage(TEXT("WRONG_DIRECTORY_NAME")));
 		return;
 	}
 
-	// °°Àº ÆÄÀÏÀÌ Á¸ÀçÇÏ´ÂÁö È®ÀÎÇÑ´Ù.
+	// ê°™ì€ íŒŒì¼ì´ ì¡´ì¬í•˜ëŠ”ì§€ í™•ì¸í•œë‹¤.
 	if ( 0 == _taccess(strToFileName.c_str(), 00) )
 	{
-		// ÀÌ¹Ì Á¸ÀçÇÏ¸é
+		// ì´ë¯¸ ì¡´ì¬í•˜ë©´
 		if ( IDNO == ShowMessageBox(GetMessage(TEXT("ASK_OVERWRITE_FILE")), MB_YESNO) )
 		{
 			return;
@@ -1588,7 +1588,7 @@ void ZMain::SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyle style)
 		return;
 	}
 
-	// ÇöÀçº¸°í ÀÖ´Â ÆÄÀÏÀ» À©µµ¿ì Æú´õ¿¡ ÀúÀåÇÑ´Ù.
+	// í˜„ì¬ë³´ê³  ìˆëŠ” íŒŒì¼ì„ ìœˆë„ìš° í´ë”ì— ì €ì¥í•œë‹¤.
 	TCHAR szSystemFolder[_MAX_PATH] = { 0 };
 
 	if ( E_FAIL == SHGetFolderPath(NULL, CSIDL_WINDOWS, NULL, SHGFP_TYPE_CURRENT, szSystemFolder) )
@@ -1615,7 +1615,7 @@ void ZMain::SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyle style)
 }
 
 
-/// ÇöÀç È­¸éÀÇ ±×¸± ¼ö ÀÖ´Â ¿µ¿ªÀÇ Å©±â¸¦ ¹Ş¾Æ¿Â´Ù.
+/// í˜„ì¬ í™”ë©´ì˜ ê·¸ë¦´ ìˆ˜ ìˆëŠ” ì˜ì—­ì˜ í¬ê¸°ë¥¼ ë°›ì•„ì˜¨ë‹¤.
 bool ZMain::getCurrentScreenRect(RECT & rect)
 {
 	if ( NULL == m_hShowWindow )
@@ -1637,13 +1637,13 @@ void ZMain::OnWindowResized()
 	OnChangeCurrentSize(rt.right, rt.bottom);
 }
 
-/// »óÅÂ Ç¥½Ã À©µµ¿ì¸¦ ¸¸µç´Ù.
+/// ìƒíƒœ í‘œì‹œ ìœˆë„ìš°ë¥¼ ë§Œë“ ë‹¤.
 void ZMain::CreateStatusBar()
 {
-	// StatusBar ¸¦ »ı¼ºÇÑ´Ù.
+	// StatusBar ë¥¼ ìƒì„±í•œë‹¤.
 	m_hStatusBar = CreateStatusWindow(WS_CHILD | WS_VISIBLE, TEXT("No Image"), m_hMainDlg, 0);
 
-	// StatusBar ¸¦ split ÇÑ´Ù. ¾Æ·¡ÀÇ ¼ıÀÚ´Â Å©±â°¡ ¾Æ´Ï¶ó Àı´ë À§Ä¡¶ó´Â °ÍÀ» ¸í½É!!!!!!!
+	// StatusBar ë¥¼ split í•œë‹¤. ì•„ë˜ì˜ ìˆ«ìëŠ” í¬ê¸°ê°€ ì•„ë‹ˆë¼ ì ˆëŒ€ ìœ„ì¹˜ë¼ëŠ” ê²ƒì„ ëª…ì‹¬!!!!!!!
 	enum
 	{
 		STATUS_SPLIT_NUM = 8
@@ -1651,19 +1651,19 @@ void ZMain::CreateStatusBar()
 
 	int SBPart[STATUS_SPLIT_NUM] =
 	{
-		70,		///< %d/%d ÇöÀçº¸°í ÀÖ´Â ÀÌ¹ÌÁö ÆÄÀÏÀÇ index number
-		200,	///< %dx%dx%dbpp ÇØ»óµµ¿Í color depth, image size
+		70,		///< %d/%d í˜„ì¬ë³´ê³  ìˆëŠ” ì´ë¯¸ì§€ íŒŒì¼ì˜ index number
+		200,	///< %dx%dx%dbpp í•´ìƒë„ì™€ color depth, image size
 		300,	///< image size
 		350,	///< zoom
 		470,	///< temp banner http://www.wimy.com
-		550,	///< ÆÄÀÏÀ» ÀĞ¾îµéÀÌ´Âµ¥ °É¸° ½Ã°£
+		550,	///< íŒŒì¼ì„ ì½ì–´ë“¤ì´ëŠ”ë° ê±¸ë¦° ì‹œê°„
 		633,	///< cache status
-		1910,	///< ÆÄÀÏ¸íÇ¥½Ã
+		1910,	///< íŒŒì¼ëª…í‘œì‹œ
 	};
 	SendMessage(m_hStatusBar, SB_SETPARTS, STATUS_SPLIT_NUM, (LPARAM)SBPart);
 }
 
-/// ¸Ş´º Áß Ã¼Å©Ç¥½Ã µÇ´Â °ÍÀ» È®ÀÎÇÏ¿© ¼³Á¤ÇØÁØ´Ù.
+/// ë©”ë‰´ ì¤‘ ì²´í¬í‘œì‹œ ë˜ëŠ” ê²ƒì„ í™•ì¸í•˜ì—¬ ì„¤ì •í•´ì¤€ë‹¤.
 void ZMain::SetCheckMenus()
 {
 	/// start of checking main menu
@@ -1715,14 +1715,14 @@ void ZMain::ToggleAlwaysOnTop()
 	SetCheckMenus();
 }
 
-/// ¹è°æÀ» Áö¿î´Ù.
+/// ë°°ê²½ì„ ì§€ìš´ë‹¤.
 void ZMain::_eraseBackground(HDC mainDC, LONG right, LONG bottom)
 {
 	SelectObject(mainDC, m_bgBrush);
 	Rectangle(mainDC, 0, 0, right, bottom);
 }
 
-/// Zoom in & out ÀüÀÇ ¼¾ÅÍ À§Ä¡·Î ±×¸²À» µå·¡±×ÇÔ. ZoomOut, ZoomIn Áß¿¡ È£ÃâµÊ
+/// Zoom in & out ì „ì˜ ì„¼í„° ìœ„ì¹˜ë¡œ ê·¸ë¦¼ì„ ë“œë˜ê·¸í•¨. ZoomOut, ZoomIn ì¤‘ì— í˜¸ì¶œë¨
 void ZMain::_PositionPreviousCenter()
 {
 	if ( NULL == m_pCurrentImage || m_bCurrentImageLoaded == false )
@@ -1756,7 +1756,7 @@ void ZMain::ZoomIn()
 		m_fCurrentZoomRate = fBeforeModify;
 	}
 
-	/// ½Ç¼ö ¿¬»êÀÌ µü ¶³¾îÁöÁö ¾Ê±â ¶§¹®¿¡ Ã³¸®ÇØÁØ´Ù.
+	/// ì‹¤ìˆ˜ ì—°ì‚°ì´ ë”± ë–¨ì–´ì§€ì§€ ì•Šê¸° ë•Œë¬¸ì— ì²˜ë¦¬í•´ì¤€ë‹¤.
 	m_fCurrentZoomRate = ((int)((m_fCurrentZoomRate * 10.0)+0.5) / 10.0f);
 
 	if ( fBeforeModify != m_fCurrentZoomRate )
@@ -1765,7 +1765,7 @@ void ZMain::ZoomIn()
 		m_iShowingY = 0;
 
 		SetStatusBarText();
-		_PositionPreviousCenter(); ///< ÀÌÀü ¹èÀ²¿¡¼­ÀÇ È­¸é À§Ä¡·Î µå·¡±×ÇØ¼­ Zoom ÇÒ ¶§ ÀÚ¿¬½º·´°Ô º¸¿©ÁØ´Ù.
+		_PositionPreviousCenter(); ///< ì´ì „ ë°°ìœ¨ì—ì„œì˜ í™”ë©´ ìœ„ì¹˜ë¡œ ë“œë˜ê·¸í•´ì„œ Zoom í•  ë•Œ ìì—°ìŠ¤ëŸ½ê²Œ ë³´ì—¬ì¤€ë‹¤.
 		Draw();
 	}
 }
@@ -1788,7 +1788,7 @@ void ZMain::ZoomOut()
 		m_fCurrentZoomRate = fBeforeModify;
 	}
 
-	/// ½Ç¼ö ¿¬»êÀÌ µü ¶³¾îÁöÁö ¾Ê±â ¶§¹®¿¡ Ã³¸®ÇØÁØ´Ù.
+	/// ì‹¤ìˆ˜ ì—°ì‚°ì´ ë”± ë–¨ì–´ì§€ì§€ ì•Šê¸° ë•Œë¬¸ì— ì²˜ë¦¬í•´ì¤€ë‹¤.
 	m_fCurrentZoomRate = ((int)((m_fCurrentZoomRate * 10.0)+0.5) / 10.0f);
 
 	if ( fBeforeModify != m_fCurrentZoomRate )
@@ -1797,7 +1797,7 @@ void ZMain::ZoomOut()
 		m_iShowingY = 0;
 
 		SetStatusBarText();
-		_PositionPreviousCenter(); ///< ÀÌÀü ¹èÀ²¿¡¼­ÀÇ È­¸é À§Ä¡·Î µå·¡±×ÇØ¼­ Zoom ÇÒ ¶§ ÀÚ¿¬½º·´°Ô º¸¿©ÁØ´Ù.
+		_PositionPreviousCenter(); ///< ì´ì „ ë°°ìœ¨ì—ì„œì˜ í™”ë©´ ìœ„ì¹˜ë¡œ ë“œë˜ê·¸í•´ì„œ Zoom í•  ë•Œ ìì—°ìŠ¤ëŸ½ê²Œ ë³´ì—¬ì¤€ë‹¤.
 		Draw();
 	}
 }
@@ -1814,7 +1814,7 @@ void ZMain::ZoomNone()
 	Draw();
 }
 
-/// ÇöÀçº¸´Â ÀÌ¹ÌÁö¸¦ Å¬¸³º¸µå¿¡ º¹»çÇÑ´Ù.
+/// í˜„ì¬ë³´ëŠ” ì´ë¯¸ì§€ë¥¼ í´ë¦½ë³´ë“œì— ë³µì‚¬í•œë‹¤.
 void ZMain::CopyToClipboard()
 {
 	if ( NULL == m_pCurrentImage || m_bCurrentImageLoaded == false )
@@ -1833,7 +1833,7 @@ void ZMain::CopyToClipboard()
 	}
 }
 
-/// ±×¸²À» º¸¿©ÁÙ À©µµ¿ì¸¦ ¸¸µç´Ù.
+/// ê·¸ë¦¼ì„ ë³´ì—¬ì¤„ ìœˆë„ìš°ë¥¼ ë§Œë“ ë‹¤.
 void ZMain::CreateShowWindow()
 {
 	m_hShowWindow = CreateWindow(TEXT("static"), TEXT(""), WS_CHILD | WS_VISIBLE , 0,0,100,100,
@@ -1845,13 +1845,13 @@ void ZMain::CreateShowWindow()
 }
 
 
-/// ÇöÀç Å©±â¿¡ ¸Â´Â ShowWindow Å©±â¸¦ Á¤ÇÑ´Ù.
+/// í˜„ì¬ í¬ê¸°ì— ë§ëŠ” ShowWindow í¬ê¸°ë¥¼ ì •í•œë‹¤.
 void ZMain::AdjustShowWindowScreen()
 {
 	RECT rect;
 	GetClientRect(m_hMainDlg, &rect);
 
-	if ( false == ZOption::GetInstance().IsFullScreen() ) /// Ç® ½ºÅ©¸°ÀÌ ¾Æ´Ò ¶§´Â ÀÛ¾÷Ç¥½ÃÁÙÀÇ ¿µ¿ª¸¸Å­Àº »©Áà¾ßÇÔ
+	if ( false == ZOption::GetInstance().IsFullScreen() ) /// í’€ ìŠ¤í¬ë¦°ì´ ì•„ë‹ ë•ŒëŠ” ì‘ì—…í‘œì‹œì¤„ì˜ ì˜ì—­ë§Œí¼ì€ ë¹¼ì¤˜ì•¼í•¨
 	{
 		enum
 		{

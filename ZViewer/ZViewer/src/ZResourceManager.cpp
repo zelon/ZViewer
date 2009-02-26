@@ -1,4 +1,4 @@
-/********************************************************************
+ï»¿/********************************************************************
 *
 * Created by zelon(Kim, Jinwook Korea)
 * 
@@ -33,7 +33,7 @@ const tstring ZResourceManager::GetString(UINT iStringID)
 {
 	if ( m_stringMap.find(iStringID ) == m_stringMap.end())
 	{
-		// ¸Ê¿¡¼­ Ã£À» ¼ö ¾øÀ¸¸é LoadString ÇÑ ÈÄ ¸Ê¿¡ ³Ö´Â´Ù.
+		// ë§µì—ì„œ ì°¾ì„ ìˆ˜ ì—†ìœ¼ë©´ LoadString í•œ í›„ ë§µì— ë„£ëŠ”ë‹¤.
 		TCHAR szString[COMMON_BUFFER_SIZE] = { 0 };
 		if ( 0 == LoadString(m_hInstance, iStringID, szString, 256) )
 		{
@@ -47,7 +47,7 @@ const tstring ZResourceManager::GetString(UINT iStringID)
 		return strString;
 	}
 
-	// ¸Ê¿¡ ÀÖÀ¸¸é ¸Ê¿¡ ÀÖ´Â ½ºÆ®¸µÀ» ¹İÈ¯ÇÑ´Ù.
+	// ë§µì— ìˆìœ¼ë©´ ë§µì— ìˆëŠ” ìŠ¤íŠ¸ë§ì„ ë°˜í™˜í•œë‹¤.
 	return m_stringMap[iStringID];
 }
 */

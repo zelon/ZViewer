@@ -1,4 +1,4 @@
-/* ------------------------------------------------------------------------
+ï»¿/* ------------------------------------------------------------------------
  *
  * Copyright 2006 by zelon
  *
@@ -63,14 +63,14 @@ void CLogManager::Output(const TCHAR * fmt, ...)
 	int				iCnt;
 	DWORD			dwWritten;
 
-	// °¡º¯ ÀÎÀÚ Á¤¸®
+	// ê°€ë³€ ì¸ì ì •ë¦¬
 	va_start(argptr, fmt);
 	iCnt = StringCbVPrintf(cBuf, sizeof(cBuf) / sizeof(TCHAR), fmt, argptr);
 	va_end(argptr);
 
 	CLockObjUtil lock(m_logLock);
 
-	// ÄÜ¼Ö À©µµ¿ì¿¡ Ãâ·Â
+	// ì½˜ì†” ìœˆë„ìš°ì— ì¶œë ¥
 	WriteConsole(m_hConsoleOutput, cBuf, (DWORD)(_tcslen(cBuf)), &dwWritten, NULL);
 	WriteConsole(m_hConsoleOutput, "\n", 1, &dwWritten, NULL);
 }

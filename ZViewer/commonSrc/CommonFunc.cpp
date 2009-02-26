@@ -1,4 +1,4 @@
-/********************************************************************
+ï»¿/********************************************************************
 *
 * Created by zelon(Kim, Jinwook Korea)
 * 
@@ -60,7 +60,7 @@ bool SetRegistryValue(HKEY hOpenKey, const tstring & strKey,LPCTSTR szValue, con
 	if( ERROR_SUCCESS == ::RegCreateKeyEx(hOpenKey, strKey.c_str(), NULL,
 		NULL, REG_OPTION_NON_VOLATILE, KEY_SET_VALUE, NULL, &hTempKey, &dwDisposition) )
 	{
-		// ¸¶Áö¸· \0 ±îÁö Æ÷ÇÔÇØ¾ßÇÑ´Ù´øµ¥;;
+		// ë§ˆì§€ë§‰ \0 ê¹Œì§€ í¬í•¨í•´ì•¼í•œë‹¤ë˜ë°;;
 		DWORD	dwBufferLength = (DWORD)(strData.size() + 1) * sizeof(TCHAR);
 
 		if( ERROR_SUCCESS == ::RegSetValueEx(hTempKey, (LPTSTR)szValue,
@@ -78,7 +78,7 @@ bool SetRegistryValue(HKEY hOpenKey, const tstring & strKey,LPCTSTR szValue, con
 	return bRetVal;
 }
 
-// ÃÖ´ë Å©±â¸¦ ³ÑÁö ¾Ê´Â Àû´çÇÑ ¸®»çÀÌÁî Å©±â¸¦ µ¹·ÁÁØ´Ù.
+// ìµœëŒ€ í¬ê¸°ë¥¼ ë„˜ì§€ ì•ŠëŠ” ì ë‹¹í•œ ë¦¬ì‚¬ì´ì¦ˆ í¬ê¸°ë¥¼ ëŒë ¤ì¤€ë‹¤.
 RECT GetResizedRectForBigToSmall(const RECT & MaximumSize, const RECT & originalSize)
 {
 	if ( originalSize.right <= MaximumSize.right && originalSize.bottom <= MaximumSize.bottom )
@@ -87,8 +87,8 @@ RECT GetResizedRectForBigToSmall(const RECT & MaximumSize, const RECT & original
 		return ret;
 	}
 
-	// °¡·Î ¼¼·Î Å©±â Áß Å« °ªÀ» Ã£´Â´Ù.
-	bool bSetWidth = true;		// °¡·Î Å©±â¸¦ ±âÁØÀ¸·Î ¸ÂÃâ °ÍÀÎ°¡?
+	// ê°€ë¡œ ì„¸ë¡œ í¬ê¸° ì¤‘ í° ê°’ì„ ì°¾ëŠ”ë‹¤.
+	bool bSetWidth = true;		// ê°€ë¡œ í¬ê¸°ë¥¼ ê¸°ì¤€ìœ¼ë¡œ ë§ì¶œ ê²ƒì¸ê°€?
 
 	double dWidthRate = (double)MaximumSize.right / (double)originalSize.right;
 	double dHeightRate = (double)MaximumSize.bottom / (double)originalSize.bottom;
@@ -102,17 +102,17 @@ RECT GetResizedRectForBigToSmall(const RECT & MaximumSize, const RECT & original
 		bSetWidth = false;
 	}
 
-	// Å« °ªÀÌ MaximumSize °¡ µÇ°Ô ÇÏ´Â ºñ·Ê¸¦ Ã£´Â´Ù.
+	// í° ê°’ì´ MaximumSize ê°€ ë˜ê²Œ í•˜ëŠ” ë¹„ë¡€ë¥¼ ì°¾ëŠ”ë‹¤.
 	RECT ret;
 
 	if ( bSetWidth == true )
 	{
-		// °¡·Î Å©±â°¡ ±âÁØÀÌ´Ù.
+		// ê°€ë¡œ í¬ê¸°ê°€ ê¸°ì¤€ì´ë‹¤.
 		SetRect(&ret, 0, 0, (int)(originalSize.right*dWidthRate), (int)(originalSize.bottom*dWidthRate));
 	}
 	else
 	{
-		// ¼¼·Î Å©±â°¡ ±âÁØÀÌ´Ù.
+		// ì„¸ë¡œ í¬ê¸°ê°€ ê¸°ì¤€ì´ë‹¤.
 		SetRect(&ret, 0, 0, (int)(originalSize.right*dHeightRate), (int)(originalSize.bottom*dHeightRate));
 	}
 
@@ -130,8 +130,8 @@ RECT GetResizedRectForSmallToBig(const RECT & MaximumSize, const RECT & original
 		return GetResizedRectForBigToSmall(MaximumSize, originalSize);
 	}
 
-	// °¡·Î ¼¼·Î Å©±â Áß Å« °ªÀ» Ã£´Â´Ù.
-	bool bSetWidth = true;		// °¡·Î Å©±â¸¦ ±âÁØÀ¸·Î ¸ÂÃâ °ÍÀÎ°¡?
+	// ê°€ë¡œ ì„¸ë¡œ í¬ê¸° ì¤‘ í° ê°’ì„ ì°¾ëŠ”ë‹¤.
+	bool bSetWidth = true;		// ê°€ë¡œ í¬ê¸°ë¥¼ ê¸°ì¤€ìœ¼ë¡œ ë§ì¶œ ê²ƒì¸ê°€?
 
 	double dWidthRate = (double)originalSize.right / (double)MaximumSize.right;
 	double dHeightRate = (double)originalSize.bottom / (double)MaximumSize.bottom;
@@ -149,12 +149,12 @@ RECT GetResizedRectForSmallToBig(const RECT & MaximumSize, const RECT & original
 
 	if ( bSetWidth == true )
 	{
-		// °¡·Î Å©±â°¡ ±âÁØÀÌ´Ù.
+		// ê°€ë¡œ í¬ê¸°ê°€ ê¸°ì¤€ì´ë‹¤.
 		SetRect(&ret, 0, 0, (int)(MaximumSize.right), (int)(MaximumSize.right * originalSize.bottom/originalSize.right));
 	}
 	else
 	{
-		// ¼¼·Î Å©±â°¡ ±âÁØÀÌ´Ù.
+		// ì„¸ë¡œ í¬ê¸°ê°€ ê¸°ì¤€ì´ë‹¤.
 		SetRect(&ret, 0, 0, (int)(originalSize.right * MaximumSize.bottom / originalSize.bottom), (int)(MaximumSize.bottom));
 	}
 
@@ -174,7 +174,7 @@ tstring toString(int i)
 	return tstring(szTemp);
 }
 
-/// Æú´õ¸¦ ¼±ÅÃÇÏ´Â ´ÙÀÌ¾ó·Î±×¸¦ ¶ç¿î´Ù.
+/// í´ë”ë¥¼ ì„ íƒí•˜ëŠ” ë‹¤ì´ì–¼ë¡œê·¸ë¥¼ ë„ìš´ë‹¤.
 bool SelectFolder(HWND hWnd, TCHAR * szFolder)
 {
 	LPITEMIDLIST pidl;
@@ -200,7 +200,7 @@ bool SelectFolder(HWND hWnd, TCHAR * szFolder)
 	return true;
 }
 
-/// µå¶óÀÌºê¿Í Æú´õ¸í°ú ÆÄÀÏ¸íÀ¸·Î ÀÌ·ç¾îÁø ¹®ÀÚ¿­À» ÁÖ¸é, µå¶óÀÌºê¿Í Æú´õ¸í±îÁö¸¸ ¹İÈ¯ÇÑ´Ù.
+/// ë“œë¼ì´ë¸Œì™€ í´ë”ëª…ê³¼ íŒŒì¼ëª…ìœ¼ë¡œ ì´ë£¨ì–´ì§„ ë¬¸ìì—´ì„ ì£¼ë©´, ë“œë¼ì´ë¸Œì™€ í´ë”ëª…ê¹Œì§€ë§Œ ë°˜í™˜í•œë‹¤.
 tstring GetFolderNameFromFullFileName(const tstring & strFullFilename)
 {
 	TCHAR szDrive[_MAX_DRIVE] = { 0 };
@@ -213,7 +213,7 @@ tstring GetFolderNameFromFullFileName(const tstring & strFullFilename)
 	return strFolder;
 }
 
-/// µå¶óÀÌºê¿Í Æú´õ¸í°ú ÆÄÀÏ¸íÀ¸·Î µÈ ¹®ÀÚ¿­À» ÁÖ¸é, ÆÄÀÏ¸í¸¸ ÁØ´Ù.
+/// ë“œë¼ì´ë¸Œì™€ í´ë”ëª…ê³¼ íŒŒì¼ëª…ìœ¼ë¡œ ëœ ë¬¸ìì—´ì„ ì£¼ë©´, íŒŒì¼ëª…ë§Œ ì¤€ë‹¤.
 tstring GetFileNameFromFullFileName(const tstring & strFullFilename)
 {
 	TCHAR szFileName[FILENAME_MAX] = { 0 };
@@ -226,7 +226,7 @@ tstring GetFileNameFromFullFileName(const tstring & strFullFilename)
 	return strFilename;
 }
 
-/// ÇöÀç ½ÇÇà ÁßÀÎ OS ÀÇ ¹öÁ¯À» ¹İÈ¯ÇÑ´Ù.
+/// í˜„ì¬ ì‹¤í–‰ ì¤‘ì¸ OS ì˜ ë²„ì ¼ì„ ë°˜í™˜í•œë‹¤.
 eOSKind getOSVersion()
 {
 	const int BUFSIZE = 1024;
@@ -418,7 +418,7 @@ eOSKind getOSVersion()
 }
 
 
-/// string À» wstring À¸·Î º¯È¯
+/// string ì„ wstring ìœ¼ë¡œ ë³€í™˜
 std::wstring getWStringFromString(const std::string & str)
 {
 	WCHAR buff[256] = { 0 };
@@ -448,7 +448,7 @@ tstring GetDumpFilename()
 }
 
 
-/// ÇöÀç ½ÇÇà ÆÄÀÏÀÌ ÀÖ´Â Æú´õ¸¦ ¾ò´Â´Ù.
+/// í˜„ì¬ ì‹¤í–‰ íŒŒì¼ì´ ìˆëŠ” í´ë”ë¥¼ ì–»ëŠ”ë‹¤.
 tstring GetProgramFolder()
 {
 	tstring retString;
@@ -464,7 +464,7 @@ tstring GetProgramFolder()
 #endif
 		);
 
-	/// ZViewer, ZViewerAgent µÑ´Ù FreeImage.dll À» ¾²¹Ç·Î ÀÌ dll ÀÌ ÀÖ´Â Æú´õ¸¦ Ã£´Â´Ù.
+	/// ZViewer, ZViewerAgent ë‘˜ë‹¤ FreeImage.dll ì„ ì“°ë¯€ë¡œ ì´ dll ì´ ìˆëŠ” í´ë”ë¥¼ ì°¾ëŠ”ë‹¤.
 	DWORD ret = GetModuleFileName(hModule, szGetFileName, FILENAME_MAX);
 
 	if ( ret == 0 )
@@ -481,7 +481,7 @@ tstring GetProgramFolder()
 	return retString;
 }
 
-/// ÄÄÆÄÀÏ·¯ ¹öÁ¯¿¡ ¸Â°Ô ÇÔ¼ö Á¤ÀÇ
+/// ì»´íŒŒì¼ëŸ¬ ë²„ì ¼ì— ë§ê²Œ í•¨ìˆ˜ ì •ì˜
 void SplitPath(const TCHAR * path, TCHAR * drive, size_t driveNumberOfElements, TCHAR * dir, size_t dirNumberOfElements,
 				TCHAR * fname, size_t nameNumberOfElements, TCHAR * ext, size_t extNumberOfElements)
 {

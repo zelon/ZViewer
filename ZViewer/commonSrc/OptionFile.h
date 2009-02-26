@@ -1,4 +1,4 @@
-/********************************************************************
+ï»¿/********************************************************************
 *
 * Created by zelon(Kim, Jinwook Korea)
 * 
@@ -21,10 +21,10 @@ public:
 	COptionFile();
 	~COptionFile();
 
-	/// µ¥ÀÌÅÍ ÆÄÀÏÀ» ÀĞ¾îµé¿©¼­ ¸ÊÀ» ±¸¼ºÇÑ´Ù.
+	/// ë°ì´í„° íŒŒì¼ì„ ì½ì–´ë“¤ì—¬ì„œ ë§µì„ êµ¬ì„±í•œë‹¤.
 	static bool LoadFromFile(const tstring & strFilename, iniMap & settings);
 
-	/// ¸Ê ³»¿ëÀ» µ¥ÀÌÅÍ ÆÄÀÏ¿¡ ¾´´Ù.
+	/// ë§µ ë‚´ìš©ì„ ë°ì´í„° íŒŒì¼ì— ì“´ë‹¤.
 	static void SaveToFile(const tstring & strFilename, const iniMap & settings);
 
 private:

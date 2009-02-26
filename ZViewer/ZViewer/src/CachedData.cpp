@@ -1,4 +1,4 @@
-/* ------------------------------------------------------------------------
+ï»¿/* ------------------------------------------------------------------------
  *
  * CachedData.cpp
  *
@@ -50,14 +50,14 @@ bool CachedData::HasCachedData(const int index) const
 {
 	CLockObjUtil lock(m_cacheLock);
 
-	/// ÀÎµ¦½º¸¦ ÆÄÀÏ¸íÀ¸·Î ¹Ù²Û´Ù.
+	/// ì¸ë±ìŠ¤ë¥¼ íŒŒì¼ëª…ìœ¼ë¡œ ë°”ê¾¼ë‹¤.
 	std::map < int, tstring >::const_iterator it = m_imageIndex2FilenameMap.find(index);
 	if ( it != m_imageIndex2FilenameMap.end() )
 	{
 		const tstring & strNextFilename = it->second;
 		if ( true == HasCachedData(strNextFilename) )
 		{
-			DebugPrintf(TEXT("´ÙÀ½ ÆÄÀÏ Ä³½¬µÊ"));
+			DebugPrintf(TEXT("ë‹¤ìŒ íŒŒì¼ ìºì‰¬ë¨"));
 			return true;
 		}
 	}
@@ -80,7 +80,7 @@ void CachedData::PrintCachedData() const
 	}
 }
 
-/// Ä³½ÃµÇ¾î ÀÖ´Â µ¥ÀÌÅÍµé Áß ÇöÀç ÀÎµ¦½º·ÎºÎÅÍ °¡Àå ¸Ö¸®ÀÖ´Â ÀÎµ¦½º¸¦ ¾ò´Â´Ù.
+/// ìºì‹œë˜ì–´ ìˆëŠ” ë°ì´í„°ë“¤ ì¤‘ í˜„ì¬ ì¸ë±ìŠ¤ë¡œë¶€í„° ê°€ì¥ ë©€ë¦¬ìˆëŠ” ì¸ë±ìŠ¤ë¥¼ ì–»ëŠ”ë‹¤.
 int CachedData::GetFarthestIndexFromCurrentIndex(volatile const int & iCurrentIndex)
 {
 	CLockObjUtil lock(m_cacheLock);
@@ -189,7 +189,7 @@ bool CachedData::ClearFarthestDataFromCurrent(const int iFarthestIndex)
 
 void CachedData::InsertData(const tstring & strFilename, ZImage * pImage, bool bForceCache)
 {
-	/// ÀÌ¹Ì Ä³½ÃµÇ¾î ÀÖÀ¸¸é Ä³½ÃÇÏÁö ¾Ê´Â´Ù.
+	/// ì´ë¯¸ ìºì‹œë˜ì–´ ìˆìœ¼ë©´ ìºì‹œí•˜ì§€ ì•ŠëŠ”ë‹¤.
 	if ( HasCachedData(strFilename) )
 	{
 		assert(false);
@@ -200,10 +200,10 @@ void CachedData::InsertData(const tstring & strFilename, ZImage * pImage, bool b
 
 	if ( false == bForceCache )
 	{
-		/// ¿ë·®À» Ã¼Å©ÇØ¼­ ÀÌ ÀÌ¹ÌÁö¸¦ Ä³½ÃÇßÀ» ¶§ Á¦ÇÑÀ» ³Ñ¾î¼¹À¸¸é Ä³½ÃÇÏÁö ¾Ê´Â´Ù.
+		/// ìš©ëŸ‰ì„ ì²´í¬í•´ì„œ ì´ ì´ë¯¸ì§€ë¥¼ ìºì‹œí–ˆì„ ë•Œ ì œí•œì„ ë„˜ì–´ì„°ìœ¼ë©´ ìºì‹œí•˜ì§€ ì•ŠëŠ”ë‹¤.
 		if ( (GetCachedTotalSize() + pImage->GetImageSize()) /1024/1024 > ZOption::GetInstance().GetMaxCacheMemoryMB() )
 		{
-			DebugPrintf(_T("-- ÀÌ ÀÌ¹ÌÁö¸¦ Ä³½ÃÇÏ¸é ¿ë·®Á¦ÇÑÀ» ³Ñ¾î¼­ Ä³½ÃÇÏÁö ¾Ê½À´Ï´Ù -- : %s"), strFilename.c_str());
+			DebugPrintf(_T("-- ì´ ì´ë¯¸ì§€ë¥¼ ìºì‹œí•˜ë©´ ìš©ëŸ‰ì œí•œì„ ë„˜ì–´ì„œ ìºì‹œí•˜ì§€ ì•ŠìŠµë‹ˆë‹¤ -- : %s"), strFilename.c_str());
 			delete pImage;
 			return;
 		}
@@ -219,7 +219,7 @@ void CachedData::InsertData(const tstring & strFilename, ZImage * pImage, bool b
 		{
 			if ( m_cacheData.find(strFilename) != m_cacheData.end() )
 			{
-				assert(!"--- ÀÌ¹Ì Ä³½Ã¿¡ ÀÖ´Â ÆÄÀÏÀ» ´Ù½Ã ³ÖÀ¸·Á°í ÇÕ´Ï´Ù ---");
+				assert(!"--- ì´ë¯¸ ìºì‹œì— ìˆëŠ” íŒŒì¼ì„ ë‹¤ì‹œ ë„£ìœ¼ë ¤ê³  í•©ë‹ˆë‹¤ ---");
 				delete pImage;
 				return;
 			}

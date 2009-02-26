@@ -1,4 +1,4 @@
-/********************************************************************
+ï»¿/********************************************************************
 *
 * Created by zelon(Kim, Jinwook Korea)
 * 
@@ -22,19 +22,19 @@ public:
 	void ShowDlg();
 
 
-	/// ÇöÀç ½Ã½ºÅÛ¿¡ ¼³Á¤µÈ ÆÄÀÏ È®ÀåÀÚ ¿¬°á »óÅÂ¸¦ ÀúÀåÇÑ´Ù. true °¡ ¿¬°áµÈ °ÍÀÌ´Ù.
+	/// í˜„ìž¬ ì‹œìŠ¤í…œì— ì„¤ì •ëœ íŒŒì¼ í™•ìž¥ìž ì—°ê²° ìƒíƒœë¥¼ ì €ìž¥í•œë‹¤. true ê°€ ì—°ê²°ëœ ê²ƒì´ë‹¤.
 //	bool m_bFileExt[eFileExt_MAX];
 
-	/// ÇöÀç ½Ã½ºÅÛ¿¡ ¼³Á¤µÈ ÆÄÀÏ È®ÀåÀÚ ¿¬°á »óÅÂ¸¦ ¾ò¾î¿Â´Ù.
+	/// í˜„ìž¬ ì‹œìŠ¤í…œì— ì„¤ì •ëœ íŒŒì¼ í™•ìž¥ìž ì—°ê²° ìƒíƒœë¥¼ ì–»ì–´ì˜¨ë‹¤.
 //	void LoadExtEnv(HWND hwnd);
 
-	/// ÇöÀç ¼³Á¤°ª´ë·Î ½Ã½ºÅÛ¿¡ ¾´´Ù.
+	/// í˜„ìž¬ ì„¤ì •ê°’ëŒ€ë¡œ ì‹œìŠ¤í…œì— ì“´ë‹¤.
 	void SaveExtEnv();
 
 private:
-	/// º¯°æµÈ °ªÀÌ ÀÖ³ª?
+	/// ë³€ê²½ëœ ê°’ì´ ìžˆë‚˜?
 //	bool m_bChanged;
 
-	/// ½ÇÁ¦·Î ÆÄÀÏ ¿¬°áÀ» ¼¼ÆÃÇÏ´Â ÇÔ¼ö
+	/// ì‹¤ì œë¡œ íŒŒì¼ ì—°ê²°ì„ ì„¸íŒ…í•˜ëŠ” í•¨ìˆ˜
 	bool SetExtWithProgram(const tstring & strProgramName, const tstring & strExt, tstring strFullProgramPath = TEXT(""), const tstring & strIcon = TEXT(""), int iIconIndex = 0);
 };

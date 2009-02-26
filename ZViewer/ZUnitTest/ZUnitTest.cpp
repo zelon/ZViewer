@@ -1,4 +1,4 @@
-// ZUnitTest.cpp : ÄÜ¼Ö ÀÀ¿ë ÇÁ·Î±×·¥¿¡ ´ëÇÑ ÁøÀÔÁ¡À» Á¤ÀÇÇÕ´Ï´Ù.
+ï»¿// ZUnitTest.cpp : ì½˜ì†” ì‘ìš© í”„ë¡œê·¸ë¨ì— ëŒ€í•œ ì§„ì…ì ì„ ì •ì˜í•©ë‹ˆë‹¤.
 //
 
 #include "stdafx.h"
@@ -76,7 +76,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		return 0;
 	}
 
-	/// °á°ú°¡ failed ÀÌ¸é UnitTestFlag.cpp ÆÄÀÏÀ» touch ÇÏ¿© ´Ù½Ã ºôµåÇÏ°Ô ÇÑ´Ù.
+	/// ê²°ê³¼ê°€ failed ì´ë©´ UnitTestFlag.cpp íŒŒì¼ì„ touch í•˜ì—¬ ë‹¤ì‹œ ë¹Œë“œí•˜ê²Œ í•œë‹¤.
 	TouchUnitTestFlag();
 	return 1;
 }

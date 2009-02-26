@@ -1,4 +1,4 @@
-/********************************************************************
+ï»¿/********************************************************************
 *
 * Created by zelon(Kim, Jinwook Korea)
 * 
@@ -8,10 +8,10 @@
 *                                       http://www.wimy.com
 *********************************************************************/
 
-// ZViewMenuExt.h : CZViewMenuExtÀÇ ¼±¾ğÀÔ´Ï´Ù.
+// ZViewMenuExt.h : CZViewMenuExtì˜ ì„ ì–¸ì…ë‹ˆë‹¤.
 
 #pragma once
-#include "resource.h"       // ÁÖ ±âÈ£ÀÔ´Ï´Ù.
+#include "resource.h"       // ì£¼ ê¸°í˜¸ì…ë‹ˆë‹¤.
 
 
 #include "ZViewerAgent.h"
@@ -57,10 +57,10 @@ public:
     // IContextMenu
     STDMETHOD(QueryContextMenu)(HMENU, UINT, UINT, UINT, UINT);
 
-	/// ±×¸² ¹× ¸Ş´º¸¦ Å¬¸¯ÇßÀ» ¶§ ¾î¶² ¸í·ÉÀ» ¼öÇàÇÒÁö¸¦ °áÁ¤ÇØ¼­ ¼öÇàÇÑ´Ù.
+	/// ê·¸ë¦¼ ë° ë©”ë‰´ë¥¼ í´ë¦­í–ˆì„ ë•Œ ì–´ë–¤ ëª…ë ¹ì„ ìˆ˜í–‰í• ì§€ë¥¼ ê²°ì •í•´ì„œ ìˆ˜í–‰í•œë‹¤.
     STDMETHOD(InvokeCommand)(LPCMINVOKECOMMANDINFO);
 
-	/// mouseover ÇÑ ¸Ş´º¿¡ µû¶ó¼­, ÀÌ ÇÔ¼ö¿¡¼­ ¾òÀº ¹®ÀÚ¿­À» Å½»ö±âÀÇ '»óÅÂÇ¥½ÃÁÙ' ¿¡ º¸¿©ÁØ´Ù.
+	/// mouseover í•œ ë©”ë‰´ì— ë”°ë¼ì„œ, ì´ í•¨ìˆ˜ì—ì„œ ì–»ì€ ë¬¸ìì—´ì„ íƒìƒ‰ê¸°ì˜ 'ìƒíƒœí‘œì‹œì¤„' ì— ë³´ì—¬ì¤€ë‹¤.
     STDMETHOD(GetCommandString)(UINT_PTR, UINT, UINT*, LPSTR, UINT);
 
     // IContextMenu2
@@ -74,18 +74,18 @@ public:
 
 protected:
 
-	/// ÇöÀçÀÇ dll ÀÌ ÀÖ´Â Æú´õÀÇ ZViewer ¸¦ ½ÇÇàÇÑ´Ù.
+	/// í˜„ì¬ì˜ dll ì´ ìˆëŠ” í´ë”ì˜ ZViewer ë¥¼ ì‹¤í–‰í•œë‹¤.
 	void ExecZViewer();
 
-	/// ¹ÙÅÁÈ­¸é ÆÄÀÏÀ» ÁöÁ¤ÇÑ´Ù.
+	/// ë°”íƒ•í™”ë©´ íŒŒì¼ì„ ì§€ì •í•œë‹¤.
 	void SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyle style);
 
-	/// ´Ù¸¥ ÀÌ¸§À¸·Î ÀúÀåÇÑ´Ù.
+	/// ë‹¤ë¥¸ ì´ë¦„ìœ¼ë¡œ ì €ì¥í•œë‹¤.
 	void _SaveAS();
 
 	void MsgBox(const tstring & strMsg);		// for debugging messagebox
 
-	tstring m_strCurrentDir;		///< ÇöÀç Å½»ö±â ¸Ş´º°¡ ¶ç¿öÁø Æú´õ À§Ä¡
+	tstring m_strCurrentDir;		///< í˜„ì¬ íƒìƒ‰ê¸° ë©”ë‰´ê°€ ë„ì›Œì§„ í´ë” ìœ„ì¹˜
 	TCHAR   m_szFile[MAX_PATH];
 	CBitmap m_bmp;
 	bool m_b8bit;
@@ -116,8 +116,8 @@ public:
 		return S_OK;
 	}
 	
-	// ÇöÀç ½©ÀÇ Extension ÀÌ ³¡³¯ ¶§ ºÒ¸°´Ù. ¸¸¾à Ã³À½ Initialize ÇÒ ¶§ E_FAIL À» ¸®ÅÏÇßÀ¸¸é ¹Ù·Î ºÒ¸®°í,
-	// ½©À» È®ÀåÇßÀ¸¸é ÆË¾÷¸Ş´º°¡ »ç¶óÁú ¶§ ºÒ¸°´Ù.
+	// í˜„ì¬ ì‰˜ì˜ Extension ì´ ëë‚  ë•Œ ë¶ˆë¦°ë‹¤. ë§Œì•½ ì²˜ìŒ Initialize í•  ë•Œ E_FAIL ì„ ë¦¬í„´í–ˆìœ¼ë©´ ë°”ë¡œ ë¶ˆë¦¬ê³ ,
+	// ì‰˜ì„ í™•ì¥í–ˆìœ¼ë©´ íŒì—…ë©”ë‰´ê°€ ì‚¬ë¼ì§ˆ ë•Œ ë¶ˆë¦°ë‹¤.
 	void FinalRelease() 
 	{
 //		MsgBox("FinalRelease");
@@ -125,10 +125,10 @@ public:
 
 public:
 
-	/// ÇöÀç À§Ä¡¿¡ CMD Ã¢À» ¶ç¿î´Ù.
+	/// í˜„ì¬ ìœ„ì¹˜ì— CMD ì°½ì„ ë„ìš´ë‹¤.
 	void OpenCmdWindow(void);
 
-	/// Å¬¸³º¸µåÀÇ ÀÌ¹ÌÁö¸¦ ÆÄÀÏ·Î ºÙ¿©³Ö±â
+	/// í´ë¦½ë³´ë“œì˜ ì´ë¯¸ì§€ë¥¼ íŒŒì¼ë¡œ ë¶™ì—¬ë„£ê¸°
 	void PasteAsImagefileFromClipboard();
 };
 

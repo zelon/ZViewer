@@ -1,4 +1,4 @@
-/* ------------------------------------------------------------------------
+ï»¿/* ------------------------------------------------------------------------
  *
  * Copyright 2006
  *
@@ -33,7 +33,7 @@ CMessageManager::~CMessageManager()
 }
 
 
-/// ÇØ´ç ¾ğ¾î¿¡ ¸Â´Â ÆÄÀÏÀ» ÀĞ¾îµé¿© ¸Ş½ÃÁö ¸ÊÀ» ±¸¼ºÇÑ´Ù.
+/// í•´ë‹¹ ì–¸ì–´ì— ë§ëŠ” íŒŒì¼ì„ ì½ì–´ë“¤ì—¬ ë©”ì‹œì§€ ë§µì„ êµ¬ì„±í•œë‹¤.
 void CMessageManager::_LoadLanguage(eLanguage lang)
 {
 	tstring strFileName = GetProgramFolder();
@@ -52,7 +52,7 @@ void CMessageManager::_LoadLanguage(eLanguage lang)
 	COptionFile::LoadFromFile(strFileName, m_messageMap);
 }
 
-/// ¾î¶² ¾ğ¾î¸¦ ¾µ°ÇÁö ¼±ÅÃÇÑ´Ù.
+/// ì–´ë–¤ ì–¸ì–´ë¥¼ ì“¸ê±´ì§€ ì„ íƒí•œë‹¤.
 void CMessageManager::SetLanguage(eLanguage lang)
 {
 	_LoadLanguage(lang);
@@ -60,7 +60,7 @@ void CMessageManager::SetLanguage(eLanguage lang)
 
 
 
-/// ÀÌ ¸Ş½ÃÁö¸¦ ¾ò´Â´Ù.
+/// ì´ ë©”ì‹œì§€ë¥¼ ì–»ëŠ”ë‹¤.
 const tstring & CMessageManager::GetMessage(const tstring & key) const
 {
 	iniMap::const_iterator it = m_messageMap.find(key);

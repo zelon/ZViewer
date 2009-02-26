@@ -1,4 +1,4 @@
-
+ï»¿
 #pragma once
 
 #include <windows.h>
@@ -31,10 +31,10 @@ public:
 
 	}
 
-	/// ÆÄÀÏÀ» ¿¬´Ù.
+	/// íŒŒì¼ì„ ì—°ë‹¤.
 	bool open(const tstring & strFileName, eFileOpenMode openMode);
 
-	/// ÆÄÀÏÀÇ ³»¿ëÀ» ÇÑÁÙ ¾ò¾î¿Â´Ù. \r, \n Àº Æ÷ÇÔÇÏÁö ¾Ê´Â´Ù.
+	/// íŒŒì¼ì˜ ë‚´ìš©ì„ í•œì¤„ ì–»ì–´ì˜¨ë‹¤. \r, \n ì€ í¬í•¨í•˜ì§€ ì•ŠëŠ”ë‹¤.
 	bool getLine(std::wstring & str);
 
 	bool getLine(std::string & str);
@@ -57,7 +57,7 @@ public:
 
 protected:
 
-	/// ¿£µğ¾ÈÀ» º¯°æÇÑ´Ù. ºò¿£µğ¾È <-> ¸®Æ²¿£µğ¾È
+	/// ì—”ë””ì•ˆì„ ë³€ê²½í•œë‹¤. ë¹…ì—”ë””ì•ˆ <-> ë¦¬í‹€ì—”ë””ì•ˆ
 	const wchar_t _changeEndian(const wchar_t src)
 	{
 		BYTE hiByte = HIBYTE(((WORD)src));
@@ -66,8 +66,8 @@ protected:
 		return  (wchar_t)((((WORD)(loByte)) << 8) | ((WORD)(hiByte)));
 	}
 
-	std::ifstream m_inputStream;		///< ÆÄÀÏ·ÎºÎÅÍ ÀĞ±â À§ÇÑ ½ºÆ®¸²
-	std::ofstream m_outputStream;		///< ÆÄÀÏ¿¡ ¾²±â À§ÇÑ ½ºÆ®¸²
+	std::ifstream m_inputStream;		///< íŒŒì¼ë¡œë¶€í„° ì½ê¸° ìœ„í•œ ìŠ¤íŠ¸ë¦¼
+	std::ofstream m_outputStream;		///< íŒŒì¼ì— ì“°ê¸° ìœ„í•œ ìŠ¤íŠ¸ë¦¼
 
 	eFileOpenMode m_openMode;
 

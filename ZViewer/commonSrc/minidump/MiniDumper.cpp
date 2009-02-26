@@ -1,4 +1,4 @@
-
+Ôªø
 #include "stdafx.h"
 #include <TCHAR.H>
 #include "MiniDumper.h"
@@ -26,7 +26,7 @@ tstring GetFaultReason(PEXCEPTION_POINTERS exPtrs)
     if (::IsBadReadPtr(exPtrs, sizeof(EXCEPTION_POINTERS))) 
         return _T("bad exception pointers");
 
-    // ∞£¥‹«— ø°∑Ø ƒ⁄µÂ∂Û∏È ±◊≥… ∫Ø»Ø«“ ºˆ ¿÷¥Ÿ.
+    // Í∞ÑÎã®Ìïú ÏóêÎü¨ ÏΩîÎìúÎùºÎ©¥ Í∑∏ÎÉ• Î≥ÄÌôòÌï† Ïàò ÏûàÎã§.
     switch (exPtrs->ExceptionRecord->ExceptionCode)
     {
     case EXCEPTION_ACCESS_VIOLATION:         return _T("EXCEPTION_ACCESS_VIOLATION");
@@ -58,7 +58,7 @@ tstring GetFaultReason(PEXCEPTION_POINTERS exPtrs)
         break;
     }
 
-    // π∫∞° ¡ª ¥ı ∫π¿‚«— ø°∑Ø∂Û∏È...
+    // Î≠îÍ∞Ä Ï¢Ä Îçî Î≥µÏû°Ìïú ÏóêÎü¨ÎùºÎ©¥...
     static TCHAR szFaultReason[2048];
     SPrintf(szFaultReason, 2048, _T("Unknown")); 
     ::FormatMessage(

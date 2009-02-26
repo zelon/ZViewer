@@ -1,8 +1,8 @@
-
+ï»¿
 #include "stdafx.h"
 #include "UnicodeFile.h"
 
-/// ÆÄÀÏÀ» ¿¬´Ù.
+/// íŒŒì¼ì„ ì—°ë‹¤.
 bool CUnicodeFile::open(const tstring & strFileName, eFileOpenMode openMode)
 {
 	char filename[FILENAME_MAX] = { 0 };
@@ -67,7 +67,7 @@ bool CUnicodeFile::open(const tstring & strFileName, eFileOpenMode openMode)
 
 bool CUnicodeFile::getLine(std::wstring & str)
 {
-	// ¸ÖÆ¼¹ÙÀÌÆ® ¹öÆÛ¿¡ ÇÑÁÙ¾¿ ¾ò¾î ´ã¾Æ¾ß ÇÑ´Ù.
+	// ë©€í‹°ë°”ì´íŠ¸ ë²„í¼ì— í•œì¤„ì”© ì–»ì–´ ë‹´ì•„ì•¼ í•œë‹¤.
 	str.resize(0);
 	wchar_t aCh = L'\0';
 
@@ -80,17 +80,17 @@ bool CUnicodeFile::getLine(std::wstring & str)
 	{
 		m_inputStream.read((char*)&aCh,2);
 
-		/// ´õÀÌ»ó ¸ø ÀĞ¾úÀ¸¸é ÀÌ ÁÙÀº ³¡³­ °ÍÀÌ´Ù.
+		/// ë”ì´ìƒ ëª» ì½ì—ˆìœ¼ë©´ ì´ ì¤„ì€ ëë‚œ ê²ƒì´ë‹¤.
 		if ( -1 == m_inputStream.tellg() ) break;
 
 		if( m_bBigEndian )
 		{
-			// ºò¿£µğ¾ÈÀÌ¶ó¸é ¸®Æ²¿£µğ¾ÈÀ¸·Î º¯È¯ÇÑ´Ù.
-			// ÀÎÅÚ°è¿­Àº ¸®Æ²¿£µğ¾ÈÀÌ±â¶§¹®ÀÌ´Ù.
+			// ë¹…ì—”ë””ì•ˆì´ë¼ë©´ ë¦¬í‹€ì—”ë””ì•ˆìœ¼ë¡œ ë³€í™˜í•œë‹¤.
+			// ì¸í…”ê³„ì—´ì€ ë¦¬í‹€ì—”ë””ì•ˆì´ê¸°ë•Œë¬¸ì´ë‹¤.
 			aCh = _changeEndian(aCh);
 		}
 
-		if (EOF == aCh )// ÆÄÀÏÀÇ ³¡ÀÎ°æ¿ì 
+		if (EOF == aCh )// íŒŒì¼ì˜ ëì¸ê²½ìš° 
 		{
 			if(str.empty())
 			{
@@ -100,7 +100,7 @@ bool CUnicodeFile::getLine(std::wstring & str)
 			break;
 		}
 
-		/// end line ÀÌ ³ª¿À¸é ÀÌ ÁÙÀº ³¡³­ °ÍÀÌ´Ù.
+		/// end line ì´ ë‚˜ì˜¤ë©´ ì´ ì¤„ì€ ëë‚œ ê²ƒì´ë‹¤.
 		if( L'\n' == aCh)
 		{
 			break;

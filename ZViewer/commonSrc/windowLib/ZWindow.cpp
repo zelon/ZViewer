@@ -1,4 +1,4 @@
-/* ------------------------------------------------------------------------
+ï»¿/* ------------------------------------------------------------------------
  *
  * Copyright 2006
  *
@@ -67,20 +67,20 @@ HWND ZWindow::Create(HINSTANCE hInstance, HWND hParentHWND, int nCmdShow, const 
 		dlgName.c_str(),
 		dlgName.c_str(),		///< Window Title
 		WS_OVERLAPPEDWINDOW,///< | WS_EX_ACCEPTFILES,
-		iXPosition,		///< ±âº» x À§Ä¡
-		iYPosition,		///< ±âº» y À§Ä¡
+		iXPosition,		///< ê¸°ë³¸ x ìœ„ì¹˜
+		iYPosition,		///< ê¸°ë³¸ y ìœ„ì¹˜
 		iWidth,			///< width
 		iHeight,		///< height
 		hParentHWND,
 		hMenu,			///< MainMenu
 		hInstance,NULL);
 
-	// Å½»ö±â¿¡¼­ÀÇ Drag&Drop À» °¡´ÉÇÏ°Ô ÇÑ´Ù.
+	// íƒìƒ‰ê¸°ì—ì„œì˜ Drag&Drop ì„ ê°€ëŠ¥í•˜ê²Œ í•œë‹¤.
 	//DragAcceptFiles(m_hWindow, TRUE);
 
 	ShowWindow(m_hWindow, nCmdShow);
 
-	// ´ÜÃàÅ° ¼³Á¤. ¿©±â¼­ ¹ÝÈ¯µÈ ÇÚµéÀº ÇÁ·Î±×·¥ÀÌ Á¾·áµÉ ¶§ ÀÚµ¿ÀûÀ¸·Î close µÊ.
+	// ë‹¨ì¶•í‚¤ ì„¤ì •. ì—¬ê¸°ì„œ ë°˜í™˜ëœ í•¸ë“¤ì€ í”„ë¡œê·¸ëž¨ì´ ì¢…ë£Œë  ë•Œ ìžë™ì ìœ¼ë¡œ close ë¨.
 	m_hAccel = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDR_MAIN_ACCELERATOR));
 
 	DialogBox(hInstance, dlgName.c_str(), hParentHWND, (DLGPROC)m_wndProc);

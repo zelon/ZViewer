@@ -1,4 +1,4 @@
-/********************************************************************
+ï»¿/********************************************************************
 *
 * Created by zelon(Kim, Jinwook Korea)
 *
@@ -41,7 +41,7 @@ ZCacheImage::~ZCacheImage()
 
 	if ( m_hThread != INVALID_HANDLE_VALUE )
 	{
-		/// Ä³½¬ ¾²·¹µå°¡ Á¾·áÇÏ±æ ±â´Ù¸°´Ù.
+		/// ìºì‰¬ ì“°ë ˆë“œê°€ ì¢…ë£Œí•˜ê¸¸ ê¸°ë‹¤ë¦°ë‹¤.
 		WaitForSingleObject(m_hThread, INFINITE);
 		CloseHandle(m_hThread);
 
@@ -61,18 +61,18 @@ void ZCacheImage::StartThread()
 	DWORD dwThreadID;
 	m_hThread = CreateThread(0, 0, ThreadFuncProxy, this, 0, &dwThreadID);
 
-	// Cache ¸¦ ÁøÇàÇÏ´Â ¾²·¹µå´Â
+	// Cache ë¥¼ ì§„í–‰í•˜ëŠ” ì“°ë ˆë“œëŠ”
 	if ( SetThreadPriority(m_hThread, THREAD_PRIORITY_BELOW_NORMAL) == FALSE )
 	{
 		assert(!"Can't SetThreadPriority!");
 	}
 }
 
-// ÇöÀç Ä³½ÃµÇ¾î ÀÖ´Â ÆÄÀÏµéÀ» output À©µµ¿ì·Î »Ñ·ÁÁØ´Ù.
+// í˜„ì¬ ìºì‹œë˜ì–´ ìˆëŠ” íŒŒì¼ë“¤ì„ output ìœˆë„ìš°ë¡œ ë¿Œë ¤ì¤€ë‹¤.
 void ZCacheImage::ShowCachedImageToOutputWindow()
 {
 #ifndef _DEBUG
-	return; // ¸±¸®Áî ¸ğµå¿¡¼­´Â ±×³É ¸®ÅÏ
+	return; // ë¦´ë¦¬ì¦ˆ ëª¨ë“œì—ì„œëŠ” ê·¸ëƒ¥ ë¦¬í„´
 #else
 	m_cacheData.PrintCachedData();
 #endif
@@ -88,7 +88,7 @@ DWORD ZCacheImage::ThreadFuncProxy(LPVOID )
 bool ZCacheImage::_CacheIndex(int iIndex)
 {
 	/*
-	// ÃÖ´ë Ä³½Ã Å©±â¸¦ ³Ñ¾úÀ¸¸é ´õ ÀÌ»ó Ä³½ÃÇÏÁö ¾Ê´Â´Ù.
+	// ìµœëŒ€ ìºì‹œ í¬ê¸°ë¥¼ ë„˜ì—ˆìœ¼ë©´ ë” ì´ìƒ ìºì‹œí•˜ì§€ ì•ŠëŠ”ë‹¤.
 	if ( m_iCurrentIndex != iIndex &&
 		((m_lCacheSize / 1024 / 1024) > ZOption::GetInstance().GetMaxCacheMemoryMB()) )
 	{
@@ -96,19 +96,19 @@ bool ZCacheImage::_CacheIndex(int iIndex)
 	}
 	*/
 
-	if ( iIndex < 0 )///< Ä³½Ã ¸Å´ÏÀú¿¡¼­ ÇöÀç ÆÄÀÏÀÇ µÚ¸¦ Ä³½ÃÇÏ·Á°í ½ÃµµÇÏ±â ¶§¹®¿¡ ÀÌ if ¹®¿¡ µé¾î¿À°Ô µÈ´Ù. assert »óÈ²ÀÌ ¾Æ´Ï´Ù.
+	if ( iIndex < 0 )///< ìºì‹œ ë§¤ë‹ˆì €ì—ì„œ í˜„ì¬ íŒŒì¼ì˜ ë’¤ë¥¼ ìºì‹œí•˜ë ¤ê³  ì‹œë„í•˜ê¸° ë•Œë¬¸ì— ì´ if ë¬¸ì— ë“¤ì–´ì˜¤ê²Œ ëœë‹¤. assert ìƒí™©ì´ ì•„ë‹ˆë‹¤.
 	{
 		iIndex = 0;
 	}
-	if ( iIndex >= (int)m_cacheData.GetImageVectorSize() )///< Ä³½Ã ¸Å´ÏÀú¿¡¼­ ÇöÀç ÆÄÀÏÀÇ ¾ÕÀ» Ä³½ÃÇÏ·Á°í ½ÃµµÇÏ±â ¶§¹®¿¡ ÀÌ if ¹®¿¡ µé¾î¿À°Ô µÈ´Ù. assert »óÈ²ÀÌ ¾Æ´Ï´Ù.
+	if ( iIndex >= (int)m_cacheData.GetImageVectorSize() )///< ìºì‹œ ë§¤ë‹ˆì €ì—ì„œ í˜„ì¬ íŒŒì¼ì˜ ì•ì„ ìºì‹œí•˜ë ¤ê³  ì‹œë„í•˜ê¸° ë•Œë¬¸ì— ì´ if ë¬¸ì— ë“¤ì–´ì˜¤ê²Œ ëœë‹¤. assert ìƒí™©ì´ ì•„ë‹ˆë‹¤.
 	{
 		iIndex = (int)(m_cacheData.GetImageVectorSize()) - 1;
 	}
 
-	/// ÀÌ »óÈ²Àº ÇöÀç ÆÄÀÏ ¸ñ·ÏÀÌ ÇÏ³ªµµ ¾ø´Â »óÈ²ÀÌ´Ù.
+	/// ì´ ìƒí™©ì€ í˜„ì¬ íŒŒì¼ ëª©ë¡ì´ í•˜ë‚˜ë„ ì—†ëŠ” ìƒí™©ì´ë‹¤.
 	if ( iIndex < 0 ) return false;
 
-	// ÀÌ¹Ì Ä³½ÃµÇ¾î ÀÖ´ÂÁö Ã£´Â´Ù.
+	// ì´ë¯¸ ìºì‹œë˜ì–´ ìˆëŠ”ì§€ ì°¾ëŠ”ë‹¤.
 	bool bFound = false;
 	tstring strFileName;
 
@@ -126,7 +126,7 @@ bool ZCacheImage::_CacheIndex(int iIndex)
 		}
 	}
 
-	if ( bFound == false )	// Ä³½ÃµÇ¾î ÀÖÁö ¾ÊÀ¸¸é ÀĞ¾îµéÀÎ´Ù.
+	if ( bFound == false )	// ìºì‹œë˜ì–´ ìˆì§€ ì•Šìœ¼ë©´ ì½ì–´ë“¤ì¸ë‹¤.
 	{
 		ZImage * pCacheReadyImage = new ZImage();
 
@@ -156,20 +156,20 @@ bool ZCacheImage::_CacheIndex(int iIndex)
 
 			while ( bReadOK )
 			{
-				if ( m_bNewChange && m_iCurrentIndex != iIndex )	///< »õ·Î¿î ±×¸²À¸·Î ³Ñ¾î°¬´Âµ¥ ÇöÀç ÀÎµ¦½º°¡ ¾Æ´Ï¸é
+				if ( m_bNewChange && m_iCurrentIndex != iIndex )	///< ìƒˆë¡œìš´ ê·¸ë¦¼ìœ¼ë¡œ ë„˜ì–´ê°”ëŠ”ë° í˜„ì¬ ì¸ë±ìŠ¤ê°€ ì•„ë‹ˆë©´
 				{
 					CloseHandle(hFile);
 					DebugPrintf(TEXT("---------------------------- stop readfile"));
 					delete pCacheReadyImage;
-					return false;	// ÇöÀçº¸°í ÀÖ´Â ÆÄÀÏ ÀÎµ¦½º°¡ ¹Ù²î¾úÀ¸¸é »¡¸® ´ÙÀ½ for ¸¦ ½ÃÀÛÇÑ´Ù.
+					return false;	// í˜„ì¬ë³´ê³  ìˆëŠ” íŒŒì¼ ì¸ë±ìŠ¤ê°€ ë°”ë€Œì—ˆìœ¼ë©´ ë¹¨ë¦¬ ë‹¤ìŒ for ë¥¼ ì‹œì‘í•œë‹¤.
 				}
 				bReadOK = ReadFile(hFile, readBuffer, readBufferSize, &dwReadBytes,  NULL);
-				if ( m_bNewChange && m_iCurrentIndex != iIndex )	///< »õ·Î¿î ±×¸²À¸·Î ³Ñ¾î°¬´Âµ¥ ÇöÀç ÀÎµ¦½º°¡ ¾Æ´Ï¸é
+				if ( m_bNewChange && m_iCurrentIndex != iIndex )	///< ìƒˆë¡œìš´ ê·¸ë¦¼ìœ¼ë¡œ ë„˜ì–´ê°”ëŠ”ë° í˜„ì¬ ì¸ë±ìŠ¤ê°€ ì•„ë‹ˆë©´
 				{
 					CloseHandle(hFile);
 					DebugPrintf(TEXT("---------------------------- stop readfile"));
 					delete pCacheReadyImage;
-					return false;	// ÇöÀçº¸°í ÀÖ´Â ÆÄÀÏ ÀÎµ¦½º°¡ ¹Ù²î¾úÀ¸¸é »¡¸® ´ÙÀ½ for ¸¦ ½ÃÀÛÇÑ´Ù.
+					return false;	// í˜„ì¬ë³´ê³  ìˆëŠ” íŒŒì¼ ì¸ë±ìŠ¤ê°€ ë°”ë€Œì—ˆìœ¼ë©´ ë¹¨ë¦¬ ë‹¤ìŒ for ë¥¼ ì‹œì‘í•œë‹¤.
 				}
 				if ( FALSE == bReadOK )
 				{
@@ -179,7 +179,7 @@ bool ZCacheImage::_CacheIndex(int iIndex)
 				}
 				else
 				{
-					if ( dwReadBytes <= 0 )	///< ÆÄÀÏÀÇ ³¡±îÁö ÀĞ¾ú´Ù.
+					if ( dwReadBytes <= 0 )	///< íŒŒì¼ì˜ ëê¹Œì§€ ì½ì—ˆë‹¤.
 					{
 						break;
 					}
@@ -194,17 +194,17 @@ bool ZCacheImage::_CacheIndex(int iIndex)
 
 			if ( m_vBuffer.size() < 5 )
 			{
-				/// ÆÄÀÏ Å©±â°¡ ³Ê¹« ÀÛÀ½
+				/// íŒŒì¼ í¬ê¸°ê°€ ë„ˆë¬´ ì‘ìŒ
 				bLoadOK = false;
 			}
 			else
 			{
 				DWORD dwEnd = GetTickCount();
 				DebugPrintf(TEXT("----- readfile(%s) time(%d)"), strFileName.c_str(), dwEnd - dwStart);
-				CloseHandle(hFile);	///< ÆÄÀÏ¿¡¼­ ÀĞ±â°¡ ³¡³ª¼­ ÆÄÀÏÀ» ´İ¾ÆÁØ´Ù.
+				CloseHandle(hFile);	///< íŒŒì¼ì—ì„œ ì½ê¸°ê°€ ëë‚˜ì„œ íŒŒì¼ì„ ë‹«ì•„ì¤€ë‹¤.
 
 				assert(m_vBuffer.size() > 0);
-				/// todo: ¾Æ·¡ ³»¿ëÀ» ¸â¹ö º¯¼ö·Î ¹Ù²Ù¸é ´õ ÁÁ¾ÆÁú±î
+				/// todo: ì•„ë˜ ë‚´ìš©ì„ ë©¤ë²„ ë³€ìˆ˜ë¡œ ë°”ê¾¸ë©´ ë” ì¢‹ì•„ì§ˆê¹Œ
 				fipMemoryIO mem(&m_vBuffer[0], (DWORD)m_vBuffer.size());
 
 				DebugPrintf(TEXT("----- start decode(%s)"), strFileName.c_str());
@@ -213,7 +213,7 @@ bool ZCacheImage::_CacheIndex(int iIndex)
 				DebugPrintf(TEXT("----- end of decode(%s)"), strFileName.c_str());
 				TIMECHECK_END();
 
-				/// ¿É¼Ç¿¡ µû¶ó ÀÚµ¿ È¸ÀüÀ» ½ÃÅ²´Ù.
+				/// ì˜µì…˜ì— ë”°ë¼ ìë™ íšŒì „ì„ ì‹œí‚¨ë‹¤.
 				if ( ZOption::GetInstance().IsUseAutoRotation() )
 				{
 					pCacheReadyImage->AutoRotate();
@@ -229,13 +229,13 @@ bool ZCacheImage::_CacheIndex(int iIndex)
 			strErrorFilename += TEXT("LoadError.png");
 			if ( pCacheReadyImage->LoadFromFile(strErrorFilename) )
 			{
-				bLoadOK = true; ///< error image ¶óµµ load ok
+				bLoadOK = true; ///< error image ë¼ë„ load ok
 			}
 			else
 			{
 				MessageBox(HWND_DESKTOP, TEXT("Please check LoadError.png in ZViewer installed folder"), TEXT("ZViewer"), MB_OK);
 
-				// ¿¡·¯ ¶§ Ç¥½ÃÇÏ´Â ÆÄÀÏÀ» ÀĞ¾îµéÀÌÁö ¸ø ÇßÀ¸¸é
+				// ì—ëŸ¬ ë•Œ í‘œì‹œí•˜ëŠ” íŒŒì¼ì„ ì½ì–´ë“¤ì´ì§€ ëª» í–ˆìœ¼ë©´
 				//ShowMessageBox(GetMessage(TEXT("CANNOT_LOAD_ERROR_IMAGE_FILE")));
 
 				HBITMAP hBitmap = CreateBitmap(100, 100, 1, 1, NULL);
@@ -248,11 +248,11 @@ bool ZCacheImage::_CacheIndex(int iIndex)
 		{
 			/*
 			{/// Debug Code
-				//if ( m_bNewChange) return false;	// ÇöÀçº¸°í ÀÖ´Â ÆÄÀÏ ÀÎµ¦½º°¡ ¹Ù²î¾úÀ¸¸é »¡¸® ´ÙÀ½ for ¸¦ ½ÃÀÛÇÑ´Ù.
+				//if ( m_bNewChange) return false;	// í˜„ì¬ë³´ê³  ìˆëŠ” íŒŒì¼ ì¸ë±ìŠ¤ê°€ ë°”ë€Œì—ˆìœ¼ë©´ ë¹¨ë¦¬ ë‹¤ìŒ for ë¥¼ ì‹œì‘í•œë‹¤.
 
 				AddCacheData(strFileName, temp);
 
-				if ( m_bNewChange) return false;	// ÇöÀçº¸°í ÀÖ´Â ÆÄÀÏ ÀÎµ¦½º°¡ ¹Ù²î¾úÀ¸¸é »¡¸® ´ÙÀ½ for ¸¦ ½ÃÀÛÇÑ´Ù.
+				if ( m_bNewChange) return false;	// í˜„ì¬ë³´ê³  ìˆëŠ” íŒŒì¼ ì¸ë±ìŠ¤ê°€ ë°”ë€Œì—ˆìœ¼ë©´ ë¹¨ë¦¬ ë‹¤ìŒ for ë¥¼ ì‹œì‘í•œë‹¤.
 				*/
 
 				/*
@@ -326,12 +326,12 @@ bool ZCacheImage::_CacheIndex(int iIndex)
 #endif
 			const long CachedImageSize = pCacheReadyImage->GetImageSize();
 
-			if ( iIndex == m_iCurrentIndex )	///< ÇöÀç º¸´Â ÀÌ¹ÌÁö¸é ¹«Á¶°Ç ³Ö´Â´Ù.
+			if ( iIndex == m_iCurrentIndex )	///< í˜„ì¬ ë³´ëŠ” ì´ë¯¸ì§€ë©´ ë¬´ì¡°ê±´ ë„£ëŠ”ë‹¤.
 			{
 				AddCacheData(strFileName, pCacheReadyImage, true);
 				return true;
 			}
-			// ÀĞÀº ÀÌ¹ÌÁö¸¦ ³ÖÀ» °ø°£ÀÌ ¾øÀ¸¸é
+			// ì½ì€ ì´ë¯¸ì§€ë¥¼ ë„£ì„ ê³µê°„ì´ ì—†ìœ¼ë©´
 			else if ( (m_cacheData.GetCachedTotalSize() + CachedImageSize) / 1024 / 1024 > ZOption::GetInstance().GetMaxCacheMemoryMB() )
 			{
 				int iTemp = 100;
@@ -339,7 +339,7 @@ bool ZCacheImage::_CacheIndex(int iIndex)
 
 				do
 				{
-					// Ä³½ÃµÇ¾î ÀÖ´Â °Íµé Áß °¡Àå ÇöÀç index ¿¡¼­ ¸Õ°ÍÀ» Ã£´Â´Ù.
+					// ìºì‹œë˜ì–´ ìˆëŠ” ê²ƒë“¤ ì¤‘ ê°€ì¥ í˜„ì¬ index ì—ì„œ ë¨¼ê²ƒì„ ì°¾ëŠ”ë‹¤.
 					{
 						iFarthestIndex = m_cacheData.GetFarthestIndexFromCurrentIndex(m_iCurrentIndex);
 					}
@@ -350,27 +350,27 @@ bool ZCacheImage::_CacheIndex(int iIndex)
 
 					if ( nCachedFarthestDiff < nToCacheDiff )
 					{
-						// Ä³½Ã Çß´Â °Í Áß °¡Àå ¸Ö¸®ÀÖ´Â °ÍÀÌ ÀÌ¹ø°Åº¸´Ù °¡±î¿îµ¥ ÀÖÀ¸¸é ´õÀÌ»ó Ä³½ÃÇÏÁö ¾Ê´Â´Ù
+						// ìºì‹œ í–ˆëŠ” ê²ƒ ì¤‘ ê°€ì¥ ë©€ë¦¬ìˆëŠ” ê²ƒì´ ì´ë²ˆê±°ë³´ë‹¤ ê°€ê¹Œìš´ë° ìˆìœ¼ë©´ ë”ì´ìƒ ìºì‹œí•˜ì§€ ì•ŠëŠ”ë‹¤
 						delete pCacheReadyImage;
 						return false;
 					}
 					else if ( nCachedFarthestDiff == nToCacheDiff )
 					{
-						// Ä³½ÃÇß´Â °Å¶û ÀÌ¹ø¿¡ Ä³½ÃÇÒ °ÍÀÌ µ¿µîÇÑ À§Ä¡¿¡ ÀÖÀ¸¸é
+						// ìºì‹œí–ˆëŠ” ê±°ë‘ ì´ë²ˆì— ìºì‹œí•  ê²ƒì´ ë™ë“±í•œ ìœ„ì¹˜ì— ìˆìœ¼ë©´
 
 						if ( m_lastActionDirection == eLastActionDirection_FORWARD )
 						{
-							// ¾ÕÀ¸·Î ÁøÇà ÁßÀÌ¸é °¡Àå ¸Ö¸®ÀÖ´Â °ÍÀÌ prev ÀÌ¸é Áö¿î´Ù(¾ÕÀ¸·Î °¡°í ÀÖÀ» ¶§´Â next image °¡ ¿ì¼±¼øÀ§°¡ ³ô´Ù)
+							// ì•ìœ¼ë¡œ ì§„í–‰ ì¤‘ì´ë©´ ê°€ì¥ ë©€ë¦¬ìˆëŠ” ê²ƒì´ prev ì´ë©´ ì§€ìš´ë‹¤(ì•ìœ¼ë¡œ ê°€ê³  ìˆì„ ë•ŒëŠ” next image ê°€ ìš°ì„ ìˆœìœ„ê°€ ë†’ë‹¤)
 							if ( iFarthestIndex >= iIndex )
 							{
-								// Ä³½ÃµÇ¾î ÀÖ´Â °ÍÀ» ºñ¿ìÁö ¾Ê´Â´Ù.
+								// ìºì‹œë˜ì–´ ìˆëŠ” ê²ƒì„ ë¹„ìš°ì§€ ì•ŠëŠ”ë‹¤.
 								delete pCacheReadyImage;
 								return false;
 							}
 						}
 						else
 						{
-							// µÚ·Î ÁøÇà ÁßÀÌ¸é °¡Àå ¸Ö¸®ÀÖ´Â °ÍÀÌ next ÀÌ¸é Áö¿î´Ù.
+							// ë’¤ë¡œ ì§„í–‰ ì¤‘ì´ë©´ ê°€ì¥ ë©€ë¦¬ìˆëŠ” ê²ƒì´ next ì´ë©´ ì§€ìš´ë‹¤.
 							if ( iFarthestIndex <= iIndex )
 							{
 								delete pCacheReadyImage;
@@ -379,14 +379,14 @@ bool ZCacheImage::_CacheIndex(int iIndex)
 						}
 					}
 
-					//  ÇöÀç °ÍÀÌ ´õ °¡±õ±â ¶§¹®¿¡ °¡Àå ¸Õ °ÍÀ» Å¬¸®¾îÇÏ°í, ÇöÀç °ÍÀ» Ä³½ÃÇØ ³õ´Â °ÍÀÌ ÁÁÀº »óÈ²ÀÌ´Ù.
+					//  í˜„ì¬ ê²ƒì´ ë” ê°€ê¹ê¸° ë•Œë¬¸ì— ê°€ì¥ ë¨¼ ê²ƒì„ í´ë¦¬ì–´í•˜ê³ , í˜„ì¬ ê²ƒì„ ìºì‹œí•´ ë†“ëŠ” ê²ƒì´ ì¢‹ì€ ìƒí™©ì´ë‹¤.
 
-					// °¡Àå ¸Õ °ÍÀ» clear ÇÑ´Ù.
+					// ê°€ì¥ ë¨¼ ê²ƒì„ clear í•œë‹¤.
 					{
 						m_cacheData.ClearFarthestDataFromCurrent(iFarthestIndex);
 					}
 
-					// ÀÌÁ¦ ¾î´À Á¤µµ ¿ë·®À» È®º¸ÇßÀ¸´Ï ´Ù½Ã ÀÌ ÀÌ¹ÌÁö¸¦ ³ÖÀ» ¼ö ÀÖ´Â Áö Ä³½Ã¸¦ Ã¼Å©ÇÑ´Ù.
+					// ì´ì œ ì–´ëŠ ì •ë„ ìš©ëŸ‰ì„ í™•ë³´í–ˆìœ¼ë‹ˆ ë‹¤ì‹œ ì´ ì´ë¯¸ì§€ë¥¼ ë„£ì„ ìˆ˜ ìˆëŠ” ì§€ ìºì‹œë¥¼ ì²´í¬í•œë‹¤.
 					if ( (m_cacheData.GetCachedTotalSize() + CachedImageSize) / 1024 / 1024 <= ZOption::GetInstance().GetMaxCacheMemoryMB() )
 					{
 						AddCacheData(strFileName, pCacheReadyImage);
@@ -397,7 +397,7 @@ bool ZCacheImage::_CacheIndex(int iIndex)
 						DebugPrintf(TEXT("There is no vacant space"));
 					}
 
-					// ¸¸¾àÀÇ ¹«ÇÑ·çÇÁ¸¦ ¹æÁöÇÏ±â À§ÇØ 100¹ø¸¸ µ¹¸°´Ù.
+					// ë§Œì•½ì˜ ë¬´í•œë£¨í”„ë¥¼ ë°©ì§€í•˜ê¸° ìœ„í•´ 100ë²ˆë§Œ ëŒë¦°ë‹¤.
 					--iTemp;
 				} while( iTemp > 0 );
 
@@ -406,7 +406,7 @@ bool ZCacheImage::_CacheIndex(int iIndex)
 			else
 			{
 				AddCacheData(strFileName, pCacheReadyImage);
-				if ( m_bNewChange) return false;	// ÇöÀçº¸°í ÀÖ´Â ÆÄÀÏ ÀÎµ¦½º°¡ ¹Ù²î¾úÀ¸¸é »¡¸® ´ÙÀ½ for ¸¦ ½ÃÀÛÇÑ´Ù.
+				if ( m_bNewChange) return false;	// í˜„ì¬ë³´ê³  ìˆëŠ” íŒŒì¼ ì¸ë±ìŠ¤ê°€ ë°”ë€Œì—ˆìœ¼ë©´ ë¹¨ë¦¬ ë‹¤ìŒ for ë¥¼ ì‹œì‘í•œë‹¤.
 			}
 		}
 	}
@@ -440,34 +440,34 @@ void ZCacheImage::ThreadFunc()
 
 		for ( i=0; i<ZOption::GetInstance().m_iMaxCacheImageNum/2; ++i)
 		{
-			if ( false == m_bCacheGoOn ) break; ///< ÇÁ·Î±×·¥ÀÌ Á¾·áµÇ¾úÀ¸¸é for ¸¦ ³¡³½´Ù.
-			if ( m_bNewChange) break;	// ÇöÀçº¸°í ÀÖ´Â ÆÄÀÏ ÀÎµ¦½º°¡ ¹Ù²î¾úÀ¸¸é »¡¸® ´ÙÀ½ for ¸¦ ½ÃÀÛÇÑ´Ù.
+			if ( false == m_bCacheGoOn ) break; ///< í”„ë¡œê·¸ë¨ì´ ì¢…ë£Œë˜ì—ˆìœ¼ë©´ for ë¥¼ ëë‚¸ë‹¤.
+			if ( m_bNewChange) break;	// í˜„ì¬ë³´ê³  ìˆëŠ” íŒŒì¼ ì¸ë±ìŠ¤ê°€ ë°”ë€Œì—ˆìœ¼ë©´ ë¹¨ë¦¬ ë‹¤ìŒ for ë¥¼ ì‹œì‘í•œë‹¤.
 
-			/// Ç×»ó ÇöÀç ÀÌ¹ÌÁö¸¦ ¸ÕÀú Ä³½¬ÇÑ´Ù.
+			/// í•­ìƒ í˜„ì¬ ì´ë¯¸ì§€ë¥¼ ë¨¼ì € ìºì‰¬í•œë‹¤.
 			_CacheIndex(m_iCurrentIndex);
-			if ( m_bNewChange) break;	// ÇöÀçº¸°í ÀÖ´Â ÆÄÀÏ ÀÎµ¦½º°¡ ¹Ù²î¾úÀ¸¸é »¡¸® ´ÙÀ½ for ¸¦ ½ÃÀÛÇÑ´Ù.
+			if ( m_bNewChange) break;	// í˜„ì¬ë³´ê³  ìˆëŠ” íŒŒì¼ ì¸ë±ìŠ¤ê°€ ë°”ë€Œì—ˆìœ¼ë©´ ë¹¨ë¦¬ ë‹¤ìŒ for ë¥¼ ì‹œì‘í•œë‹¤.
 
-			/// ÇöÀçº¸°í ÀÖ´Â ¹æÇâ¿¡ µû¶ó¼­ ¾îµğÂÊ ÀÌ¹ÌÁö¸¦ ¸ÕÀú Ä³½ÃÇÒ °ÍÀÎÁö ÆÇ´ÜÇÑ´Ù.
+			/// í˜„ì¬ë³´ê³  ìˆëŠ” ë°©í–¥ì— ë”°ë¼ì„œ ì–´ë””ìª½ ì´ë¯¸ì§€ë¥¼ ë¨¼ì € ìºì‹œí•  ê²ƒì¸ì§€ íŒë‹¨í•œë‹¤.
 
 			if ( m_lastActionDirection == eLastActionDirection_FORWARD )
 			{
 				// right side
 				if ( false == _CacheIndex(m_iCurrentIndex + iPos) ) break;
-				if ( m_bNewChange) break;	// ÇöÀçº¸°í ÀÖ´Â ÆÄÀÏ ÀÎµ¦½º°¡ ¹Ù²î¾úÀ¸¸é »¡¸® ´ÙÀ½ for ¸¦ ½ÃÀÛÇÑ´Ù.
+				if ( m_bNewChange) break;	// í˜„ì¬ë³´ê³  ìˆëŠ” íŒŒì¼ ì¸ë±ìŠ¤ê°€ ë°”ë€Œì—ˆìœ¼ë©´ ë¹¨ë¦¬ ë‹¤ìŒ for ë¥¼ ì‹œì‘í•œë‹¤.
 
 				// left side
 				if ( false == _CacheIndex(m_iCurrentIndex - iPos) ) break;
-				if ( m_bNewChange) break;	// ÇöÀçº¸°í ÀÖ´Â ÆÄÀÏ ÀÎµ¦½º°¡ ¹Ù²î¾úÀ¸¸é »¡¸® ´ÙÀ½ for ¸¦ ½ÃÀÛÇÑ´Ù.
+				if ( m_bNewChange) break;	// í˜„ì¬ë³´ê³  ìˆëŠ” íŒŒì¼ ì¸ë±ìŠ¤ê°€ ë°”ë€Œì—ˆìœ¼ë©´ ë¹¨ë¦¬ ë‹¤ìŒ for ë¥¼ ì‹œì‘í•œë‹¤.
 			}
 			else if ( m_lastActionDirection == eLastActionDirection_BACKWARD )
 			{
 				// left side
 				if ( false == _CacheIndex(m_iCurrentIndex - iPos) ) break;
-				if ( m_bNewChange) break;	// ÇöÀçº¸°í ÀÖ´Â ÆÄÀÏ ÀÎµ¦½º°¡ ¹Ù²î¾úÀ¸¸é »¡¸® ´ÙÀ½ for ¸¦ ½ÃÀÛÇÑ´Ù.
+				if ( m_bNewChange) break;	// í˜„ì¬ë³´ê³  ìˆëŠ” íŒŒì¼ ì¸ë±ìŠ¤ê°€ ë°”ë€Œì—ˆìœ¼ë©´ ë¹¨ë¦¬ ë‹¤ìŒ for ë¥¼ ì‹œì‘í•œë‹¤.
 
 				// right side
 				if ( false == _CacheIndex(m_iCurrentIndex + iPos) ) break;
-				if ( m_bNewChange) break;	// ÇöÀçº¸°í ÀÖ´Â ÆÄÀÏ ÀÎµ¦½º°¡ ¹Ù²î¾úÀ¸¸é »¡¸® ´ÙÀ½ for ¸¦ ½ÃÀÛÇÑ´Ù.
+				if ( m_bNewChange) break;	// í˜„ì¬ë³´ê³  ìˆëŠ” íŒŒì¼ ì¸ë±ìŠ¤ê°€ ë°”ë€Œì—ˆìœ¼ë©´ ë¹¨ë¦¬ ë‹¤ìŒ for ë¥¼ ì‹œì‘í•œë‹¤.
 			}
 			else
 			{
@@ -489,7 +489,7 @@ void ZCacheImage::ThreadFunc()
 
 bool ZCacheImage::hasCachedData(const tstring & strFilename, int iIndex)
 {
-	// index ¸¦ Ã¼Å©ÇÑ´Ù.
+	// index ë¥¼ ì²´í¬í•œë‹¤.
 	m_iCurrentIndex = iIndex;
 	m_strCurrentFileName = strFilename;
 
@@ -524,7 +524,7 @@ void ZCacheImage::AddCacheData(const tstring & strFilename, ZImage * pImage, boo
 	m_cacheData.InsertData(strFilename, pImage, bForceCache);
 }
 
-/// ´ÙÀ½ ÆÄÀÏÀÌ Ä³½¬µÇ¾ú³ª¸¦ Ã¼Å©ÇØ¼­ µ¹·ÁÁØ´Ù.
+/// ë‹¤ìŒ íŒŒì¼ì´ ìºì‰¬ë˜ì—ˆë‚˜ë¥¼ ì²´í¬í•´ì„œ ëŒë ¤ì¤€ë‹¤.
 bool ZCacheImage::IsNextFileCached() const
 {
 	int iNextIndex = m_iCurrentIndex;
@@ -543,7 +543,7 @@ bool ZCacheImage::IsNextFileCached() const
 	return m_cacheData.HasCachedData(iNextIndex);
 }
 
-/// ÇöÀç Ä³½¬ Á¤º¸¸¦ µğ¹ö±× ÄÜ¼Ö¿¡ º¸¿©ÁØ´Ù. µğ¹ö±ë¸ğµå Àü¿ë
+/// í˜„ì¬ ìºì‰¬ ì •ë³´ë¥¼ ë””ë²„ê·¸ ì½˜ì†”ì— ë³´ì—¬ì¤€ë‹¤. ë””ë²„ê¹…ëª¨ë“œ ì „ìš©
 void ZCacheImage::debugShowCacheInfo()
 {
 	RECT rt;

@@ -1,4 +1,4 @@
-/********************************************************************
+ï»¿/********************************************************************
 *
 * Created by zelon(Kim, Jinwook - Korea)
 * 
@@ -11,10 +11,10 @@
 #include "stdafx.h"
 #include "TaskBar.h"
 
-/// ÀÛ¾÷ Ç¥½ÃÁÙÀ» º¸ÀÌ°Ô ÇØÁØ´Ù.
+/// ì‘ì—… í‘œì‹œì¤„ì„ ë³´ì´ê²Œ í•´ì¤€ë‹¤.
 void TaskBar::ShellTrayShow()
 {
-	/// ÀÛ¾÷ Ç¥½ÃÁÙÀ» º¸ÀÌ°Ô ÇØÁØ´Ù.
+	/// ì‘ì—… í‘œì‹œì¤„ì„ ë³´ì´ê²Œ í•´ì¤€ë‹¤.
 	HWND h = FindWindow(TEXT("Shell_TrayWnd"), TEXT(""));
 
 	if ( h != INVALID_HANDLE_VALUE )
@@ -25,7 +25,7 @@ void TaskBar::ShellTrayShow()
 
 void TaskBar::ShellTrayHide()
 {
-	// ÀÛ¾÷ Ç¥½ÃÁÙÀ» º¸ÀÌ°Ô ÇØÁØ´Ù.
+	// ì‘ì—… í‘œì‹œì¤„ì„ ë³´ì´ê²Œ í•´ì¤€ë‹¤.
 	HWND h = FindWindow(TEXT("Shell_TrayWnd"), TEXT(""));
 
 	if ( h != INVALID_HANDLE_VALUE )

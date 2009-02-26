@@ -1,4 +1,4 @@
-
+ï»¿
 #include <windows.h>
 #include "dbghelp.h"
 
@@ -11,7 +11,7 @@ public:
 	MiniDumper(const TCHAR * szDumpFilename = TEXT("Minidump.dmp"), const TCHAR * szDumpMsg = TEXT("Oops! Crash!"));
 	~MiniDumper();
 
-//private:///< ´ýÇÁ »óÈ²¿¡¼­ ÃÖ´ëÇÑ ÇÔ¼ö È£ÃâÀ» ÁÙÀÌ±â À§ÇØ private ¸¦ ¾²Áö ¾ÊÀ½
+//private:///< ë¤í”„ ìƒí™©ì—ì„œ ìµœëŒ€í•œ í•¨ìˆ˜ í˜¸ì¶œì„ ì¤„ì´ê¸° ìœ„í•´ private ë¥¼ ì“°ì§€ ì•ŠìŒ
 	TCHAR m_szDumpFilename[FILENAME_MAX];
 	TCHAR m_szDumpMsg[FILENAME_MAX];
 	static LONG WINAPI TopLevelFilter( struct _EXCEPTION_POINTERS *pExceptionInfo );

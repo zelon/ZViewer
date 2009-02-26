@@ -1,4 +1,4 @@
-/* ------------------------------------------------------------------------
+ï»¿/* ------------------------------------------------------------------------
  *
  * Copyright 2006 by zelon
  *
@@ -14,7 +14,7 @@
 
 #include <windows.h>
 
-/// À©µµ¿ìÀÇ Event ¸¦ ½±°Ô ¾²°Ô ÇÏ´Â À¯Æ¿¸®Æ¼ Å¬·¡½º
+/// ìœˆë„ìš°ì˜ Event ë¥¼ ì‰½ê²Œ ì“°ê²Œ í•˜ëŠ” ìœ í‹¸ë¦¬í‹° í´ëž˜ìŠ¤
 class CEventObj
 {
 public:
@@ -39,12 +39,12 @@ public:
 	}
 
 protected:
-	/// ³»ºÎÀûÀ¸·Î °¡Áö°í ÀÖ´Â ÀÌº¥Æ® ÇÚµé
+	/// ë‚´ë¶€ì ìœ¼ë¡œ ê°€ì§€ê³  ìžˆëŠ” ì´ë²¤íŠ¸ í•¸ë“¤
 	HANDLE m_hEvent;
 
 };
 
-/// À©µµ¿ìÀÇ Å©¸®Æ¼ÄÃ ¼½¼ÇÀ» ½±°Ô ¾²°Ô ÇÏ´Â À¯Æ¿¸®Æ¼ Å¬·¡½º
+/// ìœˆë„ìš°ì˜ í¬ë¦¬í‹°ì»¬ ì„¹ì…˜ì„ ì‰½ê²Œ ì“°ê²Œ í•˜ëŠ” ìœ í‹¸ë¦¬í‹° í´ëž˜ìŠ¤
 class CLockObj
 {
 public:
@@ -59,7 +59,7 @@ public:
 	}
 
 protected:
-	/// ³»ºÎÀûÀ¸·Î °¡Áö°í ÀÖ´Â Å©¸®Æ¼ÄÃ ¼½¼Ç
+	/// ë‚´ë¶€ì ìœ¼ë¡œ ê°€ì§€ê³  ìžˆëŠ” í¬ë¦¬í‹°ì»¬ ì„¹ì…˜
 	CRITICAL_SECTION m_cs;
 
 
@@ -80,7 +80,7 @@ private:
 
 };
 
-/// lock, unlock À» ½±°Ô ÇÏ±â À§ÇØ µµ¿ÍÁÖ´Â À¯Æ¿¸®Æ¼ Å¬·¡½º
+/// lock, unlock ì„ ì‰½ê²Œ í•˜ê¸° ìœ„í•´ ë„ì™€ì£¼ëŠ” ìœ í‹¸ë¦¬í‹° í´ëž˜ìŠ¤
 class CLockObjUtil
 {
 public:
@@ -96,10 +96,10 @@ public:
 	}
 
 protected:
-	/// »ý¼ºÀÚ¿¡¼­ ¹ÞÀº Å©¸®Æ¼ÄÃ ¼½¼ÇÀ» ³»ºÎÀûÀ¸·Î °¡Áö°í ÀÖ´Â ¸â¹ö º¯¼ö
+	/// ìƒì„±ìžì—ì„œ ë°›ì€ í¬ë¦¬í‹°ì»¬ ì„¹ì…˜ì„ ë‚´ë¶€ì ìœ¼ë¡œ ê°€ì§€ê³  ìžˆëŠ” ë©¤ë²„ ë³€ìˆ˜
 	CLockObj & m_lockObj;
 
-	/// ÇÒ´ç ¿¬»êÀÚ°¡ ¾²ÀÌ´Â °É ¹æÁöÇÏ´Â ÄÚµå. ÇÒ´ç ¿¬»êÀÚ°¡ ¾²ÀÌ°Ô µÇ¸é ¿À·ù ¹ß»ýÇÏ°Ô µÊ
+	/// í• ë‹¹ ì—°ì‚°ìžê°€ ì“°ì´ëŠ” ê±¸ ë°©ì§€í•˜ëŠ” ì½”ë“œ. í• ë‹¹ ì—°ì‚°ìžê°€ ì“°ì´ê²Œ ë˜ë©´ ì˜¤ë¥˜ ë°œìƒí•˜ê²Œ ë¨
 	CLockObjUtil & operator=(const CLockObjUtil & obj);
 };
 

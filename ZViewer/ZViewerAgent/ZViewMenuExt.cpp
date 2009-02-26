@@ -1,4 +1,4 @@
-/********************************************************************
+ï»¿/********************************************************************
 *
 * Created by zelon(Kim, Jinwook Korea)
 * 
@@ -8,7 +8,7 @@
 *                                       http://www.wimy.com
 *********************************************************************/
 
-// ZViewMenuExt.cpp : CZViewMenuExtÀÇ ±¸ÇöÀÔ´Ï´Ù.
+// ZViewMenuExt.cpp : CZViewMenuExtì˜ êµ¬í˜„ì…ë‹ˆë‹¤.
 
 #include "stdafx.h"
 #include "ZViewMenuExt.h"
@@ -26,7 +26,7 @@ const LONG CZViewMenuExt::m_l3DBorderWidth    = 1;
 const LONG CZViewMenuExt::m_lMenuItemSpacing  = 4;
 const LONG CZViewMenuExt::m_lTotalBorderSpace = 2*(m_lMenuItemSpacing+m_l3DBorderWidth);
 
-/// Å½»ö±âÀÇ ¿À¸¥ÂÊ ¹öÆ°À» ´­·¶À» ¶§ ¹Ì¸®º¸±âÃ¢À» ³ÖÀ» °ÍÀÎ°¡
+/// íƒìƒ‰ê¸°ì˜ ì˜¤ë¥¸ìª½ ë²„íŠ¼ì„ ëˆŒë €ì„ ë•Œ ë¯¸ë¦¬ë³´ê¸°ì°½ì„ ë„£ì„ ê²ƒì¸ê°€
 bool g_bPreviewMenuInsert = true;
 
 void CZViewMenuExt::MsgBox(const tstring & strMsg)
@@ -35,7 +35,7 @@ void CZViewMenuExt::MsgBox(const tstring & strMsg)
 }
 
 
-/// ´Ù¸¥ ÀÌ¸§À¸·Î ÀúÀåÇÑ´Ù.
+/// ë‹¤ë¥¸ ì´ë¦„ìœ¼ë¡œ ì €ì¥í•œë‹¤.
 void CZViewMenuExt::_SaveAS()
 {
 	CSaveAs::getInstance().setParentHWND(HWND_DESKTOP);
@@ -62,7 +62,7 @@ void CZViewMenuExt::_SaveAS()
 
 STDMETHODIMP CZViewMenuExt::Initialize (LPCITEMIDLIST pidlFolder, LPDATAOBJECT  pDO, HKEY /*hkeyProgID*/ )
 {
-	/// ¸¸¾à Shift Å°¸¦ ´©¸£°í ¸Ş´º¸¦ ¶ç¿î °ÍÀÌ¸é ÀÌ¹ÌÁö ¹Ì¸®º¸±â¸¦ º¸¿©ÁÖÁö ¾Ê´Â´Ù.
+	/// ë§Œì•½ Shift í‚¤ë¥¼ ëˆ„ë¥´ê³  ë©”ë‰´ë¥¼ ë„ìš´ ê²ƒì´ë©´ ì´ë¯¸ì§€ ë¯¸ë¦¬ë³´ê¸°ë¥¼ ë³´ì—¬ì£¼ì§€ ì•ŠëŠ”ë‹¤.
 	if ( GetKeyState(VK_LSHIFT) < 0 )
 	{
 		return E_FAIL;
@@ -91,7 +91,7 @@ STDMETHODIMP CZViewMenuExt::Initialize (LPCITEMIDLIST pidlFolder, LPDATAOBJECT  
 		CMessageManager::getInstance().SetLanguage(eLanguage_KOREAN);
 	}
 
-	if ( pDO == NULL )	/// pDO °¡ NULL ÀÌ¸é ¼±ÅÃµÈ ÆÄÀÏÀÌ ¾øÀÌ ¿À¸¥ÂÊ ¹öÆ°À» ´©¸¥ »óÈ²ÀÌ´Ù.
+	if ( pDO == NULL )	/// pDO ê°€ NULL ì´ë©´ ì„ íƒëœ íŒŒì¼ì´ ì—†ì´ ì˜¤ë¥¸ìª½ ë²„íŠ¼ì„ ëˆ„ë¥¸ ìƒí™©ì´ë‹¤.
 	{
 		g_bPreviewMenuInsert = false;
 	}
@@ -118,12 +118,12 @@ STDMETHODIMP CZViewMenuExt::Initialize (LPCITEMIDLIST pidlFolder, LPDATAOBJECT  
 		/// Get the name of the first selected file.
 		if ( DragQueryFile( hdrop, 0, m_szFile, MAX_PATH ) )
 		{
-			/// ÇöÀç µğ·ºÅä¸® À§Ä¡¸¦ ÀĞ¾î¿Â´Ù.
+			/// í˜„ì¬ ë””ë ‰í† ë¦¬ ìœ„ì¹˜ë¥¼ ì½ì–´ì˜¨ë‹¤.
 			m_strCurrentDir = GetFolderNameFromFullFileName(m_szFile);
 
 			if ( g_bPreviewMenuInsert )
 			{
-				/// Is it's extension is valid 'Image File', ÀÌ¹ÌÁö ¶óÀÌºê·¯¸®¿¡¼­ ÀĞÀ» ¼ö ¾ø´Â ÆÄÀÏÀÌ¸é ¹Ì¸®º¸±â ¸Ş´º¸¦ ºñÈ°¼ºÈ­½ÃÅ²´Ù.
+				/// Is it's extension is valid 'Image File', ì´ë¯¸ì§€ ë¼ì´ë¸ŒëŸ¬ë¦¬ì—ì„œ ì½ì„ ìˆ˜ ì—†ëŠ” íŒŒì¼ì´ë©´ ë¯¸ë¦¬ë³´ê¸° ë©”ë‰´ë¥¼ ë¹„í™œì„±í™”ì‹œí‚¨ë‹¤.
 				if ( ExtInfoManager::GetInstance().IsValidImageFileExt(m_szFile) )
 				{
 					if ( m_originalImage.LoadFromFile(m_szFile) )
@@ -135,7 +135,7 @@ STDMETHODIMP CZViewMenuExt::Initialize (LPCITEMIDLIST pidlFolder, LPDATAOBJECT  
 							m_b8bit = true;
 						}
 					}
-					else /// ÀÌ¹ÌÁö ÆÄÀÏÀ» ÀĞÀ» ¼ö ¾ø¾ú´Ù.
+					else /// ì´ë¯¸ì§€ íŒŒì¼ì„ ì½ì„ ìˆ˜ ì—†ì—ˆë‹¤.
 					{
 						g_bPreviewMenuInsert = false;
 					}
@@ -153,7 +153,7 @@ STDMETHODIMP CZViewMenuExt::Initialize (LPCITEMIDLIST pidlFolder, LPDATAOBJECT  
 
 }
 
-/// shell32 ¸¦ °Ë»çÇØ¼­ UseOwnerDraw ¸¦ ÇÒ ¼ö ÀÖ´Â ¹öÁ¯ÀÎÁö °Ë»çÇÑ´Ù.
+/// shell32 ë¥¼ ê²€ì‚¬í•´ì„œ UseOwnerDraw ë¥¼ í•  ìˆ˜ ìˆëŠ” ë²„ì ¼ì¸ì§€ ê²€ì‚¬í•œë‹¤.
 bool CanUseOwnerDraw()
 {
 	HINSTANCE hinstShell;
@@ -202,7 +202,7 @@ STDMETHODIMP CZViewMenuExt::QueryContextMenu(HMENU hmenu, UINT uIndex, UINT uidC
 	{
 		bUseOwnerDraw = CanUseOwnerDraw();
 
-		// ÀÌ¹ÌÁö ÆÄÀÏ¿¡ ´ëÇÑ Á¤º¸¸¦ ¼öÁıÇØ³õ´Â´Ù.
+		// ì´ë¯¸ì§€ íŒŒì¼ì— ëŒ€í•œ ì •ë³´ë¥¼ ìˆ˜ì§‘í•´ë†“ëŠ”ë‹¤.
 		TCHAR szImageInfo[COMMON_BUFFER_SIZE] = { 0 };
 		SPrintf(szImageInfo, COMMON_BUFFER_SIZE, TEXT("ZViewer %dx%d %dbpp"), m_originalImage.GetWidth(), m_originalImage.GetHeight(), m_originalImage.GetBPP());
 
@@ -232,7 +232,7 @@ STDMETHODIMP CZViewMenuExt::QueryContextMenu(HMENU hmenu, UINT uIndex, UINT uidC
 			assert(false);
 		}
 
-		/// ÇÏÀ§ ¸Ş´º¸¦ ¸¸µç´Ù.
+		/// í•˜ìœ„ ë©”ë‰´ë¥¼ ë§Œë“ ë‹¤.
 		HMENU hSubMenu = CreatePopupMenu();
 		{
 			InsertMenu( hSubMenu, 0, MF_BYPOSITION | MF_STRING, uID++, GetMessage(TEXT("VIEW_IN_ZVIEWER")));
@@ -262,13 +262,13 @@ STDMETHODIMP CZViewMenuExt::QueryContextMenu(HMENU hmenu, UINT uIndex, UINT uidC
 	}
 	else
 	{
-		/// ÇÏÀ§ ¸Ş´º¸¦ ¸¸µç´Ù.
+		/// í•˜ìœ„ ë©”ë‰´ë¥¼ ë§Œë“ ë‹¤.
 		HMENU hSubMenu = CreatePopupMenu();
 		{
 			InsertMenu( hSubMenu, 0, MF_BYPOSITION | MF_STRING, uID++, GetMessage(TEXT("ZVIEWERAGENT_OPEN_COMMAND_WINDOW")));
 
 			UINT bPasteMenuFlag = MF_BYPOSITION | MF_STRING;
-			/// Å¬¸³º¸µå¿¡ ÀÌ¹ÌÁö°¡ ¾Æ´Ï¸é ¸Ş´º¸¦ disble ÇÑ´Ù.
+			/// í´ë¦½ë³´ë“œì— ì´ë¯¸ì§€ê°€ ì•„ë‹ˆë©´ ë©”ë‰´ë¥¼ disble í•œë‹¤.
 			if ( FALSE == IsClipboardFormatAvailable(CF_DIB) )
 			{
 				bPasteMenuFlag |= MF_GRAYED;
@@ -291,20 +291,20 @@ STDMETHODIMP CZViewMenuExt::QueryContextMenu(HMENU hmenu, UINT uIndex, UINT uidC
 
 	iAddedMenuCount = (uID - uidCmdFirst);
 
-	/// uID ´Â ÇÔ¼ö ÀÎÀÚ·Î ³Ñ¾î¿Â uidCmdLast º¸´Ù ÀÛ¾Æ¾ßÇÑ´Ù(ref by msdn)
+	/// uID ëŠ” í•¨ìˆ˜ ì¸ìë¡œ ë„˜ì–´ì˜¨ uidCmdLast ë³´ë‹¤ ì‘ì•„ì•¼í•œë‹¤(ref by msdn)
 	if ( uID >= uidCmdLast )
 	{
 		assert(uID < uidCmdLast);
 	}
 
-	// ¸Ş´º¿¡ ¸î °³ÀÇ ¸Ş´º¸¦ ³Ö¾ú´ÂÁö ¾ê±âÇØÁØ´Ù. ¿©±âÀÇ iAddedMenuCount °ªÀÌ ÀÌ»óÇÏ¸é, ¸í·ÉÀ» ½ÇÇàÇß´Âµ¥ ´Ù¸¥ ¸í·ÉÀÌ ½ÇÇàµÇ°ï ÇÑ´Ù.
+	// ë©”ë‰´ì— ëª‡ ê°œì˜ ë©”ë‰´ë¥¼ ë„£ì—ˆëŠ”ì§€ ì–˜ê¸°í•´ì¤€ë‹¤. ì—¬ê¸°ì˜ iAddedMenuCount ê°’ì´ ì´ìƒí•˜ë©´, ëª…ë ¹ì„ ì‹¤í–‰í–ˆëŠ”ë° ë‹¤ë¥¸ ëª…ë ¹ì´ ì‹¤í–‰ë˜ê³¤ í•œë‹¤.
 	return MAKE_HRESULT ( SEVERITY_SUCCESS, FACILITY_NULL, iAddedMenuCount );
 }
 
-/// mouseover ÇÑ ¸Ş´º¿¡ µû¶ó¼­, ÀÌ ÇÔ¼ö¿¡¼­ ¾òÀº ¹®ÀÚ¿­À» Å½»ö±âÀÇ '»óÅÂÇ¥½ÃÁÙ' ¿¡ º¸¿©ÁØ´Ù.
+/// mouseover í•œ ë©”ë‰´ì— ë”°ë¼ì„œ, ì´ í•¨ìˆ˜ì—ì„œ ì–»ì€ ë¬¸ìì—´ì„ íƒìƒ‰ê¸°ì˜ 'ìƒíƒœí‘œì‹œì¤„' ì— ë³´ì—¬ì¤€ë‹¤.
 STDMETHODIMP CZViewMenuExt::GetCommandString (UINT uCmd, UINT uFlags, UINT* /*puReserved*/, LPSTR pszName, UINT cchMax)
 {
-	// ¿©±â¼­ uCmd ´Â ¸Ş´º¿¡ ³ÖÀº ¼ø¼­´ë·Î 0 ºÎÅÍ ¼ø¼­´ë·Î ¿Â´Ù. ´Ü, ¼±ÅÃÇÒ ¼ö ¾ø´Â ¸Ş´º´Â ¹«½ÃÇÑ ¼ø¼­´Ù.
+	// ì—¬ê¸°ì„œ uCmd ëŠ” ë©”ë‰´ì— ë„£ì€ ìˆœì„œëŒ€ë¡œ 0 ë¶€í„° ìˆœì„œëŒ€ë¡œ ì˜¨ë‹¤. ë‹¨, ì„ íƒí•  ìˆ˜ ì—†ëŠ” ë©”ë‰´ëŠ” ë¬´ì‹œí•œ ìˆœì„œë‹¤.
 
 #ifdef _DEBUG
 	TCHAR szTemp[COMMON_BUFFER_SIZE];
@@ -313,7 +313,7 @@ STDMETHODIMP CZViewMenuExt::GetCommandString (UINT uCmd, UINT uFlags, UINT* /*pu
 	OutputDebugString(TEXT("\r\n"));
 #endif
 
-	// ¸Ş´º¿¡ ³ÖÀº °¹¼ö¸¦ ³Ñ¾î¼­¸é ¾ÈµÈ´Ù.
+	// ë©”ë‰´ì— ë„£ì€ ê°¯ìˆ˜ë¥¼ ë„˜ì–´ì„œë©´ ì•ˆëœë‹¤.
 	if ( uCmd > m_uiMaxMenuID )
 	{
 		assert(false);
@@ -335,7 +335,7 @@ STDMETHODIMP CZViewMenuExt::GetCommandString (UINT uCmd, UINT uFlags, UINT* /*pu
             // Unicode string copy API.
             lstrcpynW ( (LPWSTR) pszName, T2CW(szHelpString), cchMax );
 
-			/* ¾Æ·¡ ÄÚµå¸¦ »ìÆìº¸¸é Á¦´ë·Î ±¸¼ºÇÒ ¼ö ÀÖ´Ù.
+			/* ì•„ë˜ ì½”ë“œë¥¼ ì‚´í´ë³´ë©´ ì œëŒ€ë¡œ êµ¬ì„±í•  ìˆ˜ ìˆë‹¤.
 			TCHAR buffer[256];
             SPrintf( buffer, sizeof(buffer) / sizeof(TCHAR), TEXT("uCmd(%d)"), uCmd);
 
@@ -354,7 +354,7 @@ STDMETHODIMP CZViewMenuExt::GetCommandString (UINT uCmd, UINT uFlags, UINT* /*pu
 
 
 
-/// ±×¸² ¹× ¸Ş´º¸¦ Å¬¸¯ÇßÀ» ¶§ ¾î¶² ¸í·ÉÀ» ¼öÇàÇÒÁö¸¦ °áÁ¤ÇØ¼­ ¼öÇàÇÑ´Ù.
+/// ê·¸ë¦¼ ë° ë©”ë‰´ë¥¼ í´ë¦­í–ˆì„ ë•Œ ì–´ë–¤ ëª…ë ¹ì„ ìˆ˜í–‰í• ì§€ë¥¼ ê²°ì •í•´ì„œ ìˆ˜í–‰í•œë‹¤.
 STDMETHODIMP CZViewMenuExt::InvokeCommand( LPCMINVOKECOMMANDINFO pInfo )
 {
     // If lpVerb really points to a string, ignore this function call and bail out.
@@ -365,7 +365,7 @@ STDMETHODIMP CZViewMenuExt::InvokeCommand( LPCMINVOKECOMMANDINFO pInfo )
 
 	WORD commandID = LOWORD( pInfo->lpVerb );
 
-    // ³Ñ¾î¿Ã ¼ö ÀÖ´Â command ÀÇ °ªÀ» Ã¼Å©ÇÑ´Ù.
+    // ë„˜ì–´ì˜¬ ìˆ˜ ìˆëŠ” command ì˜ ê°’ì„ ì²´í¬í•œë‹¤.
 	if ( commandID > m_uiMaxMenuID)
 	{
 		assert(false);
@@ -419,12 +419,12 @@ STDMETHODIMP CZViewMenuExt::InvokeCommand( LPCMINVOKECOMMANDINFO pInfo )
 
 		default:
 			{
-				/// Ã³¸®ÇÏÁö ¾ÊÀº ¸Ş´ºÀÌ´Ù.
+				/// ì²˜ë¦¬í•˜ì§€ ì•Šì€ ë©”ë‰´ì´ë‹¤.
 				assert(false);
 			}
 		}
 	}
-	else /// ¼±ÅÃµÈ ÆÄÀÏÀÌ ¾øÀ» ¶§
+	else /// ì„ íƒëœ íŒŒì¼ì´ ì—†ì„ ë•Œ
 	{
 		if ( commandID == 0 )
 		{
@@ -510,7 +510,7 @@ STDMETHODIMP CZViewMenuExt::OnMeasureItem ( MEASUREITEMSTRUCT* pmis, LRESULT* pR
 	m_lBmpWidth = m_originalImage.GetWidth();
 	m_lBmpHeight = m_originalImage.GetHeight();
 
-	// ½æ³×ÀÏÀÇ Å©±â¸¦ °è»êÇÑ´Ù.
+	// ì¸ë„¤ì¼ì˜ í¬ê¸°ë¥¼ ê³„ì‚°í•œë‹¤.
 	RECT original = { 0, 0, m_lBmpWidth, m_lBmpHeight };
 	RECT max = { 0, 0, m_lMaxThumbnailSize, m_lMaxThumbnailSize };
 
@@ -557,10 +557,10 @@ STDMETHODIMP CZViewMenuExt::OnDrawItem(DRAWITEMSTRUCT * pdis, LRESULT * pResult 
     // the thumbnail.
     rcDraw.DeflateRect ( m_lMenuItemSpacing, m_lMenuItemSpacing );
 
-   // ¸Ş´ºÀÇ ¹è°æÀ» Ä¥ÇÑ´Ù.
+   // ë©”ë‰´ì˜ ë°°ê²½ì„ ì¹ í•œë‹¤.
     if ( pdis->itemState & ODS_SELECTED )
 	{
-		// ¸¶¿ì½º°¡ over µÇ¾î ÀÖÀ¸¸é(¼±ÅÃµÇ¾îÀÖÀ¸¸é)
+		// ë§ˆìš°ìŠ¤ê°€ over ë˜ì–´ ìˆìœ¼ë©´(ì„ íƒë˜ì–´ìˆìœ¼ë©´)
         pdcMenu->FillSolidRect ( rcItem, GetSysColor ( COLOR_HIGHLIGHT ));
 	}
 	else
@@ -577,12 +577,12 @@ STDMETHODIMP CZViewMenuExt::OnDrawItem(DRAWITEMSTRUCT * pdis, LRESULT * pResult 
 		rcDraw.DeflateRect ( 1, 1 );
 	}
 
-	// Rescale ÀÌ ÇÊ¿äÇÏ¸é ÇØÁØ´Ù.
+	// Rescale ì´ í•„ìš”í•˜ë©´ í•´ì¤€ë‹¤.
 	if ( rcDraw.Width() < m_originalImage.GetWidth()
 		|| rcDraw.Height() < m_originalImage.GetHeight() )
 	{
 		/*
-		if ( m_b8bit )	// 8bit ÄÃ·¯´Â 32·Î ¹Ù²Û ÈÄ¿¡ rescale ÇØÁà¾ß ÇÑ´Ù... À¸À½.. ¿Ö ÀÌ·²±î;;
+		if ( m_b8bit )	// 8bit ì»¬ëŸ¬ëŠ” 32ë¡œ ë°”ê¾¼ í›„ì— rescale í•´ì¤˜ì•¼ í•œë‹¤... ìœ¼ìŒ.. ì™œ ì´ëŸ´ê¹Œ;;
 		{
 			if ( !m_originalImage.ConvertTo32Bit() )
 			{
@@ -596,7 +596,7 @@ STDMETHODIMP CZViewMenuExt::OnDrawItem(DRAWITEMSTRUCT * pdis, LRESULT * pResult 
 		m_originalImage.Resize((WORD)rcDraw.Width(), (WORD)rcDraw.Height());
 	}
 
-	// ½ÇÁ¦·Î ±×¸°´Ù.
+	// ì‹¤ì œë¡œ ê·¸ë¦°ë‹¤.
 	int r = StretchDIBits(*pdcMenu,
 		rcDraw.left, rcDraw.top, rcDraw.Width(), rcDraw.Height(),
 		0, 0, rcDraw.Width(), rcDraw.Height(),
@@ -609,7 +609,7 @@ STDMETHODIMP CZViewMenuExt::OnDrawItem(DRAWITEMSTRUCT * pdis, LRESULT * pResult 
     return S_OK;
 }
 
-/// ÇöÀçÀÇ dll ÀÌ ÀÖ´Â Æú´õÀÇ ZViewer ¸¦ ½ÇÇàÇÑ´Ù.
+/// í˜„ì¬ì˜ dll ì´ ìˆëŠ” í´ë”ì˜ ZViewer ë¥¼ ì‹¤í–‰í•œë‹¤.
 void CZViewMenuExt::ExecZViewer()
 {
 	TCHAR command[FILENAME_MAX] = { 0 };
@@ -626,13 +626,13 @@ void CZViewMenuExt::ExecZViewer()
 	si.wShowWindow =SW_SHOW;
 	ZeroMemory( &pi, sizeof(pi) );
 
-	// ZViewer ¸¦ ½ÇÇà½ÃÅ²´Ù.
+	// ZViewer ë¥¼ ì‹¤í–‰ì‹œí‚¨ë‹¤.
 	CreateProcess(NULL, command, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi);
 }
 
 void CZViewMenuExt::SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyle style)
 {
-	// ÇöÀçº¸°í ÀÖ´Â ÆÄÀÏÀ» À©µµ¿ì Æú´õ¿¡ ÀúÀåÇÑ´Ù.
+	// í˜„ì¬ë³´ê³  ìˆëŠ” íŒŒì¼ì„ ìœˆë„ìš° í´ë”ì— ì €ì¥í•œë‹¤.
 	TCHAR szSystemFolder[_MAX_PATH] = { 0 };
 
 	if ( E_FAIL == SHGetFolderPath(NULL, CSIDL_WINDOWS, NULL, SHGFP_TYPE_CURRENT, szSystemFolder) )
@@ -660,7 +660,7 @@ void CZViewMenuExt::SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyl
 	CDesktopWallPaper::SetDesktopWallPaper(strSaveFileName, style);
 }
 
-/// ÇöÀç À§Ä¡¿¡ CMD Ã¢À» ¶ç¿î´Ù.
+/// í˜„ì¬ ìœ„ì¹˜ì— CMD ì°½ì„ ë„ìš´ë‹¤.
 void CZViewMenuExt::OpenCmdWindow(void)
 {
 	TCHAR command[FILENAME_MAX] = _T("cmd.exe");
@@ -673,13 +673,13 @@ void CZViewMenuExt::OpenCmdWindow(void)
 	si.wShowWindow = SW_SHOW;
 	ZeroMemory( &pi, sizeof(pi) );
 
-	// ZViewer ¸¦ ½ÇÇà½ÃÅ²´Ù.
+	// ZViewer ë¥¼ ì‹¤í–‰ì‹œí‚¨ë‹¤.
 	CreateProcess(NULL, command, NULL, NULL, FALSE, 0, NULL, m_strCurrentDir.c_str(), &si, &pi);
 
 	//MessageBox(HWND_DESKTOP, m_szCurrentDir, TEXT("zviewer a"), MB_OK);
 }
 
-/// Å¬¸³º¸µåÀÇ ÀÌ¹ÌÁö¸¦ ÆÄÀÏ·Î ºÙ¿©³Ö±â
+/// í´ë¦½ë³´ë“œì˜ ì´ë¯¸ì§€ë¥¼ íŒŒì¼ë¡œ ë¶™ì—¬ë„£ê¸°
 void CZViewMenuExt::PasteAsImagefileFromClipboard()
 {
 	ZImage image;

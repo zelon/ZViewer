@@ -1,4 +1,4 @@
-// ZViewerAgent.cpp : DLL ³»º¸³»±âÀÇ ±¸ÇöÀÔ´Ï´Ù.
+ï»¿// ZViewerAgent.cpp : DLL ë‚´ë³´ë‚´ê¸°ì˜ êµ¬í˜„ì…ë‹ˆë‹¤.
 
 #include "stdafx.h"
 #include "resource.h"
@@ -17,7 +17,7 @@ class CZViewerAgentApp : public CWinApp
 {
 public:
 
-// ÀçÁ¤ÀÇ
+// ì¬ì •ì˜
     virtual BOOL InitInstance();
     virtual int ExitInstance();
 
@@ -40,7 +40,7 @@ int CZViewerAgentApp::ExitInstance()
 }
 
 
-// DLLÀÌ OLE¿¡ ÀÇÇØ ¾ğ·ÎµåµÉ ¼ö ÀÖ´ÂÁö °áÁ¤ÇÏ´Â µ¥ »ç¿ëµË´Ï´Ù.
+// DLLì´ OLEì— ì˜í•´ ì–¸ë¡œë“œë  ìˆ˜ ìˆëŠ”ì§€ ê²°ì •í•˜ëŠ” ë° ì‚¬ìš©ë©ë‹ˆë‹¤.
 STDAPI DllCanUnloadNow(void)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -48,23 +48,23 @@ STDAPI DllCanUnloadNow(void)
 }
 
 
-// Å¬·¡½º ÆÑÅÍ¸®¸¦ ¹İÈ¯ÇÏ¿© ¿äÃ»µÈ Çü½ÄÀÇ °³Ã¼¸¦ ¸¸µì´Ï´Ù.
+// í´ë˜ìŠ¤ íŒ©í„°ë¦¬ë¥¼ ë°˜í™˜í•˜ì—¬ ìš”ì²­ëœ í˜•ì‹ì˜ ê°œì²´ë¥¼ ë§Œë“­ë‹ˆë‹¤.
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
     return _AtlModule.DllGetClassObject(rclsid, riid, ppv);
 }
 
 
-// DllRegisterServer - ½Ã½ºÅÛ ·¹Áö½ºÆ®¸®¿¡ Ç×¸ñÀ» Ãß°¡ÇÕ´Ï´Ù.
+// DllRegisterServer - ì‹œìŠ¤í…œ ë ˆì§€ìŠ¤íŠ¸ë¦¬ì— í•­ëª©ì„ ì¶”ê°€í•©ë‹ˆë‹¤.
 STDAPI DllRegisterServer(void)
 {
-    // °³Ã¼, Çü½Ä ¶óÀÌºê·¯¸® ¹× Çü½Ä ¶óÀÌºê·¯¸®¿¡ µé¾î ÀÖ´Â ¸ğµç ÀÎÅÍÆäÀÌ½º¸¦ µî·ÏÇÕ´Ï´Ù.
+    // ê°œì²´, í˜•ì‹ ë¼ì´ë¸ŒëŸ¬ë¦¬ ë° í˜•ì‹ ë¼ì´ë¸ŒëŸ¬ë¦¬ì— ë“¤ì–´ ìˆëŠ” ëª¨ë“  ì¸í„°í˜ì´ìŠ¤ë¥¼ ë“±ë¡í•©ë‹ˆë‹¤.
     HRESULT hr = _AtlModule.DllRegisterServer();
 	return hr;
 }
 
 
-// DllUnregisterServer - ½Ã½ºÅÛ ·¹Áö½ºÆ®¸®¿¡¼­ Ç×¸ñÀ» Á¦°ÅÇÕ´Ï´Ù.
+// DllUnregisterServer - ì‹œìŠ¤í…œ ë ˆì§€ìŠ¤íŠ¸ë¦¬ì—ì„œ í•­ëª©ì„ ì œê±°í•©ë‹ˆë‹¤.
 STDAPI DllUnregisterServer(void)
 {
 	HRESULT hr = _AtlModule.DllUnregisterServer();

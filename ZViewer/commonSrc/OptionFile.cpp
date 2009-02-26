@@ -1,4 +1,4 @@
-/********************************************************************
+ï»¿/********************************************************************
 *
 * Created by zelon(Kim, Jinwook Korea)
 * 
@@ -16,7 +16,7 @@
 
 using namespace std;
 
-/// µ¥ÀÌÅÍ ÆÄÀÏÀ» ÀĞ¾îµé¿©¼­ ¸ÊÀ» ±¸¼ºÇÑ´Ù.
+/// ë°ì´í„° íŒŒì¼ì„ ì½ì–´ë“¤ì—¬ì„œ ë§µì„ êµ¬ì„±í•œë‹¤.
 bool COptionFile::LoadFromFile(const tstring & strFilename, iniMap & settings)
 {
 	CUnicodeFile file;
@@ -31,19 +31,19 @@ bool COptionFile::LoadFromFile(const tstring & strFilename, iniMap & settings)
 	{
 		if ( aLine.empty() ) continue;
 
-		if ( aLine[0] == L'#' || aLine[0] == L'/' )	// Ã³À½ ¹ÙÀÌÆ®°¡ # ÀÌ°Å³ª / ÀÌ¸é ¹«½ÃÇÑ´Ù.
+		if ( aLine[0] == L'#' || aLine[0] == L'/' )	// ì²˜ìŒ ë°”ì´íŠ¸ê°€ # ì´ê±°ë‚˜ / ì´ë©´ ë¬´ì‹œí•œë‹¤.
 		{
 			continue;
 		}
 
-		if ( aLine.size() <= 3 )	// µ¥ÀÌÅÍ·Î º¼ ¼ö ¾ø´Â ±æÀÌ¸é ¹«½ÃÇÑ´Ù.
+		if ( aLine.size() <= 3 )	// ë°ì´í„°ë¡œ ë³¼ ìˆ˜ ì—†ëŠ” ê¸¸ì´ë©´ ë¬´ì‹œí•œë‹¤.
 		{
 			continue;
 		}
 
 		tstring::size_type pos = aLine.find(TEXT("="));
 
-		if ( pos == aLine.npos )	// Ã³À½ '=' À» Ã£À» ¼ö ¾øÀ¸¸é ÀÌ»óÇÑ ÁÙÀÌ´Ù.
+		if ( pos == aLine.npos )	// ì²˜ìŒ '=' ì„ ì°¾ì„ ìˆ˜ ì—†ìœ¼ë©´ ì´ìƒí•œ ì¤„ì´ë‹¤.
 		{
 			continue;
 		}
@@ -59,7 +59,7 @@ bool COptionFile::LoadFromFile(const tstring & strFilename, iniMap & settings)
 	return true;
 }
 
-/// ¸Ê ³»¿ëÀ» µ¥ÀÌÅÍ ÆÄÀÏ¿¡ ¾´´Ù.
+/// ë§µ ë‚´ìš©ì„ ë°ì´í„° íŒŒì¼ì— ì“´ë‹¤.
 void COptionFile::SaveToFile(const tstring & strFilename, const iniMap & settings)
 {
 	CUnicodeFile file;

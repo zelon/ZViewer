@@ -1,4 +1,4 @@
-/********************************************************************
+ï»¿/********************************************************************
 *
 * Created by zelon(Kim, Jinwook Korea)
 * 
@@ -11,7 +11,7 @@
 
 #pragma once
 
-/// ´ÙÁß ¾ğ¾î Áö¿øÀ» À§ÇØ HINSTANCE ¹× ¸®¼Ò½º¸¦ °ü¸®ÇÏ´Â Å¬·¡½º
+/// ë‹¤ì¤‘ ì–¸ì–´ ì§€ì›ì„ ìœ„í•´ HINSTANCE ë° ë¦¬ì†ŒìŠ¤ë¥¼ ê´€ë¦¬í•˜ëŠ” í´ë˜ìŠ¤
 class ZResourceManager
 {
 	ZResourceManager();
@@ -36,6 +36,6 @@ public:
 	HINSTANCE m_hInstance;
 
 private:
-	std::map < UINT, tstring > m_stringMap;	/// ID ¿¡ ÇØ´çÇÏ´Â String À» Ä³½ÃÇÑ´Ù.
+	std::map < UINT, tstring > m_stringMap;	/// ID ì— í•´ë‹¹í•˜ëŠ” String ì„ ìºì‹œí•œë‹¤.
 };
 

@@ -1,4 +1,4 @@
-/* ------------------------------------------------------------------------
+ï»¿/* ------------------------------------------------------------------------
  *
  * Copyright 2006 by zelon
  *
@@ -30,7 +30,7 @@ CSaveAs::~CSaveAs()
 {
 }
 
-/// ÆÄÀÏ ¿­±â ´ÙÀÌ¾ó·Î±×´Â Ç×»ó ºÎ¸ðÀÇ °¡¿îµ¥¿¡ ¶ç¿î´Ù.
+/// íŒŒì¼ ì—´ê¸° ë‹¤ì´ì–¼ë¡œê·¸ëŠ” í•­ìƒ ë¶€ëª¨ì˜ ê°€ìš´ë°ì— ë„ìš´ë‹¤.
 UINT_PTR CALLBACK OFNHookProc(HWND hdlg, UINT uiMsg, WPARAM /*wParam*/, LPARAM /*lParam*/ )
 {
 	switch ( uiMsg )
@@ -68,7 +68,7 @@ UINT_PTR CALLBACK OFNHookProc(HWND hdlg, UINT uiMsg, WPARAM /*wParam*/, LPARAM /
 	return 0L;
 }
 
-/// ´Ù¸¥ ÀÌ¸§À¸·Î ÀúÀåÃ¢À» ¶ç¿î´Ù. ¹ÝÈ¯°ªÀÌ false ÀÌ¸é ÀúÀåÇÏÁö ¾Ê´Â´Ù.
+/// ë‹¤ë¥¸ ì´ë¦„ìœ¼ë¡œ ì €ìž¥ì°½ì„ ë„ìš´ë‹¤. ë°˜í™˜ê°’ì´ false ì´ë©´ ì €ìž¥í•˜ì§€ ì•ŠëŠ”ë‹¤.
 bool CSaveAs::showDialog()
 {
 	// Initialize OPENFILENAME

@@ -1,4 +1,4 @@
-/********************************************************************
+ï»¿/********************************************************************
 *
 * Created by zelon(Kim, Jinwook Korea)
 * 
@@ -77,10 +77,10 @@ int CALLBACK ZFileExtDlg::FileExtDlgProc(HWND hWnd,UINT iMessage,WPARAM wParam,L
 /*
 void ZFileExtDlg::LoadExtEnv(HWND hwnd)
 {
-	/// Registry ¿¡¼­ ¼³Á¤µÇ¾î ÀÖ´Â °ªµéÀ» ¹Ş¾Æ¿Â´Ù.
-	/// TODO: registry ¿¡¼­ ÀĞ¾î¿Â´Ù.
+	/// Registry ì—ì„œ ì„¤ì •ë˜ì–´ ìˆëŠ” ê°’ë“¤ì„ ë°›ì•„ì˜¨ë‹¤.
+	/// TODO: registry ì—ì„œ ì½ì–´ì˜¨ë‹¤.
 
-	/// ÀĞ¾î¿Â ´ë·Î checkbox ¸¦ ¼¼ÆÃÇÑ´Ù.
+	/// ì½ì–´ì˜¨ ëŒ€ë¡œ checkbox ë¥¼ ì„¸íŒ…í•œë‹¤.
 	SendMessage(GetDlgItem(hwnd, (IDC_CHECK_BMP)), BM_SETCHECK, BST_CHECKED, 0);
 	SendMessage(GetDlgItem(hwnd, (IDC_CHECK_GIF)), BM_SETCHECK, BST_CHECKED, 0);
 	SendMessage(GetDlgItem(hwnd, (IDC_CHECK_PNG)), BM_SETCHECK, BST_CHECKED, 0);
@@ -104,16 +104,16 @@ void ZFileExtDlg::SaveExtEnv()
 		const ExtSetting & extset = *it;
 
 		if ( false == SetExtWithProgram(TEXT("ZViewer"), extset.m_strExt, 
-			TEXT(""),	/// ÇÁ·Î±×·¥ Full Path. ºñ¿öµÎ¸é ÇöÀç ÇÁ·Î±×·¥ÀÌ´Ù.
-			strIconDll.c_str(),	/// ¾ÆÀÌÄÜ ÇÁ·Î±×·¥
-			extset.m_numIconIndex	/// ¾ÆÀÌÄÜ index
+			TEXT(""),	/// í”„ë¡œê·¸ë¨ Full Path. ë¹„ì›Œë‘ë©´ í˜„ì¬ í”„ë¡œê·¸ë¨ì´ë‹¤.
+			strIconDll.c_str(),	/// ì•„ì´ì½˜ í”„ë¡œê·¸ë¨
+			extset.m_numIconIndex	/// ì•„ì´ì½˜ index
 		) )
 		{
 			assert(false);
 		}
 	}
 
-	/// explorer ÀÇ ¾ÆÀÌÄÜÀ» update ½ÃÅ²´Ù.
+	/// explorer ì˜ ì•„ì´ì½˜ì„ update ì‹œí‚¨ë‹¤.
 	SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST, NULL, NULL);
 }
 
@@ -135,28 +135,28 @@ bool ZFileExtDlg::SetExtWithProgram(const tstring & strProgramName, const tstrin
 
 	fileExtReg.m_strExtension = strExt.c_str();
 
-	// ÇÁ·Î±×·¥¿¡°Ô ÀÎÀÚ¸¦ ³Ñ°ÜÁÙ ¶§ÀÇ full path ¸¦ ¸¸µç´Ù.
+	// í”„ë¡œê·¸ë¨ì—ê²Œ ì¸ìë¥¼ ë„˜ê²¨ì¤„ ë•Œì˜ full path ë¥¼ ë§Œë“ ë‹¤.
 	strTempText  = strFullProgramPath;
 	strTempText += TEXT(" \"%1\"");
 	fileExtReg.m_strShellOpenCommand = strTempText.c_str();
 	fileExtReg.m_strDocumentShellOpenCommand = strTempText.c_str();
 
-	// ·¹Áö½ºÆ®¸®¿¡ µî·ÏÇÒ ¶§ÀÇ ÇÁ·Î±×·¥ÀÇ ÀÌ¸§°ú È®ÀåÀÚ¸¦ Á¤ÇÑ´Ù.
+	// ë ˆì§€ìŠ¤íŠ¸ë¦¬ì— ë“±ë¡í•  ë•Œì˜ í”„ë¡œê·¸ë¨ì˜ ì´ë¦„ê³¼ í™•ì¥ìë¥¼ ì •í•œë‹¤.
 	tstring strClassName = strProgramName;
 	strClassName += TEXT(".");
 	strClassName += strExt;
 	fileExtReg.m_strDocumentClassName = strClassName.c_str();
 
-	// È®ÀåÀÚ¿¡ ¸Â´Â ±âº» ¾ÆÀÌÄÜÀ» ÁöÁ¤ÇÑ´Ù.
+	// í™•ì¥ìì— ë§ëŠ” ê¸°ë³¸ ì•„ì´ì½˜ì„ ì§€ì •í•œë‹¤.
 	if ( strIcon.size() <= 0 )
 	{
-		// ¾ÆÀÌÄÜ ÇÁ·Î±×·¥À» ÁöÁ¤ÇÏÁö ¾ÊÀ¸¸é ¿ø·¡ ÇÁ·Î±×·¥ÀÇ Ã¹¹øÂ° ¾ÆÀÌÄÜÀ» ¾´´Ù.
+		// ì•„ì´ì½˜ í”„ë¡œê·¸ë¨ì„ ì§€ì •í•˜ì§€ ì•Šìœ¼ë©´ ì›ë˜ í”„ë¡œê·¸ë¨ì˜ ì²«ë²ˆì§¸ ì•„ì´ì½˜ì„ ì“´ë‹¤.
 		strTempText  = strFullProgramPath;
 		strTempText += TEXT(",0");
 	}
 	else
 	{
-		// ¾ÆÀÌÄÜ ÇÁ·Î±×·¥À» ÁöÁ¤ÇßÀ¸¸é icon ¹øÈ£¸¦ ¾´´Ù.
+		// ì•„ì´ì½˜ í”„ë¡œê·¸ë¨ì„ ì§€ì •í–ˆìœ¼ë©´ icon ë²ˆí˜¸ë¥¼ ì“´ë‹¤.
 		if ( iIconIndex < 0 )
 		{
 			assert(iIconIndex >= 0 );
@@ -172,7 +172,7 @@ bool ZFileExtDlg::SetExtWithProgram(const tstring & strProgramName, const tstrin
 	}
 	fileExtReg.m_strDocumentDefaultIcon = strTempText.c_str();
 
-	// ¼³Á¤µÈ °ªÀ¸·Î ·¹Áö½ºÆ®¸®¸¦ µî·ÏÇÑ´Ù.
+	// ì„¤ì •ëœ ê°’ìœ¼ë¡œ ë ˆì§€ìŠ¤íŠ¸ë¦¬ë¥¼ ë“±ë¡í•œë‹¤.
 	fileExtReg.SetRegistries();
 
 	return true;

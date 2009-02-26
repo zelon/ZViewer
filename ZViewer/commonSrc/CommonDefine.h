@@ -1,4 +1,4 @@
-/********************************************************************
+ï»¿/********************************************************************
 *
 * Created by zelon(Kim, Jinwook Korea)
 *
@@ -13,7 +13,7 @@
 #include <string>
 #include <windows.h>
 
-/// ÀÏ¹İÀûÀ¸·Î ´ëÃæ¾²´Â ¹öÆÛÀÇ Å©±â
+/// ì¼ë°˜ì ìœ¼ë¡œ ëŒ€ì¶©ì“°ëŠ” ë²„í¼ì˜ í¬ê¸°
 const int COMMON_BUFFER_SIZE = 512;
 
 #ifdef _UNICODE
@@ -28,7 +28,7 @@ typedef std::string tstring;
 #define		EXIF_ROTATION_270	"left side, bottom"
 
 
-const tstring g_strVersion = TEXT("0.7.0alpha1");
+const tstring g_strVersion = TEXT("0.7.0Z5");
 const tstring g_strHomepage = TEXT("http://zviewer.wimy.com");
 struct TagData
 {
@@ -38,15 +38,15 @@ struct TagData
 
 struct FileData
 {
-	tstring m_strFileName;	// ÆÄÀÏ¸í
-	_FILETIME m_timeModified;	// ÃÖ±Ù ¼öÁ¤µÈ ³¯Â¥
-	DWORD m_nFileSize;			// ÆÄÀÏÅ©±â
+	tstring m_strFileName;	// íŒŒì¼ëª…
+	_FILETIME m_timeModified;	// ìµœê·¼ ìˆ˜ì •ëœ ë‚ ì§œ
+	DWORD m_nFileSize;			// íŒŒì¼í¬ê¸°
 };
 
 struct ExtSetting
 {
-	unsigned int m_numIconIndex;		// icon dll ¿¡¼­ÀÇ index
-	tstring m_strExt;				// ÆÄÀÏÀÇ È®ÀåÀÚ
+	unsigned int m_numIconIndex;		// icon dll ì—ì„œì˜ index
+	tstring m_strExt;				// íŒŒì¼ì˜ í™•ì¥ì
 };
 
 
@@ -56,7 +56,7 @@ public:
 	bool operator()(const FileData & a, const FileData & b)
 	{
 		/*
-		// ÆÄÀÏ¸í ºñ±³¸¦ ÇÒ ¶§ ¸ğµÎ ¼Ò¹®ÀÚ·Î ¹Ù²ã¼­ ºñ±³ÇÑ´Ù.
+		// íŒŒì¼ëª… ë¹„êµë¥¼ í•  ë•Œ ëª¨ë‘ ì†Œë¬¸ìë¡œ ë°”ê¿”ì„œ ë¹„êµí•œë‹¤.
 		char szTempA[FILENAME_MAX], szTempB[FILENAME_MAX];
 		_snprintf(szTempA, sizeof(szTempA), GetOnlyFileNameWithoutExt(a.m_strFileName).c_str());
 		_snprintf(szTempB, sizeof(szTempB), GetOnlyFileNameWithoutExt(b.m_strFileName).c_str());
@@ -75,7 +75,7 @@ public:
 	bool operator()(const FileData & a, const FileData & b)
 	{
 		/*
-		// ÆÄÀÏ¸í ºñ±³¸¦ ÇÒ ¶§ ¸ğµÎ ¼Ò¹®ÀÚ·Î ¹Ù²ã¼­ ºñ±³ÇÑ´Ù.
+		// íŒŒì¼ëª… ë¹„êµë¥¼ í•  ë•Œ ëª¨ë‘ ì†Œë¬¸ìë¡œ ë°”ê¿”ì„œ ë¹„êµí•œë‹¤.
 		char szTempA[FILENAME_MAX], szTempB[FILENAME_MAX];
 		_snprintf(szTempA, sizeof(szTempA), GetOnlyFileNameWithoutExt(a.m_strFileName).c_str());
 		_snprintf(szTempB, sizeof(szTempB), GetOnlyFileNameWithoutExt(b.m_strFileName).c_str());
@@ -103,7 +103,7 @@ class CFileDataSort_LastModifiedTime
 public:
 	bool operator()(const FileData & a, const FileData & b)
 	{
-		// µ¹·ÁÁÖ´Â ºÎµîÈ£°¡ > ÀÌ¸é ÃÖ±Ù°ÍÀÌ ¾Õ¿¡, < ÀÌ¸é ÃÖ±Ù°ÍÀÌ µÚ¿¡ °£´Ù.
+		// ëŒë ¤ì£¼ëŠ” ë¶€ë“±í˜¸ê°€ > ì´ë©´ ìµœê·¼ê²ƒì´ ì•ì—, < ì´ë©´ ìµœê·¼ê²ƒì´ ë’¤ì— ê°„ë‹¤.
 		if ( a.m_timeModified.dwHighDateTime == b.m_timeModified.dwHighDateTime)
 		{
 			return a.m_timeModified.dwLowDateTime >= b.m_timeModified.dwLowDateTime;

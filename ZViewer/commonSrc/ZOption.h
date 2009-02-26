@@ -1,4 +1,4 @@
-/********************************************************************
+ï»¿/*********************************************************************
 *
 * Created by zelon(Kim, Jinwook Korea)
 * 
@@ -42,7 +42,7 @@ public:
 		SaveToFile();
 	}
 
-	/// ±âº» ¿É¼ÇÀ» ÆÄÀÏ·ÎºÎÅÍ ºÒ·¯¿Â´Ù.
+	/// æ¹²ê³•ë‚¯ ?ë“­ë€¡???ëš¯ì”ªæ¿¡ì’•???éºëˆìœ­?â‘¤ë–Ž.
 	void LoadOption();
 
 	bool IsFullScreen() const
@@ -73,21 +73,21 @@ public:
 	const bool IsUsingPreviewModeInShell() const { return m_bUsePreviewInShell; }
 	const bool IsUsingOpenCMDInShell() const { return m_bUseOpenCMDInShell; }
 	//-----------------------------------------------------------
-	// ¾Æ·¡´Â ÇÁ·Î±×·¥ ±¸µ¿ ÈÄ¿¡ ÀÓ½Ã·Î ¾²ÀÌ´Â ¿É¼Çµé. ÆÄÀÏ¿¡ ÀúÀåÇÏÁö ¾Ê´Â´Ù.
+	// ?ê¾¨ì˜’???ê¾¨ì¤ˆæ´¹ëªƒì˜© æ´Ñ‰ë£ž ?ê¾©ë¿‰ ?ê¾©ë–†æ¿¡??ê³—ì” ???ë“­ë€¡?? ?ëš¯ì”ª???Â€?Î½ë¸¯ï§žÂ€ ?ë”…ë’—??
 
-	//// ±×¸²ÀÇ ½ÃÀÛ À§Ä¡. ÀÏº» ¸¸È­ÀÇ °æ¿ì ¿ìÃø »ó´ÜºÎÅÍ ½ÃÀÛÇÏ±â À§ÇØ¼­...
+	//// æ´¹ëªƒâ”???ì’–ì˜‰ ?ê¾©íŠ‚. ?ì‡°ë‚¯ ï§ëš°ì†•??å¯ƒìŽŒìŠ¦ ?ê³—ë¥« ?ê³·ë–’éºÂ€???ì’–ì˜‰?ì„ë¦° ?ê¾ªë¹??..
 	bool m_bRightTopFirstDraw;
 
-	/// ÇÑ È­¸é¿¡ 2ÀåÀÇ ±×¸²À» º¸¿©ÁÙ °ÍÀÎ°¡.
+	/// ???ë¶¾ãˆƒ??2?Î¼ì“½ æ´¹ëªƒâ”??è¹‚ëŒë¿¬ä»¥?å¯ƒê»‹ì”¤åª›Â€.
 	bool m_bTwoInSaveView;
 
-	/// ÃÖ´ë Ä³½ÃÇÒ ÀÌ¹ÌÁö °¹¼ö. ¿©±â¼­ Àý¹Ý¹ÝÅ­ ¿ÞÂÊ, ¿À¸¥ÂÊÀ¸·Î °£´Ù.
+	/// ï§¤ì’•? ï§¦ë¨¯ë–†???ëŒ€?ï§žÂ€ åª›?ë‹”. ?Ñˆë¦°???ëˆì»²è«›ì„‘ê²® ?ì‡±ã, ?ã…»â…¨ï§ŸìŽŒì‘æ¿¡?åª›ê¾¨ë–Ž.
 	int m_iMaxCacheImageNum;
 
-	/// ½½¶óÀÌµå ¸ðµåÀÎ°¡
+	/// ?Ñ‰ì”ª?ëŒ€ë±¶ ï§â‘¤ë±¶?ë©¸?
 	bool m_bSlideMode;
 
-	/// ½½¶óÀÌµå ¸ðµåÀÇ ½Ã°£(mili seconds)
+	/// ?Ñ‰ì”ª?ëŒ€ë±¶ ï§â‘¤ë±¶???ì’“ì»™(mili seconds)
 	DWORD m_iSlideModePeriodMiliSeconds;
 
 	DWORD m_dwLastSlidedTime;
@@ -101,48 +101,48 @@ protected:
 
 private:
 	//----------------------------------------------------------
-	// ¾Æ·¡´Â Áö¼ÓÀûÀ¸·Î ÀúÀåµÇ´Â ¿É¼Çµé. ÆÄÀÏ¿¡ ÀúÀåÇÑ´Ù.
+	// ?ê¾¨ì˜’??ï§žÂ€?ë¿ìŸ»?ì‡°ì¤ˆ ?Â€?Î»ë¦º???ë“­ë€¡?? ?ëš¯ì”ª???Â€?Î½ë¸³??
 
-	/// exif Á¤º¸¿¡ µû¸¥ ÀÚµ¿ È¸ÀüÀ» ÇÒ °ÍÀÎ°¡.
+	/// exif ?ëº£ë‚«???ê³•â…¨ ?ë¨®ë£ž ?ëš¯ìŸ¾????å¯ƒê»‹ì”¤åª›Â€.
 	bool m_bUseAutoRotation;
 
-	/// ¸¶Áö¸· ±×¸² ÆÄÀÏ¿¡¼­ ´ÙÀ½À¸·Î °¡¸é Ã³À½ ±×¸² ÆÄÀÏ·Î °¥ °ÍÀÎ°¡?
+	/// ï§ë‰?ï§?æ´¹ëªƒâ” ?ëš¯ì”ª?ë¨¯ê½Œ ?ã…¼ì“¬?ì‡°ì¤ˆ åª›Â€ï§Ž?ï§£ì„ì“¬ æ´¹ëªƒâ” ?ëš¯ì”ªæ¿¡?åª›?å¯ƒê»‹ì”¤åª›Â€?
 	bool m_bLoopImages;
 
-	/// µð¹ö±× Á¤º¸¸¦ ³²±â³ª
+	/// ?ë¶¾ì¾­æ´¹??ëº£ë‚«ç‘œ??â‘£ë¦°??
 	bool m_bUseDebug;
 
-	/// È­¸éº¸´Ù Å« ±×¸²À» È­¸é¿¡ ¸Â°Ô Ãà¼ÒÇÒ °ÍÀÎ°¡
+	/// ?ë¶¾ãˆƒè¹‚ëŒ€ë–Ž ??æ´¹ëªƒâ”???ë¶¾ãˆƒ??ï§ìšŠì¾¶ ç•°ëº¤ëƒ¼??å¯ƒê»‹ì”¤åª›Â€
 	bool m_bBigToSmallStretchImage;
 
-	/// È­¸éº¸´Ù ÀÛÀº ±×¸²À» È­¸é¿¡ ¸Â°Ô È®´ëÇÒ °ÍÀÎ°¡.
+	/// ?ë¶¾ãˆƒè¹‚ëŒ€ë–Ž ?ë¬’? æ´¹ëªƒâ”???ë¶¾ãˆƒ??ï§ìšŠì¾¶ ?ëº£???å¯ƒê»‹ì”¤åª›Â€.
 	bool m_bSmallToBigStretchImage;
 
-	/// Ä³½ÃµÇ´Â ÃÖ´ë ¸Þ¸ð¸®·®
+	/// ï§¦ë¨¯ë–†?ì„Žë’— ï§¤ì’•? ï§Žë¶¾ãˆç”±Ñ‰ì›¾
 	int m_iMaximumCacheMemoryMB;
 
 	tstring m_strOptionFilename;
 
-	/// Shell ¿¡¼­ ¹Ì¸® º¸±â¸¦ »ç¿ëÇÒ °ÍÀÎ°¡.
+	/// Shell ?ë¨¯ê½Œ èª˜ëªƒâ” è¹‚ë‹¿ë¦°ç‘œ??ÑŠìŠœ??å¯ƒê»‹ì”¤åª›Â€.
 	bool m_bUsePreviewInShell;
 
-	/// Shell ¿¡¼­ cmd Ã¢ ¿­±â¸¦ »ç¿ëÇÒ °ÍÀÎ°¡.
+	/// Shell ?ë¨¯ê½Œ cmd ï§¡??ë‹¿ë¦°ç‘œ??ÑŠìŠœ??å¯ƒê»‹ì”¤åª›Â€.
 	bool m_bUseOpenCMDInShell;
 
-	/// ±âº»ÀûÀÎ ¿É¼ÇÀ» ¼³Á¤ÇØµÐ´Ù. ¼³Ä¡ ÈÄ Ã³À½ ½ÇÇàµÇ¾úÀ» ¶§ ÀÌ °ªÀ» ±âÁØÀ¸·Î zviewer.ini ÆÄÀÏÀÌ ¸¸µé¾îÁø´Ù.
+	/// æ¹²ê³•ë‚¯?ê³¸ì”¤ ?ë“­ë€¡???ã…¼ì ™?ëŒ€ëª¦?? ?ã…¼íŠ‚ ??ï§£ì„ì“¬ ?ã…½ë»¾?ì„ë¿€??????åª›ë¯ªì“£ æ¹²ê³—??ì‡°ì¤ˆ zviewer.ini ?ëš¯ì”ª??ï§ëš®ë±¾?ëŒì­Š??
 	void SetDefaultOption();
 
 	void LoadFromFile();
 	void SaveToFile();
 
-	/// ÀÌ ¸â¹öµéÀº ÀÌ ÀÌ¸§À¸·Î ÀúÀåµÇ°í, ºÒ·ÁÁ® ¿Â´Ù¶ó°í ¼³Á¤
+	/// ??ï§Žã…»ì¾­?ã…¼? ???ëŒ€ì««?ì‡°ì¤ˆ ?Â€?Î»ë¦ºæ€¨? éºëˆì ®???â‘¤ë–Ž?ì‡¨í€¬ ?ã…¼ì ™
 	void SetSaveOptions();
 
-	/// ÀÌ °ªÀÌ false ÀÌ¸é singleton À» ³¡³¾ ¶§ °ªÀ» ÀúÀåÇÏÁö ¾Ê´Â´Ù(ZviewerAgent ÀÇ Á¾·á ½ÃÁ¡À» Á¤È®È÷ ¾Ë ¼ö ¾ø±â ¶§¹®)
+	/// ??åª›ë¯ªì”  false ?ëŒ€ãˆƒ singleton ???ì•¸ê¶ª ??åª›ë¯ªì“£ ?Â€?Î½ë¸¯ï§žÂ€ ?ë”…ë’—??ZviewerAgent ??é†«ë‚…ì¦º ?ì’–ì ???ëº¥ì†—???????ë…¾ë¦° ?ëš®Ð¦)
 	bool m_bDontSaveInstance;
 
 protected:
-	/// ÆÄÀÏ·ÎºÎÅÍ ¿É¼ÇÀ» ÀÐ¾îµé¿©¼­ ¹Ù²ï ¿É¼ÇÀÌ ÀÖ³ª.
+	/// ?ëš¯ì”ªæ¿¡ì’•????ë“­ë€¡???ìŽŒë¼±?ã…¼ë¿¬??è«›ë¶¾Â€??ë“­ë€¡???ëˆêµ¹.
 	bool m_bOptionChanged;
 
 	std::vector < StringToValue > m_saveOptions;

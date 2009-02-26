@@ -1,4 +1,4 @@
-/* ------------------------------------------------------------------------
+ï»¿/* ------------------------------------------------------------------------
  *
  * Copyright 2006
  *
@@ -25,7 +25,7 @@
 
 enum
 {
-	ARROW_MOVEMENT_LENGTH = 100		///< È­¸éº¸´Ù Å« ±×¸²À» º¼ ¶§, ¹æÇâÅ°¸¦ ´­·¶À» ¶§ ¿òÁ÷ÀÌ´Â Á¤µµ
+	ARROW_MOVEMENT_LENGTH = 100		///< í™”ë©´ë³´ë‹¤ í° ê·¸ë¦¼ì„ ë³¼ ë•Œ, ë°©í–¥í‚¤ë¥¼ ëˆŒë €ì„ ë•Œ ì›€ì§ì´ëŠ” ì •ë„
 };
 
 bool m_bCapture = false;
@@ -95,20 +95,20 @@ HWND CMainWindow::Create(HINSTANCE hInstance, HWND hParentHWND, int nCmdShow)
 		lpszClass,
 		lpszClass,		///< Window Title
 		WS_OVERLAPPEDWINDOW,///< | WS_EX_ACCEPTFILES,
-		iXPosition,		///< ±âº» x À§Ä¡
-		iYPosition,		///< ±âº» y À§Ä¡
+		iXPosition,		///< ê¸°ë³¸ x ìœ„ì¹˜
+		iYPosition,		///< ê¸°ë³¸ y ìœ„ì¹˜
 		iWidth,			///< width
 		iHeight,		///< height
 		NULL,
 		hMenu,			///< MainMenu
 		hInstance,NULL);
 
-	// Å½»ö±â¿¡¼­ÀÇ Drag&Drop À» °¡´ÉÇÏ°Ô ÇÑ´Ù.
+	// íƒìƒ‰ê¸°ì—ì„œì˜ Drag&Drop ì„ ê°€ëŠ¥í•˜ê²Œ í•œë‹¤.
 	DragAcceptFiles(m_hWindow, TRUE);
 
 	ShowWindow(m_hWindow, nCmdShow);
 
-	// ´ÜÃàÅ° ¼³Á¤. ¿©±â¼­ ¹ÝÈ¯µÈ ÇÚµéÀº ÇÁ·Î±×·¥ÀÌ Á¾·áµÉ ¶§ ÀÚµ¿ÀûÀ¸·Î close µÊ.
+	// ë‹¨ì¶•í‚¤ ì„¤ì •. ì—¬ê¸°ì„œ ë°˜í™˜ëœ í•¸ë“¤ì€ í”„ë¡œê·¸ëž¨ì´ ì¢…ë£Œë  ë•Œ ìžë™ì ìœ¼ë¡œ close ë¨.
 	m_hAccel = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDR_MAIN_ACCELERATOR));
 
 	return m_hWindow;
@@ -174,7 +174,7 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 			case '0':
 				ZMain::GetInstance().ZoomNone();
 				break;
-/// µð¹ö±× ¸ðµå¿¡¼­¸¸ ÀÛµ¿ÇÏ´Â ´ÜÃàÅ°µé
+/// ë””ë²„ê·¸ ëª¨ë“œì—ì„œë§Œ ìž‘ë™í•˜ëŠ” ë‹¨ì¶•í‚¤ë“¤
 #ifdef _DEBUG
 			case '`':
 				ZCacheImage::GetInstance().debugShowCacheInfo();
@@ -266,7 +266,7 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 		}
 		break;
 
-	case WM_DROPFILES:///< Å½»ö±â¿¡¼­ µå·¡±× ¾Ø µå¶øÀ¸·Î ³õ¾ÒÀ» ¶§
+	case WM_DROPFILES:///< íƒìƒ‰ê¸°ì—ì„œ ë“œëž˜ê·¸ ì•¤ ë“œëžìœ¼ë¡œ ë†“ì•˜ì„ ë•Œ
 		{
 			HDROP hDrop = (HDROP)wParam;
 
@@ -335,22 +335,22 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 			ZMain::GetInstance().SetHWND(hWnd);
 
 			InitCommonControls();
-			// ¾ÆÀÌÄÜÀ» ÁöÁ¤ÇØÁØ´Ù.
+			// ì•„ì´ì½˜ì„ ì§€ì •í•´ì¤€ë‹¤.
 			SendMessage(hWnd, WM_SETICON, ICON_BIG, (LPARAM)LoadIcon(ZMain::GetInstance().GetHInstance(), MAKEINTRESOURCE(IDI_BIG_MAIN)));
 
-			/// ±×¸²À» Ç¥½ÃÇÒ child window ¸¦ ¸¸µç´Ù.
+			/// ê·¸ë¦¼ì„ í‘œì‹œí•  child window ë¥¼ ë§Œë“ ë‹¤.
 			ZMain::GetInstance().CreateShowWindow();
 
 			ZMain::GetInstance().CreateStatusBar();
 
-			// ÆË¾÷ ¸Þ´º¸¦ ºÒ·¯³õ´Â´Ù.
+			// íŒì—… ë©”ë‰´ë¥¼ ë¶ˆëŸ¬ë†“ëŠ”ë‹¤.
 			HMENU hMenu = LoadMenu(ZResourceManager::GetInstance().GetHInstance(), MAKEINTRESOURCE(IDR_POPUP_MENU));
 			g_hPopupMenu = GetSubMenu(hMenu, 0);
 			ZMain::GetInstance().SetPopupMenu(g_hPopupMenu);
 
 			ZMain::GetInstance().OnInit();
 
-			/// Å¸ÀÌ¸Ó¸¦ ½ÃÀÛÇÑ´Ù.
+			/// íƒ€ì´ë¨¸ë¥¼ ì‹œìž‘í•œë‹¤.
 			ZMain::GetInstance().StartTimer();
 			return TRUE;
 		}
@@ -405,10 +405,10 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 
 	case WM_SIZE:
 		{
-			/// ShowWindow Å©±â¸¦ Á¶ÀýÇÑ´Ù.
+			/// ShowWindow í¬ê¸°ë¥¼ ì¡°ì ˆí•œë‹¤.
 			ZMain::GetInstance().AdjustShowWindowScreen();
 
-			/// StatusBar Å©±â¸¦ Á¶ÀýÇÑ´Ù.
+			/// StatusBar í¬ê¸°ë¥¼ ì¡°ì ˆí•œë‹¤.
 			SendMessage(ZMain::GetInstance().GetStatusHandle(), WM_SIZE, wParam, lParam);
 			ZMain::GetInstance().OnWindowResized();
 		}
@@ -577,7 +577,7 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 				ZMain::GetInstance().ShowExif();
 				break;
 			case ID_ACCELERATOR_CANCEL_FULLSCREEN:
-				// ÇöÀç Ç® ½ºÅ©¸° ÀÏ ¶§¸¸ Ç®½ºÅ©¸°À» Ãë¼ÒÇÑ´Ù.
+				// í˜„ìž¬ í’€ ìŠ¤í¬ë¦° ì¼ ë•Œë§Œ í’€ìŠ¤í¬ë¦°ì„ ì·¨ì†Œí•œë‹¤.
 				if ( ZOption::GetInstance().IsFullScreen() )
 				{
 					ZMain::GetInstance().ToggleFullScreen();
@@ -673,7 +673,7 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 	case WM_PAINT:
 		HDC hdc;
 		PAINTSTRUCT ps;
-		// ¾Æ·¡ÀÇ BeginPaint/EndPaint ºÎºÐÀ» Áö¿ì¸é WM_PAINT °¡ ¹«ÇÑÈ÷ È£ÃâµÈ´Ù.
+		// ì•„ëž˜ì˜ BeginPaint/EndPaint ë¶€ë¶„ì„ ì§€ìš°ë©´ WM_PAINT ê°€ ë¬´í•œížˆ í˜¸ì¶œëœë‹¤.
 		hdc=BeginPaint(ZMain::GetInstance().GetHWND(), &ps);
 		EndPaint(ZMain::GetInstance().GetHWND(), &ps);
 
@@ -700,7 +700,7 @@ void HandCursorProc()
 {
 	if ( ZMain::GetInstance().IsHandCursor() )
 	{
-		if ( m_bCapture )	// ¸¶¿ì½º ¿ÞÂÊ ¹öÆ°À» ´©¸£°í ÀÖÀ¸¸é ¿òÄÑÁå Ä¿¼­¸¦ ±×¸°´Ù.
+		if ( m_bCapture )	// ë§ˆìš°ìŠ¤ ì™¼ìª½ ë²„íŠ¼ì„ ëˆ„ë¥´ê³  ìžˆìœ¼ë©´ ì›€ì¼œì¥” ì»¤ì„œë¥¼ ê·¸ë¦°ë‹¤.
 		{
 			SetCursor(LoadCursor(ZMain::GetInstance().GetHInstance(), MAKEINTRESOURCE(IDC_MOVE_HAND_CAPTURE_CURSOR)));
 		}

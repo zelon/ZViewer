@@ -1,4 +1,4 @@
-/********************************************************************
+ï»¿/********************************************************************
 *
 * Created by zelon(Kim, Jinwook Korea)
 * 
@@ -19,13 +19,13 @@ ZHistory::ZHistory()
 
 void ZHistory::push_lastImageIndex(int iIndex)
 {
-	// ÇöÀç À§Ä¡ ÀÌÈÄÀÇ Redo ´Â Áö¿î´Ù.
+	// í˜„ì¬ ìœ„ì¹˜ ì´í›„ì˜ Redo ëŠ” ì§€ìš´ë‹¤.
 	m_indexVector.resize(m_iCurrentIndex);
 
-	// ¸¶Áö¸·¿¡ ³Ö´Â´Ù.
+	// ë§ˆì§€ë§‰ì— ë„£ëŠ”ë‹¤.
 	m_indexVector.push_back(iIndex);
 
-	// index À§Ä¡¸¦ Á¶Á¤ÇÑ´Ù.
+	// index ìœ„ì¹˜ë¥¼ ì¡°ì •í•œë‹¤.
 	m_iCurrentIndex = m_indexVector.size();
 
 }
@@ -34,10 +34,10 @@ int ZHistory::Undo()
 {
 	assert(CanUndo());
 
-	// Undo/Redo À§Ä¡¸¦ Á¶Á¤ÇÑ´Ù.
+	// Undo/Redo ìœ„ì¹˜ë¥¼ ì¡°ì •í•œë‹¤.
 	--m_iCurrentIndex;
 
-	// ¸¶Áö¸·À¸·Î ºÃ´ø °ÍÀ» µ¹·ÁÁØ´Ù.
+	// ë§ˆì§€ë§‰ìœ¼ë¡œ ë´¤ë˜ ê²ƒì„ ëŒë ¤ì¤€ë‹¤.
 	int iRet = m_indexVector[m_iCurrentIndex];
 
 
@@ -48,7 +48,7 @@ int ZHistory::Redo()
 {
 	assert(CanRedo());
 
-	// Undo ¸¦ µÇµ¹¸°´Ù.
+	// Undo ë¥¼ ë˜ëŒë¦°ë‹¤.
 
 	++m_iCurrentIndex;
 

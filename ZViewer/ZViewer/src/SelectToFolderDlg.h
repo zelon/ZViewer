@@ -1,4 +1,4 @@
-/********************************************************************
+ï»¿/********************************************************************
 *
 * Created by zelon(Kim, Jinwook Korea)
 * 
@@ -10,14 +10,14 @@
 
 #pragma once
 
-/// ÆÄÀÏ ÀÌµ¿À» ÇÒ ¶§ º¸¿©ÁÖ´Â ´ÙÀÌ¾ó·Î±×¸¦ À§ÇÑ Å¬·¡½º
+/// íŒŒì¼ ì´ë™ì„ í•  ë•Œ ë³´ì—¬ì£¼ëŠ” ëŒ€í™” ìƒìë¥¼ ìœ„í•œ í´ë˜ìŠ¤
 class CSelectToFolderDlg
 {
 public:
 	CSelectToFolderDlg();
 	~CSelectToFolderDlg();
 
-	/// ´ÙÀÌ¾ó·Î±×¸¦ È­¸é¿¡ ¶ç¿î´Ù.
+	/// ë‹¤ì´ì–¼ë¡œê·¸ë¥¼ í™”ë©´ì— ë„ìš´ë‹¤.
 	bool DoModal();
 
 	const tstring & GetMoveToFolder() const { return m_strMoveToFolder; }

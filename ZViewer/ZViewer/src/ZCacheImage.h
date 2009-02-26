@@ -1,4 +1,4 @@
-/********************************************************************
+ï»¿/********************************************************************
 *
 * Created by zelon(Kim, Jinwook Korea)
 * 
@@ -17,19 +17,19 @@
 #include "CachedData.h"
 
 
-/// Ä³½Ã¸¦ ¾î´À ¹æÇâºÎÅÍ ¸ÕÀúÇÒ °ÍÀÎÁö, ¿ì¼±½ÃÇÒ °ÍÀÎÁö¸¦ À§ÇØ...
+/// ìºì‹œë¥¼ ì–´ëŠ ë°©í–¥ë¶€í„° ë¨¼ì €í•  ê²ƒì¸ì§€, ìš°ì„ ì‹œí•  ê²ƒì¸ì§€ë¥¼ ìœ„í•´...
 /**
- ¿¹¸¦ µé¾î »ç¿ëÀÚ°¡ PageDown À¸·Î ´ÙÀ½ ÀÌ¹ÌÁöµéÀ» º¸°í ÀÖ´Ù¸é ´ÙÀ½ ÀÌ¹ÌÁöµéÀ» Á» ´õ Ä³½¬ÇØ³õ°í,
- PageUp À¸·Î ÀÌÀü ÀÌ¹ÌÁö ¹æÇâÀ¸·Î º¸°í ÀÖ´Ù¸é ÀÌÀü ÀÌ¹ÌÁöµéÀ» Á» ´õ Ä³½¬ÇØ³õ±â À§ÇØ¼­ÀÌ´Ù.
+ ì˜ˆë¥¼ ë“¤ì–´ ì‚¬ìš©ìžê°€ PageDown ìœ¼ë¡œ ë‹¤ìŒ ì´ë¯¸ì§€ë“¤ì„ ë³´ê³  ìžˆë‹¤ë©´ ë‹¤ìŒ ì´ë¯¸ì§€ë“¤ì„ ì¢€ ë” ìºì‰¬í•´ë†“ê³ ,
+ PageUp ìœ¼ë¡œ ì´ì „ ì´ë¯¸ì§€ ë°©í–¥ìœ¼ë¡œ ë³´ê³  ìžˆë‹¤ë©´ ì´ì „ ì´ë¯¸ì§€ë“¤ì„ ì¢€ ë” ìºì‰¬í•´ë†“ê¸° ìœ„í•´ì„œì´ë‹¤.
 */
 enum eLastActionDirection
 {
-	eLastActionDirection_FORWARD,	///< PageDown µîÀ¸·Î ´ÙÀ½ ÆÄÀÏÀ» º¸¾Ò´Ù
-	eLastActionDirection_BACKWARD,	///< PageUp µîÀ¸·Î ÀÌÀü ÆÄÀÏÀ» º¸¾Ò´Ù.
+	eLastActionDirection_FORWARD,	///< PageDown ë“±ìœ¼ë¡œ ë‹¤ìŒ íŒŒì¼ì„ ë³´ì•˜ë‹¤
+	eLastActionDirection_BACKWARD,	///< PageUp ë“±ìœ¼ë¡œ ì´ì „ íŒŒì¼ì„ ë³´ì•˜ë‹¤.
 };
 
 
-/// ÀÌ¹ÌÁö¸¦ Ä³½¬ÇÏ¿© °ü¸®ÇÏ´Â Å¬·¡½º
+/// ì´ë¯¸ì§€ë¥¼ ìºì‰¬í•˜ì—¬ ê´€ë¦¬í•˜ëŠ” í´ëž˜ìŠ¤
 class ZCacheImage
 {
 private:
@@ -48,7 +48,7 @@ public:
 	inline void LogCacheHit() { ++m_iLogCacheHit; }
 	inline void LogCacheMiss() { ++m_iLogCacheMiss; }
 
-	/// ´ÙÀ½ ÆÄÀÏÀÌ Ä³½¬µÇ¾ú³ª¸¦ Ã¼Å©ÇØ¼­ µ¹·ÁÁØ´Ù.
+	/// ë‹¤ìŒ íŒŒì¼ì´ ìºì‰¬ë˜ì—ˆë‚˜ë¥¼ ì²´í¬í•´ì„œ ëŒë ¤ì¤€ë‹¤.
 	bool IsNextFileCached() const;
 
 	void WaitCacheLock()
@@ -56,7 +56,7 @@ public:
 		m_cacheData.WaitCacheLock();
 	}
 
-	void debugShowCacheInfo();		///< ÇöÀç Ä³½¬ Á¤º¸¸¦ µð¹ö±× ÄÜ¼Ö¿¡ º¸¿©ÁØ´Ù. µð¹ö±ë¸ðµå Àü¿ë
+	void debugShowCacheInfo();		///< í˜„ìž¬ ìºì‰¬ ì •ë³´ë¥¼ ë””ë²„ê·¸ ì½˜ì†”ì— ë³´ì—¬ì¤€ë‹¤. ë””ë²„ê¹…ëª¨ë“œ ì „ìš©
 
 	void clearCache();
 	void setCacheEvent()
@@ -76,7 +76,7 @@ public:
 
 	void StartThread();
 
-	// ÇöÀç Ä³½ÃµÇ¾î ÀÖ´Â ÆÄÀÏµéÀ» output À©µµ¿ì·Î »Ñ·ÁÁØ´Ù.
+	// í˜„ìž¬ ìºì‹œë˜ì–´ ìžˆëŠ” íŒŒì¼ë“¤ì„ output ìœˆë„ìš°ë¡œ ë¿Œë ¤ì¤€ë‹¤.
 	void ShowCachedImageToOutputWindow();
 
 	size_t GetNumOfCacheImage() const { return m_cacheData.Size(); 	}
@@ -85,9 +85,9 @@ public:
 	void ThreadFunc();
 
 	void SetImageVector(const std::vector < FileData > & v);
-	bool hasCachedData(const tstring & strFilename, int iIndex);	///< ÀÌ ÆÄÀÏ¿¡ ÇØ´çÇÏ´Â Á¤º¸¸¦ Ä³½¬ÇØ¼­ °¡Áö°í ÀÖ´ÂÁö Ã¼Å©ÇÏ´Â ÇÔ¼ö
-	void GetCachedData(const tstring & strFilename, ZImage * & pImage);	///< ÀÌ ÆÄÀÏ¿¡ ÇØ´çÇÏ´Â ZImage Á¤º¸¸¦ ¹Þ¾Æ¿À´Â ÇÔ¼ö
-	void AddCacheData(const tstring & strFilename, ZImage * image, bool bForceCache = false);		///< ÀÌ ÆÄÀÏ¿¡ ÇØ´çÇÏ´Â ZImage Á¤º¸¸¦ »õ·Î Ãß°¡ÇØ¶ó.
+	bool hasCachedData(const tstring & strFilename, int iIndex);	///< ì´ íŒŒì¼ì— í•´ë‹¹í•˜ëŠ” ì •ë³´ë¥¼ ìºì‰¬í•´ì„œ ê°€ì§€ê³  ìžˆëŠ”ì§€ ì²´í¬í•˜ëŠ” í•¨ìˆ˜
+	void GetCachedData(const tstring & strFilename, ZImage * & pImage);	///< ì´ íŒŒì¼ì— í•´ë‹¹í•˜ëŠ” ZImage ì •ë³´ë¥¼ ë°›ì•„ì˜¤ëŠ” í•¨ìˆ˜
+	void AddCacheData(const tstring & strFilename, ZImage * image, bool bForceCache = false);		///< ì´ íŒŒì¼ì— í•´ë‹¹í•˜ëŠ” ZImage ì •ë³´ë¥¼ ìƒˆë¡œ ì¶”ê°€í•´ë¼.
 
 	void SetLastActionDirection(eLastActionDirection last)
 	{
@@ -98,39 +98,39 @@ public:
 
 private:
 
-	/// ÇöÀç Ä³½¬ ÁßÀÎ°¡...
+	/// í˜„ìž¬ ìºì‰¬ ì¤‘ì¸ê°€...
 	bool m_bNowCaching;
 
-	/// Ä³½¬ÀÇ È¿À²¼ºÀ» À§ÇØ¼­ »ç¿ëÀÚ°¡ ¸¶Áö¸·À¸·Î ¾î´À ¹æÇâÀ¸·Î ¿òÁ÷¿´´ÂÁö¸¦ ±â¾ïÇØ³õ´Â´Ù.
+	/// ìºì‰¬ì˜ íš¨ìœ¨ì„±ì„ ìœ„í•´ì„œ ì‚¬ìš©ìžê°€ ë§ˆì§€ë§‰ìœ¼ë¡œ ì–´ëŠ ë°©í–¥ìœ¼ë¡œ ì›€ì§ì˜€ëŠ”ì§€ë¥¼ ê¸°ì–µí•´ë†“ëŠ”ë‹¤.
 	eLastActionDirection m_lastActionDirection;
 
-	/// Ä³½Ã°¡ hit ÇÑ È½¼ö. Åë°è¿ë
+	/// ìºì‹œê°€ hit í•œ íšŸìˆ˜. í†µê³„ìš©
 	unsigned int m_iLogCacheHit;
 
-	/// Ä³½Ã°¡ miss ÇÑ È½¼ö. Åë°è¿ë
+	/// ìºì‹œê°€ miss í•œ íšŸìˆ˜. í†µê³„ìš©
 	unsigned int m_iLogCacheMiss;
 
 	volatile bool m_bNewChange;
 
-	/// threadfunc ¸¦ °è¼Ó ½ÇÇà½ÃÅ³ °ÍÀÎ°¡. ÇÁ·Î±×·¥ÀÌ ³¡³¯ ¶§ false ·Î ÇØÁÖ¸é Ä³½¬ ¾²·¹µå¸¦ ÃÖ´ëÇÑ »¡¸® ³¡³¾ ¶§ ¾²ÀÓ
+	/// threadfunc ë¥¼ ê³„ì† ì‹¤í–‰ì‹œí‚¬ ê²ƒì¸ê°€. í”„ë¡œê·¸ëž¨ì´ ëë‚  ë•Œ false ë¡œ í•´ì£¼ë©´ ìºì‰¬ ì“°ë ˆë“œë¥¼ ìµœëŒ€í•œ ë¹¨ë¦¬ ëë‚¼ ë•Œ ì“°ìž„
 	volatile bool m_bCacheGoOn;
 
 	CachedData m_cacheData;
 
-	/// ÇöÀçº¸°í ÀÖ´Â index;
+	/// í˜„ìž¬ë³´ê³  ìžˆëŠ” index;
 	volatile int m_iCurrentIndex;
 
-	/// ÇöÀçº¸°í ÀÖ´Â ÆÄÀÏÀÌ¸§
+	/// í˜„ìž¬ë³´ê³  ìžˆëŠ” íŒŒì¼ì´ë¦„
 	tstring m_strCurrentFileName;
 
-	HANDLE m_hThread;			///< Ä³½¬ ¾²·¹µå¸¦ °¡¸£Å°´Â ÇÚµé
+	HANDLE m_hThread;			///< ìºì‰¬ ì“°ë ˆë“œë¥¼ ê°€ë¥´í‚¤ëŠ” í•¸ë“¤
 	
-	/// Ä³½Ã ÀÌº¥Æ®
+	/// ìºì‹œ ì´ë²¤íŠ¸
 	CEventObj m_hCacheEvent;
 
-	/// ÁöÁ¤µÈ ¹øÈ£ÀÇ ÆÄÀÏÀ» Ä³½ÃÇÒ ¼ö ÀÖÀ¸¸é Ä³½ÃÇÑ´Ù. ¹ÝÈ¯°ªÀº Ä³½¬¼º°øÀÌ¸é true
+	/// ì§€ì •ëœ ë²ˆí˜¸ì˜ íŒŒì¼ì„ ìºì‹œí•  ìˆ˜ ìžˆìœ¼ë©´ ìºì‹œí•œë‹¤. ë°˜í™˜ê°’ì€ ìºì‰¬ì„±ê³µì´ë©´ true
 	bool _CacheIndex(int iIndex);
 
-	/// ÇöÀç ÀÐ°í ÀÖ´Â ÆÄÀÏÀÇ µ¥ÀÌÅÍ¸¦ ÀúÀåÇÏ´Â ¹öÆÛ
+	/// í˜„ìž¬ ì½ê³  ìžˆëŠ” íŒŒì¼ì˜ ë°ì´í„°ë¥¼ ì €ìž¥í•˜ëŠ” ë²„í¼
 	std::vector < BYTE > m_vBuffer;
 };
