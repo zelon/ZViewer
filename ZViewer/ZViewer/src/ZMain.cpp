@@ -823,7 +823,11 @@ void ZMain::ShowCacheStatus()
 
 		static tstring strStatusMsg=TEXT("...");	///< PostMessage() 로 호출하므로, 메모리가 없어지지 않게 하기 위해 static
 
-		if ( false == bNowActionIsCache ) ///< 캐쉬가 끝났으면
+		if ( m_vFile.empty() )
+		{
+			strStatusMsg = TEXT("");
+		}
+		else if ( false == bNowActionIsCache ) ///< 캐쉬가 끝났으면
 		{
 			strStatusMsg = TEXT("Cached");
 		}
@@ -987,7 +991,14 @@ void ZMain::SetStatusBarText()
 		SendMessage(m_hStatusBar, SB_SETTEXT, 5, (LPARAM)TEXT(""));
 
 		// 캐시 중인가
-		ShowCacheStatus(); ///< 6
+		if ( m_vFile.size() == 0 )
+		{
+			SendMessage(m_hStatusBar, SB_SETTEXT, 6, (LPARAM)TEXT(""));
+		}
+		else
+		{
+			ShowCacheStatus(); ///< 6
+		}
 
 		// 파일명
 		SendMessage(m_hStatusBar, SB_SETTEXT, 7, (LPARAM)TEXT("No File"));
@@ -1231,6 +1242,7 @@ void ZMain::ReLoadFileList()
 	OpenFile(strFileName);
 }
 
+/// 현재 파일이 지워졌을 때 후의 처리. 파일 삭제, 이동 후에 불리는 함수이다.
 void ZMain::_ProcAfterRemoveThisFile()
 {
 	m_bCurrentImageLoaded = false;
@@ -1254,77 +1266,20 @@ void ZMain::_ProcAfterRemoveThisFile()
 	}
 	else
 	{
-		if ( ((int)m_vFile.size() - 1) > m_iCurretFileIndex )	// 다음 그림이 있다.
+		tstring strNextFilename;
+
+		assert(m_vFile.size() > 1);
+		assert(m_iCurretFileIndex >= 0);
+
+		if ( m_iCurretFileIndex == (int)(m_vFile.size() - 1) )	///< 마지막 파일이면 이전 파일이고,
 		{
-			// for 문을 돌면서 지울 것을 찾아놓는다.
-			vector< FileData >::iterator it, endit = m_vFile.end();
-			int i = 0;
-			bool bFound = false;
-			for ( it = m_vFile.begin(); it != endit; ++it)
-			{
-				if ( i == m_iCurretFileIndex)
-				{
-					bFound = true;
-					break;
-				}
-				++i;
-			}
-			if ( !bFound )
-			{
-				assert(!"Can't find the file");
-				return;
-			}
-
-			m_vFile.erase(it);
-
-			// Cache Thread 에 전달한다.
-			ZCacheImage::GetInstance().SetImageVector(m_vFile);
-
-			NextImage();
-
-			// 지웠으므로 현재 인덱스를 1줄인다.
-			m_iCurretFileIndex -= 1;
-
-			SetTitle();
-			SetStatusBarText();
-
-			Draw(NULL, true);
+			strNextFilename = m_vFile[m_iCurretFileIndex-1].m_strFileName;
 		}
-		else
+		else/// 마지막 파일이 아니면 다음 파일을 보여준다.
 		{
-			// 사이즈가 1이 아니고, 다음것이 없었으므로 이전 것은 있다.
-			// for 문을 돌면서 지울 것을 찾아놓는다.
-			vector< FileData >::iterator it, endit = m_vFile.end();
-			int i = 0;
-
-			bool bFound = false;
-			for ( it = m_vFile.begin(); it != endit; ++it)
-			{
-				if ( i == m_iCurretFileIndex)
-				{
-					bFound = true;
-					break;
-				}
-				++i;
-			}
-
-			if ( !bFound )
-			{
-				assert(!"Can't find the file");
-				return;
-			}
-
-			m_vFile.erase(it);
-
-			// Cache Thread 에 전달한다.
-			ZCacheImage::GetInstance().SetImageVector(m_vFile);
-
-			PrevImage();
-
-			SetTitle();
-			SetStatusBarText();
-			Draw(NULL, true);
+			strNextFilename = m_vFile[m_iCurretFileIndex+1].m_strFileName;
 		}
+		ZMain::GetInstance().OpenFile(strNextFilename);
 	}
 	ZCacheImage::GetInstance().SetImageVector(m_vFile);
 }
