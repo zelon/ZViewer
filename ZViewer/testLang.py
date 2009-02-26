@@ -30,10 +30,17 @@ def checkUsedMap():
 
 	collectedUsedKeyList.clear()
 
+	bFailed = False
 	for file in collectFilesList:
-		print("File : " + file)
+		#print("File : " + file)
 		f = open(file, "rb")
-		data = f.read().decode("utf-8")
+
+		try:
+			data = f.read().decode("utf-8")
+		except UnicodeDecodeError:
+			print("[FAILED] UnicodeError(not utf-8) : " + file)
+			bFailed = True
+			continue
 		f.close()
 
 		regstr = r"GetMessage[^\{\},\"]*?\"(.*?)\""
@@ -47,6 +54,9 @@ def checkUsedMap():
 			for key in result:
 				collectedUsedKeyList[key] = 1
 
+	if bFailed:
+		return False
+		
 	for key in collectedUsedKeyList:
 		if len(key) > 0:
 			#print("^" + key + "$")
@@ -253,7 +263,6 @@ def checkSameRes():
 	print("[OK] Completed checking resource.h")
 
 if __name__ == "__main__":
-	exit(0)
 	if False == checkSameMap():
 		exit(1)
 	if False == checkUsedMap():
