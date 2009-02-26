@@ -114,6 +114,8 @@ int CachedData::GetFarthestIndexFromCurrentIndex(volatile const int & iCurrentIn
 
 void CachedData::SetNewFileList(const std::vector < FileData > & v)
 {
+	CLockObjUtil lock(m_cacheLock);
+
 	m_imageIndex2FilenameMap.clear();
 	m_imageFilename2IndexMap.clear();
 	for ( size_t i = 0; i < v.size(); ++i)

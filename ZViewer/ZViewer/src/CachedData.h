@@ -57,11 +57,17 @@ public:
 		return (m_cacheData.count(strFilename) > 0);
 	}
 
-	size_t GetIndex2FilenameMapSize() const { return m_imageIndex2FilenameMap.size(); }
+	size_t GetIndex2FilenameMapSize() const
+	{
+		CLockObjUtil lock(m_cacheLock);
+		return m_imageIndex2FilenameMap.size();
+	}
+
 	void SetNewFileList(const std::vector < FileData > & v);
 
 	size_t GetImageVectorSize()
 	{
+		CLockObjUtil lock(m_cacheLock);
 		return m_numImageVectorSize;
 	}
 
