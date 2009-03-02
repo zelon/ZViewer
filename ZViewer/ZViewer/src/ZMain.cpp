@@ -1209,14 +1209,32 @@ void ZMain::OnDrag(int x, int y)
 	int iZoomedWidth = (int)(m_pCurrentImage->GetWidth() * m_fCurrentZoomRate);
 	int iZoomedHeight = (int)(m_pCurrentImage->GetHeight() * m_fCurrentZoomRate);
 
+	/// 현재 그림이 화면보다 작거나 딱 맞으면 drag 를 하지 않는다.
+	if ( iZoomedWidth <= rt.right && iZoomedHeight <= rt.bottom )
+	{
+		return;
+	}
+
 	m_iShowingX += x;
 
-	if ( m_iShowingX <= 0 ) m_iShowingX = 0;
-	if ( m_iShowingX + rt.right >= iZoomedWidth ) m_iShowingX = iZoomedWidth - rt.right;
+	if ( m_iShowingX <= 0 )
+	{
+		m_iShowingX = 0;
+	}
+	if ( m_iShowingX + rt.right >= iZoomedWidth )
+	{
+		m_iShowingX = iZoomedWidth - rt.right;
+	}
 
 	m_iShowingY += y;
-	if ( m_iShowingY <= 0 ) m_iShowingY = 0;
-	if ( m_iShowingY + rt.bottom >= iZoomedHeight ) m_iShowingY = iZoomedHeight - rt.bottom;
+	if ( m_iShowingY <= 0 )
+	{
+		m_iShowingY = 0;
+	}
+	if ( m_iShowingY + rt.bottom >= iZoomedHeight )
+	{
+		m_iShowingY = iZoomedHeight - rt.bottom;
+	}
 
 	//DebugPrintf(TEXT("ShowingX(%d), ShowingY(%d)"), m_iShowingX, m_iShowingY);
 	/// 보여주는 X 좌표나 Y 좌표 둘 중 하나라도 변경되었으면, 드래그된 것이므로 다시 그린다.
@@ -1371,9 +1389,6 @@ void ZMain::ShowFileExtDlg()
 
 void ZMain::DeleteThisFile()
 {
-	DeleteThisFileToRecycleBin();
-	return;
-
 	/// 현재 보고 있는 파일이 없으면 바로 리턴한다.
 	if ( m_strCurrentFilename.empty() || m_bCurrentImageLoaded == false )
 	{
@@ -1407,39 +1422,29 @@ void ZMain::DeleteThisFileToRecycleBin()
 		return;
 	}
 
-	/*
-	TCHAR szDeleteMsg[COMMON_BUFFER_SIZE];
+	SHFILEOPSTRUCT fo;
+	fo.hwnd = m_hMainDlg;
+	fo.wFunc = FO_DELETE;
 
-	SPrintf(szDeleteMsg, COMMON_BUFFER_SIZE, GetMessage(TEXT("DELETE_THIS_FILE")), GetFileNameFromFullFileName(m_strCurrentFilename).c_str());
-	int iRet = ::MessageBox(m_hMainDlg, szDeleteMsg, TEXT("ZViewer"), MB_YESNO);
-	*/
+	TCHAR szFilename[_MAX_PATH];
+	SPrintf(szFilename, _MAX_PATH, _T("%s"), m_strCurrentFilename.c_str());
+	szFilename[m_strCurrentFilename.size()+1] = 0;
 
-	//if ( iRet == IDYES )
+	fo.pFrom = szFilename;
+	fo.pTo = NULL;
+	fo.fFlags = FOF_ALLOWUNDO;
+
+	if ( 0 == SHFileOperation(&fo))
 	{
-		SHFILEOPSTRUCT fo;
-		fo.hwnd = m_hMainDlg;
-		fo.wFunc = FO_DELETE;
-
-		TCHAR szFilename[_MAX_PATH];
-		SPrintf(szFilename, _MAX_PATH, _T("%s"), m_strCurrentFilename.c_str());
-		szFilename[m_strCurrentFilename.size()+1] = 0;
-
-		fo.pFrom = szFilename;
-		fo.pTo = NULL;
-		fo.fFlags = FOF_ALLOWUNDO;
-
-		if ( 0 == SHFileOperation(&fo))
+		if ( fo.fAnyOperationsAborted == FALSE )
 		{
-			if ( fo.fAnyOperationsAborted == FALSE )
-			{
-				DebugPrintf(TEXT("-- %s deleted --"), m_strCurrentFilename.c_str());
-				_ProcAfterRemoveThisFile();
-			}
+			DebugPrintf(TEXT("-- %s deleted --"), m_strCurrentFilename.c_str());
+			_ProcAfterRemoveThisFile();
 		}
-		else
-		{
-			ShowMessageBox(GetMessage(TEXT("CANNOT_DELETE_THIS_FILE")));
-		}
+	}
+	else
+	{
+		ShowMessageBox(GetMessage(TEXT("CANNOT_DELETE_THIS_FILE")));
 	}
 }
 

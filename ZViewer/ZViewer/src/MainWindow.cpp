@@ -648,6 +648,10 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 				ZMain::GetInstance().DeleteThisFile();
 				break;
 
+			case ID_DELETETHISFILE_RECYCLEBIN:
+				ZMain::GetInstance().DeleteThisFileToRecycleBin();
+				break;
+
 			case ID_SETDESKTOPWALLPAPER_CENTER:
 				ZMain::GetInstance().SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyle_CENTER);
 				break;
