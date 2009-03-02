@@ -700,7 +700,7 @@ void CZViewMenuExt::PasteAsImagefileFromClipboard()
 		enum { eMax_NO = 999 };
 		do
 		{
-			SPrintf(szDes, MAX_PATH, TEXT("%s\\Clip%03d.png"), m_strCurrentDir.c_str(), iPostFix);
+			SPrintf(szDes, MAX_PATH, TEXT("%s\\Clip%03d.bmp"), m_strCurrentDir.c_str(), iPostFix);
 
 			if ( 0 != _taccess(szDes, 00) )	///< file not exist
 			{
@@ -717,7 +717,7 @@ void CZViewMenuExt::PasteAsImagefileFromClipboard()
 		}
 		while ( iPostFix <= eMax_NO );
 
-		if ( false == image.SaveToFile(szDes, 0) )
+		if ( false == image.SaveToFile(szDes, PNG_DEFAULT) )
 		{
 			MsgBox(GetMessage(TEXT("ZVIEWERAGENT_CANNOT_PASTE_IMAGE_FILE")));
 		}

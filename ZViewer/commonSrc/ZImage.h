@@ -153,7 +153,8 @@ public:
 	void AutoRotate();
 
 	bool CopyToClipboard(HWND hWndNewOwner) { return (TRUE == m_image.copyToClipboard(hWndNewOwner)); }
-	bool PasteFromClipboard() { return (TRUE == m_image.pasteFromClipboard()); }
+	bool PasteFromClipboard();
+	
 private:
 	mutable fipWinImage m_image;
 

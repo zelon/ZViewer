@@ -95,3 +95,18 @@ void ZImage::AutoRotate()
 		} while( finder.findNextMetadata(tag) );
 	}
 }
+
+bool ZImage::PasteFromClipboard()
+{
+	if ( FALSE == m_image.pasteFromClipboard() )
+	{
+		return false;
+	}
+
+	if ( FALSE == m_image.convertTo24Bits() )
+	{
+		return false;
+	}
+	
+	return true;
+}
