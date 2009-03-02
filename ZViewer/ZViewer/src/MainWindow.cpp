@@ -427,8 +427,13 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 		break;
 
 	case WM_CONTEXTMENU:
-		ZMain::GetInstance().SetHandCursor(false);	///< When popup menu, change to arrow cursor
-		TrackPopupMenu(g_hPopupMenu, TPM_LEFTALIGN, LOWORD(lParam), HIWORD(lParam), 0, hWnd, NULL);
+		{
+			ZMain::GetInstance().SetHandCursor(false);	///< When popup menu, change to arrow cursor
+
+			POINT p;
+			GetCursorPos(&p);
+			TrackPopupMenuEx(g_hPopupMenu, TPM_RIGHTBUTTON, p.x, p.y, hWnd, NULL);
+		}
 		break;
 
 	case WM_COMMAND:
