@@ -1642,6 +1642,33 @@ void ZMain::OnWindowResized()
 	OnChangeCurrentSize(rt.right, rt.bottom);
 }
 
+/// 마우스 휠을 돌렸을 때. delta 는 돌린 방향과 돌린 정도, bControlPushed 는 Control 키가 눌려졌으면 true
+void ZMain::OnMouseWheel(const short delta, bool bControlPushed)
+{
+	if ( bControlPushed )
+	{
+		if ( delta < 0 )
+		{
+			ZMain::GetInstance().ZoomOut();
+		}
+		else
+		{
+			ZMain::GetInstance().ZoomIn();
+		}
+	}
+	else
+	{
+		if ( delta < 0 )
+		{
+			ZMain::GetInstance().NextImage();
+		}
+		else
+		{
+			ZMain::GetInstance().PrevImage();
+		}
+	}
+}
+
 /// 상태 표시 윈도우를 만든다.
 void ZMain::CreateStatusBar()
 {

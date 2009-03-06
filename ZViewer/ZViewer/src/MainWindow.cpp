@@ -388,18 +388,13 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 
 	case WM_MOUSEWHEEL:
 		{
-			short zDelta = GET_WHEEL_DELTA_WPARAM(wParam);
-
-			//DebugPrintf("Wheel Delta : %d", zDelta);
-
-			if ( zDelta < 0 )
+			bool bPushedControl = false;
+			if ( (LOWORD(wParam) & MK_CONTROL) == MK_CONTROL )
 			{
-				ZMain::GetInstance().NextImage();
+				bPushedControl = true;
 			}
-			else
-			{
-				ZMain::GetInstance().PrevImage();
-			}
+
+			ZMain::GetInstance().OnMouseWheel(GET_WHEEL_DELTA_WPARAM(wParam), bPushedControl);
 		}
 		break;
 
