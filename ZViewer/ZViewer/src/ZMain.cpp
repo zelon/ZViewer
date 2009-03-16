@@ -205,6 +205,7 @@ void ZMain::SaveFileDialog()
 		if ( false == m_pCurrentImage->SaveToFile(strSaveFilename, 0) )
 		{
 			ShowMessageBox(GetMessage(TEXT("CANNOT_SAVE_AS_FILE")));
+			ShowMessageBox(GetMessage(TEXT("CANNOT_SAVE_AS_FILE_TRANS_ERROR")));
 		}
 	}
 }
@@ -267,7 +268,7 @@ void ZMain::Draw(HDC toDrawDC, bool bEraseBg)
 	if ( m_vFile.size() <= 0 )
 	{
 		_eraseBackground(mainDC, currentScreenRect.right, currentScreenRect.bottom);
-		
+
 		if ( NULL == toDrawDC )
 		{
 			ReleaseDC(m_hMainDlg, mainDC);
