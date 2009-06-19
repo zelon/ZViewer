@@ -227,31 +227,31 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 			<File
-				RelativePath=".\ext_ico.ico"
+				RelativePath=".\bmp.ico"
 				>
 			</File>
 			<File
-				RelativePath=".\ico00001.ico"
+				RelativePath=".\gif.ico"
 				>
 			</File>
 			<File
-				RelativePath=".\ico00002.ico"
+				RelativePath=".\ico.ico"
 				>
 			</File>
 			<File
-				RelativePath=".\ico00003.ico"
+				RelativePath=".\jpg.ico"
 				>
 			</File>
 			<File
-				RelativePath=".\ico00004.ico"
+				RelativePath=".\oth.ico"
 				>
 			</File>
 			<File
-				RelativePath=".\ico00005.ico"
+				RelativePath=".\png.ico"
 				>
 			</File>
 			<File
-				RelativePath=".\icon1.ico"
+				RelativePath=".\psd.ico"
 				>
 			</File>
 			<File

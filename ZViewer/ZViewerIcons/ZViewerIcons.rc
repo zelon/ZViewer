@@ -54,13 +54,13 @@ END
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
-IDI_ICON_ALL            ICON                    "ico00001.ico"
-IDI_ICON_BMP            ICON                    "icon1.ico"
-IDI_ICON_JPG            ICON                    "ico00002.ico"
-IDI_ICON_PNG            ICON                    "ico00003.ico"
-IDI_ICON_PSD            ICON                    "ico00004.ico"
-IDI_ICON_GIF            ICON                    "ico00005.ico"
-IDI_ICON_ICO            ICON                    "ext_ico.ico"
+IDI_ICON_ALL            ICON                    "oth.ico"
+IDI_ICON_BMP            ICON                    "bmp.ico"
+IDI_ICON_JPG            ICON                    "jpg.ico"
+IDI_ICON_PNG            ICON                    "png.ico"
+IDI_ICON_PSD            ICON                    "psd.ico"
+IDI_ICON_GIF            ICON                    "gif.ico"
+IDI_ICON_ICO            ICON                    "ico.ico"
 #endif    // ÇÑ±¹¾î resources
 /////////////////////////////////////////////////////////////////////////////
 
