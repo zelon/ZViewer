@@ -8,7 +8,7 @@ def commonDefineVersionUp(major, minor, patch, postfix):
 		print ("no exist of " + filename)
 		return False
 
-	file = open(filename, "r")
+	file = open(filename, "r", encoding="utf-8")
 	lines = file.readlines()
 	file.close()
 	
@@ -26,7 +26,7 @@ def commonDefineVersionUp(major, minor, patch, postfix):
 	if bFound == False:
 		print ("Can't find replace target string")
 		return False
-	file = open(filename, "w")
+	file = open(filename, "w", encoding="utf-8")
 	file.writelines(outputs)
 	file.close()
 	print ("[OK] CommonDefine.h file updated")
