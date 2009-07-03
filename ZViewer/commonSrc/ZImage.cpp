@@ -1,4 +1,4 @@
-/********************************************************************
+﻿/********************************************************************
 *
 * Created by zelon(Kim, Jinwook Korea)
 *
@@ -109,4 +109,19 @@ bool ZImage::PasteFromClipboard()
 	}
 	
 	return true;
+}
+
+/// freeimage 가 투명도가 있는 그림을 jpg 로 저장못하기 때문에 DC 에 그린 후 다시 저장해본다.
+bool ZImage::SaveToFileThroughDC(const tstring & strFilename) const
+{
+	//RECT rect = { 0, 0, m_originalWidth, m_originalHeight };
+
+	//m_image.draw(hDC, &rect);
+
+	//m_image.
+
+//	HBIT
+
+	assert(!"not implemented");
+	return false;
 }

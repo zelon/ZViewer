@@ -103,6 +103,9 @@ public:
 		m_strFilename = strFilename;
 	}
 
+	/// freeimage 가 투명도가 있는 그림을 jpg 로 저장못하기 때문에 DC 에 그린 후 다시 저장해본다.
+	bool SaveToFileThroughDC(const tstring & strFilename) const;
+
 	bool SaveToFile(const tstring & strFilename, int iFlag) const
 	{
 #ifdef _UNICODE
