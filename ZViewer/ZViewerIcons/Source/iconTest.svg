@@ -6912,16 +6912,16 @@
      objecttolerance="10"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="5.6568543"
-     inkscape:cx="-233.15248"
-     inkscape:cy="1084.6209"
+     inkscape:zoom="0.35355339"
+     inkscape:cx="1137.369"
+     inkscape:cy="1224.1542"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
      inkscape:window-width="1920"
-     inkscape:window-height="845"
-     inkscape:window-x="1280"
-     inkscape:window-y="321"
+     inkscape:window-height="1110"
+     inkscape:window-x="1276"
+     inkscape:window-y="-4"
      showguides="true"
      inkscape:guide-bbox="true">
     <sodipodi:guide
@@ -6944,6 +6944,22 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1">
+    <g
+       id="g5039"
+       inkscape:export-filename="C:\Documents and Settings\zelon\바탕 화면\bmp.png"
+       inkscape:export-xdpi="1315.4447"
+       inkscape:export-ydpi="1315.4447"
+       transform="translate(2267.5708,582.29769)">
+      <path
+         id="path5041"
+         d="M -1848.6729,119.55194 L -1762.1268,109.51259 L -1744.4714,210.59838 L -1837.9412,225.48431 L -1848.6729,119.55194 z"
+         style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.43849999px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+      <path
+         sodipodi:nodetypes="cccccccccc"
+         id="path5043"
+         style="font-size:12px;fill:#311900;fill-opacity:1;fill-rule:evenodd;stroke-width:10"
+         d="M -1845.8321,121.98125 C -1843.1137,121.85939 -1767.6146,112.79498 -1764.4124,111.88852 L -1748.8546,207.48492 L -1833.7607,219.15451 L -1845.8321,121.98125 z M -1851.6709,116.64429 C -1848.9526,116.52239 -1757.6577,106.71082 -1759.6071,106.49012 L -1741.4707,212.19824 L -1839.9447,227.63888 L -1851.6709,116.64429 z" />
+    </g>
     <rect
        style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:#a4c739;stroke-width:5.05364037;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect2396"
@@ -7377,5 +7393,107 @@
          id="tspan5037"
          x="72.362885"
          y="658.52026">BMP</tspan></text>
+    <rect
+       style="opacity:1;fill:#ff0000;fill-opacity:1;stroke:#ff0000;stroke-width:0;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect5051"
+       width="101.60051"
+       height="42.5"
+       x="407.89948"
+       y="720.86218" />
+    <text
+       xml:space="preserve"
+       style="font-size:35.58653259px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="429.36288"
+       y="755.52026"
+       id="text5045"
+       inkscape:export-filename="C:\Documents and Settings\zelon\바탕 화면\bmp.png"
+       inkscape:export-xdpi="1315.4447"
+       inkscape:export-ydpi="1315.4447"><tspan
+         sodipodi:role="line"
+         id="tspan5047"
+         x="429.36288"
+         y="755.52026">BMP</tspan></text>
+    <g
+       id="g5823"
+       inkscape:export-filename="C:\Documents and Settings\zelon\바탕 화면\bmp.png"
+       inkscape:export-xdpi="1315.4447"
+       inkscape:export-ydpi="1315.4447"
+       transform="translate(2419.9965,568.51385)">
+      <path
+         id="path5825"
+         d="M -1848.6729,119.55194 L -1762.1268,109.51259 L -1744.4714,210.59838 L -1837.9412,225.48431 L -1848.6729,119.55194 z"
+         style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.43849999px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+      <path
+         sodipodi:nodetypes="cccccccccc"
+         id="path5827"
+         style="font-size:12px;fill:#311900;fill-opacity:1;fill-rule:evenodd;stroke-width:10"
+         d="M -1845.8321,121.98125 C -1843.1137,121.85939 -1767.6146,112.79498 -1764.4124,111.88852 L -1748.8546,207.48492 L -1833.7607,219.15451 L -1845.8321,121.98125 z M -1851.6709,116.64429 C -1848.9526,116.52239 -1757.6577,106.71082 -1759.6071,106.49012 L -1741.4707,212.19824 L -1839.9447,227.63888 L -1851.6709,116.64429 z" />
+    </g>
+    <rect
+       style="opacity:1;fill:#ff0000;fill-opacity:0.48743719;stroke:#ff0000;stroke-width:0;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect5829"
+       width="101.60051"
+       height="42.5"
+       x="560.32526"
+       y="707.07837" />
+    <text
+       xml:space="preserve"
+       style="font-size:35.58653259px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="581.78864"
+       y="741.73645"
+       id="text5831"
+       inkscape:export-filename="C:\Documents and Settings\zelon\바탕 화면\bmp.png"
+       inkscape:export-xdpi="1315.4447"
+       inkscape:export-ydpi="1315.4447"><tspan
+         sodipodi:role="line"
+         id="tspan5833"
+         x="581.78864"
+         y="741.73645">BMP</tspan></text>
+    <rect
+       style="opacity:1;fill:#ff0000;fill-opacity:0.48743717;stroke:#ff0000;stroke-width:0;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect5835"
+       width="242"
+       height="52"
+       x="994"
+       y="274.36218" />
+    <rect
+       style="opacity:1;fill:#ff0000;fill-opacity:0.48743717;stroke:#ff0000;stroke-width:0;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect5837"
+       width="242.00002"
+       height="52.000004"
+       x="233.32649"
+       y="1112.6489"
+       transform="matrix(0.5990271,-0.8007288,0.8007288,0.5990271,0,0)" />
+    <rect
+       style="opacity:1;fill:#ff0000;fill-opacity:0.48743717;stroke:#ff0000;stroke-width:0;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect5839"
+       width="242"
+       height="52"
+       x="993"
+       y="480.36218" />
+    <g
+       id="g5855"
+       transform="matrix(2.0898608,0,0,2.0898608,-1918.733,-471.09759)">
+      <rect
+         y="402.61218"
+         x="1398.6997"
+         height="42.5"
+         width="101.60051"
+         id="rect5841"
+         style="fill:#00b036;fill-opacity:0.48743717;stroke:#000000;stroke-width:3;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <text
+         inkscape:export-ydpi="1315.4447"
+         inkscape:export-xdpi="1315.4447"
+         inkscape:export-filename="C:\Documents and Settings\zelon\바탕 화면\bmp.png"
+         id="text5843"
+         y="436.59897"
+         x="1410.3773"
+         style="font-size:35.58653259px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+         xml:space="preserve"><tspan
+           y="436.59897"
+           x="1410.3773"
+           id="tspan5845"
+           sodipodi:role="line">BMP</tspan></text>
+    </g>
   </g>
 </svg>
