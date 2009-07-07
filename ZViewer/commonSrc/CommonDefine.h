@@ -28,7 +28,7 @@ typedef std::string tstring;
 #define		EXIF_ROTATION_270	"left side, bottom"
 
 
-const tstring g_strVersion = TEXT("0.7.0Z5");
+const tstring g_strVersion = TEXT("0.7.0");
 const tstring g_strHomepage = TEXT("http://zviewer.wimy.com");
 struct TagData
 {
