@@ -10,6 +10,7 @@
 
 #pragma once
 
+/// _WIN32_WINNT means NT 4.0. If you want for above Win2000, use 0x0500. Check http://a.tk.co.kr/75
 #define _WIN32_WINNT 0x0400
 
 /// if Visual Studio .NET 2005, disable 6011 warning because of STL warning
