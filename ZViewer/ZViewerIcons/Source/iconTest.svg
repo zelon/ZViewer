@@ -6920,6 +6920,49 @@
        x2="499.99997"
        y2="750.11218"
        gradientTransform="translate(-242.95247,124.7662)" />
+    <linearGradient
+       id="RSSg"
+       y2="225.94001"
+       x2="225.94001"
+       y1="30.06"
+       x1="30.06"
+       gradientUnits="userSpaceOnUse">
+      <stop
+         id="stop5226"
+         stop-color="#E3702D"
+         offset="0.0" />
+      <stop
+         id="stop5228"
+         stop-color="#EA7D31"
+         offset="0.1071" />
+      <stop
+         id="stop5230"
+         stop-color="#F69537"
+         offset="0.3503" />
+      <stop
+         id="stop5232"
+         stop-color="#FB9E3A"
+         offset="0.5" />
+      <stop
+         id="stop5234"
+         stop-color="#EA7C31"
+         offset="0.7016" />
+      <stop
+         id="stop5236"
+         stop-color="#DE642B"
+         offset="0.8866" />
+      <stop
+         id="stop5238"
+         stop-color="#D95B29"
+         offset="1.0" />
+    </linearGradient>
+    <inkscape:perspective
+       id="perspective5255"
+       inkscape:persp3d-origin="64 : 42.666667 : 1"
+       inkscape:vp_z="128 : 64 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 64 : 1"
+       sodipodi:type="inkscape:persp3d" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -6932,8 +6975,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.4142136"
-     inkscape:cx="322.61599"
-     inkscape:cy="421.15272"
+     inkscape:cx="232.10632"
+     inkscape:cy="291.04508"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -7550,5 +7593,54 @@
          id="tspan4563"
          x="174.63705"
          y="888.32935">BMP</tspan></text>
+    <g
+       id="g5266"
+       transform="translate(-133.35251,776.57687)">
+      <rect
+         id="rect5240"
+         y="0"
+         x="0"
+         ry="55"
+         rx="55"
+         height="256"
+         width="256"
+         style="fill:#cc5d15" />
+      <rect
+         id="rect5242"
+         y="5"
+         x="5"
+         ry="50"
+         rx="50"
+         height="246"
+         width="246"
+         style="fill:#f49c52" />
+      <rect
+         id="rect5244"
+         y="10"
+         x="10"
+         ry="47"
+         rx="47"
+         height="236"
+         width="236"
+         style="fill:url(#RSSg)" />
+      <circle
+         id="circle5246"
+         r="24"
+         cy="189"
+         cx="68"
+         sodipodi:cx="68"
+         sodipodi:cy="189"
+         sodipodi:rx="24"
+         sodipodi:ry="24"
+         style="fill:#ffffff" />
+      <path
+         id="path5248"
+         d="M 160,213 L 126,213 C 126,167.71265 89.287349,131 44,131 L 44,97 C 108.06503,97 160,148.93497 160,213 z"
+         style="fill:#ffffff" />
+      <path
+         id="path5250"
+         d="M 184,213 C 184,135.68014 121.31986,73 44,73 L 44,38 C 140.64983,38 219,116.35017 219,213 L 184,213 z"
+         style="fill:#ffffff" />
+    </g>
   </g>
 </svg>
