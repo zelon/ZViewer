@@ -38,7 +38,7 @@ int CALLBACK AboutWndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM /*lParam*
 {
 	switch(iMessage)
 	{
-	case WM_INITDIALOG:
+		case WM_INITDIALOG:
 		{
 			SetDlgItemText(hWnd, IDC_STATIC_VERSION, g_strVersion.c_str());
 
@@ -63,7 +63,7 @@ int CALLBACK AboutWndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM /*lParam*
 		}
 		return TRUE;
 
-	case WM_COMMAND:
+		case WM_COMMAND:
 		{
 			switch ( wParam )
 			{
@@ -72,8 +72,12 @@ int CALLBACK AboutWndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM /*lParam*
 				break;
 			}
 		}
-		break;
 
+		case WM_CLOSE:
+		{
+			EndDialog(hWnd, 0);
+			break;
+		}
 	}
 	return FALSE;
 }
