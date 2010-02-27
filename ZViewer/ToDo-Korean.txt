@@ -11,6 +11,7 @@
  * xp64, vista64 에서 정상 동작하지 않음(설치는 정상이나 ZViewerAgent 가 안되는듯)
 
 == 해야할 일 ==
+ * 투명 배경을 격자 말고 색상으로 하는 옵션 추가
  * Ctrl + 마우스 가운데 버튼시 100%
  * windows 7 rc 에서 설치시 Publisher 가 Unknown 으로 나옴
  * 영문판 설치시, License 가 한글로 나옴
