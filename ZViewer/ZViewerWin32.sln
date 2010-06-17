@@ -1,5 +1,5 @@
-Microsoft Visual Studio Solution File, Format Version 9.00
-# Visual Studio 2005
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ZViewerAgent", "ZViewerAgent\ZViewerAgent.vcproj", "{FF216AE6-86AC-49FA-81D4-40A0B41D4C2B}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ZViewer", "ZViewer\ZViewer.vcproj", "{F22C641A-3DB2-41A2-9530-8B39EEC1E4D8}"
