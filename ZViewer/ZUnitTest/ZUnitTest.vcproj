@@ -47,7 +47,6 @@
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="2"
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="true"
 				DebugInformationFormat="4"
 			/>
 			<Tool
@@ -124,7 +123,6 @@
 				UsePrecompiledHeader="2"
 				ProgramDataBaseFileName="$(IntDir)/ZUnitTestCpp.pdb"
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="true"
 				DebugInformationFormat="3"
 			/>
 			<Tool

@@ -27,7 +27,6 @@
 // STL Headers
 #include <vector>
 #include <list>
-#include <deque>
 #include <map>
 #include <string>
 #include <functional>
@@ -35,8 +34,21 @@
 #include <tchar.h>
 
 #ifdef _MSC_VER
+/// if visual studio 2008, disable code anlysis for strsafe.h
+#if _MSC_VER == 1500
+#include <CodeAnalysis/warnings.h>
+#pragma warning(push)
+#pragma warning(disable: ALL_CODE_ANALYSIS_WARNINGS)
+
 #include <strsafe.h>
-#endif
+#include <deque>
+
+#pragma warning(pop)
+#else /* else of #if _MSC_VER == 1500 */
+#include <deque>
+#endif /* end of #if _MSC_VER == 1500 */
+
+#endif /* end of #ifdef _MSC_VER */
 
 #include <cassert>
 

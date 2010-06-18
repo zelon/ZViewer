@@ -27,7 +27,7 @@ ZOption::ZOption()
 
 void ZOption::LoadOption()
 {
-	TCHAR buffer[256];
+	TCHAR buffer[1024];
 
 	/// C:\Documents and Settings\USERID\Local Settings\Application Data 의 위치를 얻어온다.
 	if ( S_OK != SHGetFolderPath(NULL, CSIDL_LOCAL_APPDATA, NULL, SHGFP_TYPE_CURRENT, buffer) )

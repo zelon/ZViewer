@@ -45,12 +45,10 @@
 				Optimization="0"
 				AdditionalIncludeDirectories="$(SolutionDir)/ZViewer;$(SolutionDir)/ZViewer/res;$(SolutionDir)/lib;$(SolutionDir)/commonSrc;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
-				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="2"
 				WarningLevel="4"
-				Detect64BitPortabilityProblems="true"
 				DebugInformationFormat="3"
 				EnablePREfast="true"
 			/>
@@ -72,7 +70,6 @@
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(OutDir)/ZViewerD.pdb"
 				SubSystem="2"
-				OptimizeForWindows98="1"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
 				TargetMachine="1"
@@ -133,7 +130,6 @@
 				UsePrecompiledHeader="2"
 				ProgramDataBaseFileName="$(IntDir)/ZViewerCpp.pdb"
 				WarningLevel="4"
-				Detect64BitPortabilityProblems="true"
 				DebugInformationFormat="3"
 			/>
 			<Tool
@@ -336,6 +332,42 @@
 				RelativePath=".\Main.cpp"
 				>
 			</File>
+			<Filter
+				Name="리소스 파일"
+				Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx"
+				UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
+				>
+				<File
+					RelativePath=".\res\MoveHand.cur"
+					>
+				</File>
+				<File
+					RelativePath=".\res\MoveHandHold.cur"
+					>
+				</File>
+				<File
+					RelativePath=".\res\MoveHold.cur"
+					>
+				</File>
+				<File
+					RelativePath=".\res\resource.h"
+					>
+				</File>
+				<File
+					RelativePath=".\res\ZViewer.ico"
+					>
+				</File>
+				<File
+					RelativePath=".\res\ZViewer.rc"
+					>
+				</File>
+			</Filter>
+		</Filter>
+		<Filter
+			Name="헤더 파일"
+			Filter="h;hpp;hxx;hm;inl;inc;xsd"
+			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
+			>
 			<File
 				RelativePath=".\stdafx.cpp"
 				>
@@ -364,44 +396,8 @@
 					/>
 				</FileConfiguration>
 			</File>
-		</Filter>
-		<Filter
-			Name="헤더 파일"
-			Filter="h;hpp;hxx;hm;inl;inc;xsd"
-			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
-			>
 			<File
 				RelativePath=".\stdafx.h"
-				>
-			</File>
-		</Filter>
-		<Filter
-			Name="리소스 파일"
-			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx"
-			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
-			>
-			<File
-				RelativePath=".\res\MoveHand.cur"
-				>
-			</File>
-			<File
-				RelativePath=".\res\MoveHandHold.cur"
-				>
-			</File>
-			<File
-				RelativePath=".\res\MoveHold.cur"
-				>
-			</File>
-			<File
-				RelativePath=".\res\resource.h"
-				>
-			</File>
-			<File
-				RelativePath=".\res\ZViewer.ico"
-				>
-			</File>
-			<File
-				RelativePath=".\res\ZViewer.rc"
 				>
 			</File>
 		</Filter>

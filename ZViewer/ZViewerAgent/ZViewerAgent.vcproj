@@ -57,13 +57,11 @@
 				Optimization="0"
 				AdditionalIncludeDirectories="$(SolutionDir)/lib"
 				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG;_USRDLL;_ATL_NO_UUIDOF"
-				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="2"
 				ProgramDataBaseFileName="$(OutDir)/ZViewerAgentD.pdb"
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="true"
 				DebugInformationFormat="3"
 			/>
 			<Tool
@@ -160,7 +158,6 @@
 				UsePrecompiledHeader="2"
 				ProgramDataBaseFileName="$(IntDir)/ZViewerAgentCpp.pdb"
 				WarningLevel="4"
-				Detect64BitPortabilityProblems="true"
 				DebugInformationFormat="3"
 			/>
 			<Tool

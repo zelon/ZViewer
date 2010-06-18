@@ -15,20 +15,21 @@
 
 // 아래 지정된 플랫폼에 우선하는 플랫폼을 대상으로 해야 한다면 다음 정의를 수정하십시오.
 // 다른 플랫폼에 사용되는 해당 값의 최신 정보는 MSDN을 참조하십시오.
-#ifndef WINVER				// Windows 95 및 Windows NT 4 이상에서만 기능을 사용할 수 있습니다.
-#define WINVER 0x0400		// 이 값을 Windows 98 및 Windows 2000 이상을 대상으로 하는 데 적합한 값으로 변경하십시오.
+
+#ifndef WINVER
+#define WINVER 0x0500		///< 0x0500 = Win2000
 #endif
 
-#ifndef _WIN32_WINNT		// Windows NT 4 이상에서만 기능을 사용할 수 있습니다.
-#define _WIN32_WINNT 0x0400	// 이 값을 Windows 2000 이상을 대상으로 하는 데 적합한 값으로 변경하십시오.
+#ifndef _WIN32_WINNT
+#define _WIN32_WINNT 0x0500	///< 0x0500 = Win2000
 #endif						
 
-#ifndef _WIN32_WINDOWS		// Windows 98 이상에서만 기능을 사용할 수 있습니다.
-#define _WIN32_WINDOWS 0x0410 // 이 값을 Windows Me 이상을 대상으로 하는 데 적합한 값으로 변경하십시오.
+#ifndef _WIN32_WINDOWS
+#define _WIN32_WINDOWS 0x0500 ///< 0x0500 = WinME
 #endif
 
-#ifndef _WIN32_IE			// IE 4.0 이상에서만 기능을 사용할 수 있습니다.
-#define _WIN32_IE 0x0500	// 이 값을 IE 5.0 이상을 대상으로 하는 데 적합한 값으로 변경하십시오.
+#ifndef _WIN32_IE
+#define _WIN32_IE 0x0600	// Internet Explorer 6.0
 #endif
 
 #define _ATL_APARTMENT_THREADED
