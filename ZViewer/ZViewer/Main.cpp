@@ -106,39 +106,43 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,HINSTANCE /*hPrevInstance */,LPTSTR l
 		//*p = 0;
 	}
 
-	/// 파일 확장자를 연결하라는 거면
-	if ( _tcscmp(lpszCmdParam, TEXT("/fileext")) == 0 )	
-	{
-		int iRet = MessageBox(HWND_DESKTOP, GetMessage(TEXT("REG_FILE_TYPE")), TEXT("ZViewer"), MB_YESNO);
-
-		if ( iRet == IDYES )
-		{
-			ZFileExtDlg::GetInstance().SaveExtEnv();
-		}
-		return 0;
-	}
-	else if ( _tcscmp(lpszCmdParam, TEXT("/freezvieweragent")) == 0 )	// uninstall 할 때 ZViewerAgent 를 unload 한다.
-	{
-		CoFreeUnusedLibraries();
-		return 0;
-	}
-
 	tstring strCmdString;
 
-	// 쉘에서 보낼 때는 따옴표로 둘러싸서 준다. 그래서 따옴표를 제거한다.
-	if ( _tcslen(lpszCmdParam) > 0 )
+	if ( NULL != lpszCmdParam )
 	{
-		// 만약 따옴표를 포함하고 있으면(바탕화면에서 보냈을 때)
-		size_t iLen = _tcslen(lpszCmdParam);
-		for ( unsigned int i=0; i<iLen; ++i)
+		/// 파일 확장자를 연결하라는 거면
+		if ( _tcscmp(lpszCmdParam, TEXT("/fileext")) == 0 )	
 		{
-			if ( lpszCmdParam[i] == '\"')
+			int iRet = MessageBox(HWND_DESKTOP, GetMessage(TEXT("REG_FILE_TYPE")), TEXT("ZViewer"), MB_YESNO);
+
+			if ( iRet == IDYES )
 			{
-				continue;
+				ZFileExtDlg::GetInstance().SaveExtEnv();
 			}
-			strCmdString.push_back(lpszCmdParam[i]);
+			return 0;
+		}
+		else if ( _tcscmp(lpszCmdParam, TEXT("/freezvieweragent")) == 0 )	// uninstall 할 때 ZViewerAgent 를 unload 한다.
+		{
+			CoFreeUnusedLibraries();
+			return 0;
+		}
+
+		// 쉘에서 보낼 때는 따옴표로 둘러싸서 준다. 그래서 따옴표를 제거한다.
+		if ( _tcslen(lpszCmdParam) > 0 )
+		{
+			// 만약 따옴표를 포함하고 있으면(바탕화면에서 보냈을 때)
+			size_t iLen = _tcslen(lpszCmdParam);
+			for ( unsigned int i=0; i<iLen; ++i)
+			{
+				if ( lpszCmdParam[i] == '\"')
+				{
+					continue;
+				}
+				strCmdString.push_back(lpszCmdParam[i]);
+			}
 		}
 	}
+
 
 #ifdef _DEBUG
 	if ( strCmdString.empty() )

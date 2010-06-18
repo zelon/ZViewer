@@ -255,7 +255,12 @@ void ZMain::Draw(HDC toDrawDC, bool bEraseBg)
 		/// 무효화된 부분만 그릴 때의 DC 를 얻어오기 위해
 		mainDC = toDrawDC;
 	}
-	assert(mainDC != NULL);
+
+	if ( NULL == mainDC )
+	{
+		assert(mainDC != NULL);
+		return;
+	}
 
 	RECT currentScreenRect;
 	if ( false == getCurrentScreenRect(currentScreenRect) )

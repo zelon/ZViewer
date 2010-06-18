@@ -104,7 +104,12 @@ void ExifDlg::ShowExifMap()
 
 	assert(m_hWindow != NULL);
 	HWND hList = GetDlgItem(m_hWindow, IDC_EXIF_INFO_LIST);
-	assert(hList != NULL);
+	
+	if ( NULL == hList )
+	{
+		assert(hList != NULL);
+		return;
+	}
 
 	LVITEM li;
 	tstring readKey, convertedKey, readValue, convertedValue;

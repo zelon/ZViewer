@@ -61,6 +61,12 @@ void ZCacheImage::StartThread()
 	DWORD dwThreadID;
 	m_hThread = CreateThread(0, 0, ThreadFuncProxy, this, 0, &dwThreadID);
 
+	if ( NULL == m_hThread )
+	{
+		assert(!"Cache image thread createing failed");
+		return;
+	}
+
 	// Cache 를 진행하는 쓰레드는
 	if ( SetThreadPriority(m_hThread, THREAD_PRIORITY_BELOW_NORMAL) == FALSE )
 	{
