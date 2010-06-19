@@ -19,7 +19,7 @@
 		<Configuration
 			Name="Debug|Win32"
 			OutputDirectory="../../output"
-			IntermediateDirectory="Debug"
+			IntermediateDirectory="../../obj/ZViewerIconsD"
 			ConfigurationType="2"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			CharacterSet="2"
@@ -65,12 +65,12 @@
 				OutputFile="$(OutDir)/ZViewerIconsD.dll"
 				LinkIncremental="2"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="$(OutDir)/ZViewerIcons.pdb"
+				ProgramDatabaseFile="$(OutDir)/ZViewerIconsD.pdb"
 				SubSystem="2"
 				ResourceOnlyDLL="true"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
-				ImportLibrary="$(OutDir)/ZViewerIcons.lib"
+				ImportLibrary="$(OutDir)/ZViewerIconsD.lib"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -98,7 +98,7 @@
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="../../output"
-			IntermediateDirectory="Release"
+			IntermediateDirectory="../../obj/ZViewerIcons"
 			ConfigurationType="2"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			CharacterSet="2"
@@ -180,7 +180,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="../../ZViewerIcons/stdafx.cpp"
+				RelativePath="..\..\ZViewerIcons\stdafx.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -200,7 +200,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="../../ZViewerIcons/ZViewerIcons.cpp"
+				RelativePath="..\..\ZViewerIcons\ZViewerIcons.cpp"
 				>
 			</File>
 		</Filter>
