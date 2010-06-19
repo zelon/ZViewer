@@ -18,8 +18,8 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="../output"
-			IntermediateDirectory="../obj/ZViewerAgentD"
+			OutputDirectory="../../output"
+			IntermediateDirectory="../../obj/ZViewerAgentD"
 			ConfigurationType="2"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="2"
@@ -79,10 +79,10 @@
 			<Tool
 				Name="VCLinkerTool"
 				IgnoreImportLibrary="true"
-				AdditionalDependencies="$(SolutionDir)/lib/freeimage/FreeImaged.lib $(SolutionDir)/lib/freeimage/FreeImagePlusd.lib"
+				AdditionalDependencies="$(SolutionDir)/../../lib/freeimage/FreeImaged.lib $(SolutionDir)/../../lib/freeimage/FreeImagePlusd.lib"
 				OutputFile="$(OutDir)/ZViewerAgentD.dll"
 				LinkIncremental="2"
-				ModuleDefinitionFile=".\ZViewerAgent.def"
+				ModuleDefinitionFile="../../ZViewerAgent/ZViewerAgent.def"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(OutDir)/$(ProjectName)D.pdb"
 				SubSystem="2"
@@ -111,14 +111,14 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				Description="등록하고 있습니다."
-				CommandLine="regsvr32 /s /c &quot;$(TargetPath)&quot;"
+				Description="Registering ZViewerAgentD.dll"
+				CommandLine="regsvr32 /s /c &quot;$(TargetDir)ZViewerAgentD.dll&quot;"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(SolutionDir)/output"
-			IntermediateDirectory="../obj/ZViewerAgent"
+			OutputDirectory="$(SolutionDir)/../../output"
+			IntermediateDirectory="../../obj/ZViewerAgent"
 			ConfigurationType="2"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="1"
@@ -152,7 +152,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="$(SolutionDir)/lib"
+				AdditionalIncludeDirectories="$(SolutionDir)/../../lib"
 				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG;_USRDLL;_ATL_NO_UUIDOF"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="2"
@@ -175,10 +175,10 @@
 			<Tool
 				Name="VCLinkerTool"
 				IgnoreImportLibrary="true"
-				AdditionalDependencies="$(SolutionDir)/lib/freeimage/FreeImage.lib $(SolutionDir)/lib/freeimage/FreeImagePlus.lib"
+				AdditionalDependencies="$(SolutionDir)/../../lib/freeimage/FreeImage.lib $(SolutionDir)/../../lib/freeimage/FreeImagePlus.lib"
 				OutputFile="$(OutDir)/ZViewerAgent.dll"
 				LinkIncremental="1"
-				ModuleDefinitionFile=".\ZViewerAgent.def"
+				ModuleDefinitionFile="../../ZViewerAgent\ZViewerAgent.def"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				OptimizeReferences="0"
@@ -208,7 +208,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				Description="등록하고 있습니다."
+				Description="Registering ZViewerAgent.dll"
 				CommandLine="regsvr32 /s /c &quot;$(TargetPath)&quot;"
 			/>
 		</Configuration>
@@ -374,12 +374,12 @@
 	</References>
 	<Files>
 		<Filter
-			Name="소스 파일"
+			Name="Source Files"
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\stdafx.cpp"
+				RelativePath="../../ZViewerAgent\stdafx.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -407,19 +407,19 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\ZViewerAgent.cpp"
+				RelativePath="../../ZViewerAgent\ZViewerAgent.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\ZViewerAgent.def"
+				RelativePath="../../ZViewerAgent\ZViewerAgent.def"
 				>
 			</File>
 			<File
-				RelativePath=".\ZViewerAgent.idl"
+				RelativePath="../../ZViewerAgent\ZViewerAgent.idl"
 				>
 			</File>
 			<File
-				RelativePath=".\ZViewMenuExt.cpp"
+				RelativePath="../../ZViewerAgent\ZViewMenuExt.cpp"
 				>
 			</File>
 		</Filter>
@@ -429,15 +429,15 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\Resource.h"
+				RelativePath="../../ZViewerAgent\Resource.h"
 				>
 			</File>
 			<File
-				RelativePath=".\stdafx.h"
+				RelativePath="../../ZViewerAgent\stdafx.h"
 				>
 			</File>
 			<File
-				RelativePath=".\ZViewMenuExt.h"
+				RelativePath="../../ZViewerAgent\ZViewMenuExt.h"
 				>
 			</File>
 		</Filter>
@@ -447,15 +447,15 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 			<File
-				RelativePath=".\ZViewerAgent.rc"
+				RelativePath="../../ZViewerAgent\ZViewerAgent.rc"
 				>
 			</File>
 			<File
-				RelativePath=".\ZViewerAgent.rgs"
+				RelativePath="../../ZViewerAgent\ZViewerAgent.rgs"
 				>
 			</File>
 			<File
-				RelativePath=".\ZViewMenuExt.rgs"
+				RelativePath="../../ZViewerAgent\ZViewMenuExt.rgs"
 				>
 			</File>
 		</Filter>
@@ -464,7 +464,7 @@
 			SourceControlFiles="false"
 			>
 			<File
-				RelativePath=".\ZViewerAgent_i.c"
+				RelativePath="../../ZViewerAgent\ZViewerAgent_i.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -499,11 +499,11 @@
 				Name="freeimage"
 				>
 				<File
-					RelativePath="..\lib\freeimage\FreeImage.h"
+					RelativePath="../..\lib\freeimage\FreeImage.h"
 					>
 				</File>
 				<File
-					RelativePath="..\lib\freeimage\FreeImagePlus.h"
+					RelativePath="../..\lib\freeimage\FreeImagePlus.h"
 					>
 				</File>
 			</Filter>
@@ -512,98 +512,94 @@
 			Name="commonSrc"
 			>
 			<File
-				RelativePath="..\commonSrc\CommonFunc.cpp"
+				RelativePath="../..\commonSrc\CommonFunc.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\commonSrc\CommonFunc.h"
+				RelativePath="../..\commonSrc\CommonFunc.h"
 				>
 			</File>
 			<File
-				RelativePath="..\commonSrc\DesktopWallPaper.cpp"
+				RelativePath="../..\commonSrc\DesktopWallPaper.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\commonSrc\DesktopWallPaper.h"
+				RelativePath="../..\commonSrc\DesktopWallPaper.h"
 				>
 			</File>
 			<File
-				RelativePath="..\commonSrc\ExtInfoManager.cpp"
+				RelativePath="../..\commonSrc\ExtInfoManager.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\commonSrc\ExtInfoManager.h"
+				RelativePath="../..\commonSrc\ExtInfoManager.h"
 				>
 			</File>
 			<File
-				RelativePath="..\commonSrc\LogManager.cpp"
+				RelativePath="../..\commonSrc\LogManager.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\commonSrc\LogManager.h"
+				RelativePath="../..\commonSrc\LogManager.h"
 				>
 			</File>
 			<File
-				RelativePath="..\commonSrc\MessageManager.cpp"
+				RelativePath="../..\commonSrc\MessageManager.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\commonSrc\MessageManager.h"
+				RelativePath="../..\commonSrc\MessageManager.h"
 				>
 			</File>
 			<File
-				RelativePath="..\commonSrc\OptionFile.cpp"
+				RelativePath="../..\commonSrc\OptionFile.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\commonSrc\OptionFile.h"
+				RelativePath="../..\commonSrc\OptionFile.h"
 				>
 			</File>
 			<File
-				RelativePath="..\commonSrc\SaveAs.cpp"
+				RelativePath="../..\commonSrc\SaveAs.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\commonSrc\SaveAs.h"
+				RelativePath="../..\commonSrc\SaveAs.h"
 				>
 			</File>
 			<File
-				RelativePath="..\commonSrc\StringToValue.cpp"
+				RelativePath="../..\commonSrc\StringToValue.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\commonSrc\StringToValue.h"
+				RelativePath="../..\commonSrc\StringToValue.h"
 				>
 			</File>
 			<File
-				RelativePath="..\commonSrc\UnicodeFile.cpp"
+				RelativePath="../..\commonSrc\UnicodeFile.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\commonSrc\UnicodeFile.h"
+				RelativePath="../..\commonSrc\UnicodeFile.h"
 				>
 			</File>
 			<File
-				RelativePath="..\commonSrc\ZImage.cpp"
+				RelativePath="../..\commonSrc\ZImage.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\commonSrc\ZImage.h"
+				RelativePath="../..\commonSrc\ZImage.h"
 				>
 			</File>
 			<File
-				RelativePath="..\commonSrc\ZOption.cpp"
+				RelativePath="../..\commonSrc\ZOption.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\commonSrc\ZOption.h"
+				RelativePath="../..\commonSrc\ZOption.h"
 				>
 			</File>
 		</Filter>
-		<File
-			RelativePath=".\ReadMe.txt"
-			>
-		</File>
 	</Files>
 	<Globals>
 	</Globals>

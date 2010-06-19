@@ -1,20 +1,20 @@
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ZViewerAgent", "ZViewerAgent\ZViewerAgent.vcproj", "{FF216AE6-86AC-49FA-81D4-40A0B41D4C2B}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ZViewerAgent", "ZViewerAgent.vcproj", "{FF216AE6-86AC-49FA-81D4-40A0B41D4C2B}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ZViewer", "ZViewer\ZViewer.vcproj", "{F22C641A-3DB2-41A2-9530-8B39EEC1E4D8}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ZViewer", "ZViewer.vcproj", "{F22C641A-3DB2-41A2-9530-8B39EEC1E4D8}"
 	ProjectSection(ProjectDependencies) = postProject
 		{824D8007-4802-4DDC-AEED-B3A8AFB749C2} = {824D8007-4802-4DDC-AEED-B3A8AFB749C2}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ZViewerIcons", "ZViewerIcons\ZViewerIcons.vcproj", "{C61FF398-EFA2-4094-B558-58A784FAF364}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ZViewerIcons", "ZViewerIcons.vcproj", "{C61FF398-EFA2-4094-B558-58A784FAF364}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LangKor", "LangKor\LangKor.vcproj", "{4DB1B12A-2CAD-40EA-AB47-C13ED1CF0643}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LangKor", "LangKor.vcproj", "{4DB1B12A-2CAD-40EA-AB47-C13ED1CF0643}"
 	ProjectSection(ProjectDependencies) = postProject
 		{F22C641A-3DB2-41A2-9530-8B39EEC1E4D8} = {F22C641A-3DB2-41A2-9530-8B39EEC1E4D8}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ZUnitTest", "ZUnitTest\ZUnitTest.vcproj", "{824D8007-4802-4DDC-AEED-B3A8AFB749C2}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ZUnitTest", "ZUnitTest.vcproj", "{824D8007-4802-4DDC-AEED-B3A8AFB749C2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

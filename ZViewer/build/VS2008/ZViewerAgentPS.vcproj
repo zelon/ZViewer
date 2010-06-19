@@ -12,8 +12,8 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="../output"
-			IntermediateDirectory="../obj/ZViewerAgentPSD"
+			OutputDirectory="../../output"
+			IntermediateDirectory="../../obj/ZViewerAgentPSD"
 			ConfigurationType="2">
 			<Tool
 				Name="VCCLCompilerTool"
@@ -30,7 +30,7 @@
 				Name="VCMIDLTool"/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				Description="등록하고 있습니다."
+				Description="Registering ZViewerAgentPS"
 				CommandLine="regsvr32 /s /c &quot;$(TargetPath)&quot;"/>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -57,8 +57,8 @@ Exit 1
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="../output"
-			IntermediateDirectory="../obj/ZViewerAgentPS"
+			OutputDirectory="../../output"
+			IntermediateDirectory="../../obj/ZViewerAgentPS"
 			ConfigurationType="2">
 			<Tool
 				Name="VCCLCompilerTool"
@@ -78,7 +78,7 @@ Exit 1
 				Name="VCMIDLTool"/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				Description="등록하고 있습니다."
+				Description="Registering ZViewerAgentPS"
 				CommandLine="regsvr32 /s /c &quot;$(TargetPath)&quot;"/>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -156,7 +156,7 @@ Exit 1
 				Name="VCMIDLTool"/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				Description="등록하고 있습니다."
+				Description="Registering ZViewerAgentPS"
 				CommandLine="regsvr32 /s /c &quot;$(TargetPath)&quot;"/>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -193,17 +193,17 @@ Exit 1
 			Name="생성 파일"
 			SourceControlFiles="FALSE">
 			<File
-				RelativePath=".\dlldata.c">
+				RelativePath="../../ZViewerAgent\dlldata.c">
 			</File>
 			<File
-				RelativePath=".\ZViewerAgent_i.c">
+				RelativePath="../../ZViewerAgent\ZViewerAgent_i.c">
 			</File>
 			<File
-				RelativePath=".\ZViewerAgent_p.c">
+				RelativePath="../../ZViewerAgent\ZViewerAgent_p.c">
 			</File>
 		</Filter>
 		<File
-			RelativePath=".\ZViewerAgentps.def">
+			RelativePath="../../ZViewerAgent\ZViewerAgentps.def">
 		</File>
 	</Files>
 	<Globals>
