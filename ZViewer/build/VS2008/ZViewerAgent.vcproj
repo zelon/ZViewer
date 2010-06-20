@@ -55,7 +55,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/MP"
 				Optimization="0"
-				AdditionalIncludeDirectories="$(SolutionDir)/lib"
+				AdditionalIncludeDirectories="$(SolutionDir)/../../lib;$(SolutionDir)"
 				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG;_USRDLL;_ATL_NO_UUIDOF"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -463,6 +463,18 @@
 			Name="생성 파일"
 			SourceControlFiles="false"
 			>
+			<File
+				RelativePath=".\ZViewerAgent_i.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
 		</Filter>
 		<Filter
 			Name="lib"
