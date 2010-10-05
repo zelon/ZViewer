@@ -1,0 +1,19 @@
+
+syntax: regexp
+^\.cproject$
+syntax: regexp
+^\.project$
+syntax: regexp
+^build/VS2010/LangKor\.vcxproj\.user$
+syntax: regexp
+^build/VS2010/ZUnitTest\.vcxproj\.user$
+syntax: regexp
+^build/VS2010/ZViewer\.vcxproj\.user$
+syntax: regexp
+^build/VS2010/ZViewerAgent\.vcxproj\.user$
+syntax: regexp
+^build/VS2010/ZViewerIcons\.vcxproj\.user$
+syntax: regexp
+^build/VS2010/ZViewerWin32\.sdf$
+syntax: regexp
+^build/VS2010/ZViewerWin32\.suo$
