@@ -24,7 +24,7 @@ bool CUnicodeFile::open(const tstring & strFileName, eFileOpenMode openMode)
 
 		m_inputStream.seekg(-1, std::ios_base::end);
 
-		size_t pos = m_inputStream.tellg();
+		std::streamoff pos = m_inputStream.tellg();
 		if ( pos < 2 || pos % 2 != 1)
 		{
 			assert(!"not unicode file");
