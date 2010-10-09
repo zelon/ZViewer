@@ -78,12 +78,17 @@ STDMETHODIMP CZViewMenuExt::Initialize (LPCITEMIDLIST pidlFolder, LPDATAOBJECT  
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
 	bool bGetCurrentDirOK = true;
+	TCHAR szCurrentDir[MAX_PATH] = { 0, };
 
 	m_strCurrentDir.reserve(MAX_PATH);
 
-	if ( FALSE == SHGetPathFromIDList(pidlFolder, &(m_strCurrentDir[0])) )
+	if ( FALSE == SHGetPathFromIDList(pidlFolder, szCurrentDir) ) 
 	{
 		bGetCurrentDirOK = false;
+	}
+	else
+	{
+		m_strCurrentDir = szCurrentDir;
 	}
 
 	if ( GetSystemDefaultLangID() == 0x0412 )
