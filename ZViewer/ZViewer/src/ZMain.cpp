@@ -813,6 +813,10 @@ void ZMain::StopTimer()
 		{
 			assert(bRet);
 		}
+		else
+		{
+			m_timerPtr = 0;
+		}
 	}
 }
 
