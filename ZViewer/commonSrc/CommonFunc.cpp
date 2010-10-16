@@ -492,3 +492,40 @@ void SplitPath(const TCHAR * path, TCHAR * drive, size_t driveNumberOfElements, 
 #endif
 	
 }
+
+/// 파일 열기 다이얼로그는 항상 부모의 가운데에 띄운다.
+UINT_PTR CenterOFNHookProc(HWND hdlg, UINT uiMsg, WPARAM /*wParam*/, LPARAM /*lParam*/)
+{
+    if ( uiMsg == WM_INITDIALOG)
+	{
+		HWND hwndParent = GetParent(hdlg);
+
+		if ( hwndParent != INVALID_HANDLE_VALUE )
+		{
+			RECT windowRect;
+
+			if ( TRUE == GetWindowRect(hwndParent, &windowRect) )
+			{
+				int width, height;
+				width = windowRect.right - windowRect.left;
+				height = windowRect.bottom - windowRect.top;
+
+				RECT viewerArea = { 0, };
+				
+				if ( TRUE == GetWindowRect(GetParent(hwndParent), &viewerArea) )
+				{
+					int newX = ((viewerArea.right-viewerArea.left)/2)-(width/2);
+					int newY = ((viewerArea.bottom-viewerArea.top)/2)-(height/2);
+
+					newX += viewerArea.left;
+					newY += viewerArea.top;
+
+					MoveWindow(hwndParent, newX, newY, width, height, FALSE);
+				}
+			}
+		}
+    }
+    return 0;
+}
+
+

@@ -127,3 +127,6 @@ void SplitPath(const TCHAR * path, TCHAR * drive, size_t driveNumberOfElements, 
 #define TIMECHECK_START(szMsg)	;
 #define TIMECHECK_END()			;
 #endif
+
+UINT_PTR CenterOFNHookProc(HWND hdlg, UINT uiMsg, WPARAM /*wParam*/, LPARAM /*lParam*/);
+

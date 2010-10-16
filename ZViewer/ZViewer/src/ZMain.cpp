@@ -171,7 +171,8 @@ void ZMain::InitOpenFileDialog()
 	ofn.lpstrFileTitle = NULL;
 	ofn.nMaxFileTitle = 0;
 	ofn.lpstrInitialDir = m_strCurrentFolder.c_str();
-	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_ENABLEHOOK | OFN_EXPLORER;
+	ofn.lpfnHook = (LPOFNHOOKPROC)CenterOFNHookProc;
 }
 
 void ZMain::OpenFileDialog()
