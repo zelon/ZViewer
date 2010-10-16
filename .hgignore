@@ -27,3 +27,17 @@ syntax: regexp
 ^ZViewer/build/VS2010/ZViewerWin32\.suo$
 syntax: regexp
 ^ZViewer/output/ZViewerAgent\.lib$
+syntax: regexp
+^ZViewer/output/ZUnitTestD\.exe$
+syntax: regexp
+^ZViewer/output/ZViewer\.exe$
+syntax: regexp
+^ZViewer/output/ZViewerAgent\.dll$
+syntax: regexp
+^ZViewer/output/ZViewerAgentD\.dll$
+syntax: regexp
+^ZViewer/output/ZViewerD\.exe$
+syntax: regexp
+^ZViewer/output/ZViewerIcons\.dll$
+syntax: regexp
+^ZViewer/output/ZViewerIconsD\.dll$
