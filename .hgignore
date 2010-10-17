@@ -41,3 +41,7 @@ syntax: regexp
 ^ZViewer/output/ZViewerIcons\.dll$
 syntax: regexp
 ^ZViewer/output/ZViewerIconsD\.dll$
+syntax: regexp
+^ZViewer/output/language/korean\.dll$
+syntax: regexp
+^ZViewer/build/VS2010/ipch$
