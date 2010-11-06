@@ -916,7 +916,7 @@ void ZMain::ToggleFullScreen()
 		const int screenWidth = ::GetSystemMetrics( SM_CXSCREEN );
 		const int screenHeight = ::GetSystemMetrics(SM_CYSCREEN);
 
-		// 화면 듀얼 모니터 처리를 해줌. 처음 위치에 따라서 full screen 후 화면의 위치를 바꿔준다.
+		// 화면 듀얼 모니터 처리를 해줌. 처음 위치에 따라서 full screen 후 화면의 위치를 바꿔준다.(아래 소스는 듀얼 모니터이고, 양쪽의 해상도가 같고, 기본 모니터가 왼쪽의 모니터일 때만 적용된다)
 		const int screenX = int(m_lastPosition.left / screenWidth) * screenWidth;
 		const int screenY = int(m_lastPosition.top / screenHeight) * screenHeight;
 
