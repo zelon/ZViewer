@@ -27,6 +27,11 @@ void DebugPrintf( const TCHAR *fmt, ... )
 	len = StringCbVPrintf( buf, sizeof(buf) / sizeof(TCHAR), fmt, v );
 	va_end( v );
 
+	if ( S_OK != len )
+	{
+		assert(false);
+	}
+
 	OutputDebugString( buf );
 	OutputDebugString( TEXT("\r\n") );
 

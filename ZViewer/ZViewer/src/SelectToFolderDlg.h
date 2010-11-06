@@ -29,7 +29,7 @@ public:
 protected:
 
 	HWND m_hWnd;
-	void OnBrowserButton();
+	void OnBrowserButton() const;
 
 	tstring m_strMoveToFolder;
 };

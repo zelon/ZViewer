@@ -68,6 +68,10 @@ void CLogManager::Output(const TCHAR * fmt, ...)
 	iCnt = StringCbVPrintf(cBuf, sizeof(cBuf) / sizeof(TCHAR), fmt, argptr);
 	va_end(argptr);
 
+	if ( S_OK != iCnt )
+	{
+		assert(false);
+	}
 	CLockObjUtil lock(m_logLock);
 
 	// 콘솔 윈도우에 출력

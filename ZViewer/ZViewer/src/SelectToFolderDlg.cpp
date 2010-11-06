@@ -35,7 +35,7 @@ bool CSelectToFolderDlg::DoModal()
 	return false;
 }
 
-void CSelectToFolderDlg::OnBrowserButton()
+void CSelectToFolderDlg::OnBrowserButton() const
 {
 
 }

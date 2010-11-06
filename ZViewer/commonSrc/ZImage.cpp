@@ -17,6 +17,7 @@
 using namespace std;
 
 ZImage::ZImage()
+: m_originalWidth(0), m_originalHeight(0), m_originalSize(0)
 {
 }
 

@@ -73,20 +73,13 @@ STDMETHODIMP CZViewMenuExt::Initialize (LPCITEMIDLIST pidlFolder, LPDATAOBJECT  
 
 	g_bPreviewMenuInsert = ZOption::GetInstance().IsUsingPreviewModeInShell();
 
-	const ZOption & fff = ZOption::GetInstance();
-
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-	bool bGetCurrentDirOK = true;
 	TCHAR szCurrentDir[MAX_PATH] = { 0, };
 
 	m_strCurrentDir.reserve(MAX_PATH);
 
-	if ( FALSE == SHGetPathFromIDList(pidlFolder, szCurrentDir) ) 
-	{
-		bGetCurrentDirOK = false;
-	}
-	else
+	if ( TRUE == SHGetPathFromIDList(pidlFolder, szCurrentDir) ) 
 	{
 		m_strCurrentDir = szCurrentDir;
 	}
@@ -602,12 +595,17 @@ STDMETHODIMP CZViewMenuExt::OnDrawItem(DRAWITEMSTRUCT * pdis, LRESULT * pResult 
 	}
 
 	// 실제로 그린다.
-	int r = StretchDIBits(*pdcMenu,
+	int scanLinesCopied = StretchDIBits(*pdcMenu,
 		rcDraw.left, rcDraw.top, rcDraw.Width(), rcDraw.Height(),
 		0, 0, rcDraw.Width(), rcDraw.Height(),
 		m_originalImage.GetData(),		//FreeImage_GetBits(m_toDraw),
 		m_originalImage.GetBitmapInfo(),		//FreeImage_GetInfo(m_toDraw),
 		0, 0x00cc0020);
+
+	if ( 0 == scanLinesCopied )
+	{
+		assert(false);
+	}
 
     *pResult = TRUE;            // we handled the message
 

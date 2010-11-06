@@ -11,6 +11,7 @@ public:
 
 	enum eFileOpenMode
 	{
+		eFileOpenMode_NONE,
 		eFileOpenMode_READ,
 		eFileOpenMode_WRITE,
 	};
@@ -22,6 +23,7 @@ public:
 	};
 
 	CUnicodeFile()
+		: m_openMode(eFileOpenMode_NONE), m_bBigEndian(false)
 	{
 
 	}
