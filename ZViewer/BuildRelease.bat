@@ -2,7 +2,7 @@
 SET NSIS_PATH="C:\Program Files\NSIS\makensis.exe"
 SET NSIS_PATH_PLUGIN1="C:\Program Files\NSIS\Plugins\KillProcDLL.dll"
 SET NSIS_PATH_PLUGIN2="C:\Program Files\NSIS\Plugins\FindProcDLL.dll"
-SET VS_BATCH="C:\Program Files\Microsoft Visual Studio 8\VC\vcvarsall.bat"
+SET VS_BATCH="C:\Program Files\Microsoft Visual Studio 10.0\VC\vcvarsall.bat"
 SET START_DIR=%CD%
 
 :CHECK_NSIS
@@ -33,7 +33,7 @@ GOTO END
 
 :VS_BUILD
 call %VS_BATCH% x86
-devenv ZViewerWin32.sln /rebuild Release
+devenv build\VS2010\ZViewerWin32.sln /rebuild Release
 IF %ERRORLEVEL% == 0 GOTO MAKE_PORTABLE
 echo [FAILED] Visual Studio Build FAILED!!!!!
 GOTO END
