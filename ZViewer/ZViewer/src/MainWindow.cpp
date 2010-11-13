@@ -111,6 +111,8 @@ HWND CMainWindow::Create(HINSTANCE hInstance, HWND hParentHWND, int nCmdShow)
 	// 단축키 설정. 여기서 반환된 핸들은 프로그램이 종료될 때 자동적으로 close 됨.
 	m_hAccel = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDR_MAIN_ACCELERATOR));
 
+	SetWindowLong ( m_hWindow, GWL_EXSTYLE, GetWindowLong(m_hWindow, GWL_EXSTYLE) | WS_EX_LAYERED );
+
 	return m_hWindow;
 }
 
@@ -126,6 +128,14 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 		{
 			switch ( wParam )
 			{
+			case '{':
+				ZMain::GetInstance().DecreaseOpacity();
+				break;
+
+			case '}':
+				ZMain::GetInstance().IncreaseOpacity();
+				break;
+
 			case 'g':
 			case 'G':
 				ZMain::GetInstance().StartSlideMode();

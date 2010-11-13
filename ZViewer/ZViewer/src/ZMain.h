@@ -109,6 +109,8 @@ public:
 	/// 현재보고 있는 이미지 파일을 90도 회전시킴
 	void Rotate(bool bClockWise);
 
+	void DecreaseOpacity();
+	void IncreaseOpacity();
 
 	HWND GetHWND() const { return m_hMainDlg; }
 	void SetHWND(HWND hWnd);
@@ -308,4 +310,6 @@ private:
 
 	/// 현재 이미지가 로딩되었나
 	bool m_bCurrentImageLoaded;
+
+	BYTE m_alpha;
 };

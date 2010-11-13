@@ -46,6 +46,7 @@ ZMain::ZMain(void)
 :	m_hMainDlg(NULL)
 ,	m_sortOrder(eFileSortOrder_FILENAME)
 ,	m_osKind(eOSKind_UNKNOWN)
+,	m_alpha(255)
 {
 	memset( &m_lastPosition, 0, sizeof( m_lastPosition ) );
 	m_hBufferDC = NULL;
@@ -1595,6 +1596,28 @@ void ZMain::Rotate(bool bClockWise)
 		Draw(NULL, true);
 	}
 }
+
+void ZMain::DecreaseOpacity()
+{
+	if ( m_alpha < 20 )
+	{
+		m_alpha = 20;
+	}
+	m_alpha -= 10;
+	SetLayeredWindowAttributes(m_hMainDlg, 0, m_alpha, LWA_ALPHA);
+}
+
+void ZMain::IncreaseOpacity()
+{
+	if ( m_alpha >= 245 )
+	{
+		m_alpha = 245;
+	}
+	m_alpha += 10;
+
+	SetLayeredWindowAttributes(m_hMainDlg, 0, m_alpha, LWA_ALPHA);
+}
+
 
 void ZMain::SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyle style)
 {
