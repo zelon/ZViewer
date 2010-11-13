@@ -1604,6 +1604,9 @@ void ZMain::DecreaseOpacity()
 		m_alpha = 20;
 	}
 	m_alpha -= 10;
+
+	SetWindowLong ( m_hMainDlg, GWL_EXSTYLE, GetWindowLong(m_hMainDlg, GWL_EXSTYLE) | WS_EX_LAYERED );
+
 	SetLayeredWindowAttributes(m_hMainDlg, 0, m_alpha, LWA_ALPHA);
 }
 
@@ -1615,6 +1618,7 @@ void ZMain::IncreaseOpacity()
 	}
 	m_alpha += 10;
 
+	SetWindowLong ( m_hMainDlg, GWL_EXSTYLE, GetWindowLong(m_hMainDlg, GWL_EXSTYLE) | WS_EX_LAYERED );
 	SetLayeredWindowAttributes(m_hMainDlg, 0, m_alpha, LWA_ALPHA);
 }
 
