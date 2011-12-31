@@ -1,0 +1,15 @@
+
+ ZViewer is a Image Viewer on Microsoft Windows System.
+ 
+ Official blog is http://zviewer.wimy.com
+ 
+ 
+ Main Features:
+ 
+  - Cache next image
+  - Paste clipboard image as file ( in explorer )
+  - Support Unicode
+  - Support Preview in explorer ( with right click )
+  - Support various image format : bmp, jpg, jpeg2000, png, tif, psd, gif, dds, tga, pcx, xpm, xbm, cut, ico, hdr, jng, koa, mng, pcd, ras, wbmp
+  - Auto Rotate
+  
