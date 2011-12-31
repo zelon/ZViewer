@@ -300,7 +300,7 @@ STDMETHODIMP CZViewMenuExt::QueryContextMenu(HMENU hmenu, UINT uIndex, UINT uidC
 }
 
 /// mouseover 한 메뉴에 따라서, 이 함수에서 얻은 문자열을 탐색기의 '상태표시줄' 에 보여준다.
-STDMETHODIMP CZViewMenuExt::GetCommandString (UINT uCmd, UINT uFlags, UINT* /*puReserved*/, LPSTR pszName, UINT cchMax)
+STDMETHODIMP CZViewMenuExt::GetCommandString (UINT_PTR uCmd, UINT uFlags, UINT* /*puReserved*/, LPSTR pszName, UINT cchMax)
 {
 	// 여기서 uCmd 는 메뉴에 넣은 순서대로 0 부터 순서대로 온다. 단, 선택할 수 없는 메뉴는 무시한 순서다.
 
