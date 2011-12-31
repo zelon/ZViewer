@@ -85,5 +85,5 @@ int CALLBACK AboutWndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM /*lParam*
 
 void CAboutWindow::DoResource(HWND hParentHWND)
 {
-	DialogBox(ZResourceManager::GetInstance().GetHInstance(), MAKEINTRESOURCE(IDD_DIALOGHELP), hParentHWND, AboutWndProc);
+	DialogBox(ZResourceManager::GetInstance().GetHInstance(), MAKEINTRESOURCE(IDD_DIALOGHELP), hParentHWND, (DLGPROC)AboutWndProc);
 }

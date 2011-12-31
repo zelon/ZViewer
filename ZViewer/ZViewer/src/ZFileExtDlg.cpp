@@ -34,7 +34,7 @@ ZFileExtDlg & ZFileExtDlg::GetInstance()
 
 void ZFileExtDlg::ShowDlg()
 {
-	INT_PTR iRet = DialogBox(ZResourceManager::GetInstance().GetHInstance(), MAKEINTRESOURCE(IDD_FILE_EXT_DIALOG), ZMain::GetInstance().GetHWND(), FileExtDlgProc);
+	INT_PTR iRet = DialogBox(ZResourceManager::GetInstance().GetHInstance(), MAKEINTRESOURCE(IDD_FILE_EXT_DIALOG), ZMain::GetInstance().GetHWND(), (DLGPROC)FileExtDlgProc);
 
 	if ( iRet == IDOK )
 	{

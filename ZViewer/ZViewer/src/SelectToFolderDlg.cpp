@@ -40,7 +40,7 @@ void CSelectToFolderDlg::OnBrowserButton() const
 
 }
 
-int CALLBACK CSelectToFolderDlg::MoveToDlgPrc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM /*lParam*/)
+INT_PTR CALLBACK CSelectToFolderDlg::MoveToDlgPrc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM /*lParam*/)
 {
 	static tstring strLastFolder = TEXT("");
 

@@ -22,7 +22,7 @@ public:
 
 	const tstring & GetMoveToFolder() const { return m_strMoveToFolder; }
 
-	static int CALLBACK MoveToDlgPrc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam);
+	static INT_PTR CALLBACK MoveToDlgPrc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam);
 
 	void SetFolder(const tstring & strFolder);
 
