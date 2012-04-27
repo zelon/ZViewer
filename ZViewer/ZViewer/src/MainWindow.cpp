@@ -123,6 +123,25 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 
 	switch(iMessage)
 	{
+	case WM_KEYDOWN:
+		{
+			switch ( wParam )
+			{
+			case VK_ESCAPE:
+				{
+					if ( ZOption::GetInstance().IsFullScreen() )	// 현재 풀스크린이면 원래 화면으로 돌아간다.
+					{
+						ZMain::GetInstance().ToggleFullScreen();
+					}
+					else
+					{
+						SendMessage(hWnd, WM_CLOSE, 0, 0);
+					}
+				}
+				break;
+			}
+		}
+		break;
 	case WM_CHAR:
 		{
 			switch ( wParam )

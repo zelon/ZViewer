@@ -13,13 +13,11 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
-// 한국어 resources
+// Korean (Korea) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_KOR)
-#ifdef _WIN32
 LANGUAGE LANG_KOREAN, SUBLANG_DEFAULT
 #pragma code_page(949)
-#endif //_WIN32
 
 #ifdef APSTUDIO_INVOKED
 /////////////////////////////////////////////////////////////////////////////
@@ -52,7 +50,7 @@ END
 // Menu
 //
 
-IDR_MAIN_MENU MENU 
+IDR_MAIN_MENU MENU
 BEGIN
     POPUP "파일(&F)"
     BEGIN
@@ -122,7 +120,7 @@ BEGIN
     END
 END
 
-IDR_POPUP_MENU MENU 
+IDR_POPUP_MENU MENU
 BEGIN
     POPUP "PopupMenu"
     BEGIN
@@ -165,9 +163,8 @@ IDI_BIG_MAIN            ICON                    "ZViewer.ico"
 // Accelerator
 //
 
-IDR_MAIN_ACCELERATOR ACCELERATORS 
+IDR_MAIN_ACCELERATOR ACCELERATORS
 BEGIN
-    VK_ESCAPE,      ID_ACCELERATOR_CANCEL_FULLSCREEN, VIRTKEY, NOINVERT
     VK_DOWN,        ID_ACCELERATOR_DOWN,    VIRTKEY, NOINVERT
     VK_LEFT,        ID_ACCELERATOR_LEFT,    VIRTKEY, NOINVERT
     VK_RIGHT,       ID_ACCELERATOR_RIGHT,   VIRTKEY, NOINVERT
@@ -273,7 +270,7 @@ END
 //
 
 #ifdef APSTUDIO_INVOKED
-GUIDELINES DESIGNINFO 
+GUIDELINES DESIGNINFO
 BEGIN
     IDD_DIALOGHELP, DIALOG
     BEGIN
@@ -355,12 +352,12 @@ END
 // String Table
 //
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_FILE_OPEN40016       "ZViewer Project do not use String Table."
 END
 
-#endif    // 한국어 resources
+#endif    // Korean (Korea) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
