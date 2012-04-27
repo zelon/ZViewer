@@ -1,5 +1,5 @@
 ﻿"""
- 이 파일은 각 언어에 맞는 언어 파일을 테스트하는 파일입니다.
+ This file tests all kind of language file and resource file
 """
 import os
 import re
@@ -81,8 +81,8 @@ def checkUsedMap():
 def checkSameMap():
 	files = glob.glob("output/language/*.txt")
 
-	""" 모든 텍스트 파일을 열면서 key(=왼쪽부분) 의 모든 종류를 모으고
-		다시 모든 파일을 돌면서 key 가 없는 파일을 찾음 """
+	""" Check every file has same kind of key and value.
+	    check odd key and some language file has that key """
 
 
 	#print("Collecting language map...")
@@ -101,7 +101,7 @@ def checkSameMap():
 				continue
 			#print("^" + line + "|")
 
-			# line 에 = 가 있는지 체크해야함
+			# '=' should exist in a line
 			sline = line.split("=")
 
 			langMap[sline[0]] = sline[1]
@@ -124,7 +124,7 @@ def checkSameMap():
 				continue
 			#print("^" + line + "$")
 
-			# line 에 = 가 있는지 체크해야함
+			# '=' should exist in a line
 			sline = line.split("=")
 
 			thisLangMap[sline[0]] = sline[1]
@@ -191,7 +191,7 @@ def checkSamePattern(files, strRe, printResult = False):
 
 	return True
 
-""" .rc 파일들의 주요 내용이 서로 같은지 체크 """
+""" Check if .rc files are same """
 def checkSameRCFile():
 	files = [ r'ZViewer\res\ZViewer.rc', r'LangKor\res\ZViewer.rc' ]
 
@@ -199,13 +199,13 @@ def checkSameRCFile():
 
 	bRet = checkSamePattern(files, strRe)
 	if False == bRet:
-		print("[FAILED]testLang : error lang: Not same accelerator")
+		print("[FAILED]testLang : error lang: Not same accelerator. Check ZViewer.rc files")
 		return False
 	else:
 		print("[OK] Same accelerator")
 	return True
 
-""" Resource 파일들이 서로 같은지 체크~~~ """
+""" Check if resource.h files are same """
 def checkSameRes():
 	left = open(r'ZViewer\res\resource.h', "r")
 	right = open(r'LangKor\res\resource.h', "r")
