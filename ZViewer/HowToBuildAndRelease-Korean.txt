@@ -10,7 +10,7 @@
 
  * 소스 파일을 공백이 포함된 폴더 밑에 두면 링크 오류가 생길 수 있으므로(Visual Studio 의 버그) 파일 경로에 공백이 없는 곳을 추천합니다!!
 
- 0. python(http://python.org)을 설치 후 환경변수 path 에 추가해준다.
+ 0. python 3 version(http://python.org)을 설치 후 환경변수 path 에 추가해준다.
  1. Visual Studio .NET 2010 에서 소스 디렉토리 아래의 build/VS2010/ZViewerWin32.sln 파일을 연 후, Release 로 빌드 솔루션을 한다.
  2. output 폴더에 실행 파일 및 부속 파일들이 생긴다.
 
