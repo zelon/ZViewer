@@ -13,9 +13,15 @@
 /output/*.pdb
 /output/ZViewerAgent.exp
 /output/ZViewerAgent.lib
+/output/ZViewerAgent.dll
+/output/ZViewerIcons.dll
 /output/ZViewerAgentD.dll
+/output/ZViewer.exe
 /output/ZViewerD.exe
+/output/ZUnitTest.exe
+/output/ZUnitTestD.exe
 /output/ZViewerIconsD.dll
 /output/language/korean.dll
+/output/language/korean.pdb
 /output/language/korean.ilk
 /output/language/LangKor.pdb
