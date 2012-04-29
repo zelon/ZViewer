@@ -124,7 +124,10 @@ void CachedData::SetNewFileList(const std::vector < FileData > & v)
 		m_imageFilename2IndexMap.insert(std::make_pair(v[i].m_strFileName, (int)i));
 	}
 
+	DebugPrintf(TEXT("m_imageFilename2IndexMap : %d"), m_imageFilename2IndexMap.size());
 	DebugPrintf(TEXT("imageIndex2FilenameMapSize : %d"), m_imageIndex2FilenameMap.size());
+
+	assert(m_imageFilename2IndexMap.size() == m_imageIndex2FilenameMap.size());
 }
 
 bool CachedData::GetCachedData(const tstring & strFilename, ZImage * & pImage) const
