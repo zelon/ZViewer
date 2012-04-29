@@ -50,6 +50,12 @@ const tstring GetOnlyFileNameWithoutExt(const tstring & strFullFileName)
 	return szFile;
 }
 
+bool IsPressedVirtualKey(int vk)
+{
+	if ( GetKeyState(vk) < 0 ) return true;
+	return false;
+}
+
 bool SetRegistryValue(HKEY hOpenKey, const tstring & strKey,LPCTSTR szValue, const tstring & strData)
 {
 	if( !hOpenKey || strKey.empty() || !szValue)

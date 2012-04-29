@@ -77,6 +77,8 @@ public:
 
 void DebugPrintf( const TCHAR *fmt, ... );
 
+bool IsPressedVirtualKey(int vk);
+
 bool SetRegistryValue(HKEY hOpenKey, const tstring & strKey,LPCTSTR szValue, const tstring & strData);
 
 /// 최대 크기를 넘지 않는 적당한 리사이즈 크기를 돌려준다.
