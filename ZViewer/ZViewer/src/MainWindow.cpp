@@ -127,6 +127,7 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 		{
 			switch ( wParam )
 			{
+			case 'E':
 			case VK_OEM_COMMA:
 				{
 					if ( IsPressedVirtualKey(VK_CONTROL) )
@@ -140,6 +141,7 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 				}
 				break;
 
+			case 'R':
 			case VK_OEM_PERIOD:
 				{
 					if ( IsPressedVirtualKey(VK_CONTROL) )
