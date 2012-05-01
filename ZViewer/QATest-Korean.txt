@@ -25,3 +25,4 @@
  * transparent png 파일을 열어서 확대, 축소, 회전해서 체크 배경이 나오나 체크
  * 다른 이름으로 저장 & 확장자 바꾸기가 잘되는가
  * NSIS 는 최신 버젼인가
+ * Readme and license file has window delimiter?
