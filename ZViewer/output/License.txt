@@ -1,7 +1,4 @@
 
- * Icon licence is cc-by -sa/2.0/(http://creativecommons.org/licenses/by-nc/2.0/). Modified from Jini Icon theme(http://kldp.net/projects/jini/)
- * The license of this program is GPL.
-
 		    GNU GENERAL PUBLIC LICENSE
 		       Version 2, June 1991
 
