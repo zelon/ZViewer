@@ -1,4 +1,9 @@
+
+# eclipse setting files
 /.project
+/.cproject
+/.pydevproject
+
 /obj
 /build/VS2010/*.vcxproj.user
 /build/VS2010/dlldata.c
@@ -25,3 +30,5 @@
 /output/language/korean.pdb
 /output/language/korean.ilk
 /output/language/LangKor.pdb
+/output/__pycache__/*.pyc
+/_release
