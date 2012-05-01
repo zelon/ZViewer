@@ -67,11 +67,11 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionPath)\..\..\..\output\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../../output\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionPath)\..\..\..\obj\ZViewerAgentD\</IntDir>
     <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</IgnoreImportLibrary>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionPath)\..\..\..\output\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../../output\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionPath)\..\..\..\obj\ZViewerAgent\</IntDir>
     <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</IgnoreImportLibrary>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
@@ -126,7 +126,7 @@
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>$(SolutionDir)/../../lib/freeimage/FreeImaged.lib;$(SolutionDir)/../../lib/freeimage/FreeImagePlusd.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(SolutionPath)\..\..\..\output\ZViewerAgentD.dll</OutputFile>
+      <OutputFile>$(OutDir)ZViewerAgentD.dll</OutputFile>
       <ModuleDefinitionFile>../../ZViewerAgent/ZViewerAgent.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(OutDir)$(ProjectName)D.pdb</ProgramDatabaseFile>
