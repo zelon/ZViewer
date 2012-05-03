@@ -45,14 +45,15 @@ void ZOption::LoadOption()
 	/// 기본적인 옵션은 설정해둔다.
 	SetDefaultOption();
 
-	SetSaveOptions();
+	/// Make the table that indicate which key-value is mapped to which variable
+	InitializeOptionMappingTable();
 
 	/// 기본적인 옵션에서 파일에서 불러온 설정을 덮어씌운다.
 	LoadFromFile();
 }
 
-/// 이 멤버들은 이 이름으로 저장되고, 불려져 온다라고 설정
-void ZOption::SetSaveOptions()
+/// Make the table that indicate which key-value is mapped to which variable
+void ZOption::InitializeOptionMappingTable()
 {
 	_InsertSaveOptionSetting(L"maximumcachememoryMB", &m_iMaximumCacheMemoryMB);
 	_InsertSaveOptionSetting(L"maximumcachefilenum", &m_iMaxCacheImageNum);
