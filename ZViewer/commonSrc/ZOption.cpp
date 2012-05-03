@@ -69,6 +69,9 @@ void ZOption::InitializeOptionMappingTable()
 	_InsertSaveOptionSetting(L"use_debug", &m_bUseDebug);
 
 	_InsertSaveOptionSetting(L"use_auto_rotation", &m_bUseAutoRotation);
+
+	_InsertSaveOptionSetting(L"last_copy_directory", &m_strLastCopyDirectory);
+	_InsertSaveOptionSetting(L"last_move_directory", &m_strLastMoveDirectory);
 }
 
 /// 기본적인 옵션을 설정해둔다. 설치 후 처음 실행되었을 때 이 값을 기준으로 zviewer.ini 파일이 만들어진다.

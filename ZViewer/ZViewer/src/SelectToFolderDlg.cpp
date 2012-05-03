@@ -17,9 +17,11 @@
 
 CSelectToFolderDlg * pThis = NULL;
 
-CSelectToFolderDlg::CSelectToFolderDlg()
+CSelectToFolderDlg::CSelectToFolderDlg(const tstring & initaliDir)
 {
 	pThis = this;
+
+	m_strSelectedFolder = initaliDir;
 }
 
 CSelectToFolderDlg::~CSelectToFolderDlg()
@@ -42,17 +44,15 @@ void CSelectToFolderDlg::OnBrowserButton() const
 
 INT_PTR CALLBACK CSelectToFolderDlg::MoveToDlgPrc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM /*lParam*/)
 {
-	static tstring strLastFolder = TEXT("");
-
 	switch(iMessage)
 	{
 	case WM_INITDIALOG:
 		{
 			pThis->m_hWnd = hWnd;
 
-			if ( !strLastFolder.empty() )
+			if ( !pThis->m_strSelectedFolder.empty() )
 			{
-				pThis->SetFolder(strLastFolder);
+				pThis->SetFolder(pThis->m_strSelectedFolder);
 			}
 		}
 		return TRUE;
@@ -66,8 +66,7 @@ INT_PTR CALLBACK CSelectToFolderDlg::MoveToDlgPrc(HWND hWnd,UINT iMessage,WPARAM
 					TCHAR szTemp[MAX_PATH];
 					GetDlgItemText(hWnd, IDC_EDIT_MOVE_TO_FOLDER, szTemp, sizeof(szTemp) / sizeof(TCHAR) );
 
-					pThis->m_strMoveToFolder = szTemp;
-					strLastFolder = szTemp;
+					pThis->m_strSelectedFolder = szTemp;
 
 					::EndDialog(hWnd, IDOK);
 				}
@@ -101,7 +100,7 @@ INT_PTR CALLBACK CSelectToFolderDlg::MoveToDlgPrc(HWND hWnd,UINT iMessage,WPARAM
 
 void CSelectToFolderDlg::SetFolder(const tstring & strFolder)
 {
-	m_strMoveToFolder = strFolder;
+	m_strSelectedFolder = strFolder;
 
 	SetDlgItemText(m_hWnd, IDC_EDIT_MOVE_TO_FOLDER, strFolder.c_str());
 }

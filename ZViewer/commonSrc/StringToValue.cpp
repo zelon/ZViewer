@@ -11,7 +11,6 @@ void StringToValue::InsertValueToMap(iniMap & mapData)
 		{
 			bool * pData = (bool*)m_pData;
 			mapData[m_str] = (*pData) ? TEXT("true") : TEXT("false");
-
 		}
 		break;
 
@@ -19,6 +18,13 @@ void StringToValue::InsertValueToMap(iniMap & mapData)
 		{
 			int * pData = (int*)m_pData;
 			mapData[m_str] = toString(*pData);
+		}
+		break;
+
+	case eValueType_STRING:
+		{
+			tstring * pData = (tstring*)m_pData;
+			mapData[m_str] = (*pData);
 		}
 		break;
 	default:
@@ -63,6 +69,23 @@ void StringToValue::InsertMapToValue(iniMap & mapData)
 			*pData = _tstoi(value.c_str());
 		}
 		break;
+
+	case eValueType_STRING:
+		{
+			iniMap::const_iterator it = mapData.find(m_str);
+
+			if ( it == mapData.end() )
+			{
+				return;
+			}
+
+			const tstring value = it->second;
+
+			tstring * pData = (tstring*)m_pData;
+			*pData = value;
+		}
+		break;
+
 	default:
 		assert(false);
 	}

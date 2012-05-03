@@ -1469,17 +1469,17 @@ void ZMain::MoveThisFile()
 		return;
 	}
 
-	CSelectToFolderDlg aDlg;
+	CSelectToFolderDlg aDlg(ZOption::GetInstance().GetLastMoveDirectory());
 
 	if ( !aDlg.DoModal() )
 	{
 		return;
 	}
 
-	tstring strFolder = aDlg.GetMoveToFolder();
+	tstring strFolder = aDlg.GetSelectedFolder();
 
 	tstring filename = GetFileNameFromFullFileName(m_strCurrentFilename);
-	tstring strToFileName = aDlg.GetMoveToFolder();
+	tstring strToFileName = aDlg.GetSelectedFolder();
 
 	if ( strToFileName.size() <= 2 )
 	{
@@ -1491,7 +1491,7 @@ void ZMain::MoveThisFile()
 	strToFileName += filename;
 
 	// 옮겨갈 폴더에 같은 파일이 있는지 확인한다.
-	if ( 0 != _taccess(aDlg.GetMoveToFolder().c_str(), 00) )
+	if ( 0 != _taccess(aDlg.GetSelectedFolder().c_str(), 00) )
 	{
 		ShowMessageBox(GetMessage(TEXT("WRONG_DIRECTORY_NAME")));
 		return;
@@ -1511,6 +1511,10 @@ void ZMain::MoveThisFile()
 	{
 		ShowMessageBox(GetMessage(TEXT("CANNOT_MOVE_FILE")));
 	}
+	else
+	{
+		ZOption::GetInstance().SetLastMoveDirectory(aDlg.GetSelectedFolder());
+	}
 	_ProcAfterRemoveThisFile();
 }
 
@@ -1524,17 +1528,17 @@ void ZMain::CopyThisFile()
 		return;
 	}
 
-	CSelectToFolderDlg aDlg;
+	CSelectToFolderDlg aDlg(ZOption::GetInstance().GetLastCopyDirectory());
 
 	if ( !aDlg.DoModal() )
 	{
 		return;
 	}
 
-	tstring strFolder = aDlg.GetMoveToFolder();
+	tstring strFolder = aDlg.GetSelectedFolder();
 
 	tstring filename = GetFileNameFromFullFileName(m_strCurrentFilename);
-	tstring strToFileName = aDlg.GetMoveToFolder();
+	tstring strToFileName = aDlg.GetSelectedFolder();
 
 	if ( strToFileName.size() <= 2 )
 	{
@@ -1546,7 +1550,7 @@ void ZMain::CopyThisFile()
 	strToFileName += filename;
 
 	// 옮겨갈 폴더에 같은 파일이 있는지 확인한다.
-	if ( 0 != _taccess(aDlg.GetMoveToFolder().c_str(), 00) )
+	if ( 0 != _taccess(aDlg.GetSelectedFolder().c_str(), 00) )
 	{
 		ShowMessageBox(GetMessage(TEXT("WRONG_DIRECTORY_NAME")));
 		return;
@@ -1565,6 +1569,10 @@ void ZMain::CopyThisFile()
 	if ( FALSE == CopyFile(m_strCurrentFilename.c_str(), strToFileName.c_str(), FALSE) )
 	{
 		ShowMessageBox(GetMessage(TEXT("CANNOT_COPY_FILE")));
+	}
+	else
+	{
+		ZOption::GetInstance().SetLastCopyDirectory(aDlg.GetSelectedFolder());
 	}
 }
 

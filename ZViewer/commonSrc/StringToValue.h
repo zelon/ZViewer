@@ -17,19 +17,24 @@ class StringToValue
 	{
 		eValueType_INT,
 		eValueType_BOOL,
+		eValueType_STRING,
 	};
 
 public:
-	StringToValue(tstring & val, int * iValue)
+	explicit StringToValue(tstring & val, int * iValue)
 	{
 		_Init(val, iValue, eValueType_INT);
 	}
 
-	StringToValue(tstring & val, bool * bValue)
+	explicit StringToValue(tstring & val, bool * bValue)
 	{
 		_Init(val, bValue, eValueType_BOOL);
 	}
 
+	explicit StringToValue(tstring & val, tstring * bValue)
+	{
+		_Init(val, bValue, eValueType_STRING);
+	}
 
 	void InsertValueToMap(iniMap & mapData);
 	void InsertMapToValue(iniMap & mapData);

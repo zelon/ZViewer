@@ -52,7 +52,6 @@ bool COptionFile::LoadFromFile(const tstring & strFilename, iniMap & settings)
 		tstring strKey = aLine.substr(0, pos);
 
 		assert(strKey.empty() == false);
-		assert(strValue.empty() == false);
 
 		settings[strKey] = strValue;
 	}

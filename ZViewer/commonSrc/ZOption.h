@@ -20,14 +20,8 @@ class ZOption
 {
 	ZOption();
 
-	void _InsertSaveOptionSetting(TCHAR * str, bool * value)
-	{
-		tstring val(str);
-		StringToValue v(val, value);
-		m_saveOptions.push_back(v);
-	}
-
-	void _InsertSaveOptionSetting(TCHAR * str, int * value)
+	template < class T >
+	void _InsertSaveOptionSetting(TCHAR * str, T * value)
 	{
 		tstring val(str);
 		StringToValue v(val, value);
@@ -52,6 +46,12 @@ public:
 
 	void SetDontSave() { m_bDontSaveInstance = true; }
 	void SetFullScreen(bool bFullScreen) { m_bFullScreen = bFullScreen; }
+
+	void SetLastMoveDirectory(const tstring & strDir) { m_strLastMoveDirectory = strDir; }
+	const tstring & GetLastMoveDirectory(void) const { return m_strLastMoveDirectory; }
+
+	void SetLastCopyDirectory(const tstring & strDir) { m_strLastCopyDirectory = strDir; }
+	const tstring & GetLastCopyDirectory(void) const { return m_strLastCopyDirectory; }
 
 	int GetMaxCacheMemoryMB() const { return m_iMaximumCacheMemoryMB; }
 	void SetMaxCacheMemoryMB(const int iMB) { m_iMaximumCacheMemoryMB = iMB; }
@@ -102,6 +102,10 @@ protected:
 private:
 	//----------------------------------------------------------
 	// 아래는 지속적으로 저장되는 옵션들. 파일에 저장한다.
+
+	tstring m_strLastCopyDirectory;
+
+	tstring m_strLastMoveDirectory;
 
 	/// exif 정보에 따른 자동 회전을 할 것인가.
 	bool m_bUseAutoRotation;

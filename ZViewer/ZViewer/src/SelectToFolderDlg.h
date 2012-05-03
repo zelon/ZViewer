@@ -10,26 +10,25 @@
 
 #pragma once
 
-/// 파일 이동을 할 때 보여주는 대화 상자를 위한 클래스
+/// class for selecting a directory
 class CSelectToFolderDlg
 {
 public:
-	CSelectToFolderDlg();
+	CSelectToFolderDlg(const tstring & initaliDir = L"");
 	~CSelectToFolderDlg();
 
 	/// 다이얼로그를 화면에 띄운다.
 	bool DoModal();
 
-	const tstring & GetMoveToFolder() const { return m_strMoveToFolder; }
+	const tstring & GetSelectedFolder() const { return m_strSelectedFolder; }
 
 	static INT_PTR CALLBACK MoveToDlgPrc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam);
-
-	void SetFolder(const tstring & strFolder);
 
 protected:
 
 	HWND m_hWnd;
+	void SetFolder(const tstring & strFolder);
 	void OnBrowserButton() const;
 
-	tstring m_strMoveToFolder;
+	tstring m_strSelectedFolder;
 };
