@@ -298,8 +298,8 @@ void ZMain::Draw(HDC toDrawDC, bool bEraseBg)
 	HRGN hrgn = CreateRectRgn(currentScreenRect.left, currentScreenRect.top, currentScreenRect.right, currentScreenRect.bottom);
 	SelectClipRgn(mainDC, hrgn);
 
-	const WORD zoomedImageWidth = (WORD)(m_pCurrentImage->GetWidth() * m_fCurrentZoomRate);
-	const WORD zoomedImageHeight = (WORD)(m_pCurrentImage->GetHeight() * m_fCurrentZoomRate);
+	const int zoomedImageWidth = (int)(m_pCurrentImage->GetWidth() * m_fCurrentZoomRate);
+	const int zoomedImageHeight = (int)(m_pCurrentImage->GetHeight() * m_fCurrentZoomRate);
 
 	/// 그릴 그림이 현재 화면보다, 가로 & 세로 모두 크면 배경을 지우지 않아도 됨.
 	if ( zoomedImageWidth >= currentScreenRect.right && zoomedImageHeight >= currentScreenRect.bottom )

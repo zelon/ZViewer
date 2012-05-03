@@ -45,13 +45,13 @@ public:
 		m_image.clear();
 	}
 
-	WORD GetWidth() const { return m_image.getWidth(); }
-	WORD GetHeight() const { return m_image.getHeight(); }
+	int GetWidth() const { return (int)m_image.getWidth(); }
+	int GetHeight() const { return (int)m_image.getHeight(); }
 
-	WORD GetOriginalWidth() const { return m_originalWidth; }
-	WORD GetOriginalHeight() const { return m_originalHeight; }
+	int GetOriginalWidth() const { return m_originalWidth; }
+	int GetOriginalHeight() const { return m_originalHeight; }
 
-	WORD GetBPP() const { return m_image.getBitsPerPixel(); }
+	unsigned int GetBPP() const { return m_image.getBitsPerPixel(); }
 	BYTE * GetData() { return m_image.accessPixels(); }
 	BITMAPINFO * GetBitmapInfo() { return m_image.getInfo(); }
 	bool IsValid() const
@@ -162,10 +162,10 @@ private:
 	mutable fipWinImage m_image;
 
 	/// Image's original width - before resizing
-	WORD m_originalWidth;
+	unsigned int m_originalWidth;
 
 	/// Image's original height - before resizing
-	WORD m_originalHeight;
+	unsigned int m_originalHeight;
 
 	/// Image's original size - before resizing
 	long m_originalSize;
