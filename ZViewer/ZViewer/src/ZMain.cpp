@@ -1945,3 +1945,8 @@ void ZMain::AdjustShowWindowScreen()
 	}
 	SetWindowPos(m_hShowWindow, HWND_TOP, 0, 0, rect.right, rect.bottom, SWP_NOMOVE);
 }
+
+void ZMain::SendMsg(UINT Msg, WPARAM wParam, LPARAM lParam)
+{
+	SendMessage(m_hMainDlg, Msg, wParam, lParam);
+}

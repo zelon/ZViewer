@@ -44,6 +44,8 @@ public:
 	/// 현재 크기에 맞는 ShowWindow 크기를 정한다.
 	void AdjustShowWindowScreen();
 
+	void SendMsg(UINT Msg, WPARAM wParam, LPARAM lParam);
+
 	/// On Window is resized
 	void OnWindowResized();
 

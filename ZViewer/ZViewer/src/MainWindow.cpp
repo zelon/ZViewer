@@ -126,9 +126,10 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 	{
 	case WM_KEYDOWN:
 		{
-			ShortCut::DoShortCut(wParam);
+			ShortCut::GetInstance().DoShortCut(wParam);
 		}
 		break;
+
 	case WM_CHAR:
 		{
 			switch ( wParam )
