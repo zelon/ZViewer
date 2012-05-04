@@ -191,20 +191,6 @@ def checkSamePattern(files, strRe, printResult = False):
 
 	return True
 
-""" Check if .rc files are same """
-def checkSameRCFile():
-	files = [ r'ZViewer\res\ZViewer.rc', r'LangKor\res\ZViewer.rc' ]
-
-	strRe = r"IDR_MAIN_ACCELERATOR.*?^END"
-
-	bRet = checkSamePattern(files, strRe)
-	if False == bRet:
-		print("[FAILED]testLang : error lang: Not same accelerator. Check ZViewer.rc files")
-		return False
-	else:
-		print("[OK] Same accelerator")
-	return True
-
 """ Check if resource.h files are same """
 def checkSameRes():
 	left = open(r'ZViewer\res\resource.h', "r")
@@ -268,8 +254,6 @@ if __name__ == "__main__":
 	if False == checkUsedMap():
 		exit(1)
 	if False == checkSameRes():
-		exit(1)
-	if False == checkSameRCFile():
 		exit(1)
 	if False == checkNSISLanguageFiles():
 		exit(1)
