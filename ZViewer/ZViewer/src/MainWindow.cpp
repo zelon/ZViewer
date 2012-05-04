@@ -20,6 +20,7 @@
 #include "../commonSrc/ExtInfoManager.h"
 #include "../commonSrc/ZOption.h"
 
+#include "src/ShortCut.h"
 #include "src/ZMain.h"
 #include "src/ZResourceManager.h"
 
@@ -125,49 +126,7 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 	{
 	case WM_KEYDOWN:
 		{
-			switch ( wParam )
-			{
-			case 'E':
-			case VK_OEM_COMMA:
-				{
-					if ( IsPressedVirtualKey(VK_CONTROL) )
-					{
-						ZMain::GetInstance().PrevFolder();
-					}
-					else
-					{
-						ZMain::GetInstance().PrevImage();
-					}
-				}
-				break;
-
-			case 'R':
-			case VK_OEM_PERIOD:
-				{
-					if ( IsPressedVirtualKey(VK_CONTROL) )
-					{
-						ZMain::GetInstance().NextFolder();
-					}
-					else
-					{
-						ZMain::GetInstance().NextImage();
-					}
-				}
-				break;
-
-			case VK_ESCAPE:
-				{
-					if ( ZOption::GetInstance().IsFullScreen() )	// 현재 풀스크린이면 원래 화면으로 돌아간다.
-					{
-						ZMain::GetInstance().ToggleFullScreen();
-					}
-					else
-					{
-						SendMessage(hWnd, WM_CLOSE, 0, 0);
-					}
-				}
-				break;
-			}
+			ShortCut::DoShortCut(wParam);
 		}
 		break;
 	case WM_CHAR:
@@ -498,7 +457,7 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 			{
 			case IDOK:
 			case ID_MAINMENU_FILE_EXIT:
-				SendMessage(hWnd, WM_CLOSE, 0, 0);
+				ZMain::GetInstance().CloseProgram();
 				break;
 			}
 
@@ -519,7 +478,7 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 				break;
 
 			case ID_MAINMENU_FILE_EXIT:
-				SendMessage(hWnd, WM_CLOSE, 0, 0);
+				ZMain::GetInstance().CloseProgram();
 				break;
 
 			case ID_MAINMENU_FILE_OPEN:
@@ -745,7 +704,7 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 		DebugPrintf(TEXT("Recv WM_PAINT"));
 		return 0;
 	case WM_DESTROY:
-		SendMessage(hWnd, WM_CLOSE, 0, 0);
+		ZMain::GetInstance().CloseProgram();
 		return 0;
 
 	case WM_TIMER:

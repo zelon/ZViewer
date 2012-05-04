@@ -1911,6 +1911,11 @@ void ZMain::CopyToClipboard()
 	}
 }
 
+void ZMain::CloseProgram(void)
+{
+	SendMessage(m_hMainDlg, WM_CLOSE, 0, 0);
+}
+
 /// 그림을 보여줄 윈도우를 만든다.
 void ZMain::CreateShowWindow()
 {

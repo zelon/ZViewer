@@ -208,6 +208,9 @@ public:
 
 	/// 현재보는 이미지를 클립보드에 복사한다.
 	void CopyToClipboard();
+
+	void CloseProgram(void);
+
 private:
 
 	/// 현재 이미지를 드래그할 수 있어서, 손모양의 커서인가
