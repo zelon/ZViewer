@@ -5,15 +5,15 @@
 /.pydevproject
 
 /obj
-/build/VS2010/*.vcxproj.user
-/build/VS2010/dlldata.c
-/build/VS2010/ZViewerAgent.h
-/build/VS2010/ZViewerAgent_i.c
-/build/VS2010/ZViewerAgent_p.c
-/build/VS2010/ZViewerWin32.sdf
-/build/VS2010/ZViewerWin32.suo
-/build/VS2010/ZViewerWin32.opensdf
-/build/VS2010/ipch
+/build/VS20*/*.vcxproj.user
+/build/VS20*/dlldata.c
+/build/VS20*/ZViewerAgent.h
+/build/VS20*/ZViewerAgent_i.c
+/build/VS20*/ZViewerAgent_p.c
+/build/VS20*/*.suo
+/build/VS20*/*.sdf
+/build/VS20*/*.opensdf
+/build/VS20*/ipch
 /output/*.ilk
 /output/*.pdb
 /output/ZViewerAgent.exp
