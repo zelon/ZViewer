@@ -196,9 +196,6 @@
     <ClInclude Include="..\..\lib\vld\vld.h">
       <Filter>lib\vld</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\lib\vld\vldapi.h">
-      <Filter>lib\vld</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\lib\freeimage\FreeImagePlus.h">
       <Filter>lib\freeimage</Filter>
     </ClInclude>
@@ -249,6 +246,9 @@
     </ClInclude>
     <ClInclude Include="..\..\ZViewer\src\ShortCut.h">
       <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\vld\vld_def.h">
+      <Filter>lib\vld</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

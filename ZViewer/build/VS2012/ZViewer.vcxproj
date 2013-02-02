@@ -244,6 +244,7 @@ python testLang.py
     <None Include="..\..\ZViewer\res\ZViewer.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\lib\vld\vld_def.h" />
     <ClInclude Include="..\..\ZViewer\res\resource.h" />
     <ClInclude Include="..\..\ZViewer\src\ShortCut.h" />
     <ClInclude Include="..\..\ZViewer\stdafx.h" />
@@ -263,7 +264,6 @@ python testLang.py
     <ClInclude Include="..\..\ZViewer\src\ZMain.h" />
     <ClInclude Include="..\..\ZViewer\src\ZResourceManager.h" />
     <ClInclude Include="..\..\lib\vld\vld.h" />
-    <ClInclude Include="..\..\lib\vld\vldapi.h" />
     <ClInclude Include="..\..\lib\freeimage\FreeImagePlus.h" />
     <ClInclude Include="..\..\commonSrc\CommonDefine.h" />
     <ClInclude Include="..\..\commonSrc\CommonFunc.h" />
