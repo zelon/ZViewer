@@ -63,13 +63,13 @@ void ExtInfoManager::ExtMapInit()
 
 bool ExtInfoManager::IsValidImageFileExt(const TCHAR * szFilename)
 {
-	TCHAR szExt[MAX_PATH];
+	TCHAR szExt[MAX_PATH] = { 0, };
 
 	SplitPath(szFilename, NULL,0, NULL,0 , NULL,0 , szExt,MAX_PATH);
 
 	if ( _tcslen(szExt) < 2 ) return false;
 
-	TCHAR szLowerExt[MAX_PATH];
+	TCHAR szLowerExt[MAX_PATH] = { 0, };
 
 	_tcsncpy_s(szLowerExt, szExt, min(_tcslen(szExt)+1, MAX_PATH));
 
