@@ -10,6 +10,7 @@
 
 #pragma once
 
+#include <thread>
 #include <vector>
 
 #include "../../commonSrc/ZImage.h"
@@ -44,6 +45,8 @@ public:
 	{
 		m_cacheData.ClearCachedImageData();
 	}
+
+	void CleanUpThread();
 
 	inline void LogCacheHit() { ++m_iLogCacheHit; }
 	inline void LogCacheMiss() { ++m_iLogCacheMiss; }
@@ -81,7 +84,6 @@ public:
 
 	size_t GetNumOfCacheImage() const { return m_cacheData.Size(); 	}
 
-	static DWORD WINAPI ThreadFuncProxy(LPVOID p);
 	void ThreadFunc();
 
 	void SetImageVector(const std::vector < FileData > & v);
@@ -123,7 +125,7 @@ private:
 	/// 현재보고 있는 파일이름
 	tstring m_strCurrentFileName;
 
-	HANDLE m_hThread;			///< 캐쉬 쓰레드를 가르키는 핸들
+	std::thread m_thread;
 	
 	/// 캐시 이벤트
 	CEventObj m_hCacheEvent;

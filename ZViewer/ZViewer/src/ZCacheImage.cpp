@@ -11,6 +11,7 @@
 #include "stdafx.h"
 
 #include <chrono>
+#include <thread>
 
 #include "ZCacheImage.h"
 #include "ZOption.h"
@@ -33,25 +34,25 @@ ZCacheImage::ZCacheImage()
 ,	m_lastActionDirection(eLastActionDirection_FORWARD)
 {
 	m_bNowCaching = false;
-	m_hThread = INVALID_HANDLE_VALUE;
 }
 
 ZCacheImage::~ZCacheImage()
+{
+	CleanUpThread();
+}
+
+void ZCacheImage::CleanUpThread()
 {
 	m_bCacheGoOn = false;
 
 	m_hCacheEvent.setEvent();
 
-	if ( m_hThread != INVALID_HANDLE_VALUE )
+	if ( m_thread.joinable() )
 	{
-		/// 캐쉬 쓰레드가 종료하길 기다린다.
-		WaitForSingleObject(m_hThread, INFINITE);
-		CloseHandle(m_hThread);
-
-		m_hThread = INVALID_HANDLE_VALUE;
+		DebugPrintf(TEXT("Waiting for cache thread end"));
+		m_thread.join();
+		DebugPrintf(TEXT("Completed waiting for cache thread end"));
 	}
-
-	DebugPrintf(TEXT("Cached Thread ended."));
 }
 
 void ZCacheImage::SetImageVector(const std::vector < FileData > & v)
@@ -61,17 +62,18 @@ void ZCacheImage::SetImageVector(const std::vector < FileData > & v)
 
 void ZCacheImage::StartThread()
 {
-	DWORD dwThreadID;
-	m_hThread = CreateThread(0, 0, ThreadFuncProxy, this, 0, &dwThreadID);
+	std::thread cacheThread([]()
+		{
+			ZCacheImage::GetInstance().ThreadFunc();
 
-	if ( NULL == m_hThread )
-	{
-		assert(!"Cache image thread createing failed");
-		return;
-	}
+			DebugPrintf(TEXT("End of Cache Thread"));
+		}
+	);
+
+	m_thread.swap(cacheThread);
 
 	// Cache 를 진행하는 쓰레드는
-	if ( SetThreadPriority(m_hThread, THREAD_PRIORITY_BELOW_NORMAL) == FALSE )
+	if ( SetThreadPriority(m_thread.native_handle(), THREAD_PRIORITY_BELOW_NORMAL) == FALSE )
 	{
 		assert(!"Can't SetThreadPriority!");
 	}
@@ -86,13 +88,6 @@ void ZCacheImage::ShowCachedImageToOutputWindow()
 	m_cacheData.PrintCachedData();
 #endif
 }
-
-DWORD ZCacheImage::ThreadFuncProxy(LPVOID )
-{
-	ZCacheImage::GetInstance().ThreadFunc();
-	return 0;
-}
-
 
 bool ZCacheImage::_CacheIndex(int iIndex)
 {
