@@ -198,11 +198,9 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 
 			case '~':
 				{
-					DWORD dwStart = GetTickCount();
+					TIMECHECK_START("clear spend time");
 					ZCacheImage::GetInstance().clearCache();
-					DWORD dwClearTime = GetTickCount() - dwStart;
-
-					DebugPrintf(TEXT("clear spend time : %d"), dwClearTime);
+					TIMECHECK_END();
 				}
 				break;
 

@@ -11,6 +11,8 @@
 
 #pragma once
 
+#include <chrono>
+
 /// 잠시 보여주는 메시지를 위한 싱글턴 클래스
 class CShortTimeMessage
 {
@@ -30,5 +32,5 @@ protected:
 	std::string m_strMessage;
 	
 	/// 보여줄 메시지가 사라질 시각
-	DWORD m_hideTick;
+	std::chrono::system_clock::time_point m_hideTick;
 };

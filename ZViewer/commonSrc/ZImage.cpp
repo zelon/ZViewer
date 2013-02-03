@@ -28,7 +28,7 @@ ZImage::~ZImage()
 void ZImage::GetExifList(std::list < TagData > & exifList)
 {
 #ifdef _DEBUG
-	DWORD dwStart = GetTickCount();
+	TIMECHECK_START("Get exifdata time span");
 #endif
 	FREE_IMAGE_MDMODEL iEnumIndex = (FREE_IMAGE_MDMODEL)(FIMD_NODATA + 1);
 
@@ -61,8 +61,7 @@ void ZImage::GetExifList(std::list < TagData > & exifList)
 	}
 
 #ifdef _DEBUG
-	DWORD dwEnd = GetTickCount();
-	DebugPrintf(TEXT("Get exifdata time span : %d"), (dwEnd - dwStart));
+	TIMECHECK_END();
 #endif
 }
 

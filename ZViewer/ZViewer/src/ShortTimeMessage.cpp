@@ -12,6 +12,8 @@
 #include "stdafx.h"
 #include "ShortTimeMessage.h"
 
+using namespace std::chrono;
+
 CShortTimeMessage & CShortTimeMessage::getInstance()
 {
     static CShortTimeMessage inst;
@@ -32,14 +34,18 @@ CShortTimeMessage::~CShortTimeMessage()
 void CShortTimeMessage::setMessage(const std::string & strMsg, DWORD dwShowTimeInMilliSec)
 {
 	m_strMessage = strMsg;
-	m_hideTick = GetTickCount() - dwShowTimeInMilliSec;
+
+	m_hideTick = system_clock::now();
+	m_hideTick += milliseconds(dwShowTimeInMilliSec);
 }
 
 /// 타이머가 호출되었을 때
 void CShortTimeMessage::onTimer()
 {
+	long long remainTimeToShow = duration_cast<milliseconds>(m_hideTick - system_clock::now()).count();
+
 	/// 보여줄 메시지의 시간이 지나지 않았으면 화면에 그린다.
-	if ( GetTickCount() < m_hideTick )
+	if ( remainTimeToShow > 0 )
 	{
 		//ZMain::GetInstance().drawShortMessage(m_strMessage);
 	}

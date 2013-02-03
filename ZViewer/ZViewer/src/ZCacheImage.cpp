@@ -9,13 +9,16 @@
 *********************************************************************/
 
 #include "stdafx.h"
+
+#include <chrono>
+
 #include "ZCacheImage.h"
 #include "ZOption.h"
 #include "ZMain.h"
 #include "../../commonSrc/MessageManager.h"
 
 using namespace std;
-
+using namespace std::chrono;
 
 ZCacheImage & ZCacheImage::GetInstance()
 {
@@ -158,7 +161,8 @@ bool ZCacheImage::_CacheIndex(int iIndex)
 			DWORD dwReadBytes;
 			BOOL bReadOK = TRUE;
 
-			DWORD dwStart = GetTickCount();
+			//DWORD dwStart = GetTickCount();
+			system_clock::time_point startTime = system_clock::now();
 
 			while ( bReadOK )
 			{
@@ -205,8 +209,8 @@ bool ZCacheImage::_CacheIndex(int iIndex)
 			}
 			else
 			{
-				DWORD dwEnd = GetTickCount();
-				DebugPrintf(TEXT("----- readfile(%s) time(%d)"), strFileName.c_str(), dwEnd - dwStart);
+				long long diffTime = duration_cast<milliseconds>(system_clock::now() - startTime).count();
+				DebugPrintf(TEXT("----- readfile(%s) time(%d)"), strFileName.c_str(), diffTime);
 				CloseHandle(hFile);	///< 파일에서 읽기가 끝나서 파일을 닫아준다.
 
 				assert(m_vBuffer.size() > 0);

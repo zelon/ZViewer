@@ -55,6 +55,9 @@
 #include <shlobj.h>
 #include <io.h>
 
+#include <chrono>
+#include <mutex>
+
 #include "freeimage/FreeImagePlus.h"
 
 #include "CommonDefine.h"

@@ -9,6 +9,9 @@
 *********************************************************************/
 
 #include "StdAfx.h"
+
+#include <chrono>
+
 #include ".\zmain.h"
 #include "src/ZFileExtDlg.h"
 #include "src/ZResourceManager.h"
@@ -29,6 +32,7 @@
 #include "resource.h"
 
 using namespace std;
+using namespace std::chrono;
 
 enum
 {
@@ -107,13 +111,13 @@ void ZMain::onTimer()
 {
 	if ( ZOption::GetInstance().m_bSlideMode )
 	{/// check slidemode
-		DWORD dwNow = GetTickCount();
+		long long slideShowedTime = duration_cast<milliseconds>(system_clock::now() - ZOption::GetInstance().m_LastSlidedTime).count();
 
-		if ( dwNow - ZOption::GetInstance().m_dwLastSlidedTime > ZOption::GetInstance().m_iSlideModePeriodMiliSeconds )
+		if ( slideShowedTime > ZOption::GetInstance().m_iSlideModePeriodMiliSeconds )
 		{
 			NextImage();
 			Draw();
-			ZOption::GetInstance().m_dwLastSlidedTime = dwNow;
+			ZOption::GetInstance().m_LastSlidedTime = system_clock::now();
 		}
 	}
 
@@ -1106,7 +1110,7 @@ void ZMain::LoadCurrent()
 		ZCacheImage::GetInstance().StartThread();
 	}
 
-	DWORD start = GetTickCount();
+	system_clock::time_point start = system_clock::now();
 
 	_releaseBufferDC();
 
@@ -1128,7 +1132,7 @@ void ZMain::LoadCurrent()
 
 		ZCacheImage::GetInstance().LogCacheHit();
 
-		m_dwLoadingTime = GetTickCount() - start;
+		m_dwLoadingTime = duration_cast<milliseconds>(system_clock::now() - start).count();
 		SetTitle();			///< 파일명을 윈도우 타이틀바에 적는다.
 		SetStatusBarText();	///< 상태 표시줄 내용을 설정한다.
 
@@ -1768,7 +1772,7 @@ void ZMain::SetCheckMenus()
 void ZMain::StartSlideMode()
 {
 	ZOption::GetInstance().m_bSlideMode = true;
-	ZOption::GetInstance().m_dwLastSlidedTime = GetTickCount();
+	ZOption::GetInstance().m_LastSlidedTime = system_clock::now();
 }
 
 void ZMain::ToggleAutoRotation()

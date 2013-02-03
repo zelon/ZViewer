@@ -216,7 +216,7 @@ void CachedData::InsertData(const tstring & strFilename, ZImage * pImage, bool b
 	try
 	{
 #endif
-		DWORD dwStart = GetTickCount();
+		std::chrono::system_clock::time_point startTime = std::chrono::system_clock::now();
 
 		CLockObjUtil lock(m_cacheLock);
 		{
@@ -231,8 +231,10 @@ void CachedData::InsertData(const tstring & strFilename, ZImage * pImage, bool b
 		m_lCacheSize += pImage->GetImageSize();
 
 		DebugPrintf(TEXT("%s added to cache"), strFilename.c_str());
-		DWORD dwEnd = GetTickCount();
-		DebugPrintf(TEXT("Cache insert time : %d filename(%s)"), dwEnd - dwStart, strFilename.c_str());
+		std::chrono::system_clock::time_point endTime = std::chrono::system_clock::now();
+		long long diffTime = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime).count();
+
+		DebugPrintf(TEXT("Cache insert time : %d filename(%s)"), diffTime, strFilename.c_str());
 
 #ifndef _DEBUG
 	}

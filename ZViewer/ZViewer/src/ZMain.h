@@ -257,7 +257,7 @@ private:
 	ZImage * m_pCurrentImage;
 
 	///< 현재 이미지를 로딩하는 데 걸린 시간
-	DWORD m_dwLoadingTime;
+	long long m_dwLoadingTime;
 
 	/// 메인 윈도우에 대한 핸들
 	HWND m_hMainDlg;

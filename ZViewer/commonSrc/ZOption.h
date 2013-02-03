@@ -11,6 +11,7 @@
 #pragma once
 
 #include <vector>
+#include <chrono>
 
 #include "CommonFunc.h"
 #include "OptionFile.h"
@@ -90,7 +91,7 @@ public:
 	/// 슬라이드 모드의 시간(mili seconds)
 	DWORD m_iSlideModePeriodMiliSeconds;
 
-	DWORD m_dwLastSlidedTime;
+	std::chrono::system_clock::time_point m_LastSlidedTime;
 
 	/// Always on Top window
 	bool m_bAlwaysOnTop;
