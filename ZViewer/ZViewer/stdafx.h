@@ -56,6 +56,7 @@
 #include <io.h>
 
 #include <chrono>
+#include <memory>
 #include <mutex>
 
 #include "freeimage/FreeImagePlus.h"

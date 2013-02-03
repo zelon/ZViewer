@@ -38,29 +38,28 @@
 
 #include "stdafx.h"
 
+#include <crtdbg.h>
 #include <memory>
-
-#include "src/ZMain.h"
-#include "src/ZFileExtDlg.h"
-#include "src/ZResourceManager.h"
-#include "src/ZCacheImage.h"
-#include "src/MainWindow.h"
 
 #include "../commonSrc/LogManager.h"
 #include "../commonSrc/MessageManager.h"
 #include "../commonSrc/minidump/MiniDumper.h"
 #include "../commonSrc/ZOption.h"
 
+#include "src/MainWindow.h"
+#include "src/ZCacheImage.h"
+#include "src/ZFileExtDlg.h"
+#include "src/ZMain.h"
+#include "src/ZResourceManager.h"
+
 #ifdef _DEBUG
 #include "vld/vld.h"
 #endif
 
-#if _MSC_VER >= 1400
-#include <crtdbg.h>
-#endif
-
-void FreeImageMsg(FREE_IMAGE_FORMAT /*fif*/, const char * szMsg)
+void FreeImageMsg(FREE_IMAGE_FORMAT fif, const char * szMsg)
 {
+	UNREFERENCED_PARAMETER(fif);
+
 	tstring strMsg = getWStringFromString(szMsg);
 	DebugPrintf(strMsg.c_str());
 }
@@ -78,7 +77,7 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 
 	HINSTANCE hLang = NULL;
 
-	// debug mode 에서는 항상 영어모드(언어팩 테스트를 위해서)
+	// always English Mode if debug mode ( for test )
 #ifndef _DEBUG
 	if ( GetSystemDefaultLangID() == 0x0412 )
 	{
@@ -101,7 +100,7 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 	ZOption::GetInstance().LoadOption();
 
 	std::shared_ptr<MiniDumper> pDump;
-	//MiniDumper * pDump = nullptr;
+	
 	if ( ZOption::GetInstance().IsUseDebug() )
 	{
 		tstring strDumpFilename = GetDumpFilename();
@@ -110,9 +109,6 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 
 		/// 아래의 객체는 프로그램이 끝날 때에 삭제되어야 한다. 그전에 삭제되면 크래시되었을 때 제대로 덤프를 만들지 못한다.
 		pDump.reset(new MiniDumper(strDumpFilename.c_str(), szDumpMsg));
-
-		//int * p = 0;
-		//*p = 0;
 	}
 
 	tstring strCmdString;
