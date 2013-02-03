@@ -63,8 +63,13 @@ void FreeImageMsg(FREE_IMAGE_FORMAT /*fif*/, const char * szMsg)
 }
 
 /// Entry point
-int APIENTRY _tWinMain(HINSTANCE hInstance,HINSTANCE /*hPrevInstance */,LPTSTR lpszCmdParam,int nCmdShow)
+int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
+                     _In_opt_ HINSTANCE hPrevInstance,
+                     _In_ LPTSTR    lpszCmdParam,
+                     _In_ int       nCmdShow)
 {
+	UNREFERENCED_PARAMETER(hPrevInstance);
+
 	// 기본적인 언어팩은 프로젝트에 있는 영어이다.
 	ZResourceManager::GetInstance().SetHandleInstance(hInstance);
 
