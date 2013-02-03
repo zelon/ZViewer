@@ -102,8 +102,8 @@ protected:
 	CLockObjUtil & operator=(const CLockObjUtil & obj);
 };
 #else
-typedef std::mutex CLockObj;
-typedef std::lock_guard<std::mutex> CLockObjUtil;
+typedef std::recursive_mutex CLockObj;
+typedef std::lock_guard<std::recursive_mutex> CLockObjUtil;
 #endif
 
 
