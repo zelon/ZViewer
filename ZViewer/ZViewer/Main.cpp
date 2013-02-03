@@ -37,6 +37,9 @@
 */
 
 #include "stdafx.h"
+
+#include <memory>
+
 #include "src/ZMain.h"
 #include "src/ZFileExtDlg.h"
 #include "src/ZResourceManager.h"
@@ -97,7 +100,8 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 	/// 기본 옵션을 불러온다.
 	ZOption::GetInstance().LoadOption();
 
-	MiniDumper * pDump = NULL;
+	std::shared_ptr<MiniDumper> pDump;
+	//MiniDumper * pDump = nullptr;
 	if ( ZOption::GetInstance().IsUseDebug() )
 	{
 		tstring strDumpFilename = GetDumpFilename();
@@ -105,7 +109,7 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 		SPrintf(szDumpMsg, _MAX_PATH, TEXT("%s\r\n\r\nFile : %s\r\nHomepage : %s"), GetMessage(TEXT("CRASH_MSG")), strDumpFilename.c_str(), g_strHomepage.c_str());
 
 		/// 아래의 객체는 프로그램이 끝날 때에 삭제되어야 한다. 그전에 삭제되면 크래시되었을 때 제대로 덤프를 만들지 못한다.
-		pDump = new MiniDumper(strDumpFilename.c_str(), szDumpMsg);
+		pDump.reset(new MiniDumper(strDumpFilename.c_str(), szDumpMsg));
 
 		//int * p = 0;
 		//*p = 0;
@@ -196,8 +200,6 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 
 	CLogManager::getInstance().CleanUp();
 	ZImage::CleanupLibrary();
-
-	delete pDump;
 
 	return (int)wParam;
 }
