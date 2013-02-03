@@ -12,6 +12,7 @@
 
 #pragma once
 
+#include <mutex>
 #include <windows.h>
 
 /// 윈도우의 Event 를 쉽게 쓰게 하는 유틸리티 클래스
@@ -44,6 +45,7 @@ protected:
 
 };
 
+#ifdef USE_WIN32_LOCK_UTIL
 /// 윈도우의 크리티컬 섹션을 쉽게 쓰게 하는 유틸리티 클래스
 class CLockObj
 {
@@ -62,7 +64,6 @@ protected:
 	/// 내부적으로 가지고 있는 크리티컬 섹션
 	CRITICAL_SECTION m_cs;
 
-
 private:
 
 	friend class CLockObjUtil;
@@ -76,8 +77,6 @@ private:
 	{
 		LeaveCriticalSection(&m_cs);
 	}
-
-
 };
 
 /// lock, unlock 을 쉽게 하기 위해 도와주는 유틸리티 클래스
@@ -102,4 +101,9 @@ protected:
 	/// 할당 연산자가 쓰이는 걸 방지하는 코드. 할당 연산자가 쓰이게 되면 오류 발생하게 됨
 	CLockObjUtil & operator=(const CLockObjUtil & obj);
 };
+#else
+typedef std::mutex CLockObj;
+typedef std::lock_guard<std::mutex> CLockObjUtil;
+#endif
+
 
