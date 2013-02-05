@@ -139,13 +139,13 @@ LONG MiniDumper::TopLevelFilter( struct _EXCEPTION_POINTERS *pExceptionInfo )
 					}
 					else
 					{
-						SPrintf( szScratch, _MAX_PATH, TEXT("Failed to save dump file to '%s' (error %d)"), szDumpPath, GetLastError() );
+						SPrintf( szScratch, _MAX_PATH, TEXT("Failed to save dump file to '%s' (error %u)"), szDumpPath, GetLastError() );
 						szResult = szScratch;
 					}
 				}
 				else
 				{
-					SPrintf( szScratch, _MAX_PATH, TEXT("Failed to create dump file '%s' (error %d)"), szDumpPath, GetLastError() );
+					SPrintf( szScratch, _MAX_PATH, TEXT("Failed to create dump file '%s' (error %u)"), szDumpPath, GetLastError() );
 					szResult = szScratch;
 				}
 			}

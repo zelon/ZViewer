@@ -1022,11 +1022,11 @@ void ZMain::SetStatusBarText()
 	else
 	{
 		// File Index
-		SPrintf(szTemp, COMMON_BUFFER_SIZE, TEXT("%d/%d"), m_iCurretFileIndex+1, m_vFile.size());
+		SPrintf(szTemp, COMMON_BUFFER_SIZE, TEXT("%d/%u"), m_iCurretFileIndex+1, m_vFile.size());
 		SendMessage(m_hStatusBar, SB_SETTEXT, 0, (LPARAM)szTemp);
 
 		// 해상도 정보
-		SPrintf(szTemp, COMMON_BUFFER_SIZE, TEXT("%dx%dx%dbpp"), m_pCurrentImage->GetOriginalWidth(), m_pCurrentImage->GetOriginalHeight(), m_pCurrentImage->GetBPP());
+		SPrintf(szTemp, COMMON_BUFFER_SIZE, TEXT("%dx%dx%ubpp"), m_pCurrentImage->GetOriginalWidth(), m_pCurrentImage->GetOriginalHeight(), m_pCurrentImage->GetBPP());
 		SendMessage(m_hStatusBar, SB_SETTEXT, 1, (LPARAM)szTemp);
 
 		// image size

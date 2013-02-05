@@ -380,7 +380,7 @@ eOSKind getOSVersion()
 				TEXT("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Hotfix\\Q246009"),
 				0, KEY_QUERY_VALUE, &hKey );
 			if( lRet == ERROR_SUCCESS )
-				printf( "Service Pack 6a (Build %d)\n", osvi.dwBuildNumber & 0xFFFF );         
+				printf( "Service Pack 6a (Build %u)\n", osvi.dwBuildNumber & 0xFFFF );         
 			else // Windows NT 4.0 prior to SP6a
 			{
 				//printf( "%s (Build %d)\n", osvi.szCSDVersion, osvi.dwBuildNumber & 0xFFFF);

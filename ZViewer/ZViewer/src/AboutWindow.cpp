@@ -52,7 +52,7 @@ int CALLBACK AboutWndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM /*lParam*
 			SPrintf(szTemp, MAX_PATH, TEXT("%d"),ZMain::GetInstance().GetCachedKByte());
 			::GetNumberFormat((LCID)NULL, (DWORD)NULL, szTemp, &nFmt, szOUT, 20);
 
-			SPrintf(szTemp, MAX_PATH, TEXT("CachedMemory : %sKB, Num of Cached Image : %d"), szOUT, ZCacheImage::GetInstance().GetNumOfCacheImage());
+			SPrintf(szTemp, MAX_PATH, TEXT("CachedMemory : %sKB, Num of Cached Image : %u"), szOUT, ZCacheImage::GetInstance().GetNumOfCacheImage());
 			SetDlgItemText(hWnd, IDC_STATIC_CACHE_MEMORY, szTemp);
 
 			SPrintf(szTemp, MAX_PATH, TEXT("ProgramPath : %s"), GetProgramFolder().c_str());
