@@ -40,7 +40,6 @@
     <None Include="..\..\LangKor\res\ZViewer.ico">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="..\..\LangKor\ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\LangKor\res\ZViewer.rc">

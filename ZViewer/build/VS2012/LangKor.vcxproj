@@ -116,7 +116,6 @@
     <None Include="..\..\LangKor\res\MoveHand.cur" />
     <None Include="..\..\LangKor\res\MoveHandHold.cur" />
     <None Include="..\..\LangKor\res\ZViewer.ico" />
-    <None Include="..\..\LangKor\ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\LangKor\res\ZViewer.rc" />
