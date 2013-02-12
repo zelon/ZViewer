@@ -1,17 +1,17 @@
 ﻿
 = 개발 환경 =
- * Build 환경 : Microsoft Visual Studio .NET 2010
-  * Microsoft Visual Studio .NET 2003,2005,2008 에서도 가능하나 주 개발이 2010버젼을 기준으로 이루어지므로 이전 버젼의 프로젝트 파일들은 관리가 되고 있지 않습니다. 그래서 빌드 오류가 발생할 수 있습니다.
+ * Build 환경 : Microsoft Visual Studio 2012
+  * Microsoft Visual Studio 2003,2005,2008,2010 에서도 가능하나 주 개발이 2012버젼을 기준으로 이루어지므로 이전 버젼의 프로젝트 파일들은 관리가 되고 있지 않습니다. 그래서 빌드 오류가 발생할 수 있습니다.
  * NSIS 2.36 이상 - http://nsis.sf.net
- * 프로그래머 작업 환경 : WinXP Pro Korean SP3
- * python 3.1 - http://www.python.org
+ * 프로그래머 작업 환경 : Win7 Pro Korean
+ * python 3.3 - http://www.python.org
 
 = 빌드 =
 
  * 소스 파일을 공백이 포함된 폴더 밑에 두면 링크 오류가 생길 수 있으므로(Visual Studio 의 버그) 파일 경로에 공백이 없는 곳을 추천합니다!!
 
  0. python 3 version(http://python.org)을 설치 후 환경변수 path 에 추가해준다.
- 1. Visual Studio .NET 2010 에서 소스 디렉토리 아래의 build/VS2010/ZViewerWin32.sln 파일을 연 후, Release 로 빌드 솔루션을 한다.
+ 1. Visual Studio .NET 2012 에서 소스 디렉토리 아래의 build/VS2012/ZViewerWin32.sln 파일을 연 후, Release 로 빌드 솔루션을 한다.
  2. output 폴더에 실행 파일 및 부속 파일들이 생긴다.
 
 = 설치 파일 만들기 =
