@@ -8,7 +8,6 @@
 #define IDC_MOVE_HAND_CURSOR            107
 #define IDR_POPUP_MENU                  109
 #define IDC_MOVE_HAND_CAPTURE_CURSOR    111
-#define IDD_DIALOGHELP                  112
 #define IDD_FILE_EXT_DIALOG             113
 #define IDD_MOVE_DIALOG                 114
 #define IDD_EXIF_DLG                    115
@@ -17,11 +16,6 @@
 #define IDC_CHECK_GIF                   1004
 #define IDC_CHECK_PNG                   1005
 #define IDC_CHECK_PSD                   1006
-#define IDC_STATIC_VERSION              1007
-#define IDC_STATIC_HITRATE              1008
-#define IDC_STATIC_CACHE_MEMORY         1009
-#define IDC_STATIC_PROGRAM_PATH         1010
-#define IDC_STATIC_LIBRARY_VERSION      1011
 #define IDC_EDIT_MOVE_TO_FOLDER         1012
 #define IDC_BUTTON_SELECT_FOLDER        1013
 #define IDC_LIST1                       1014

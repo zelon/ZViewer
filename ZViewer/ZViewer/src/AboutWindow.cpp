@@ -33,18 +33,30 @@ void CAboutWindow::SetWndProc()
 	m_wndProc = (WNDPROC)AboutWndProc;
 }
 
+void CreateLabel(const HWND hWnd, const TCHAR * msg, int & y)
+{
+	CreateWindow(TEXT("static"), msg, WS_VISIBLE | WS_CHILD, 20, y, 500, 30,
+		hWnd, nullptr, nullptr, nullptr);
 
-int CALLBACK AboutWndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM /*lParam*/)
+	y += 30;
+}
+
+int CALLBACK AboutWndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 {
 	switch(iMessage)
 	{
-		case WM_INITDIALOG:
+		case WM_CREATE:
 		{
-			SetDlgItemText(hWnd, IDC_STATIC_VERSION, g_strVersion.c_str());
-
+			int y = 20;
 			TCHAR szTemp[MAX_PATH];
+
+			SPrintf(szTemp, MAX_PATH, TEXT("ZViewer Version : %s"), g_strVersion.c_str());
+			CreateLabel(hWnd, szTemp, y);
+
+			y += 20;
+
 			SPrintf(szTemp, MAX_PATH, TEXT("CacheHitRate : %d%%"), ZMain::GetInstance().GetLogCacheHitRate());
-			SetDlgItemText(hWnd, IDC_STATIC_HITRATE, szTemp);
+			CreateLabel(hWnd, szTemp, y);
 
 			NUMBERFMT nFmt = { 0, 0, 3, TEXT("."), TEXT(","), 1 };
 
@@ -53,37 +65,62 @@ int CALLBACK AboutWndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM /*lParam*
 			::GetNumberFormat((LCID)NULL, (DWORD)NULL, szTemp, &nFmt, szOUT, 20);
 
 			SPrintf(szTemp, MAX_PATH, TEXT("CachedMemory : %sKB, Num of Cached Image : %u"), szOUT, ZCacheImage::GetInstance().GetNumOfCacheImage());
-			SetDlgItemText(hWnd, IDC_STATIC_CACHE_MEMORY, szTemp);
+			CreateLabel(hWnd, szTemp, y);
 
 			SPrintf(szTemp, MAX_PATH, TEXT("ProgramPath : %s"), GetProgramFolder().c_str());
-			SetDlgItemText(hWnd, IDC_STATIC_PROGRAM_PATH, szTemp);
+			CreateLabel(hWnd, szTemp, y);
 
 			SPrintf(szTemp, MAX_PATH, TEXT("Library Version : %s"), ZImage::GetLibraryVersion().c_str());
-			SetDlgItemText(hWnd, IDC_STATIC_LIBRARY_VERSION, szTemp);
+			CreateLabel(hWnd, szTemp, y);
+
+			y += 20;
+
+			SPrintf(szTemp, MAX_PATH, TEXT("Homepage : http://zviewer.wimy.com/"));
+			CreateLabel(hWnd, szTemp, y);
 		}
 		return TRUE;
 
-		case WM_COMMAND:
+		case WM_DESTROY:
 		{
-			switch ( wParam )
-			{
-			case IDOK:
-				EndDialog(hWnd, 0);
-				break;
-			}
-		}
-
-		case WM_CLOSE:
-		{
-			EndDialog(hWnd, 0);
+			EnableWindow( ZMain::GetInstance().GetHWND(), TRUE );
 			break;
 		}
 	}
-	return FALSE;
+	return (DefWindowProc(hWnd, iMessage, wParam, lParam));
 }
 
 
 void CAboutWindow::DoResource(HWND hParentHWND)
 {
-	DialogBox(ZResourceManager::GetInstance().GetHInstance(), MAKEINTRESOURCE(IDD_DIALOGHELP), hParentHWND, (DLGPROC)AboutWndProc);
+	WNDCLASSEX wc = { 0, };
+	wc.cbSize			= sizeof(WNDCLASSEX);
+	wc.lpfnWndProc		= (WNDPROC)AboutWndProc;
+	wc.hInstance		= ZResourceManager::GetInstance().GetHInstance();
+	wc.hbrBackground	= GetSysColorBrush(COLOR_3DFACE);
+	wc.lpszClassName	= TEXT("AboutWindow");
+	RegisterClassEx(&wc);
+
+	HWND hCreatedHandle = CreateWindowEx(
+		/* exStyle */		  WS_EX_DLGMODALFRAME
+		/* classname */		, TEXT("AboutWindow")
+		/* window title */	, TEXT("About")
+		/* dwStyle */		, WS_VISIBLE | WS_SYSMENU | WS_CAPTION
+		/* x */				, 100
+		/* y */				, 100
+		/* width */			, 600
+		/* height */		, 300
+		/* hWndParent */	, hParentHWND
+		/* hMenu */			, nullptr
+		/* hInstance */		, ZResourceManager::GetInstance().GetHInstance()
+		/* lpParam */		, nullptr
+		);
+
+	if ( hCreatedHandle == NULL )
+	{
+		assert(!"Cannot create aboutwindow");
+		return;
+	}
+
+	// disable parent window to set this dialog modal
+	EnableWindow( hParentHWND, FALSE );
 }
