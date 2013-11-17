@@ -11,6 +11,10 @@
  * xp64, vista64 에서 정상 동작하지 않음(설치는 정상이나 ZViewerAgent 가 안되는듯)
 
 == 해야할 일 ==
+ * To add new encoding thread(Split decoding thread into IO thread and decodie thread)
+ * 이동 topmenu 넣기
+ * 전체 파일 경로, 전체 디렉토리 경로 클립보드로 복사하는 기능
+ * status 창에 간단한 hash값 출력해서, 다른 이미지 파일과 완전히 같은 그림인지 체크 쉽게
  * 창 크기 및위치를 저장해두기
  * 미리보기의 크기 설정
  * 다른 형식으로 저장할 때 압축률 설정
