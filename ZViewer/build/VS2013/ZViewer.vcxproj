@@ -1,0 +1,295 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="ZViewerDebug|Win32">
+      <Configuration>ZViewerDebug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="ZViewerRelease|Win32">
+      <Configuration>ZViewerRelease</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{F22C641A-3DB2-41A2-9530-8B39EEC1E4D8}</ProjectGuid>
+    <RootNamespace>ZViewer</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ZViewerRelease|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ZViewerDebug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='ZViewerRelease|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="Solution.props" />
+    <Import Project="Release.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='ZViewerDebug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="Solution.props" />
+    <Import Project="Debug.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="Solution.props" />
+    <Import Project="Release.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="Solution.props" />
+    <Import Project="Debug.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionPath)\..\..\..\output\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionPath)\..\..\..\obj\ZViewerD\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../../output\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../../obj/ZViewer\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='ZViewerDebug|Win32'">$(SolutionDir)../../output\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='ZViewerDebug|Win32'">$(SolutionDir)/../../obj/ZViewerD\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='ZViewerRelease|Win32'">$(SolutionDir)../../output\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='ZViewerRelease|Win32'">$(SolutionDir)../../obj/ZViewer\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='ZViewerRelease|Win32'">false</LinkIncremental>
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='ZViewerDebug|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='ZViewerDebug|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='ZViewerDebug|Win32'" />
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='ZViewerRelease|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='ZViewerRelease|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='ZViewerRelease|Win32'" />
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectName)D</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>$(SolutionDir)/../../ZViewer;$(SolutionDir)/../../ZViewer/res;$(SolutionDir)/../../lib;$(SolutionDir)/../../commonSrc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level4</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <EnablePREfast>true</EnablePREfast>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>shlwapi.lib;comctl32.lib;$(SolutionDir)/../../lib/freeimage/FreeImaged.lib;$(SolutionDir)/../../lib/freeimage/FreeImagePlusd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)ZViewerD.exe</OutputFile>
+      <AdditionalLibraryDirectories>$(SolutionDir)/../../lib/vld;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>$(OutDir)ZViewerD.pdb</ProgramDatabaseFile>
+      <SubSystem>Windows</SubSystem>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <PostBuildEvent>
+      <Command>cd $(SolutionDir)../../
+python testLang.py
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <PreBuildEvent>
+      <Command>cd $(SolutionDir)\../../output
+ZUnitTest.exe
+</Command>
+    </PreBuildEvent>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(SolutionDir)/../../ZViewer;$(SolutionDir)/../../ZViewer/res;$(SolutionDir)/../../lib;$(SolutionDir)/../../commonSrc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <ProgramDataBaseFileName>$(IntDir)ZViewerCpp.pdb</ProgramDataBaseFileName>
+      <WarningLevel>Level4</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>shlwapi.lib;comctl32.lib;$(SolutionDir)/../../lib/freeimage/FreeImage.lib;$(SolutionDir)/../../lib/freeimage/FreeImagePlus.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)ZViewer.exe</OutputFile>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <PostBuildEvent>
+      <Command>cd $(SolutionDir)../../
+python testLang.py
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ZViewerDebug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+    </ClCompile>
+    <Link>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
+    </Link>
+    <PostBuildEvent>
+      <Command>cd $(SolutionDir)
+python testLang.py
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ZViewerRelease|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(SolutionDir)/../../lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <PrecompiledHeader>Create</PrecompiledHeader>
+      <ProgramDataBaseFileName>$(IntDir)ZViewerCpp.pdb</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>shlwapi.lib;comctl32.lib;$(SolutionDir)/../../lib/FreeImage.lib;$(SolutionDir)/../../lib/FreeImagePlus.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)ZViewer.exe</OutputFile>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <PostBuildEvent>
+      <Command>cd $(SolutionDir)
+python testLang.py
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\ZViewer\Main.cpp" />
+    <ClCompile Include="..\..\ZViewer\src\ShortCut.cpp" />
+    <ClCompile Include="..\..\ZViewer\stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='ZViewerDebug|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\ZViewer\src\AboutWindow.cpp" />
+    <ClCompile Include="..\..\ZViewer\src\CachedData.cpp" />
+    <ClCompile Include="..\..\ZViewer\src\ExifDlg.cpp" />
+    <ClCompile Include="..\..\ZViewer\src\MainWindow.cpp" />
+    <ClCompile Include="..\..\ZViewer\src\SelectToFolderDlg.cpp" />
+    <ClCompile Include="..\..\ZViewer\src\ShortTimeMessage.cpp" />
+    <ClCompile Include="..\..\ZViewer\src\TaskBar.cpp" />
+    <ClCompile Include="..\..\ZViewer\src\ZCacheImage.cpp" />
+    <ClCompile Include="..\..\ZViewer\src\ZFileExtDlg.cpp" />
+    <ClCompile Include="..\..\ZViewer\src\ZFileExtReg.cpp" />
+    <ClCompile Include="..\..\ZViewer\src\ZHistory.cpp" />
+    <ClCompile Include="..\..\ZViewer\src\ZImageManager.cpp" />
+    <ClCompile Include="..\..\ZViewer\src\ZMain.cpp" />
+    <ClCompile Include="..\..\ZViewer\src\ZResourceManager.cpp" />
+    <ClCompile Include="..\..\commonSrc\CommonFunc.cpp" />
+    <ClCompile Include="..\..\commonSrc\DesktopWallPaper.cpp" />
+    <ClCompile Include="..\..\commonSrc\ExtInfoManager.cpp" />
+    <ClCompile Include="..\..\commonSrc\LogManager.cpp" />
+    <ClCompile Include="..\..\commonSrc\MessageManager.cpp" />
+    <ClCompile Include="..\..\commonSrc\OptionFile.cpp" />
+    <ClCompile Include="..\..\commonSrc\SaveAs.cpp" />
+    <ClCompile Include="..\..\commonSrc\StringToValue.cpp" />
+    <ClCompile Include="..\..\commonSrc\UnicodeFile.cpp" />
+    <ClCompile Include="..\..\commonSrc\ZImage.cpp" />
+    <ClCompile Include="..\..\commonSrc\ZOption.cpp" />
+    <ClCompile Include="..\..\commonSrc\windowLib\ZWindow.cpp" />
+    <ClCompile Include="..\..\commonSrc\minidump\MiniDumper.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\ZViewer\res\MoveHand.cur" />
+    <None Include="..\..\ZViewer\res\MoveHandHold.cur" />
+    <None Include="..\..\ZViewer\res\MoveHold.cur" />
+    <None Include="..\..\ZViewer\res\ZViewer.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\lib\vld\vld_def.h" />
+    <ClInclude Include="..\..\ZViewer\res\resource.h" />
+    <ClInclude Include="..\..\ZViewer\src\ShortCut.h" />
+    <ClInclude Include="..\..\ZViewer\stdafx.h" />
+    <ClInclude Include="..\..\ZViewer\src\AboutWindow.h" />
+    <ClInclude Include="..\..\ZViewer\src\CachedData.h" />
+    <ClInclude Include="..\..\ZViewer\src\ExifDlg.h" />
+    <ClInclude Include="..\..\lib\freeimage\FreeImage.h" />
+    <ClInclude Include="..\..\ZViewer\src\MainWindow.h" />
+    <ClInclude Include="..\..\ZViewer\src\SelectToFolderDlg.h" />
+    <ClInclude Include="..\..\ZViewer\src\ShortTimeMessage.h" />
+    <ClInclude Include="..\..\ZViewer\src\TaskBar.h" />
+    <ClInclude Include="..\..\ZViewer\src\ZCacheImage.h" />
+    <ClInclude Include="..\..\ZViewer\src\ZFileExtDlg.h" />
+    <ClInclude Include="..\..\ZViewer\src\ZFileExtReg.h" />
+    <ClInclude Include="..\..\ZViewer\src\ZHistory.h" />
+    <ClInclude Include="..\..\ZViewer\src\ZImageManager.h" />
+    <ClInclude Include="..\..\ZViewer\src\ZMain.h" />
+    <ClInclude Include="..\..\ZViewer\src\ZResourceManager.h" />
+    <ClInclude Include="..\..\lib\vld\vld.h" />
+    <ClInclude Include="..\..\lib\freeimage\FreeImagePlus.h" />
+    <ClInclude Include="..\..\commonSrc\CommonDefine.h" />
+    <ClInclude Include="..\..\commonSrc\CommonFunc.h" />
+    <ClInclude Include="..\..\commonSrc\DesktopWallPaper.h" />
+    <ClInclude Include="..\..\commonSrc\ExtInfoManager.h" />
+    <ClInclude Include="..\..\commonSrc\LockUtil.h" />
+    <ClInclude Include="..\..\commonSrc\LogManager.h" />
+    <ClInclude Include="..\..\commonSrc\MessageManager.h" />
+    <ClInclude Include="..\..\commonSrc\OptionFile.h" />
+    <ClInclude Include="..\..\commonSrc\SaveAs.h" />
+    <ClInclude Include="..\..\commonSrc\StringToValue.h" />
+    <ClInclude Include="..\..\commonSrc\UnicodeFile.h" />
+    <ClInclude Include="..\..\commonSrc\ZImage.h" />
+    <ClInclude Include="..\..\commonSrc\ZOption.h" />
+    <ClInclude Include="..\..\commonSrc\windowLib\ZWindow.h" />
+    <ClInclude Include="..\..\commonSrc\minidump\MiniDumper.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\..\ZViewer\res\ZViewer.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="ZUnitTest.vcxproj">
+      <Project>{824d8007-4802-4ddc-aeed-b3a8afb749c2}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
