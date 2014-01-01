@@ -1,5 +1,6 @@
 ﻿"""
  This file tests all kind of language file and resource file
+ Require python2.7.x
 """
 import os
 import re
