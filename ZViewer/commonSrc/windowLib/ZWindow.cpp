@@ -1,4 +1,4 @@
-﻿/* ------------------------------------------------------------------------
+/* ------------------------------------------------------------------------
  *
  * Copyright 2006
  *
@@ -16,6 +16,7 @@
 
 #include "../commonSrc/MessageManager.h"
 
+#include "src/ShortCut.h"
 #include "src/ZResourceManager.h"
 #include "../commonSrc/ZOption.h"
 
@@ -67,21 +68,20 @@ HWND ZWindow::Create(HINSTANCE hInstance, HWND hParentHWND, int nCmdShow, const 
 		dlgName.c_str(),
 		dlgName.c_str(),		///< Window Title
 		WS_OVERLAPPEDWINDOW,///< | WS_EX_ACCEPTFILES,
-		iXPosition,		///< 기본 x 위치
-		iYPosition,		///< 기본 y 위치
+		iXPosition,		///< Default position X
+		iYPosition,		///< Default position Y
 		iWidth,			///< width
 		iHeight,		///< height
 		hParentHWND,
 		hMenu,			///< MainMenu
 		hInstance,NULL);
 
-	// 탐색기에서의 Drag&Drop 을 가능하게 한다.
+	// Enable Drag&Drop from explorer
 	//DragAcceptFiles(m_hWindow, TRUE);
 
 	ShowWindow(m_hWindow, nCmdShow);
 
-	// 단축키 설정. 여기서 반환된 핸들은 프로그램이 종료될 때 자동적으로 close 됨.
-	m_hAccel = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDR_MAIN_ACCELERATOR));
+	m_hAccel = ShortCut::GetInstance().MakeAccelTable();
 
 	DialogBox(hInstance, dlgName.c_str(), hParentHWND, (DLGPROC)m_wndProc);
 

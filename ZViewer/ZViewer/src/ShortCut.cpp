@@ -1,6 +1,8 @@
 ﻿
 #include "stdafx.h"
 
+#include <vector>
+
 #include "ShortCut.h"
 
 #include "../commonSrc/CommonFunc.h"
@@ -8,8 +10,11 @@
 #include "resource.h"
 #include "src/ZMain.h"
 
-#define VK_PAGE_UP VK_PRIOR
-#define VK_PAGE_DOWN VK_NEXT
+using namespace std;
+
+#define VK_PAGE_UP		VK_PRIOR
+#define VK_PAGE_DOWN	VK_NEXT
+#define VK_X			(0x58)
 
 ShortCut& ShortCut::GetInstance(void)
 {
@@ -52,6 +57,24 @@ void ShortCut::insertShortCutData(unsigned short modifier1, unsigned short modif
 	m_shortcutData.push_back(data);
 }
 
+HACCEL ShortCut::MakeAccelTable()
+{
+	vector < ACCEL > accels;
+
+#pragma message("check http://msdn.microsoft.com/en-us/library/windows/desktop/ms646337(v=vs.85).aspx#editable_acc and make below for-loop")
+	for ( size_t i=0; i<m_shortcutData.size(); ++i )
+	{
+		ACCEL aAccel = { 0, };
+		aAccel.fVirt = FALT | FVIRTKEY;
+		aAccel.key = VK_X;
+		aAccel.cmd = ID_MAINMENU_FILE_EXIT;
+
+		accels.push_back(aAccel);
+	} 
+
+	/// returned handle must be destroyed
+	return CreateAcceleratorTable(&accels[0], accels.size());
+}
 
 bool ShortCut::CheckModifier(const std::vector < unsigned short > & modifier)
 {

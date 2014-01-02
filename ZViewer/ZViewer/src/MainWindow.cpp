@@ -110,7 +110,7 @@ HWND CMainWindow::Create(HINSTANCE hInstance, HWND hParentHWND, int nCmdShow)
 	ShowWindow(m_hWindow, nCmdShow);
 
 	// 단축키 설정. 여기서 반환된 핸들은 프로그램이 종료될 때 자동적으로 close 됨.
-	m_hAccel = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDR_MAIN_ACCELERATOR));
+	m_hAccel = ShortCut::GetInstance().MakeAccelTable();
 
 
 	return m_hWindow;

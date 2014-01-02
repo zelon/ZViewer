@@ -21,6 +21,8 @@ public:
 	bool CheckModifier(const std::vector < unsigned short > & modifier);
 	ShortCutResult DoShortCut(WPARAM wParam);
 
+	HACCEL MakeAccelTable();
+
 protected:
 	void InitializeShortCutData(void);
 
