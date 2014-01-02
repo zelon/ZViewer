@@ -17,11 +17,11 @@
 // 다른 플랫폼에 사용되는 해당 값의 최신 정보는 MSDN을 참조하십시오.
 
 #ifndef WINVER
-#define WINVER 0x0500		///< 0x0500 = Win2000
+#define WINVER 0x0501		///< 0x0501 = WinXP
 #endif
 
 #ifndef _WIN32_WINNT
-#define _WIN32_WINNT 0x0500	///< 0x0500 = Win2000
+#define _WIN32_WINNT 0x0501	///< 0x0500 = WinXP
 #endif						
 
 #ifndef _WIN32_WINDOWS
