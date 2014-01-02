@@ -79,10 +79,6 @@ bool SetRegistryValue(HKEY hOpenKey, const tstring & strKey,LPCTSTR szValue, con
 		{
 			bRetVal = true;
 		}
-	}
-
-	if( hTempKey )
-	{
 		::RegCloseKey(hTempKey);
 	}
 
@@ -379,14 +375,16 @@ eOSKind getOSVersion()
 			lRet = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
 				TEXT("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Hotfix\\Q246009"),
 				0, KEY_QUERY_VALUE, &hKey );
-			if( lRet == ERROR_SUCCESS )
-				printf( "Service Pack 6a (Build %u)\n", osvi.dwBuildNumber & 0xFFFF );         
+			if (lRet == ERROR_SUCCESS)
+			{
+				printf("Service Pack 6a (Build %u)\n", osvi.dwBuildNumber & 0xFFFF);
+				RegCloseKey(hKey);
+			}
 			else // Windows NT 4.0 prior to SP6a
 			{
 				//printf( "%s (Build %d)\n", osvi.szCSDVersion, osvi.dwBuildNumber & 0xFFFF);
 			}
 
-			RegCloseKey( hKey );
 		}
 		else // Windows NT 3.51 and earlier or Windows 2000 and later
 		{
