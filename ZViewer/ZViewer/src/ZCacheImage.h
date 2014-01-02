@@ -13,10 +13,9 @@
 #include <thread>
 #include <vector>
 
-#include "../../commonSrc/ZImage.h"
-
 #include "CachedData.h"
 
+class ZImage;
 
 /// 캐시를 어느 방향부터 먼저할 것인지, 우선시할 것인지를 위해...
 /**

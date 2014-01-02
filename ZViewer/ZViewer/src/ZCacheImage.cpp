@@ -10,10 +10,11 @@
 
 #include "stdafx.h"
 
+#include "ZCacheImage.h"
+
 #include <chrono>
 #include <thread>
 
-#include "ZCacheImage.h"
 #include "ZOption.h"
 #include "ZMain.h"
 #include "../../commonSrc/MessageManager.h"
