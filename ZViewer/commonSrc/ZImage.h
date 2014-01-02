@@ -19,12 +19,8 @@
 #include "CommonDefine.h"
 
 /// FreeImagePlus 의 클래스인 fipWinImage 를 래핑하여 함수 등을 쓰기 쉽게 하는 클래스
-class ZImage
+class ZImage : NonCopyable
 {
-private:
-	ZImage & operator=(const ZImage & );	///< 대입 연산자 금지
-	ZImage(const ZImage & );				///< 복사 생성자 금지
-
 public:
 	ZImage();
 	~ZImage();

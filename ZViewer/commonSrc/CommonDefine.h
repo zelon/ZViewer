@@ -111,3 +111,15 @@ public:
 		return a.m_timeModified.dwHighDateTime >= b.m_timeModified.dwHighDateTime;
 	}
 };
+
+class NonCopyable
+{
+protected:
+	NonCopyable(){}
+
+private:
+	NonCopyable(const NonCopyable &);
+	const NonCopyable operator=(const NonCopyable &);
+};
+
+

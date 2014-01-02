@@ -18,7 +18,7 @@ typedef std::map < tstring, ZImage * >::iterator CacheMapIterator;
 typedef std::map < tstring, ZImage * >::const_iterator CacheMapIterator_const;
 
 
-class CachedData
+class CachedData : NonCopyable
 {
 public:
 	CachedData()
@@ -123,10 +123,5 @@ protected:
 	long m_lCacheSize;
 
 	mutable CLockObj m_cacheLock;
-
-private:
-	/// 복사 생성자와 = 연산자 금지
-	CachedData & operator=(const CachedData &);
-	CachedData(const CachedData &);
 };
 
