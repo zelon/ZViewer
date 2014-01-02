@@ -10,8 +10,7 @@
 
 #pragma once
 
-#include "CachedData.h"
-
+class CachedData;
 class ZImage;
 
 /// 캐시를 어느 방향부터 먼저할 것인지, 우선시할 것인지를 위해...
@@ -37,11 +36,7 @@ public:
 
 	~ZCacheImage();
 
-	void CleanUpCache()
-	{
-		m_cacheData.ClearCachedImageData();
-	}
-
+	void CleanUpCache();
 	void CleanUpThread();
 
 	inline void LogCacheHit() { ++m_iLogCacheHit; }
@@ -50,18 +45,12 @@ public:
 	/// 다음 파일이 캐쉬되었나를 체크해서 돌려준다.
 	bool IsNextFileCached() const;
 
-	void WaitCacheLock()
-	{
-		m_cacheData.WaitCacheLock();
-	}
+	void WaitCacheLock();
 
 	void debugShowCacheInfo();		///< 현재 캐쉬 정보를 디버그 콘솔에 보여준다. 디버깅모드 전용
 
 	void clearCache();
-	void setCacheEvent()
-	{
-		m_hCacheEvent.setEvent();
-	}
+	void setCacheEvent();
 
 	long GetCachedKByte() const;
 	int GetLogCacheHitRate() const
@@ -78,7 +67,7 @@ public:
 	// 현재 캐시되어 있는 파일들을 output 윈도우로 뿌려준다.
 	void ShowCachedImageToOutputWindow();
 
-	size_t GetNumOfCacheImage() const { return m_cacheData.Size(); 	}
+	size_t GetNumOfCacheImage() const;
 
 	void ThreadFunc();
 
@@ -113,8 +102,6 @@ private:
 	/// threadfunc 를 계속 실행시킬 것인가. 프로그램이 끝날 때 false 로 해주면 캐쉬 쓰레드를 최대한 빨리 끝낼 때 쓰임
 	volatile bool m_bCacheGoOn;
 
-	CachedData m_cacheData;
-
 	/// 현재보고 있는 index;
 	volatile int m_iCurrentIndex;
 
@@ -123,12 +110,9 @@ private:
 
 	std::thread m_thread;
 	
-	/// 캐시 이벤트
-	CEventObj m_hCacheEvent;
-
 	/// 지정된 번호의 파일을 캐시할 수 있으면 캐시한다. 반환값은 캐쉬성공이면 true
 	bool _CacheIndex(int iIndex);
 
-	/// 현재 읽고 있는 파일의 데이터를 저장하는 버퍼
-	std::vector < BYTE > m_vBuffer;
+	class Impl;
+	std::unique_ptr<Impl> m_pImpl;
 };
