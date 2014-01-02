@@ -10,8 +10,6 @@
 
 #pragma once
 
-#include <map>
-
 typedef std::map < tstring, tstring > iniMap;
 
 class COptionFile

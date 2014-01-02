@@ -12,9 +12,6 @@
 
 #pragma once
 
-#include <mutex>
-#include <windows.h>
-
 /// 윈도우의 Event 를 쉽게 쓰게 하는 유틸리티 클래스
 class CEventObj
 {

@@ -9,12 +9,7 @@
 *********************************************************************/
 #pragma once
 
-#ifdef _MSC_VER
-#include <strsafe.h>
-#endif
 #include "CommonDefine.h"
-
-#include <chrono>
 
 /// OS 종류를 판단할 때 쓰일 enum
 enum eOSKind

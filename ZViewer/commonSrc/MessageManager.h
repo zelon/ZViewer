@@ -11,9 +11,6 @@
 
 #pragma once
 
-#include <string>
-#include <map>
-
 #include "OptionFile.h"
 
 enum eLanguage

@@ -9,8 +9,6 @@
 
 #pragma once
 
-#include <map>
-
 typedef unsigned int ZHandle;
 
 #include "ZImage.h"

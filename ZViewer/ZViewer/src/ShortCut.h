@@ -1,11 +1,6 @@
 ﻿
 #pragma once
 
-#include <Windows.h>
-
-#include <vector>
-
-
 enum ShortCutResult
 {
 	ShortCutResult_EXECUTED,

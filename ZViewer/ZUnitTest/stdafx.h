@@ -10,31 +10,10 @@
 #pragma warning(disable:6011)
 #endif
 
-#include <windows.h>
 #include <cassert>
-#include <CommCtrl.h>
-#include <WindowsX.h>
-#include <Shlwapi.h>
-
-// STL Headers
-#include <vector>
-#include <list>
-#include <deque>
-#include <map>
-#include <string>
-#include <functional>
-#include <algorithm>
-#include <tchar.h>
-
-#ifdef _MSC_VER
-#include <strsafe.h>
-#endif
-
-#include <cassert>
-
 #include <shlobj.h>
-#include <io.h>
+#include <tchar.h>
+#include <strsafe.h>
 
-#include "../lib/freeimage/FreeImagePlus.h"
-
-#include "../commonSrc/CommonDefine.h"
+#include <mutex>
+#include <iostream>

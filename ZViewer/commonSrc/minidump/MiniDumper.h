@@ -1,5 +1,4 @@
 ﻿
-#include <windows.h>
 #include "dbghelp.h"
 
 // based on dbghelp.h

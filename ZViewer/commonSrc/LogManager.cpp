@@ -13,9 +13,6 @@
 #include ".\logmanager.h"
 #include "CommonFunc.h"
 
-#include <strsafe.h>
-#include <tchar.h>
-
 CLogManager & CLogManager::getInstance()
 {
 	static CLogManager inst;

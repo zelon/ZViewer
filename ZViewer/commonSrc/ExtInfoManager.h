@@ -7,8 +7,6 @@
 
 #pragma once
 
-#include <vector>
-
 /// 파일 확장자에 대한 정보를 관리하는 클래스
 class ExtInfoManager
 {

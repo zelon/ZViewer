@@ -12,7 +12,6 @@
 #include "OptionFile.h"
 #include "CommonFunc.h"
 #include "UnicodeFile.h"
-#include <fstream>
 
 using namespace std;
 

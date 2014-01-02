@@ -10,9 +10,6 @@
 
 #pragma once
 
-#include <thread>
-#include <vector>
-
 #include "CachedData.h"
 
 class ZImage;

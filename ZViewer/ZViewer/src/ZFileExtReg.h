@@ -14,9 +14,6 @@
 
 #pragma once
 
-#include <windows.h>
-#include <string>
-
 /// 확장자 아이콘, 더블 클릭시 실행에 관한 내용을 레지스트리에 등록하는 클래스
 class ZFileExtReg
 {

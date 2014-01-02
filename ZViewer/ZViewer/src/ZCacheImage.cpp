@@ -12,9 +12,6 @@
 
 #include "ZCacheImage.h"
 
-#include <chrono>
-#include <thread>
-
 #include "ZOption.h"
 #include "ZMain.h"
 #include "../../commonSrc/MessageManager.h"

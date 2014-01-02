@@ -12,8 +12,6 @@
 #include "ZImage.h"
 #include "CommonDefine.h"
 
-#include <string>
-
 using namespace std;
 
 ZImage::ZImage()

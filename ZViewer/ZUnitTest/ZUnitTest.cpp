@@ -3,7 +3,6 @@
 
 #include "stdafx.h"
 
-#include <iostream>
 #include "../commonSrc/CommonFunc.h"
 
 using namespace std;

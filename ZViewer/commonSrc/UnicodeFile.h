@@ -1,10 +1,6 @@
 ﻿
 #pragma once
 
-#include <windows.h>
-#include <fstream>
-#include <string>
-
 class CUnicodeFile
 {
 public:

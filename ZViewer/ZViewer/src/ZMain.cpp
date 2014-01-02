@@ -8,24 +8,20 @@
 *                                       http://www.wimy.com
 *********************************************************************/
 
-#include "StdAfx.h"
+#include "stdafx.h"
 
-#include <chrono>
+#include "ZMain.h"
 
-#include ".\zmain.h"
-#include "src/ZFileExtDlg.h"
-#include "src/ZResourceManager.h"
+#include "../commonSrc/CommonFunc.h"
 #include "../commonSrc/DesktopWallPaper.h"
-#include "src/SelectToFolderDlg.h"
+#include "../commonSrc/ExtInfoManager.h"
 #include "../commonSrc/SaveAs.h"
 #include "../commonSrc/ZOption.h"
-#include "../commonSrc/CommonFunc.h"
-#include "../commonSrc/ExtInfoManager.h"
+#include "src/SelectToFolderDlg.h"
+#include "src/ZFileExtDlg.h"
+#include "src/ZResourceManager.h"
 #include "MessageManager.h"
 #include "TaskBar.h"
-
-#include <ShlObj.h>
-#include <cstdio>
 
 #include "src/ExifDlg.h"
 

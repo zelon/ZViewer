@@ -9,8 +9,6 @@
 
 #include "stdafx.h"
 
-#include <cassert>
-
 #include "ExifDlg.h"
 #include "ZResourceManager.h"
 #include "../commonSrc/MessageManager.h"

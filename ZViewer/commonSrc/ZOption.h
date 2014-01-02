@@ -10,9 +10,6 @@
 
 #pragma once
 
-#include <vector>
-#include <chrono>
-
 #include "CommonFunc.h"
 #include "OptionFile.h"
 #include "StringToValue.h"

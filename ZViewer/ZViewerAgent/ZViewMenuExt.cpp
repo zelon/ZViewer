@@ -16,8 +16,6 @@
 #include "../commonSrc/SaveAs.h"
 #include "../commonSrc/ZOption.h"
 #include "../commonSrc/ExtInfoManager.h"
-#include <shlobj.h>
-#include <sstream>
 
 // CZViewMenuExt
 

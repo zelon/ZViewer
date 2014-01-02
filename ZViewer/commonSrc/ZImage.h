@@ -10,10 +10,6 @@
 
 #pragma once
 
-#include <cassert>
-#include <list>
-
-
 #include "../lib/freeimage/FreeImagePlus.h"
 #include "CommonFunc.h"
 #include "CommonDefine.h"

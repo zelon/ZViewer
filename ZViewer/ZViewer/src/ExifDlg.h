@@ -7,9 +7,6 @@
  * ------------------------------------------------------------------------
  */
 
-#include <map>
-#include <string>
-
 #include "../commonSrc/windowLib/ZWindow.h"
 #include "../commonSrc/ZImage.h"
 #include "../commonSrc/CommonDefine.h"

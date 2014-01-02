@@ -53,9 +53,18 @@
 #include <afxOle.h>
 #include <atlconv.h>  // for ATL string conversion macros
 
+#include <tchar.h>
+#include <strsafe.h>
 
+#include <chrono>
+#include <fstream>
+#include <list>
+#include <map>
+#include <mutex>
+#include <sstream>
 #include <string>
+#include <vector>
 
-#include "../commonSrc/ZImage.h"
+#include "../commonSrc/CommonDefine.h"
 
 using namespace ATL;

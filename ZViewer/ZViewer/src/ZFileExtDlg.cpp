@@ -13,7 +13,6 @@
 #include "ZFileExtDlg.h"
 #include "ZMain.h"
 #include "ZResourceManager.h"
-#include <ShlObj.h>
 
 #include "ZFileExtReg.h"
 

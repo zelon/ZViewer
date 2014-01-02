@@ -1,8 +1,6 @@
 ﻿
 #include "stdafx.h"
 
-#include <vector>
-
 #include "ShortCut.h"
 
 #include "../commonSrc/CommonFunc.h"

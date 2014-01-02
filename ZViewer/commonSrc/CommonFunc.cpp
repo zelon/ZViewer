@@ -9,10 +9,7 @@
 *********************************************************************/
 #include "stdafx.h"
 #include "CommonFunc.h"
-#include <shlobj.h>
-#include <io.h>
 #include "LogManager.h"
-#include <strsafe.h>
 
 #ifdef _DEBUG
 void DebugPrintf( const TCHAR *fmt, ... )
@@ -123,7 +120,7 @@ RECT GetResizedRectForBigToSmall(const RECT & MaximumSize, const RECT & original
 		SetRect(&ret, 0, 0, (int)(originalSize.right*dHeightRate), (int)(originalSize.bottom*dHeightRate));
 	}
 
-
+	
 	assert(ret.right <= MaximumSize.right);
 	assert(ret.bottom <= MaximumSize.bottom);
 

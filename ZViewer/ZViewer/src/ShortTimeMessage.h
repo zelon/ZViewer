@@ -11,8 +11,6 @@
 
 #pragma once
 
-#include <chrono>
-
 /// 잠시 보여주는 메시지를 위한 싱글턴 클래스
 class CShortTimeMessage
 {

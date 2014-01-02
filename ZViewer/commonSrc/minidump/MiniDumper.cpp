@@ -1,6 +1,5 @@
 ﻿
 #include "stdafx.h"
-#include <TCHAR.H>
 #include "MiniDumper.h"
 #include "../CommonFunc.h"
 

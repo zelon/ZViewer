@@ -38,9 +38,6 @@
 
 #include "stdafx.h"
 
-#include <crtdbg.h>
-#include <memory>
-
 #include "../commonSrc/LogManager.h"
 #include "../commonSrc/MessageManager.h"
 #include "../commonSrc/minidump/MiniDumper.h"
@@ -51,10 +48,6 @@
 #include "src/ZFileExtDlg.h"
 #include "src/ZMain.h"
 #include "src/ZResourceManager.h"
-
-#ifdef _DEBUG
-#include "vld/vld.h"
-#endif
 
 void FreeImageMsg(FREE_IMAGE_FORMAT fif, const char * szMsg)
 {
