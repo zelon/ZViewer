@@ -4,7 +4,6 @@
 //
 #define IDR_MAIN_MENU                   102
 #define IDI_BIG_MAIN                    103
-#define IDR_MAIN_ACCELERATOR            106
 #define IDC_MOVE_HAND_CURSOR            107
 #define IDR_POPUP_MENU                  109
 #define IDC_MOVE_HAND_CAPTURE_CURSOR    111
