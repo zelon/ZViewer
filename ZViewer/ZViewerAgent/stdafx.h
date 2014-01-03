@@ -56,6 +56,7 @@
 #include <tchar.h>
 #include <strsafe.h>
 
+#include <cassert>
 #include <chrono>
 #include <fstream>
 #include <list>
