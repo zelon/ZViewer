@@ -13,13 +13,12 @@ public:
 	static ShortCut & GetInstance(void);
 	ShortCut();
 
-	bool CheckModifier(const std::vector < unsigned short > & modifier);
 	ShortCutResult DoShortCut(WPARAM wParam);
 
 	HACCEL MakeAccelTable();
 
-protected:
-	void InitializeShortCutData(void);
+private:
+	void initializeShortCutData(void);
 
 	void insertShortCutData(unsigned short key, int sendid);
 	void insertShortCutData(unsigned short modifier, unsigned short key, int sendid);
@@ -28,9 +27,12 @@ protected:
 	class ShortCutData
 	{
 	public:
-		std::vector < unsigned short > m_modifier;
+		std::vector < unsigned short > m_modifierKeys;
 		unsigned short m_key;
 		int m_sendID;
+
+		const bool isAllKeyMatched(const WPARAM pressedKey) const;
+		const bool isModifierKeyMatched() const;
 	};
 
 	std::vector < ShortCutData > m_shortcutData;
