@@ -45,7 +45,6 @@ ZMain & ZMain::GetInstance()
 ZMain::ZMain(void)
 :	m_hMainDlg(NULL)
 ,	m_sortOrder(eFileSortOrder_FILENAME)
-,	m_osKind(eOSKind_UNKNOWN)
 ,	m_alpha(255)
 {
 	memset( &m_lastPosition, 0, sizeof( m_lastPosition ) );
@@ -513,11 +512,13 @@ bool ZMain::GetNeighborFolders(std::vector < tstring > & vFolders)
 	}
 
 	// 상위 폴더의 하위 폴더들을 정렬한다.
-	if ( m_osKind == eOSKind_XP )
+	/*
+	if ( IsWindowsXPOrGreater() )
 	{
 		sort(vFolders.begin(), vFolders.end(), CStringCompareIgnoreCase_LengthFirst());
 	}
 	else
+	*/
 	{
 		sort(vFolders.begin(), vFolders.end(), CStringCompareIgnoreCase());
 	}
@@ -604,11 +605,13 @@ void ZMain::_GetFileListAndSort(const tstring & strFolderPathAndWildCard, FileLi
 	{
 	case eFileSortOrder_FILENAME:
 
-		if ( m_osKind == eOSKind_XP )
+		/*
+		if ( IsWindowsXPOrGreater() )
 		{
 			sort(vFileList.begin(), vFileList.end(), CFileDataSort_OnlyFilenameCompare_XP());
 		}
 		else
+		*/
 		{
 			sort(vFileList.begin(), vFileList.end(), CFileDataSort_OnlyFilenameCompare());
 		}

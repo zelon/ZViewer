@@ -11,15 +11,6 @@
 
 #include "CommonDefine.h"
 
-/// OS 종류를 판단할 때 쓰일 enum
-enum eOSKind
-{
-	eOSKind_UNKNOWN,
-	eOSKind_98,
-	eOSKind_2000,
-	eOSKind_XP,
-};
-
 const tstring GetOnlyFileNameWithoutExt(const tstring & strFullFileName);
 
 class CStringCompareIgnoreCase
@@ -95,9 +86,6 @@ tstring GetFolderNameFromFullFileName(const tstring & strFullFilename);
 
 /// 드라이브와 폴더명과 파일명으로 된 문자열을 주면, 파일명만 준다.
 tstring GetFileNameFromFullFileName(const tstring & strFullFilename);
-
-/// 현재 실행 중인 OS 의 버젼을 반환한다.
-eOSKind getOSVersion();
 
 /// string 을 wstring 으로 변환
 std::wstring getWStringFromString(const std::string & str);

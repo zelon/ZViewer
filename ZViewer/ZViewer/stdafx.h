@@ -18,6 +18,7 @@
 #include <shlobj.h>
 #include <tchar.h>
 #include <strsafe.h>
+#include <VersionHelpers.h>
 
 #include <fstream>
 

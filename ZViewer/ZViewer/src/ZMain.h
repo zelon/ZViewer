@@ -223,8 +223,6 @@ private:
 	void SetStatusBarText();
 	void SetTitle();
 
-	eOSKind m_osKind;
-
 	void InitOpenFileDialog();
 
 	typedef std::vector< FileData > FileListVector;
