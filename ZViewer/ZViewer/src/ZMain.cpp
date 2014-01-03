@@ -1715,6 +1715,18 @@ void ZMain::OnMouseWheel(const short delta, bool bControlPushed)
 	}
 }
 
+void ZMain::OnPressedESCKey()
+{
+	if (ZOption::GetInstance().IsFullScreen())	// 현재 풀스크린이면 원래 화면으로 돌아간다.
+	{
+		ToggleFullScreen();
+	}
+	else
+	{
+		CloseProgram();
+	}
+}
+
 /// 상태 표시 윈도우를 만든다.
 void ZMain::CreateStatusBar()
 {

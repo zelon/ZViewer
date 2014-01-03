@@ -77,6 +77,7 @@
 #define ID_COPY_TO_CLIPBOARD            40095
 #define ID_AUTOROTATION                 40096
 #define ID_DELETETHISFILE_RECYCLEBIN    40097
+#define ID_ESC_KEY_OPERATION            40098
 
 // Next default values for new objects
 // 

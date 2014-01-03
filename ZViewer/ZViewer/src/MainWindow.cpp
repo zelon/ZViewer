@@ -124,12 +124,6 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 
 	switch(iMessage)
 	{
-	case WM_KEYDOWN:
-		{
-			ShortCut::GetInstance().DoShortCut(wParam);
-		}
-		break;
-
 	case WM_CHAR:
 		{
 			switch ( wParam )
@@ -462,6 +456,10 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 
 			switch ( wMid )
 			{
+			case ID_ESC_KEY_OPERATION:
+				ZMain::GetInstance().OnPressedESCKey();
+				break;
+
 				/////////////////////////////////////////////
 				// Main Menu
 

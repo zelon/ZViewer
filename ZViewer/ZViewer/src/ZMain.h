@@ -52,6 +52,8 @@ public:
 	/// 마우스 휠을 돌렸을 때. delta 는 돌린 방향과 돌린 정도, bControlPushed 는 Control 키가 눌려졌으면 true
 	void OnMouseWheel(const short delta, bool bControlPushed);
 
+	void OnPressedESCKey();
+
 	bool IsHandCursor() const { return m_bHandCursor; }
 	void SetHandCursor(bool bHandCursor) { m_bHandCursor = bHandCursor; }
 
