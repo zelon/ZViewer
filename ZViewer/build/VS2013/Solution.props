@@ -3,7 +3,7 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
-    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\output</OutDir>
+    <OutDir>$(SolutionDir)../../output</OutDir>
     <IntDir>$(SolutionDir)$(Platform)\$(Configuration)\intermediate\$(ProjectName)</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup>
