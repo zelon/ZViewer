@@ -116,6 +116,35 @@ HWND CMainWindow::Create(HINSTANCE hInstance, HWND hParentHWND, int nCmdShow)
 	return m_hWindow;
 }
 
+HMENU CMainWindow::CreatePopupMenu()
+{
+	HMENU hPopupMenu = ::CreatePopupMenu();
+
+	AppendMenu(hPopupMenu, MF_STRING, ID_MOVE_FIRSTIMAGE, GetMessage(TEXT("POPUPMENU_FIRST")));
+	AppendMenu(hPopupMenu, MF_STRING, ID_MOVE_LASTIMAGE, GetMessage(TEXT("POPUPMENU_LAST")));
+	AppendMenu(hPopupMenu, MF_SEPARATOR, 0, nullptr);
+	AppendMenu(hPopupMenu, MF_STRING, ID_VIEW_FULLSCREEN, GetMessage(TEXT("POPUPMENU_FULL_SCREEN")));
+	AppendMenu(hPopupMenu, MF_STRING, ID_VIEW_RIGHTTOPFIRSTDRAW, GetMessage(TEXT("POPUPMENU_RIGHT_TOP_FIRST_DRAW")));
+	AppendMenu(hPopupMenu, MF_SEPARATOR, 0, nullptr);
+	AppendMenu(hPopupMenu, MF_STRING, ID_POPUPMENU_BIGTOSCREENSTRETCH, GetMessage(TEXT("POPUPMENU_STRETCH_BIG_TO_SCREEN")));
+	AppendMenu(hPopupMenu, MF_STRING, ID_POPUPMENU_SMALLTOSCREENSTRETCH, GetMessage(TEXT("POPUPMENU_STRETCH_SMALL_TO_SCREEN")));
+	AppendMenu(hPopupMenu, MF_SEPARATOR, 0, nullptr);
+	AppendMenu(hPopupMenu, MF_STRING, ID_DELETETHISFILE, GetMessage(TEXT("POPUPMENU_DELETE")));
+	AppendMenu(hPopupMenu, MF_SEPARATOR, 0, nullptr);
+	{
+		HMENU subPopup = ::CreatePopupMenu();
+		AppendMenu(subPopup, MF_STRING, ID_SETDESKTOPWALLPAPER_CENTER, GetMessage(TEXT("POPUPMENU_DESKTOP_WALLPAPER_CENTER")));
+		AppendMenu(subPopup, MF_STRING, ID_SETDESKTOPWALLPAPER_STRETCH, GetMessage(TEXT("POPUPMENU_DESKTOP_WALLPAPER_STRETCH")));
+		AppendMenu(subPopup, MF_STRING, ID_SETDESKTOPWALLPAPER_TILE, GetMessage(TEXT("POPUPMENU_DESKTOP_WALLPAPER_TILE")));
+		AppendMenu(subPopup, MF_SEPARATOR, 0, nullptr);
+		AppendMenu(subPopup, MF_STRING, ID_SETDESKTOPWALLPAPER_CLEAR, GetMessage(TEXT("POPUPMENU_DESKTOP_WALLPAPER_CLEAR")));
+		AppendMenu(hPopupMenu, MF_POPUP, (UINT_PTR)subPopup, GetMessage(TEXT("POPUPMENU_SET_DESKTOP_WALLPAPER")));
+	}
+	AppendMenu(hPopupMenu, MF_STRING, ID_START_SLIDESHOW, GetMessage(TEXT("POPUPMENU_START_SLIDESHOW")));
+	AppendMenu(hPopupMenu, MF_STRING, ID_MAINMENU_FILE_EXIT, GetMessage(TEXT("POPUPMENU_EXIT")));
+
+	return hPopupMenu;
+}
 
 int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 {
@@ -352,8 +381,8 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 			ZMain::GetInstance().CreateStatusBar();
 
 			// 팝업 메뉴를 불러놓는다.
-			HMENU hMenu = LoadMenu(ZResourceManager::GetInstance().GetHInstance(), MAKEINTRESOURCE(IDR_POPUP_MENU));
-			g_hPopupMenu = GetSubMenu(hMenu, 0);
+			HMENU hMenu = CMainWindow::CreatePopupMenu();  //LoadMenu(ZResourceManager::GetInstance().GetHInstance(), MAKEINTRESOURCE(IDR_POPUP_MENU));
+			g_hPopupMenu = hMenu; // GetSubMenu(hMenu, 0);
 			ZMain::GetInstance().SetPopupMenu(g_hPopupMenu);
 
 			ZMain::GetInstance().OnInit();

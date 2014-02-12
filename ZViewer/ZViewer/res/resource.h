@@ -5,7 +5,6 @@
 #define IDR_MAIN_MENU                   102
 #define IDI_BIG_MAIN                    103
 #define IDC_MOVE_HAND_CURSOR            107
-#define IDR_POPUP_MENU                  109
 #define IDC_MOVE_HAND_CAPTURE_CURSOR    111
 #define IDD_FILE_EXT_DIALOG             113
 #define IDD_MOVE_DIALOG                 114

@@ -120,34 +120,6 @@ BEGIN
     END
 END
 
-IDR_POPUP_MENU MENU
-BEGIN
-    POPUP "PopupMenu"
-    BEGIN
-        MENUITEM "처음 이미지\tHome",                ID_MOVE_FIRSTIMAGE
-        MENUITEM "마지막 이미지\tEnd",                ID_MOVE_LASTIMAGE
-        MENUITEM SEPARATOR
-        MENUITEM "전체화면\tAlt+Enter,Enter",       ID_VIEW_FULLSCREEN
-        MENUITEM "오른쪽 위부터 그리기",                 ID_VIEW_RIGHTTOPFIRSTDRAW
-        MENUITEM SEPARATOR
-        MENUITEM "큰 그림 화면에 맞게 축소(&B)",          ID_POPUPMENU_BIGTOSCREENSTRETCH
-        MENUITEM "작은 그림 화면에 맞게 확대(&S)",         ID_POPUPMENU_SMALLTOSCREENSTRETCH
-        MENUITEM SEPARATOR
-        MENUITEM "현재 파일 지우기\tDelete",           ID_DELETETHISFILE
-        MENUITEM SEPARATOR
-        POPUP "바탕화면 배경으로 지정"
-        BEGIN
-            MENUITEM "가운데",                         ID_SETDESKTOPWALLPAPER_CENTER
-            MENUITEM "늘이기",                         ID_SETDESKTOPWALLPAPER_STRETCH
-            MENUITEM "바둑판식",                        ID_SETDESKTOPWALLPAPER_TILE
-            MENUITEM SEPARATOR
-            MENUITEM "지우기",                         ID_SETDESKTOPWALLPAPER_CLEAR
-        END
-        MENUITEM "연속보기 시작",                     ID_START_SLIDESHOW
-        MENUITEM "종료(&X)",                      ID_MAINMENU_FILE_EXIT
-    END
-END
-
 
 /////////////////////////////////////////////////////////////////////////////
 //

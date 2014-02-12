@@ -120,34 +120,6 @@ BEGIN
     END
 END
 
-IDR_POPUP_MENU MENU
-BEGIN
-    POPUP "PopupMenu"
-    BEGIN
-        MENUITEM "First\tHome",                 ID_MOVE_FIRSTIMAGE
-        MENUITEM "Last\tEnd",                   ID_MOVE_LASTIMAGE
-        MENUITEM SEPARATOR
-        MENUITEM "FullScreen\tAlt+Enter,Enter", ID_VIEW_FULLSCREEN
-        MENUITEM "RightTop First Draw",         ID_VIEW_RIGHTTOPFIRSTDRAW
-        MENUITEM SEPARATOR
-        MENUITEM "&BigToScreenStretch",         ID_POPUPMENU_BIGTOSCREENSTRETCH
-        MENUITEM "&SmallToScreenStretch",       ID_POPUPMENU_SMALLTOSCREENSTRETCH
-        MENUITEM SEPARATOR
-        MENUITEM "DeleteThisFile\tDelete",      ID_DELETETHISFILE
-        MENUITEM SEPARATOR
-        POPUP "Set DesktopWallPaper"
-        BEGIN
-            MENUITEM "Center",                      ID_SETDESKTOPWALLPAPER_CENTER
-            MENUITEM "Stretch",                     ID_SETDESKTOPWALLPAPER_STRETCH
-            MENUITEM "Tile",                        ID_SETDESKTOPWALLPAPER_TILE
-            MENUITEM SEPARATOR
-            MENUITEM "Clear",                       ID_SETDESKTOPWALLPAPER_CLEAR
-        END
-        MENUITEM "Start SlideShow",             ID_START_SLIDESHOW
-        MENUITEM "E&xit",                       ID_MAINMENU_FILE_EXIT
-    END
-END
-
 
 /////////////////////////////////////////////////////////////////////////////
 //

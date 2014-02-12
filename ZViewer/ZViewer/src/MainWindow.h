@@ -25,6 +25,6 @@ public:
 	virtual void SetWndProc();
 
 	HWND Create(HINSTANCE hInstance, HWND hParentHWND, int nCmdShow);
-
+	static HMENU CreatePopupMenu();
 protected:
 };
