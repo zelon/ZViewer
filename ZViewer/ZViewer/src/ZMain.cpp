@@ -756,9 +756,7 @@ bool ZMain::LastImage()
 
 void ZMain::OnChangeCurrentSize(int iWidth, int iHeight)
 {
-	if ( NULL == m_pCurrentImage || m_bCurrentImageLoaded == false )
-	{
-//		assert(m_pCurrentImage);
+	if ( m_pCurrentImage == nullptr || m_bCurrentImageLoaded == false ) {
 		return;
 	}
 
@@ -1119,7 +1117,7 @@ void ZMain::LoadCurrent()
 	if ( ZCacheImage::GetInstance().hasCachedData(m_strCurrentFilename, m_iCurretFileIndex) )
 	{
 		{/// 캐시된 데이터를 읽어온다.
-			ZCacheImage::GetInstance().GetCachedData(m_strCurrentFilename, m_pCurrentImage);
+      m_pCurrentImage = ZCacheImage::GetInstance().GetCachedData(m_strCurrentFilename);
 
 			assert(m_pCurrentImage);
 			assert(m_pCurrentImage->IsValid());

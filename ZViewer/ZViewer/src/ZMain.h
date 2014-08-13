@@ -254,7 +254,7 @@ private:
 	double m_fCurrentZoomRate;
 
 	/// 현재 보여주고 있는 이미지
-	ZImage * m_pCurrentImage;
+	std::shared_ptr<ZImage> m_pCurrentImage;
 
 	///< 현재 이미지를 로딩하는 데 걸린 시간
 	long long m_dwLoadingTime;

@@ -12,10 +12,6 @@
 #include "../../commonSrc/ZImage.h"
 #include "../../commonSrc/LockUtil.h"
 
-typedef std::map < tstring, ZImage * >::iterator CacheMapIterator;
-typedef std::map < tstring, ZImage * >::const_iterator CacheMapIterator_const;
-
-
 class CachedData : NonCopyable
 {
 public:
@@ -43,7 +39,7 @@ public:
 		return false;
 	}
 
-	void InsertData(const tstring & strFilename, ZImage * pImage, bool bForceCache);
+	void InsertData(const tstring & strFilename, std::shared_ptr<ZImage> image, bool bForceCache);
 
 	void ShowCacheInfo() const;
 
@@ -69,7 +65,7 @@ public:
 		return m_numImageVectorSize;
 	}
 
-	bool GetCachedData(const tstring & strFilename, ZImage * & pImage) const;
+  std::shared_ptr<ZImage> GetCachedData(const tstring& strFilename) const;
 	bool ClearFarthestDataFromCurrent(const int iFarthestIndex);
 
 	/// 캐시되어 있는 데이터들 중 현재 인덱스로부터 가장 멀리있는 인덱스를 얻는다.
@@ -111,7 +107,7 @@ public:
 	}
 
 protected:
-	std::map < tstring, ZImage * > m_cacheData;		///< 실제로 캐쉬된 데이터를 가지고 있는 맵
+	std::map < tstring, std::shared_ptr<ZImage> > m_cacheData;		///< 실제로 캐쉬된 데이터를 가지고 있는 맵
 	std::map < int , tstring > m_imageIndex2FilenameMap;	///< 이미지 파일의 인덱스 번호,파일이름 맵
 	std::map < tstring, int > m_imageFilename2IndexMap;		///< 이미지 파일이름,인덱스 번호 맵
 

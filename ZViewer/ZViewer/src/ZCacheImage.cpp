@@ -151,7 +151,7 @@ bool ZCacheImage::_CacheIndex(int iIndex)
 
 	if ( bFound == false )	// 캐시되어 있지 않으면 읽어들인다.
 	{
-		ZImage * pCacheReadyImage = new ZImage();
+		std::shared_ptr<ZImage> pCacheReadyImage(new ZImage());
 
 		m_pImpl->m_vBuffer.resize(0);
 		HANDLE hFile = CreateFile(strFileName.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_FLAG_SEQUENTIAL_SCAN | FILE_FLAG_POSIX_SEMANTICS,  NULL);
@@ -184,7 +184,6 @@ bool ZCacheImage::_CacheIndex(int iIndex)
 				{
 					CloseHandle(hFile);
 					DebugPrintf(TEXT("---------------------------- stop readfile"));
-					delete pCacheReadyImage;
 					return false;	// 현재보고 있는 파일 인덱스가 바뀌었으면 빨리 다음 for 를 시작한다.
 				}
 				bReadOK = ReadFile(hFile, readBuffer, readBufferSize, &dwReadBytes,  NULL);
@@ -192,7 +191,6 @@ bool ZCacheImage::_CacheIndex(int iIndex)
 				{
 					CloseHandle(hFile);
 					DebugPrintf(TEXT("---------------------------- stop readfile"));
-					delete pCacheReadyImage;
 					return false;	// 현재보고 있는 파일 인덱스가 바뀌었으면 빨리 다음 for 를 시작한다.
 				}
 				if ( FALSE == bReadOK )
@@ -375,7 +373,6 @@ bool ZCacheImage::_CacheIndex(int iIndex)
 					if ( nCachedFarthestDiff < nToCacheDiff )
 					{
 						// 캐시 했는 것 중 가장 멀리있는 것이 이번거보다 가까운데 있으면 더이상 캐시하지 않는다
-						delete pCacheReadyImage;
 						return false;
 					}
 					else if ( nCachedFarthestDiff == nToCacheDiff )
@@ -388,16 +385,13 @@ bool ZCacheImage::_CacheIndex(int iIndex)
 							if ( iFarthestIndex >= iIndex )
 							{
 								// 캐시되어 있는 것을 비우지 않는다.
-								delete pCacheReadyImage;
 								return false;
 							}
 						}
 						else
 						{
 							// 뒤로 진행 중이면 가장 멀리있는 것이 next 이면 지운다.
-							if ( iFarthestIndex <= iIndex )
-							{
-								delete pCacheReadyImage;
+							if ( iFarthestIndex <= iIndex ) {
 								return false;
 							}
 						}
@@ -440,7 +434,6 @@ bool ZCacheImage::_CacheIndex(int iIndex)
 void ZCacheImage::ThreadFunc()
 {
 	m_bNewChange = false;
-	CacheMapIterator it, endit;
 	int iPos = 0;
 	int i = 0;
 
@@ -527,15 +520,13 @@ bool ZCacheImage::hasCachedData(const tstring & strFilename, int iIndex)
 	return false;
 }
 
-void ZCacheImage::GetCachedData(const tstring & strFilename, ZImage * & pImage)
+std::shared_ptr<ZImage> ZCacheImage::GetCachedData(const tstring & strFilename) const
 {
-	m_pImpl->m_cacheData.GetCachedData(strFilename, pImage);
-
-	assert(pImage);
+  return m_pImpl->m_cacheData.GetCachedData(strFilename);
 }
 
 
-void ZCacheImage::AddCacheData(const tstring & strFilename, ZImage * pImage, bool bForceCache)
+void ZCacheImage::AddCacheData(const tstring & strFilename, std::shared_ptr<ZImage> pImage, bool bForceCache)
 {
 	if ( false == pImage->IsValid() )
 	{

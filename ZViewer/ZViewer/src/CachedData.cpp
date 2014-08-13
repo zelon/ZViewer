@@ -14,35 +14,17 @@
 
 void CachedData::ClearCachedImageData()
 {
-	CacheMapIterator it;
-
 	CLockObjUtil lock(m_cacheLock);
-	for ( ; ; )
-	{
-		if ( m_cacheData.empty() ) break;
-		it = m_cacheData.begin();
-		if ( it->second )
-		{
-			delete it->second;
-		}
-		m_cacheData.erase(it);
-	}
-
 	m_cacheData.clear();
-
 	m_lCacheSize = 0;
 }
 
 void CachedData::ShowCacheInfo() const
 {
-	CacheMapIterator_const it;
-
 	CLockObjUtil lock(m_cacheLock);
-	for ( it = m_cacheData.begin(); it != m_cacheData.end(); ++it )
+	for ( auto it = m_cacheData.begin(); it != m_cacheData.end(); ++it )
 	{
-		const ZImage * pImage = it->second;
-
-		DebugPrintf(TEXT("[%s] %dbyte"), it->first.c_str(), pImage->GetImageSize());
+		DebugPrintf(TEXT("[%s] %dbyte"), it->first.c_str(), it->second->GetImageSize());
 	}
 }
 
@@ -72,11 +54,8 @@ void CachedData::PrintCachedData() const
 {
 	CLockObjUtil lock(m_cacheLock);
 
-	CacheMapIterator_const it, endIt = m_cacheData.end();
-
-	for ( it = m_cacheData.begin(); it != endIt; ++it)
-	{
-		DebugPrintf(TEXT("Cacaed Filename : %s"), it->first.c_str());
+	for ( const auto& pair : m_cacheData ) {
+		DebugPrintf(TEXT("Cacaed Filename : %s"), pair.first.c_str());
 	}
 }
 
@@ -85,7 +64,6 @@ int CachedData::GetFarthestIndexFromCurrentIndex(volatile const int & iCurrentIn
 {
 	CLockObjUtil lock(m_cacheLock);
 	assert(m_imageFilename2IndexMap.size() == m_imageIndex2FilenameMap.size());
-	CacheMapIterator it, endIt = m_cacheData.end();
 
 	int iFarthestIndex = iCurrentIndex;
 	int iDistanceMax = 0;
@@ -94,7 +72,7 @@ int CachedData::GetFarthestIndexFromCurrentIndex(volatile const int & iCurrentIn
 
 	tstring strFarthest;
 
-	for ( it = m_cacheData.begin(); it != endIt; ++it)
+	for (auto it = m_cacheData.begin(); it != m_cacheData.end(); ++it)
 	{
 		iTempIndex = m_imageFilename2IndexMap[it->first];
 		iDistance = abs(iTempIndex - iCurrentIndex);
@@ -130,28 +108,22 @@ void CachedData::SetNewFileList(const std::vector < FileData > & v)
 	assert(m_imageFilename2IndexMap.size() == m_imageIndex2FilenameMap.size());
 }
 
-bool CachedData::GetCachedData(const tstring & strFilename, ZImage * & pImage) const
+std::shared_ptr<ZImage> CachedData::GetCachedData(const tstring& strFilename) const
 {
 	CLockObjUtil lock(m_cacheLock);
 
-	CacheMapIterator_const it;
-
-	it = m_cacheData.find(strFilename);
+	auto it = m_cacheData.find(strFilename);
 	if ( it == m_cacheData.end() )
 	{
 		assert(!"Can't get NOT CACHED");
-		return false;
+		return nullptr;
 	}
 	else
 	{
 		DebugPrintf(TEXT("Cache hit"));
 	}
 
-	TIMECHECK_START("GetCacheData");
-	pImage = it->second;
-	TIMECHECK_END();
-
-	return true;
+	return it->second;
 }
 
 bool CachedData::ClearFarthestDataFromCurrent(const int iFarthestIndex)
@@ -165,7 +137,7 @@ bool CachedData::ClearFarthestDataFromCurrent(const int iFarthestIndex)
 		return false;
 	}
 
-	CacheMapIterator it = m_cacheData.find(itFileName->second);
+	auto it = m_cacheData.find(itFileName->second);
 
 	if ( it != m_cacheData.end() )
 	{
@@ -176,7 +148,6 @@ bool CachedData::ClearFarthestDataFromCurrent(const int iFarthestIndex)
 		}
 		m_lCacheSize -= it->second->GetImageSize();
 		
-		delete (it->second);
 		m_cacheData.erase(it);
 
 		DebugPrintf(TEXT("Farthest one clear"));
@@ -190,14 +161,11 @@ bool CachedData::ClearFarthestDataFromCurrent(const int iFarthestIndex)
 }
 
 
-void CachedData::InsertData(const tstring & strFilename, ZImage * pImage, bool bForceCache)
+void CachedData::InsertData(const tstring & strFilename, std::shared_ptr<ZImage> pImage, bool bForceCache)
 {
 	/// 이미 캐시되어 있으면 캐시하지 않는다.
-	if ( HasCachedData(strFilename) )
-	{
+	if ( HasCachedData(strFilename) ) {
 		assert(false);
-		delete pImage;
-		pImage = NULL;
 		return;
 	}
 
@@ -207,7 +175,6 @@ void CachedData::InsertData(const tstring & strFilename, ZImage * pImage, bool b
 		if ( (GetCachedTotalSize() + pImage->GetImageSize()) /1024/1024 > ZOption::GetInstance().GetMaxCacheMemoryMB() )
 		{
 			DebugPrintf(_T("-- 이 이미지를 캐시하면 용량제한을 넘어서 캐시하지 않습니다 -- : %s"), strFilename.c_str());
-			delete pImage;
 			return;
 		}
 	}
@@ -220,10 +187,8 @@ void CachedData::InsertData(const tstring & strFilename, ZImage * pImage, bool b
 
 		CLockObjUtil lock(m_cacheLock);
 		{
-			if ( m_cacheData.find(strFilename) != m_cacheData.end() )
-			{
+			if ( m_cacheData.find(strFilename) != m_cacheData.end() ) {
 				assert(!"--- 이미 캐시에 있는 파일을 다시 넣으려고 합니다 ---");
-				delete pImage;
 				return;
 			}
 			m_cacheData[strFilename] = pImage;
