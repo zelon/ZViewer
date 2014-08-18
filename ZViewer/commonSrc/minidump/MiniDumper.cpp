@@ -3,7 +3,7 @@
 #include "MiniDumper.h"
 #include "../CommonFunc.h"
 
-MiniDumper * pThis = NULL;
+MiniDumper * pThis = nullptr;
 
 MiniDumper::MiniDumper(const TCHAR * szDumpFilename, const TCHAR * szDumpMsg)
 {
@@ -78,7 +78,7 @@ LONG MiniDumper::TopLevelFilter( struct _EXCEPTION_POINTERS *pExceptionInfo )
 	// firstly see if dbghelp.dll is around and has the function we need
 	// look next to the EXE first, as the one in System32 might be old 
 	// (e.g. Windows 2000)
-	HMODULE hDll = NULL;
+	HMODULE hDll = nullptr;
 	TCHAR szDbgHelpPath[_MAX_PATH];
 
 	if (GetModuleFileName( NULL, szDbgHelpPath, _MAX_PATH ))
@@ -88,13 +88,13 @@ LONG MiniDumper::TopLevelFilter( struct _EXCEPTION_POINTERS *pExceptionInfo )
 		hDll = ::LoadLibrary( folder.c_str() );
 	}
 
-	if (hDll==NULL)
+	if (hDll == nullptr)
 	{
 		// load any version we can
 		hDll = ::LoadLibrary( TEXT("DBGHELP.DLL") );
 	}
 
-	LPCTSTR szResult = NULL;
+	LPCTSTR szResult = nullptr;
 
 	if (hDll)
 	{
@@ -158,11 +158,5 @@ LONG MiniDumper::TopLevelFilter( struct _EXCEPTION_POINTERS *pExceptionInfo )
 	{
 		szResult = TEXT("DBGHELP.DLL not found");
 	}
-
-	if (szResult)
-	{
-		//	::MessageBox( NULL, szResult, m_szAppName, MB_OK );
-	}
-
 	return retval;
 }

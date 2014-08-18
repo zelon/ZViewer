@@ -16,7 +16,7 @@
 #include "src/ZMain.h"
 #include "src/ZResourceManager.h"
 
-int CALLBACK AboutWndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam);
+LRESULT CALLBACK AboutWndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam);
 
 CAboutWindow::CAboutWindow()
 {
@@ -41,7 +41,7 @@ void CreateLabel(const HWND hWnd, const TCHAR * msg, int & y)
 	y += 30;
 }
 
-int CALLBACK AboutWndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
+LRESULT CALLBACK AboutWndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 {
 	switch(iMessage)
 	{
@@ -64,7 +64,7 @@ int CALLBACK AboutWndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 			SPrintf(szTemp, MAX_PATH, TEXT("%d"),ZMain::GetInstance().GetCachedKByte());
 			::GetNumberFormat((LCID)NULL, (DWORD)NULL, szTemp, &nFmt, szOUT, 20);
 
-			SPrintf(szTemp, MAX_PATH, TEXT("CachedMemory : %sKB, Num of Cached Image : %u"), szOUT, ZCacheImage::GetInstance().GetNumOfCacheImage());
+			SPrintf(szTemp, MAX_PATH, TEXT("CachedMemory : %sKB, Num of Cached Image : %u"), szOUT, static_cast<unsigned int>(ZCacheImage::GetInstance().GetNumOfCacheImage()));
 			CreateLabel(hWnd, szTemp, y);
 
 			SPrintf(szTemp, MAX_PATH, TEXT("ProgramPath : %s"), GetProgramFolder().c_str());

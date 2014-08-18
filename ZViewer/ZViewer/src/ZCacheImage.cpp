@@ -23,7 +23,7 @@ using namespace std::chrono;
 class ZCacheImage::Impl
 {
 public:
-	std::vector < BYTE > m_vBuffer;		///< buffer that keeping data of current reading file
+  std::vector < BYTE > file_read_buffer_;		///< buffer that keeping data of current reading file
 	CachedData m_cacheData;
 	CEventObj m_hCacheEvent;
 };
@@ -108,6 +108,35 @@ size_t ZCacheImage::GetNumOfCacheImage() const
 	return m_pImpl->m_cacheData.Size();
 }
 
+class File final {
+public:
+  File(const tstring& filename) {
+    file_handle_ = CreateFile(filename.c_str(),
+                              GENERIC_READ,
+                              FILE_SHARE_READ,
+                              NULL,
+                              OPEN_EXISTING,
+                              FILE_FLAG_SEQUENTIAL_SCAN | FILE_FLAG_POSIX_SEMANTICS,
+                              NULL);
+  }
+
+  ~File() {
+    if (IsOpened()) {
+      CloseHandle(file_handle_);
+    }
+  }
+
+  bool IsOpened() const {
+    return file_handle_ != INVALID_HANDLE_VALUE;
+  }
+
+  bool Read(void* read_buffer, const DWORD read_buffer_size, DWORD* number_of_bytes_read) {
+    return ::ReadFile(file_handle_, read_buffer, read_buffer_size, number_of_bytes_read, nullptr) == TRUE;
+  }
+private:
+  HANDLE file_handle_;
+};
+
 bool ZCacheImage::_CacheIndex(int iIndex)
 {
 	/*
@@ -132,7 +161,7 @@ bool ZCacheImage::_CacheIndex(int iIndex)
 	if ( iIndex < 0 ) return false;
 
 	// 이미 캐시되어 있는지 찾는다.
-	bool bFound = false;
+	bool bCacheFound = false;
 	tstring strFileName;
 
 	strFileName = m_pImpl->m_cacheData.GetFilenameFromIndex(iIndex);;//m_imageIndex2FilenameMap[iIndex];
@@ -141,306 +170,205 @@ bool ZCacheImage::_CacheIndex(int iIndex)
 
 	if ( strFileName.length() <= 0 ) return false;
 
-	{
-		if (m_pImpl->m_cacheData.HasCachedData(strFileName))
-		{
-			// found!
-			bFound = true;
-		}
+  if (m_pImpl->m_cacheData.HasCachedData(strFileName)) {
+    // found!
+    bCacheFound = true;
 	}
 
-	if ( bFound == false )	// 캐시되어 있지 않으면 읽어들인다.
-	{
-		std::shared_ptr<ZImage> pCacheReadyImage(new ZImage());
+  if (bCacheFound == true) {
+    return true;
+  }
 
-		m_pImpl->m_vBuffer.resize(0);
-		HANDLE hFile = CreateFile(strFileName.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_FLAG_SEQUENTIAL_SCAN | FILE_FLAG_POSIX_SEMANTICS,  NULL);
+  std::shared_ptr<ZImage> pCacheReadyImage(new ZImage());
 
-		bool bLoadOK = false;
+  m_pImpl->file_read_buffer_.resize(0);
+  File file(strFileName);
 
-		if ( INVALID_HANDLE_VALUE == hFile )
-		{
-			//assert(false);
-			bLoadOK = false;
-		}
-		else
-		{
-			enum
-			{
-				readBufferSize = 2048
-			};
+  bool bLoadOK = false;
 
-			BYTE readBuffer[readBufferSize];
+  if (file.IsOpened() == false) {
+    assert(false);
+    bLoadOK = false;
+  } else
+  {
+    enum
+    {
+      readBufferSize = 2048
+    };
 
-			DWORD dwReadBytes;
-			BOOL bReadOK = TRUE;
+    BYTE readBuffer[readBufferSize];
 
-			//DWORD dwStart = GetTickCount();
-			system_clock::time_point startTime = system_clock::now();
+    DWORD dwReadBytes;
+    BOOL bReadOK = TRUE;
 
-			while ( bReadOK )
-			{
-				if ( m_bNewChange && m_iCurrentIndex != iIndex )	///< 새로운 그림으로 넘어갔는데 현재 인덱스가 아니면
-				{
-					CloseHandle(hFile);
-					DebugPrintf(TEXT("---------------------------- stop readfile"));
-					return false;	// 현재보고 있는 파일 인덱스가 바뀌었으면 빨리 다음 for 를 시작한다.
-				}
-				bReadOK = ReadFile(hFile, readBuffer, readBufferSize, &dwReadBytes,  NULL);
-				if ( m_bNewChange && m_iCurrentIndex != iIndex )	///< 새로운 그림으로 넘어갔는데 현재 인덱스가 아니면
-				{
-					CloseHandle(hFile);
-					DebugPrintf(TEXT("---------------------------- stop readfile"));
-					return false;	// 현재보고 있는 파일 인덱스가 바뀌었으면 빨리 다음 for 를 시작한다.
-				}
-				if ( FALSE == bReadOK )
-				{
-					assert(false);
-					bLoadOK = false;
-					break;
-				}
-				else
-				{
-					if ( dwReadBytes <= 0 )	///< 파일의 끝까지 읽었다.
-					{
-						break;
-					}
-					else ///
-					{
-						m_pImpl->m_vBuffer.resize(m_pImpl->m_vBuffer.size() + dwReadBytes);
+    //DWORD dwStart = GetTickCount();
+    system_clock::time_point startTime = system_clock::now();
 
-						memcpy((&(m_pImpl->m_vBuffer[0])) + m_pImpl->m_vBuffer.size() - dwReadBytes, readBuffer, dwReadBytes);
-					}
-				}
-			}
+    while ( bReadOK )
+    {
+      if ( m_bNewChange && m_iCurrentIndex != iIndex )	///< 새로운 그림으로 넘어갔는데 현재 인덱스가 아니면
+      {
+        DebugPrintf(TEXT("---------------------------- stop readfile"));
+        return false;	// 현재보고 있는 파일 인덱스가 바뀌었으면 빨리 다음 for 를 시작한다.
+      }
+      bReadOK = file.Read(readBuffer, readBufferSize, &dwReadBytes);
+      if ( m_bNewChange && m_iCurrentIndex != iIndex )	///< 새로운 그림으로 넘어갔는데 현재 인덱스가 아니면
+      {
+        DebugPrintf(TEXT("---------------------------- stop readfile"));
+        return false;	// 현재보고 있는 파일 인덱스가 바뀌었으면 빨리 다음 for 를 시작한다.
+      }
+      if ( FALSE == bReadOK )
+      {
+        assert(false);
+        bLoadOK = false;
+        break;
+      }
+      else
+      {
+        if ( dwReadBytes <= 0 )	///< 파일의 끝까지 읽었다.
+        {
+          break;
+        }
+        else ///
+        {
+          m_pImpl->file_read_buffer_.resize(m_pImpl->file_read_buffer_.size() + dwReadBytes);
 
-			if (m_pImpl->m_vBuffer.size() < 5)
-			{
-				/// 파일 크기가 너무 작음
-				bLoadOK = false;
-			}
-			else
-			{
-				long long diffTime = duration_cast<milliseconds>(system_clock::now() - startTime).count();
-				DebugPrintf(TEXT("----- readfile(%s) time(%d)"), strFileName.c_str(), diffTime);
-				CloseHandle(hFile);	///< 파일에서 읽기가 끝나서 파일을 닫아준다.
+          memcpy((&(m_pImpl->file_read_buffer_[0])) + m_pImpl->file_read_buffer_.size() - dwReadBytes, readBuffer, dwReadBytes);
+        }
+      }
+    }
 
-				assert(m_pImpl->m_vBuffer.size() > 0);
-				/// todo: 아래 내용을 멤버 변수로 바꾸면 더 좋아질까
-				fipMemoryIO mem(&m_pImpl->m_vBuffer[0], (DWORD)m_pImpl->m_vBuffer.size());
+    if (m_pImpl->file_read_buffer_.size() < 5)
+    {
+      /// 파일 크기가 너무 작음
+      bLoadOK = false;
+    }
+    else
+    {
+      long long diffTime = duration_cast<milliseconds>(system_clock::now() - startTime).count();
+      DebugPrintf(TEXT("----- readfile(%s) time(%d)"), strFileName.c_str(), diffTime);
 
-				DebugPrintf(TEXT("----- start decode(%s)"), strFileName.c_str());
-				TIMECHECK_START("decode time");
-				bLoadOK = pCacheReadyImage->LoadFromMemory(mem, strFileName);
-				DebugPrintf(TEXT("----- end of decode(%s)"), strFileName.c_str());
-				TIMECHECK_END();
+      assert(m_pImpl->file_read_buffer_.size() > 0);
+      /// todo: 아래 내용을 멤버 변수로 바꾸면 더 좋아질까
+      fipMemoryIO mem(&m_pImpl->file_read_buffer_[0], (DWORD)m_pImpl->file_read_buffer_.size());
 
-				/// 옵션에 따라 자동 회전을 시킨다.
-				if ( ZOption::GetInstance().IsUseAutoRotation() )
-				{
-					pCacheReadyImage->AutoRotate();
-				}
-			}
-		}
+      DebugPrintf(TEXT("----- start decode(%s)"), strFileName.c_str());
+      TIMECHECK_START("decode time");
+      bLoadOK = pCacheReadyImage->LoadFromMemory(mem, strFileName);
+      DebugPrintf(TEXT("----- end of decode(%s)"), strFileName.c_str());
+      TIMECHECK_END();
 
-		if ( bLoadOK == false )
-		{
-			assert(!"Can't load image");
+      /// 옵션에 따라 자동 회전을 시킨다.
+      if ( ZOption::GetInstance().IsUseAutoRotation() )
+      {
+        pCacheReadyImage->AutoRotate();
+      }
+    }
+  }
 
-			tstring strErrorFilename = GetProgramFolder();
-			strErrorFilename += TEXT("LoadError.png");
-			if ( pCacheReadyImage->LoadFromFile(strErrorFilename) )
-			{
-				bLoadOK = true; ///< error image 라도 load ok
-			}
-			else
-			{
-				MessageBox(HWND_DESKTOP, TEXT("Please check LoadError.png in ZViewer installed folder"), TEXT("ZViewer"), MB_OK);
+  if ( bLoadOK == false ) {
+    assert(!"Can't load image");
 
-				// 에러 때 표시하는 파일을 읽어들이지 못 했으면
-				//ShowMessageBox(GetMessage(TEXT("CANNOT_LOAD_ERROR_IMAGE_FILE")));
+    tstring strErrorFilename = GetProgramFolder();
+    strErrorFilename += TEXT("LoadError.png");
+    if ( pCacheReadyImage->LoadFromFile(strErrorFilename) )
+    {
+      bLoadOK = true; ///< error image 라도 load ok
+    }
+    else
+    {
+      MessageBox(HWND_DESKTOP, TEXT("Please check LoadError.png in ZViewer installed folder"), TEXT("ZViewer"), MB_OK);
+      const HBITMAP hBitmap = CreateBitmap(100, 100, 1, 1, NULL);
+      pCacheReadyImage->CopyFromBitmap(hBitmap);
+      return true;
+    }
+  }
 
-				HBITMAP hBitmap = CreateBitmap(100, 100, 1, 1, NULL);
-				pCacheReadyImage->CopyFromBitmap(hBitmap);
-			}
-		}
+  if ( iIndex == m_iCurrentIndex ) {///< 현재 보는 이미지면 무조건 넣는다.
+    AddCacheData(strFileName, pCacheReadyImage, true);
+    return true;
+  }
+  const long CachedImageSize = pCacheReadyImage->GetImageSize();
 
-
-		if ( bLoadOK )
-		{
-			/*
-			{/// Debug Code
-				//if ( m_bNewChange) return false;	// 현재보고 있는 파일 인덱스가 바뀌었으면 빨리 다음 for 를 시작한다.
-
-				AddCacheData(strFileName, temp);
-
-				if ( m_bNewChange) return false;	// 현재보고 있는 파일 인덱스가 바뀌었으면 빨리 다음 for 를 시작한다.
-				*/
-
-				/*
-				WORD tempWidth, tempHeight;
-				long tempImageSize = cacheReayImage.GetImageSize();
-
-				tempWidth = cacheReayImage.GetWidth();
-				tempHeight = cacheReayImage.GetHeight();
-
-				temp.Resize(10, 10);
-
-				tempWidth = cacheReayImage.GetWidth();
-				tempHeight = cacheReayImage.GetHeight();
-				tempImageSize = cacheReayImage.GetImageSize();
-			}
-			*/
-
-#if 0
-			if ( ZOption::GetInstance().IsBigToSmallStretchImage() )
-			{
-				RECT screenRect = { 0 };
-				if ( false == ZMain::GetInstance().getCurrentScreenRect(screenRect) ) return false;
-
-				RECT imageRect = { 0 };
-				imageRect.right = cacheReayImage.GetWidth();
-				imageRect.bottom = cacheReayImage.GetHeight();
-
-				if ( imageRect.right > screenRect.right || imageRect.bottom > screenRect.bottom )
-				{
-					RECT newRect = GetResizedRectForBigToSmall(screenRect, imageRect);
-
-					if ( newRect.right != imageRect.right || newRect.bottom != imageRect.bottom )
-					{
-						DebugPrintf(TEXT("Resizing Cache..."));
-						cacheReayImage.Resize((WORD)newRect.right, (WORD)newRect.bottom);
-					}
-				}
-			}
-
-			if ( ZOption::GetInstance().IsSmallToBigStretchImage() )
-			{
-				RECT screenRect;
-				if ( false == ZMain::GetInstance().getCurrentScreenRect(screenRect) ) return false;
-
-				/*
-				if ( screenRect.right > 10 )
-				{
-					--screenRect.right;
-				}
-				if ( screenRect.bottom > 10 )
-				{
-					--screenRect.bottom;
-				}
-				*/
-
-				RECT imageRect = { 0 };
-				imageRect.right = cacheReayImage.GetWidth();
-				imageRect.bottom = cacheReayImage.GetHeight();
-
-				if ( imageRect.right < screenRect.right && imageRect.bottom < screenRect.bottom )
-				{
-					RECT newRect = GetResizedRectForSmallToBig(screenRect, imageRect);
-
-					if ( newRect.right != imageRect.right || newRect.bottom != imageRect.bottom )
-					{
-						DebugPrintf(TEXT("Resizing Cache..."));
-						cacheReayImage.Resize((WORD)newRect.right, (WORD)newRect.bottom);
-					}
-				}
-			}
-#endif
-			const long CachedImageSize = pCacheReadyImage->GetImageSize();
-
-			if ( iIndex == m_iCurrentIndex )	///< 현재 보는 이미지면 무조건 넣는다.
-			{
-				AddCacheData(strFileName, pCacheReadyImage, true);
-				return true;
-			}
-			// 읽은 이미지를 넣을 공간이 없으면
-			else if ((m_pImpl->m_cacheData.GetCachedTotalSize() + CachedImageSize) / 1024 / 1024 > ZOption::GetInstance().GetMaxCacheMemoryMB())
-			{
-				int iTemp = 100;
-				int iFarthestIndex = -1;
-
-				do
-				{
-					// 캐시되어 있는 것들 중 가장 현재 index 에서 먼것을 찾는다.
-					{
-						iFarthestIndex = m_pImpl->m_cacheData.GetFarthestIndexFromCurrentIndex(m_iCurrentIndex);
-					}
-					assert(iFarthestIndex >= 0 );
-
-					size_t nCachedFarthestDiff = abs(iFarthestIndex - m_iCurrentIndex);
-					size_t nToCacheDiff = abs(iIndex - m_iCurrentIndex );
-
-					if ( nCachedFarthestDiff < nToCacheDiff )
-					{
-						// 캐시 했는 것 중 가장 멀리있는 것이 이번거보다 가까운데 있으면 더이상 캐시하지 않는다
-						return false;
-					}
-					else if ( nCachedFarthestDiff == nToCacheDiff )
-					{
-						// 캐시했는 거랑 이번에 캐시할 것이 동등한 위치에 있으면
-
-						if ( m_lastActionDirection == eLastActionDirection_FORWARD )
-						{
-							// 앞으로 진행 중이면 가장 멀리있는 것이 prev 이면 지운다(앞으로 가고 있을 때는 next image 가 우선순위가 높다)
-							if ( iFarthestIndex >= iIndex )
-							{
-								// 캐시되어 있는 것을 비우지 않는다.
-								return false;
-							}
-						}
-						else
-						{
-							// 뒤로 진행 중이면 가장 멀리있는 것이 next 이면 지운다.
-							if ( iFarthestIndex <= iIndex ) {
-								return false;
-							}
-						}
-					}
-
-					//  현재 것이 더 가깝기 때문에 가장 먼 것을 클리어하고, 현재 것을 캐시해 놓는 것이 좋은 상황이다.
-
-					// 가장 먼 것을 clear 한다.
-					{
-						m_pImpl->m_cacheData.ClearFarthestDataFromCurrent(iFarthestIndex);
-					}
-
-					// 이제 어느 정도 용량을 확보했으니 다시 이 이미지를 넣을 수 있는 지 캐시를 체크한다.
-					if ((m_pImpl->m_cacheData.GetCachedTotalSize() + CachedImageSize) / 1024 / 1024 <= ZOption::GetInstance().GetMaxCacheMemoryMB())
-					{
-						AddCacheData(strFileName, pCacheReadyImage);
-						return true;
-					}
-					else
-					{
-						DebugPrintf(TEXT("There is no vacant space"));
-					}
-
-					// 만약의 무한루프를 방지하기 위해 100번만 돌린다.
-					--iTemp;
-				} while( iTemp > 0 );
-
-				assert(iTemp >= 0 );
-			}
-			else
-			{
-				AddCacheData(strFileName, pCacheReadyImage);
-				if ( m_bNewChange) return false;	// 현재보고 있는 파일 인덱스가 바뀌었으면 빨리 다음 for 를 시작한다.
-			}
-		}
-	}
-	return true;
+  // 읽은 이미지를 넣을 공간이 없으면
+  if ((m_pImpl->m_cacheData.GetCachedTotalSize() + CachedImageSize) / 1024 / 1024 > ZOption::GetInstance().GetMaxCacheMemoryMB())
+  {
+    // 만약의 무한루프를 방지하기 위해 100번만 돌린다.
+    for (int i = 0; i < 100; ++i)
+    {
+      // 가장 멀리있는 이미지의 캐시를 clear 해서 캐시 용량을 확보해본다.
+      if (ClearFarthestCache(iIndex) == false) {
+        return false;
+      }
+      // 이제 어느 정도 용량을 확보했으니 다시 이 이미지를 넣을 수 있는 지 캐시를 체크한다.
+      if ((m_pImpl->m_cacheData.GetCachedTotalSize() + CachedImageSize) / 1024 / 1024 <= ZOption::GetInstance().GetMaxCacheMemoryMB())
+      {
+        AddCacheData(strFileName, pCacheReadyImage);
+        return true;
+      }
+      else
+      {
+        DebugPrintf(TEXT("There is no vacant space"));
+      }
+      assert(i <= 99);
+    }
+  }
+  else
+  {
+    AddCacheData(strFileName, pCacheReadyImage);
+    if ( m_bNewChange) return false;	// 현재보고 있는 파일 인덱스가 바뀌었으면 빨리 다음 for 를 시작한다.
+  }
+  return true;
 }
 
-void ZCacheImage::ThreadFunc()
-{
-	m_bNewChange = false;
-	int iPos = 0;
-	int i = 0;
+bool ZCacheImage::ClearFarthestCache(const int index) {
+  // 캐시되어 있는 것들 중 가장 현재 index 에서 먼것을 찾는다.
+  const int iFarthestIndex = m_pImpl->m_cacheData.GetFarthestIndexFromCurrentIndex(m_iCurrentIndex);
+  assert(iFarthestIndex >= 0 );
 
+  const size_t nCachedFarthestDiff = abs(iFarthestIndex - m_iCurrentIndex);
+  const size_t nToCacheDiff = abs(index - m_iCurrentIndex );
+
+  if ( nCachedFarthestDiff < nToCacheDiff )
+  {
+    // 캐시 했는 것 중 가장 멀리있는 것이 이번거보다 가까운데 있으면 더이상 캐시하지 않는다
+    return false;
+  }
+  else if ( nCachedFarthestDiff == nToCacheDiff )
+  {
+    // 캐시했는 거랑 이번에 캐시할 것이 동등한 위치에 있으면
+
+    if ( m_lastActionDirection == eLastActionDirection_FORWARD )
+    {
+      // 앞으로 진행 중이면 가장 멀리있는 것이 prev 이면 지운다(앞으로 가고 있을 때는 next image 가 우선순위가 높다)
+      if ( iFarthestIndex >= index )
+      {
+        // 캐시되어 있는 것을 비우지 않는다.
+        return false;
+      }
+    }
+    else
+    {
+      // 뒤로 진행 중이면 가장 멀리있는 것이 next 이면 지운다.
+      if ( iFarthestIndex <= index ) {
+        return false;
+      }
+    }
+  }
+
+  //  현재 것이 더 가깝기 때문에 가장 먼 것을 클리어하고, 현재 것을 캐시해 놓는 것이 좋은 상황이다.
+
+  // 가장 먼 것을 clear 한다.
+  m_pImpl->m_cacheData.ClearFarthestDataFromCurrent(iFarthestIndex);
+  return true;
+}
+
+void ZCacheImage::ThreadFunc() {
+	m_bNewChange = false;
 	while ( m_bCacheGoOn ) // thread loop
 	{
 		m_bNowCaching = true;
-		iPos = 0;
+	  int iPos = 0;
 		assert((int)m_pImpl->m_cacheData.GetImageVectorSize() == (int)m_pImpl->m_cacheData.GetIndex2FilenameMapSize());
 		assert(m_iCurrentIndex <= (int)m_pImpl->m_cacheData.GetIndex2FilenameMapSize());
 		assert(m_iCurrentIndex <= (int)m_pImpl->m_cacheData.GetImageVectorSize());
@@ -455,7 +383,7 @@ void ZCacheImage::ThreadFunc()
 		}
 #endif
 
-		for ( i=0; i<ZOption::GetInstance().m_iMaxCacheImageNum/2; ++i)
+		for ( int i=0; i<ZOption::GetInstance().m_iMaxCacheImageNum/2; ++i)
 		{
 			if ( false == m_bCacheGoOn ) break; ///< 프로그램이 종료되었으면 for 를 끝낸다.
 			if ( m_bNewChange) break;	// 현재보고 있는 파일 인덱스가 바뀌었으면 빨리 다음 for 를 시작한다.

@@ -18,7 +18,7 @@
 
 #include "../commonSrc/ExtInfoManager.h"
 
-ZFileExtDlg * pThis = NULL;
+ZFileExtDlg * pThis = nullptr;
 
 ZFileExtDlg::ZFileExtDlg()
 {
@@ -27,8 +27,8 @@ ZFileExtDlg::ZFileExtDlg()
 
 ZFileExtDlg & ZFileExtDlg::GetInstance()
 {
-	static ZFileExtDlg a;
-	return a;
+	static ZFileExtDlg singleton;
+	return singleton;
 }
 
 void ZFileExtDlg::ShowDlg()

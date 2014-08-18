@@ -20,21 +20,19 @@
 #include "src/ZResourceManager.h"
 #include "../commonSrc/ZOption.h"
 
-ZWindow::ZWindow()
-{
-	m_wndProc = NULL;
+ZWindow::ZWindow() {
+	m_wndProc = nullptr;
 }
 
 
-ZWindow::~ZWindow()
-{
+ZWindow::~ZWindow() {
 }
 
 
 HWND ZWindow::Create(HINSTANCE hInstance, HWND hParentHWND, int nCmdShow, const tstring & dlgName, HMENU hMenu)
 {
 	SetWndProc();
-	if ( NULL == m_wndProc)
+	if ( m_wndProc == nullptr)
 	{
 		assert(!"before create, set WndProc");
 		return (HWND)INVALID_HANDLE_VALUE;

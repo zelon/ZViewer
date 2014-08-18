@@ -1019,7 +1019,7 @@ void ZMain::SetStatusBarText()
 	else
 	{
 		// File Index
-		SPrintf(szTemp, COMMON_BUFFER_SIZE, TEXT("%d/%u"), m_iCurretFileIndex+1, m_vFile.size());
+		SPrintf(szTemp, COMMON_BUFFER_SIZE, TEXT("%d/%u"), m_iCurretFileIndex+1, static_cast<unsigned int>(m_vFile.size()));
 		SendMessage(m_hStatusBar, SB_SETTEXT, 0, (LPARAM)szTemp);
 
 		// 해상도 정보
@@ -1204,7 +1204,7 @@ void ZMain::LoadCurrent()
 
 void ZMain::OnDrag(int x, int y)
 {
-	if ( NULL == m_pCurrentImage || m_bCurrentImageLoaded == false )
+	if ( m_pCurrentImage == nullptr || m_bCurrentImageLoaded == false )
 	{
 		//assert(m_pCurrentImage);
 		return;
@@ -1219,12 +1219,11 @@ void ZMain::OnDrag(int x, int y)
 	int iNowShowingX = m_iShowingX;
 	int iNowShowingY = m_iShowingY;
 
-	int iZoomedWidth = (int)(m_pCurrentImage->GetWidth() * m_fCurrentZoomRate);
-	int iZoomedHeight = (int)(m_pCurrentImage->GetHeight() * m_fCurrentZoomRate);
+	const int iZoomedWidth = (int)(m_pCurrentImage->GetWidth() * m_fCurrentZoomRate);
+	const int iZoomedHeight = (int)(m_pCurrentImage->GetHeight() * m_fCurrentZoomRate);
 
 	/// 현재 그림이 화면보다 작거나 딱 맞으면 drag 를 하지 않는다.
-	if ( iZoomedWidth <= rt.right && iZoomedHeight <= rt.bottom )
-	{
+	if ( iZoomedWidth <= rt.right && iZoomedHeight <= rt.bottom ) {
 		return;
 	}
 
@@ -1277,7 +1276,7 @@ void ZMain::ReLoadFileList()
 void ZMain::_ProcAfterRemoveThisFile()
 {
 	m_bCurrentImageLoaded = false;
-	m_pCurrentImage = NULL;
+	m_pCurrentImage = nullptr;
 	m_strCurrentFilename.resize(0);
 
 	// 현재 파일이 마지막 파일인가?

@@ -76,9 +76,6 @@ public:
 	//// 그림의 시작 위치. 일본 만화의 경우 우측 상단부터 시작하기 위해서...
 	bool m_bRightTopFirstDraw;
 
-	/// 한 화면에 2장의 그림을 보여줄 것인가.
-	bool m_bTwoInSaveView;
-
 	/// 최대 캐시할 이미지 갯수. 여기서 절반반큼 왼쪽, 오른쪽으로 간다.
 	int m_iMaxCacheImageNum;
 

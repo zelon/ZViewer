@@ -123,7 +123,7 @@ HACCEL ShortCut::MakeAccelTable()
 	} 
 
 	/// returned handle must be destroyed
-	return CreateAcceleratorTable(&accels[0], accels.size());
+	return CreateAcceleratorTable(&accels[0], static_cast<int>(accels.size()));
 }
 
 void ShortCut::initializeShortCutData(void)

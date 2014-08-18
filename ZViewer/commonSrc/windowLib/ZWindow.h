@@ -11,8 +11,7 @@
 
 #pragma once
 
-class ZWindow
-{
+class ZWindow {
 public:
 	ZWindow();
 	virtual ~ZWindow();
@@ -32,7 +31,6 @@ public:
 	}
 
 protected:
-
 	WPARAM MsgProc();
 	HWND m_hParentWindow;
 	HWND m_hWindow;

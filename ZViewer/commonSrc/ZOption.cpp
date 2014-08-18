@@ -96,7 +96,6 @@ void ZOption::SetDefaultOption()
 	m_iMaxCacheImageNum = 10;
 	m_iSlideModePeriodMiliSeconds = 1000;
 	m_bUseOpenCMDInShell = true;
-	m_bUseDebug = true;
 #endif
 }
 

@@ -113,6 +113,8 @@ private:
 	/// 지정된 번호의 파일을 캐시할 수 있으면 캐시한다. 반환값은 캐쉬성공이면 true
 	bool _CacheIndex(int iIndex);
 
+  bool ClearFarthestCache(const int index);
+
 	class Impl;
 	std::unique_ptr<Impl> m_pImpl;
 };
