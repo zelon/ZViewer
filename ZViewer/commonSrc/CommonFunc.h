@@ -109,7 +109,7 @@ void SplitPath(const TCHAR * path, TCHAR * drive, size_t driveNumberOfElements, 
 
 #ifdef _DEBUG
 #define TIMECHECK_START(szMsg)	std::chrono::system_clock::time_point dwStart___ = std::chrono::system_clock::now(); TCHAR szTimeCheckMsg___[] = TEXT(szMsg);
-#define TIMECHECK_END()			long long dwDiff___ = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - dwStart___).count(); DebugPrintf(TEXT("--- %s - time(%d)"), szTimeCheckMsg___, dwDiff___);
+#define TIMECHECK_END()			long long dwDiff___ = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - dwStart___).count(); DebugPrintf(TEXT("--- %s - time(%d ms)"), szTimeCheckMsg___, dwDiff___);
 #else
 #define TIMECHECK_START(szMsg)	;
 #define TIMECHECK_END()			;
