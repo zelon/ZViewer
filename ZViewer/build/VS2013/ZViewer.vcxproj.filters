@@ -75,9 +75,6 @@
     <ClCompile Include="..\..\ZViewer\src\ZHistory.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\ZViewer\src\ZImageManager.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\ZViewer\src\ZMain.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -157,9 +154,6 @@
     <ClInclude Include="..\..\ZViewer\src\ExifDlg.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\lib\freeimage\FreeImage.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\ZViewer\src\MainWindow.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -182,9 +176,6 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\..\ZViewer\src\ZHistory.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\ZViewer\src\ZImageManager.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\..\ZViewer\src\ZMain.h">
@@ -249,6 +240,9 @@
     </ClInclude>
     <ClInclude Include="..\..\lib\vld\vld_def.h">
       <Filter>lib\vld</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\freeimage\FreeImage.h">
+      <Filter>lib\freeimage</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

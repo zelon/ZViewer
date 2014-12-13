@@ -259,7 +259,6 @@ python testLang.py
     <ClCompile Include="..\..\ZViewer\src\ZFileExtDlg.cpp" />
     <ClCompile Include="..\..\ZViewer\src\ZFileExtReg.cpp" />
     <ClCompile Include="..\..\ZViewer\src\ZHistory.cpp" />
-    <ClCompile Include="..\..\ZViewer\src\ZImageManager.cpp" />
     <ClCompile Include="..\..\ZViewer\src\ZMain.cpp" />
     <ClCompile Include="..\..\ZViewer\src\ZResourceManager.cpp" />
     <ClCompile Include="..\..\commonSrc\CommonFunc.cpp" />
@@ -283,6 +282,7 @@ python testLang.py
     <None Include="..\..\ZViewer\res\ZViewer.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\lib\freeimage\FreeImage.h" />
     <ClInclude Include="..\..\lib\vld\vld_def.h" />
     <ClInclude Include="..\..\ZViewer\res\resource.h" />
     <ClInclude Include="..\..\ZViewer\src\ShortCut.h" />
@@ -290,7 +290,6 @@ python testLang.py
     <ClInclude Include="..\..\ZViewer\src\AboutWindow.h" />
     <ClInclude Include="..\..\ZViewer\src\CachedData.h" />
     <ClInclude Include="..\..\ZViewer\src\ExifDlg.h" />
-    <ClInclude Include="..\..\lib\freeimage\FreeImage.h" />
     <ClInclude Include="..\..\ZViewer\src\MainWindow.h" />
     <ClInclude Include="..\..\ZViewer\src\SelectToFolderDlg.h" />
     <ClInclude Include="..\..\ZViewer\src\ShortTimeMessage.h" />
@@ -299,7 +298,6 @@ python testLang.py
     <ClInclude Include="..\..\ZViewer\src\ZFileExtDlg.h" />
     <ClInclude Include="..\..\ZViewer\src\ZFileExtReg.h" />
     <ClInclude Include="..\..\ZViewer\src\ZHistory.h" />
-    <ClInclude Include="..\..\ZViewer\src\ZImageManager.h" />
     <ClInclude Include="..\..\ZViewer\src\ZMain.h" />
     <ClInclude Include="..\..\ZViewer\src\ZResourceManager.h" />
     <ClInclude Include="..\..\lib\vld\vld.h" />
