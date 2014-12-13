@@ -1,36 +1,20 @@
-﻿/* ------------------------------------------------------------------------
- *
- * Copyright 2006 by zelon
- *
- * LogManager.cpp
- *
- * 2006. 3. 11 Jinwook Kim
- *
- * ------------------------------------------------------------------------
- */
-
-#include "StdAfx.h"
+﻿#include "StdAfx.h"
 #include ".\logmanager.h"
 #include "CommonFunc.h"
 
-CLogManager & CLogManager::getInstance()
-{
+CLogManager & CLogManager::getInstance() {
 	static CLogManager inst;
 	return inst;
 }
 
-
-CLogManager::CLogManager(void)
-{
+CLogManager::CLogManager(void) {
 	m_bGoOn = true;
-#ifdef _DEBUG
-	
+#ifdef USE_CONSOLE
 	if ( !AllocConsole() )
 	{
-		DWORD errorCode = GetLastError();
+		const DWORD errorCode = GetLastError();
 
 		MessageBox(NULL, toString(errorCode).c_str(), TEXT("Error"), MB_OK);
-
 		MessageBox(NULL, TEXT("AllocConsole Error!!!"), TEXT("Error") , MB_OK);
 	}
 	else
@@ -40,17 +24,7 @@ CLogManager::CLogManager(void)
 #endif
 }
 
-CLogManager::~CLogManager(void)
-{
-}
-
-
-#ifndef _DEBUG
-void CLogManager::Output(const TCHAR * , ...)
-{
-	return;
-}
-#else
+#ifdef USE_CONSOLE
 void CLogManager::Output(const TCHAR * fmt, ...)
 {
 	if ( false == m_bGoOn ) return;
@@ -74,5 +48,9 @@ void CLogManager::Output(const TCHAR * fmt, ...)
 	// 콘솔 윈도우에 출력
 	WriteConsole(m_hConsoleOutput, cBuf, (DWORD)(_tcslen(cBuf)), &dwWritten, NULL);
 	WriteConsole(m_hConsoleOutput, "\n", 1, &dwWritten, NULL);
+}
+#else
+void CLogManager::Output(const TCHAR * , ...) {
+  return;
 }
 #endif

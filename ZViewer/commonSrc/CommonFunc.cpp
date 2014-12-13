@@ -11,7 +11,7 @@
 #include "CommonFunc.h"
 #include "LogManager.h"
 
-#ifdef _DEBUG
+#ifdef USE_CONSOLE
 void DebugPrintf( const TCHAR *fmt, ... )
 {
 //	return;
