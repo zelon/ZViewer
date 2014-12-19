@@ -65,7 +65,7 @@ public:
 	/// 현재 보고 있는 파일의 Exif 정보를 보여준다.
 	void ShowExif();
 
-	void Draw(HDC toDrawDC = NULL, bool bEraseBg = true);
+	void Draw(HDC toDrawDC = NULL, bool need_to_erase_background = true);
 
 	/// 현재보고 있는 이미지를 윈도우 바탕화면의 배경으로 지정한다.
 	void SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyle style);
@@ -116,7 +116,7 @@ public:
 	void DecreaseOpacity();
 	void IncreaseOpacity();
 
-	HWND GetHWND() const { return m_hMainDlg; }
+	HWND GetHWND() const { return main_window_handle_; }
 	void SetHWND(HWND hWnd);
 	void SetMainMenu(HMENU hMenu)
 	{
@@ -254,13 +254,13 @@ private:
 	double m_fCurrentZoomRate;
 
 	/// 현재 보여주고 있는 이미지
-	std::shared_ptr<ZImage> m_pCurrentImage;
+	std::shared_ptr<ZImage> current_image_;
 
 	///< 현재 이미지를 로딩하는 데 걸린 시간
 	long long m_dwLoadingTime;
 
 	/// 메인 윈도우에 대한 핸들
-	HWND m_hMainDlg;
+	HWND main_window_handle_;
 
 	/// 창 아래의 상태 표시줄에 대한 핸들
 	HWND m_hStatusBar;
@@ -298,7 +298,7 @@ private:
 	HBRUSH m_bgBrush;
 
 	/// 배경을 지운다.
-	void _eraseBackground(HDC mainDC, LONG right, LONG bottom);
+	void EraseBackground(HDC mainDC, LONG right, LONG bottom);
 
 	/// 실제로 그림을 그릴 화면창
 	HWND m_hShowWindow;
@@ -312,9 +312,6 @@ private:
 
 	/// Zoom in & out 전의 센터 위치로 그림을 드래그함. ZoomOut, ZoomIn 중에 호출됨
 	void _PositionPreviousCenter();
-
-	/// 현재 이미지가 로딩되었나
-	bool m_bCurrentImageLoaded;
 
 	BYTE m_alpha;
 };

@@ -1,14 +1,4 @@
-﻿/********************************************************************
-*
-* Created by zelon(Kim, Jinwook Korea)
-*
-*   2005. 5. 7
-*	ZMain.cpp
-*
-*                                       http://www.wimy.com
-*********************************************************************/
-
-#include "stdafx.h"
+﻿#include "stdafx.h"
 
 #include "ZMain.h"
 
@@ -30,29 +20,21 @@
 using namespace std;
 using namespace std::chrono;
 
-enum
-{
-	eTimerValue = 9153
-};
+static const int kTimerId = 9153;
 
-ZMain & ZMain::GetInstance()
-{
+ZMain& ZMain::GetInstance() {
 	static ZMain aInstance;
 	return aInstance;
 }
 
-
 ZMain::ZMain(void)
-:	m_hMainDlg(NULL)
+:	main_window_handle_(NULL)
 ,	m_sortOrder(eFileSortOrder_FILENAME)
-,	m_alpha(255)
-{
+,	m_alpha(255) {
 	memset( &m_lastPosition, 0, sizeof( m_lastPosition ) );
 	m_hBufferDC = NULL;
-//	m_bLastCacheHit = false;
 
-	m_bCurrentImageLoaded = false;
-	m_pCurrentImage = NULL;
+	current_image_ = NULL;
 	m_bgBrush = CreateSolidBrush(RGB(128,128,128));
 	m_hEraseRgb = CreateRectRgn(0,0,1,1);
 
@@ -121,10 +103,9 @@ void ZMain::onTimer()
 		//DebugPrintf("now cache status...");
 	}
 
-	if ( false == m_bCurrentImageLoaded )
-	{
+  if (current_image_ == nullptr) {
 		LoadCurrent();
-	}
+  }
 
 	ShowCacheStatus();
 }
@@ -133,7 +114,7 @@ void ZMain::onTimer()
 /// ZViewer 전용 메시지 박스
 int ZMain::ShowMessageBox(const TCHAR * msg, UINT button)
 {
-	return ::MessageBox(m_hMainDlg, msg, TEXT("ZViewer"), button);
+	return ::MessageBox(main_window_handle_, msg, TEXT("ZViewer"), button);
 }
 
 int ZMain::GetLogCacheHitRate() const
@@ -148,7 +129,7 @@ long ZMain::GetCachedKByte() const
 
 void ZMain::SetHWND(HWND hWnd)
 {
-	m_hMainDlg = hWnd;
+	main_window_handle_ = hWnd;
 	InitOpenFileDialog();
 }
 
@@ -157,7 +138,7 @@ void ZMain::InitOpenFileDialog()
 	// Initialize OPENFILENAME
 	ZeroMemory(&ofn, sizeof(ofn));
 	ofn.lStructSize = sizeof(ofn);
-	ofn.hwndOwner = m_hMainDlg;
+	ofn.hwndOwner = main_window_handle_;
 	ofn.lpstrFile = szFile;
 	//
 	// Set lpstrFile[0] to '\0' so that GetOpenFileName does not
@@ -190,20 +171,18 @@ void ZMain::OpenFileDialog()
 }
 
 /// 현재 파일을 다른 형식으로 저장하는 파일 다이얼로그를 연다.
-void ZMain::SaveFileDialog()
-{
-	if ( NULL == m_pCurrentImage || m_bCurrentImageLoaded == false )
-	{
+void ZMain::SaveFileDialog() {
+	if ( current_image_ == nullptr) {
 		return;
 	}
-	CSaveAs::getInstance().setParentHWND(m_hMainDlg);
+	CSaveAs::getInstance().setParentHWND(main_window_handle_);
 	CSaveAs::getInstance().setDefaultSaveFilename(m_strCurrentFolder, m_strCurrentFilename);
 
 	if ( true == CSaveAs::getInstance().showDialog() )
 	{
 		tstring strSaveFilename = CSaveAs::getInstance().getSaveFileName();
 
-		if ( false == m_pCurrentImage->SaveToFile(strSaveFilename, 0) )
+		if ( false == current_image_->SaveToFile(strSaveFilename, 0) )
 		{
 			ShowMessageBox(GetMessage(TEXT("CANNOT_SAVE_AS_FILE")));
 			ShowMessageBox(GetMessage(TEXT("CANNOT_SAVE_AS_FILE_TRANS_ERROR")));
@@ -228,31 +207,25 @@ void ZMain::OnInit()
 }
 
 /// 현재 보고 있는 파일의 Exif 정보를 보여준다.
-void ZMain::ShowExif()
-{
-	if ( NULL == m_pCurrentImage || m_bCurrentImageLoaded == false )
-	{
-		assert(m_pCurrentImage);
+void ZMain::ShowExif() {
+	if ( current_image_ == nullptr ) {
+		assert(current_image_);
 		return;
 	}
 	ExifDlg aDlg;
-	aDlg.Create(m_hMainInstance, m_hMainDlg, SW_SHOW, TEXT("ExifDlg"), NULL);
-	aDlg.MakeExifMap(*m_pCurrentImage);
-	aDlg.DoResource(m_hMainDlg);
+	aDlg.Create(m_hMainInstance, main_window_handle_, SW_SHOW, TEXT("ExifDlg"), NULL);
+	aDlg.MakeExifMap(*current_image_);
+	aDlg.DoResource(main_window_handle_);
 }
 
-void ZMain::Draw(HDC toDrawDC, bool bEraseBg)
-{
+void ZMain::Draw(HDC toDrawDC, bool need_to_erase_background) {
 	TIMECHECK_START("StartDraw");
 
-	HDC mainDC;
+	HDC mainDC = NULL;
 
-	if ( NULL == toDrawDC )
-	{
+	if ( NULL == toDrawDC ) {
 		mainDC = GetDC(m_hShowWindow);
-	}
-	else
-	{
+	} else {
 		/// 무효화된 부분만 그릴 때의 DC 를 얻어오기 위해
 		mainDC = toDrawDC;
 	}
@@ -264,46 +237,44 @@ void ZMain::Draw(HDC toDrawDC, bool bEraseBg)
 	}
 
 	RECT currentScreenRect;
-	if ( false == getCurrentScreenRect(currentScreenRect) )
-	{
+	if ( false == getCurrentScreenRect(currentScreenRect) ) {
 		assert(false);
 		return;
 	}
 
 	/// 파일이 하나도 없을 때는 배경만 지우고 바로 리턴한다.
-	if ( m_vFile.size() <= 0 )
-	{
-		_eraseBackground(mainDC, currentScreenRect.right, currentScreenRect.bottom);
+	if ( m_vFile.size() <= 0 ) {
+		EraseBackground(mainDC, currentScreenRect.right, currentScreenRect.bottom);
 
-		if ( NULL == toDrawDC )
-		{
-			ReleaseDC(m_hMainDlg, mainDC);
+		if ( NULL == toDrawDC ) {
+			ReleaseDC(main_window_handle_, mainDC);
 		}
-
 		return;
 	}
 
-	if ( NULL == m_pCurrentImage || m_bCurrentImageLoaded == false )
-	{
-		//assert(m_pCurrentImage);
+	if ( current_image_ == nullptr ) {
 		return;
 	}
 
 	DebugPrintf(TEXT("ZMain::Draw()"));
-	if ( m_pCurrentImage->IsValid() == FALSE ) return;
-	if ( m_hMainDlg == NULL ) return;
+  if (current_image_->IsValid() == FALSE) {
+    return;
+  }
+  if (main_window_handle_ == NULL) {
+    return;
+  }
 
 	/// ShowWindow 부분만 그리도록 클리핑 영역을 설정한다.
 	HRGN hrgn = CreateRectRgn(currentScreenRect.left, currentScreenRect.top, currentScreenRect.right, currentScreenRect.bottom);
 	SelectClipRgn(mainDC, hrgn);
 
-	const int zoomedImageWidth = (int)(m_pCurrentImage->GetWidth() * m_fCurrentZoomRate);
-	const int zoomedImageHeight = (int)(m_pCurrentImage->GetHeight() * m_fCurrentZoomRate);
+	const int zoomedImageWidth = (int)(current_image_->GetWidth() * m_fCurrentZoomRate);
+	const int zoomedImageHeight = (int)(current_image_->GetHeight() * m_fCurrentZoomRate);
 
 	/// 그릴 그림이 현재 화면보다, 가로 & 세로 모두 크면 배경을 지우지 않아도 됨.
 	if ( zoomedImageWidth >= currentScreenRect.right && zoomedImageHeight >= currentScreenRect.bottom )
 	{
-		bEraseBg = false;
+		need_to_erase_background = false;
 	}
 
 	if ( zoomedImageWidth <= currentScreenRect.right )
@@ -320,7 +291,7 @@ void ZMain::Draw(HDC toDrawDC, bool bEraseBg)
 
 	RECT drawRect = { -m_iShowingX, -m_iShowingY, zoomedImageWidth-m_iShowingX, zoomedImageHeight-m_iShowingY };
 
-	if ( bEraseBg )	// 배경을 지워야 하면 지운다. 그림이 그려지는 부분을 제외하고 지운다.
+	if ( need_to_erase_background )	// 배경을 지워야 하면 지운다. 그림이 그려지는 부분을 제외하고 지운다.
 	{
 		HRGN hScreenRGN = CreateRectRgn(currentScreenRect.left, currentScreenRect.top, currentScreenRect.right, currentScreenRect.bottom);
 		HRGN hDrawRGN = CreateRectRgn(drawRect.left, drawRect.top, drawRect.right, drawRect.bottom);
@@ -341,13 +312,13 @@ void ZMain::Draw(HDC toDrawDC, bool bEraseBg)
 #ifdef _DEBUG
 //	DWORD dwStart = GetTickCount();
 #endif
-	m_pCurrentImage->Draw(mainDC, drawRect);
+	current_image_->Draw(mainDC, drawRect);
 #ifdef _DEBUG
 //	DWORD dwDiff = GetTickCount() - dwStart;
 	//DebugPrintf(TEXT("freeImagePlus.Draw spend time : %d"), dwDiff);
 #endif
 
-	ReleaseDC(m_hMainDlg, mainDC);
+	ReleaseDC(main_window_handle_, mainDC);
 
 	// 마우스 커서 모양
 	if ( zoomedImageWidth > currentScreenRect.right || zoomedImageHeight > currentScreenRect.bottom )
@@ -360,7 +331,7 @@ void ZMain::Draw(HDC toDrawDC, bool bEraseBg)
 		// 마우스 커서를 원래대로
 		SetHandCursor(false);
 	}
-	PostMessage(m_hMainDlg, WM_SETCURSOR, 0, 0);
+	PostMessage(main_window_handle_, WM_SETCURSOR, 0, 0);
 
 	// 풀 스크린이 아닐 때는 상태 표시줄을 다시 그린다.
 	if ( false == ZOption::GetInstance().IsFullScreen() )
@@ -371,7 +342,7 @@ void ZMain::Draw(HDC toDrawDC, bool bEraseBg)
 	DeleteObject(hrgn);
 	if ( NULL == toDrawDC )
 	{
-		ReleaseDC(m_hMainDlg, mainDC);
+		ReleaseDC(main_window_handle_, mainDC);
 	}
 	TIMECHECK_END();
 }
@@ -646,7 +617,7 @@ void ZMain::OpenFolder(const tstring & strFolder)
 	{
 		TCHAR msg[COMMON_BUFFER_SIZE];
 		SPrintf(msg, COMMON_BUFFER_SIZE, GetMessage(TEXT("THIS_DIRECTORY_HAS_NO_IMAGE")), strFolder.c_str());
-		::MessageBox(m_hMainDlg, msg, TEXT("ZViewer"), MB_OK);
+		::MessageBox(main_window_handle_, msg, TEXT("ZViewer"), MB_OK);
 		return;
 	}
 	else
@@ -658,8 +629,7 @@ void ZMain::OpenFolder(const tstring & strFolder)
 
 void ZMain::OpenFile(const tstring & strFilename)
 {
-	m_bCurrentImageLoaded = false;
-	m_pCurrentImage = NULL;
+	current_image_ = nullptr;
 
 	m_strCurrentFolder = GetFolderNameFromFullFileName(strFilename);
 	RescanFolder();
@@ -704,8 +674,7 @@ bool ZMain::MoveIndex(int iIndex)
 
 	m_iCurretFileIndex = iIndex;
 	m_strCurrentFilename = m_vFile[m_iCurretFileIndex].m_strFileName;
-	m_bCurrentImageLoaded = false;
-	m_pCurrentImage = NULL;
+	current_image_ = nullptr;
 	LoadCurrent();
 
 	return true;
@@ -754,53 +723,52 @@ bool ZMain::LastImage()
 	return MoveIndex((int)m_vFile.size() - 1);
 }
 
-void ZMain::OnChangeCurrentSize(int iWidth, int iHeight)
-{
-	if ( m_pCurrentImage == nullptr || m_bCurrentImageLoaded == false ) {
+void ZMain::OnChangeCurrentSize(int iWidth, int iHeight) {
+	if (current_image_ == nullptr) {
 		return;
 	}
 
-	if ( m_iShowingX + iWidth > m_pCurrentImage->GetWidth() )
+	if ( m_iShowingX + iWidth > current_image_->GetWidth() )
 	{
-		m_iShowingX -= (m_iShowingX + iWidth - m_pCurrentImage->GetWidth());
+		m_iShowingX -= (m_iShowingX + iWidth - current_image_->GetWidth());
 
 		if ( m_iShowingX < 0 ) m_iShowingX = 0;
 	}
-	if ( m_iShowingY + iHeight > m_pCurrentImage->GetHeight() )
+	if ( m_iShowingY + iHeight > current_image_->GetHeight() )
 	{
-		m_iShowingY -= (m_iShowingY + iHeight - m_pCurrentImage->GetHeight());
+		m_iShowingY -= (m_iShowingY + iHeight - current_image_->GetHeight());
 		if ( m_iShowingY < 0 ) m_iShowingY = 0;
 	}
 }
 
 void ZMain::FormHide()
 {
-	LONG style = GetWindowLong(m_hMainDlg, GWL_STYLE);
+	LONG style = GetWindowLong(main_window_handle_, GWL_STYLE);
 	style &= ~WS_CAPTION;
 	style &= ~WS_THICKFRAME;
 	ShowWindow(m_hStatusBar, SW_HIDE);
-	SetMenu(m_hMainDlg, NULL);
-	SetWindowLong(m_hMainDlg, GWL_STYLE, style);
+	SetMenu(main_window_handle_, NULL);
+	SetWindowLong(main_window_handle_, GWL_STYLE, style);
 }
 
 void ZMain::FormShow()
 {
-	LONG style = GetWindowLong(m_hMainDlg, GWL_STYLE);
+	LONG style = GetWindowLong(main_window_handle_, GWL_STYLE);
 	style |= WS_CAPTION;
 	style |= WS_THICKFRAME;
 	ShowWindow(m_hStatusBar, SW_SHOW);
-	SetMenu(m_hMainDlg, m_hMainMenu);
-	SetWindowLong(m_hMainDlg, GWL_STYLE, style);
+	SetMenu(main_window_handle_, m_hMainMenu);
+	SetWindowLong(main_window_handle_, GWL_STYLE, style);
 }
 
 void ZMain::StartTimer()
 {
 	/// Add Timer
-	m_timerPtr = SetTimer(m_hMainDlg, eTimerValue, 100, NULL);
+	m_timerPtr = SetTimer(main_window_handle_, kTimerId, 100, NULL);
 
 	if ( m_timerPtr == 0 )
 	{
-		MessageBox(m_hMainDlg, GetMessage(TEXT("CANNOT_MAKE_TIMER")), TEXT("ZViewer"), MB_OK);
+		MessageBox(main_window_handle_, GetMessage(TEXT("CANNOT_MAKE_TIMER")), TEXT("ZViewer"), MB_OK);
 		return;
 	}
 }
@@ -810,7 +778,7 @@ void ZMain::StopTimer()
 	/// KillTimer
 	if ( m_timerPtr != 0 )
 	{
-		BOOL bRet = KillTimer(m_hMainDlg, eTimerValue);
+		BOOL bRet = KillTimer(main_window_handle_, kTimerId);
 
 		if ( FALSE == bRet )
 		{
@@ -905,13 +873,13 @@ void ZMain::ToggleFullScreen()
 
 		FormShow();	// 메뉴, 상태 표시줄등을 보여준다.
 
-		SetWindowPos(m_hMainDlg, HWND_TOP, m_lastPosition.left, m_lastPosition.top, m_lastPosition.right - m_lastPosition.left, m_lastPosition.bottom - m_lastPosition.top, SWP_SHOWWINDOW);
+		SetWindowPos(main_window_handle_, HWND_TOP, m_lastPosition.left, m_lastPosition.top, m_lastPosition.right - m_lastPosition.left, m_lastPosition.bottom - m_lastPosition.top, SWP_SHOWWINDOW);
 	}
 	else	// 현재 풀스크린이 아니면 풀스크린으로 만든다.
 	{
 		ZOption::GetInstance().SetFullScreen(!ZOption::GetInstance().IsFullScreen());
 		// 현재 크기를 기억한다.
-		GetWindowRect(m_hMainDlg, &m_lastPosition);
+		GetWindowRect(main_window_handle_, &m_lastPosition);
 
 		FormHide();// 메뉴, 상태 표시줄등을 숨긴다.
 
@@ -922,8 +890,8 @@ void ZMain::ToggleFullScreen()
 		const int screenX = int(m_lastPosition.left / screenWidth) * screenWidth;
 		const int screenY = int(m_lastPosition.top / screenHeight) * screenHeight;
 
-		SetWindowPos(m_hMainDlg, HWND_TOPMOST, screenX, screenY, screenWidth, screenHeight, SWP_NOMOVE|SWP_NOSIZE);
-		MoveWindow(m_hMainDlg, screenX, screenY, screenWidth, screenHeight, TRUE);
+		SetWindowPos(main_window_handle_, HWND_TOPMOST, screenX, screenY, screenWidth, screenHeight, SWP_NOMOVE|SWP_NOSIZE);
+		MoveWindow(main_window_handle_, screenX, screenY, screenWidth, screenHeight, TRUE);
 
 
 		/* patch 적용하기 전의 소스
@@ -935,7 +903,7 @@ void ZMain::ToggleFullScreen()
 		TaskBar::ShellTrayHide();
 
 		// 포커스를 잃으면 원래대로 돌아가야하므로 풀어놓는다.
-		SetWindowPos(m_hMainDlg, HWND_NOTOPMOST, screenX, screenY, screenWidth, screenHeight, SWP_NOMOVE|SWP_NOSIZE);
+		SetWindowPos(main_window_handle_, HWND_NOTOPMOST, screenX, screenY, screenWidth, screenHeight, SWP_NOMOVE|SWP_NOSIZE);
 		/* patch 적용하기 전의 소스
 		SetWindowPos(m_hMainDlg, HWND_NOTOPMOST, 0, 0, ::GetSystemMetrics(SM_CXSCREEN),::GetSystemMetrics(SM_CYSCREEN), SWP_NOMOVE|SWP_NOSIZE);
 		*/
@@ -983,8 +951,7 @@ void ZMain::SetStatusBarText()
 	TCHAR szTemp[COMMON_BUFFER_SIZE];
 	tstring strTemp;
 
-	if ( NULL == m_pCurrentImage || m_bCurrentImageLoaded == false || m_vFile.size() == 0 || m_strCurrentFilename.empty() ) // 보고 있는 파일이 없으면
-	{
+	if ( current_image_ == nullptr || m_vFile.size() == 0 || m_strCurrentFilename.empty() ) { // 보고 있는 파일이 없으면
 		// File Index
 		SendMessage(m_hStatusBar, SB_SETTEXT, 0, (LPARAM)_T("No File"));
 
@@ -1023,7 +990,7 @@ void ZMain::SetStatusBarText()
 		SendMessage(m_hStatusBar, SB_SETTEXT, 0, (LPARAM)szTemp);
 
 		// 해상도 정보
-		SPrintf(szTemp, COMMON_BUFFER_SIZE, TEXT("%dx%dx%ubpp"), m_pCurrentImage->GetOriginalWidth(), m_pCurrentImage->GetOriginalHeight(), m_pCurrentImage->GetBPP());
+		SPrintf(szTemp, COMMON_BUFFER_SIZE, TEXT("%dx%dx%ubpp"), current_image_->GetOriginalWidth(), current_image_->GetOriginalHeight(), current_image_->GetBPP());
 		SendMessage(m_hStatusBar, SB_SETTEXT, 1, (LPARAM)szTemp);
 
 		// image size
@@ -1084,7 +1051,7 @@ void ZMain::SetTitle()
 
 		SPrintf(szTemp, MAX_PATH+256, TEXT("%s%s - %s"), szFileName, szFileExt, m_strCurrentFilename.c_str());
 	}
-	BOOL bRet = SetWindowText(m_hMainDlg, szTemp);
+	BOOL bRet = SetWindowText(main_window_handle_, szTemp);
 
 	if ( FALSE == bRet )
 	{
@@ -1117,12 +1084,10 @@ void ZMain::LoadCurrent()
 	if ( ZCacheImage::GetInstance().hasCachedData(m_strCurrentFilename, m_iCurretFileIndex) )
 	{
 		{/// 캐시된 데이터를 읽어온다.
-      m_pCurrentImage = ZCacheImage::GetInstance().GetCachedData(m_strCurrentFilename);
+      current_image_ = ZCacheImage::GetInstance().GetCachedData(m_strCurrentFilename);
 
-			assert(m_pCurrentImage);
-			assert(m_pCurrentImage->IsValid());
-
-			m_bCurrentImageLoaded = true;
+			assert(current_image_);
+			assert(current_image_->IsValid());
 		}
 
 		DebugPrintf(TEXT("Cache Hit!!!!!!!!!!!!!"));
@@ -1136,82 +1101,53 @@ void ZMain::LoadCurrent()
 		m_iShowingX = 0;
 		m_iShowingY = 0;
 
-		if ( ZOption::GetInstance().m_bRightTopFirstDraw )	// 우측 상단부터 시작해야하면
-		{
+		if ( ZOption::GetInstance().m_bRightTopFirstDraw ) {// 우측 상단부터 시작해야하면
 			RECT rt;
 			getCurrentScreenRect(rt);
 
-			if ( m_pCurrentImage->GetWidth() > rt.right )
-			{
-				m_iShowingX = m_pCurrentImage->GetWidth() - rt.right;
+			if ( current_image_->GetWidth() > rt.right ) {
+				m_iShowingX = current_image_->GetWidth() - rt.right;
 			}
 		}
 
 		/// 기본적으로 그림의 zoom rate 를 설정한다.
 		m_fCurrentZoomRate = 1.0f;
 		RECT currentScreenRect;
-		if ( false == getCurrentScreenRect(currentScreenRect) )
-		{
+		if ( false == getCurrentScreenRect(currentScreenRect) ) {
 			assert(false);
-		}
-		else
-		{
-			if ( ZOption::GetInstance().IsBigToSmallStretchImage() || ZOption::GetInstance().IsSmallToBigStretchImage() )
-			{
+		} else {
+			if ( ZOption::GetInstance().IsBigToSmallStretchImage() || ZOption::GetInstance().IsSmallToBigStretchImage() ) {
 				RECT toRect;
-				SetRect(&toRect, 0, 0, m_pCurrentImage->GetWidth(), m_pCurrentImage->GetHeight());
+				SetRect(&toRect, 0, 0, current_image_->GetWidth(), current_image_->GetHeight());
 
-				if ( ZOption::GetInstance().IsBigToSmallStretchImage() )
-				{
-					if ( m_pCurrentImage->GetWidth() > (currentScreenRect.right - currentScreenRect.left) || m_pCurrentImage->GetHeight() > (currentScreenRect.bottom - currentScreenRect.top) )
-					{
+				if ( ZOption::GetInstance().IsBigToSmallStretchImage() ) {
+					if ( current_image_->GetWidth() > (currentScreenRect.right - currentScreenRect.left) || current_image_->GetHeight() > (currentScreenRect.bottom - currentScreenRect.top) ) {
 						toRect = GetResizedRectForBigToSmall(currentScreenRect, toRect);
 					}
 				}
 
-				if ( ZOption::GetInstance().IsSmallToBigStretchImage() )
-				{
-					if ( m_pCurrentImage->GetWidth() < (currentScreenRect.right - currentScreenRect.left) && m_pCurrentImage->GetHeight() < (currentScreenRect.bottom - currentScreenRect.top) )
-					{
+				if ( ZOption::GetInstance().IsSmallToBigStretchImage() ) {
+					if ( current_image_->GetWidth() < (currentScreenRect.right - currentScreenRect.left) && current_image_->GetHeight() < (currentScreenRect.bottom - currentScreenRect.top) ) {
 						toRect = GetResizedRectForSmallToBig(currentScreenRect, toRect);
 					}
 				}
-				m_fCurrentZoomRate = (float)(toRect.right - toRect.left) / (float)(m_pCurrentImage->GetWidth());
+				m_fCurrentZoomRate = (float)(toRect.right - toRect.left) / (float)(current_image_->GetWidth());
 			}
 		}
-
 		Draw();
-	}
-	else
-	{
-		// 캐시에서 찾을 수 없으면 지금 읽어들이고, 캐시에 추가한다.
+	} else {
 		DebugPrintf(TEXT("Can't find in cache. load now..."));
-
-/*
-		else
-		{
-			DebugPrintf(TEXT("Cache miss."));
-			m_bLastCacheHit = false;
-			ZCacheImage::GetInstance().LogCacheMiss();
-		}
-		*/
-
-		//m_currentImage = m_loadingImage;
-		//m_fCurrentZoomRate = 1.0f;
-		//Draw();
 	}
 }
 
 void ZMain::OnDrag(int x, int y)
 {
-	if ( m_pCurrentImage == nullptr || m_bCurrentImageLoaded == false )
-	{
-		//assert(m_pCurrentImage);
+	if ( current_image_ == nullptr) {
 		return;
 	}
 
 	//	DebugPrintf(TEXT("Drag (%d,%d)"), x, y);
-	if ( !m_pCurrentImage->IsValid()) return;
+	if ( !current_image_->IsValid()) return;
 
 	RECT rt;
 	getCurrentScreenRect(rt);
@@ -1219,8 +1155,8 @@ void ZMain::OnDrag(int x, int y)
 	int iNowShowingX = m_iShowingX;
 	int iNowShowingY = m_iShowingY;
 
-	const int iZoomedWidth = (int)(m_pCurrentImage->GetWidth() * m_fCurrentZoomRate);
-	const int iZoomedHeight = (int)(m_pCurrentImage->GetHeight() * m_fCurrentZoomRate);
+	const int iZoomedWidth = (int)(current_image_->GetWidth() * m_fCurrentZoomRate);
+	const int iZoomedHeight = (int)(current_image_->GetHeight() * m_fCurrentZoomRate);
 
 	/// 현재 그림이 화면보다 작거나 딱 맞으면 drag 를 하지 않는다.
 	if ( iZoomedWidth <= rt.right && iZoomedHeight <= rt.bottom ) {
@@ -1273,10 +1209,8 @@ void ZMain::ReLoadFileList()
 }
 
 /// 현재 파일이 지워졌을 때 후의 처리. 파일 삭제, 이동 후에 불리는 함수이다.
-void ZMain::_ProcAfterRemoveThisFile()
-{
-	m_bCurrentImageLoaded = false;
-	m_pCurrentImage = nullptr;
+void ZMain::_ProcAfterRemoveThisFile() {
+	current_image_ = nullptr;
 	m_strCurrentFilename.resize(0);
 
 	// 현재 파일이 마지막 파일인가?
@@ -1345,9 +1279,9 @@ void ZMain::OnFocusGet()
 		const int screenX = int(m_lastPosition.left / screenWidth) * screenWidth;
 		const int screenY = int(m_lastPosition.top / screenHeight) * screenHeight;
 
-		SetWindowPos(m_hMainDlg, HWND_TOPMOST, screenX, screenY, screenWidth, screenHeight, SWP_NOMOVE|SWP_NOSIZE);
-		MoveWindow(m_hMainDlg, screenX, screenY, screenWidth, screenHeight, TRUE);
-		SetWindowPos(m_hMainDlg, HWND_NOTOPMOST, screenX, screenY, screenWidth, screenHeight, SWP_NOMOVE|SWP_NOSIZE);
+		SetWindowPos(main_window_handle_, HWND_TOPMOST, screenX, screenY, screenWidth, screenHeight, SWP_NOMOVE|SWP_NOSIZE);
+		MoveWindow(main_window_handle_, screenX, screenY, screenWidth, screenHeight, TRUE);
+		SetWindowPos(main_window_handle_, HWND_NOTOPMOST, screenX, screenY, screenWidth, screenHeight, SWP_NOMOVE|SWP_NOSIZE);
 
 		/*
 		SetWindowPos(m_hMainDlg, HWND_TOPMOST, 0, 0, ::GetSystemMetrics(SM_CXSCREEN),::GetSystemMetrics(SM_CYSCREEN), SWP_NOMOVE|SWP_NOSIZE);
@@ -1399,18 +1333,15 @@ void ZMain::ShowFileExtDlg()
 	ZFileExtDlg::GetInstance().ShowDlg();
 }
 
-void ZMain::DeleteThisFile()
-{
-	/// 현재 보고 있는 파일이 없으면 바로 리턴한다.
-	if ( m_strCurrentFilename.empty() || m_bCurrentImageLoaded == false )
-	{
+void ZMain::DeleteThisFile() {
+	if ( m_strCurrentFilename.empty() || current_image_ == nullptr ) {
 		return;
 	}
 
 	TCHAR szDeleteMsg[COMMON_BUFFER_SIZE];
 
 	SPrintf(szDeleteMsg, COMMON_BUFFER_SIZE, GetMessage(TEXT("DELETE_THIS_FILE")), GetFileNameFromFullFileName(m_strCurrentFilename).c_str());
-	int iRet = ::MessageBox(m_hMainDlg, szDeleteMsg, TEXT("ZViewer"), MB_YESNO);
+	int iRet = ::MessageBox(main_window_handle_, szDeleteMsg, TEXT("ZViewer"), MB_YESNO);
 
 	if ( iRet == IDYES )
 	{
@@ -1426,16 +1357,13 @@ void ZMain::DeleteThisFile()
 	}
 }
 
-void ZMain::DeleteThisFileToRecycleBin()
-{
-	/// 현재 보고 있는 파일이 없으면 바로 리턴한다.
-	if ( m_strCurrentFilename.empty() || m_bCurrentImageLoaded == false )
-	{
+void ZMain::DeleteThisFileToRecycleBin() {
+	if ( m_strCurrentFilename.empty() || current_image_ == nullptr ) {
 		return;
 	}
 
 	SHFILEOPSTRUCT fo;
-	fo.hwnd = m_hMainDlg;
+	fo.hwnd = main_window_handle_;
 	fo.wFunc = FO_DELETE;
 
 	TCHAR szFilename[_MAX_PATH];
@@ -1577,23 +1505,21 @@ void ZMain::CopyThisFile()
 }
 
 
-void ZMain::Rotate(bool bClockWise)
-{
-	if ( NULL == m_pCurrentImage || m_bCurrentImageLoaded == false )
-	{
-		assert(m_pCurrentImage);
+void ZMain::Rotate(bool bClockWise) {
+	if (current_image_ == nullptr) {
+		assert(false);
 		return;
 	}
 
-	if ( m_pCurrentImage->IsValid() )
+	if ( current_image_->IsValid() )
 	{
 		if ( bClockWise )
 		{
-			m_pCurrentImage->Rotate(-90);
+			current_image_->Rotate(-90);
 		}
 		else
 		{
-			m_pCurrentImage->Rotate(90);
+			current_image_->Rotate(90);
 		}
 
 		m_iShowingX = 0;
@@ -1613,9 +1539,9 @@ void ZMain::DecreaseOpacity()
 	}
 	m_alpha -= 10;
 
-	SetWindowLong ( m_hMainDlg, GWL_EXSTYLE, GetWindowLong(m_hMainDlg, GWL_EXSTYLE) | WS_EX_LAYERED );
+	SetWindowLong ( main_window_handle_, GWL_EXSTYLE, GetWindowLong(main_window_handle_, GWL_EXSTYLE) | WS_EX_LAYERED );
 
-	SetLayeredWindowAttributes(m_hMainDlg, 0, m_alpha, LWA_ALPHA);
+	SetLayeredWindowAttributes(main_window_handle_, 0, m_alpha, LWA_ALPHA);
 }
 
 void ZMain::IncreaseOpacity()
@@ -1626,16 +1552,14 @@ void ZMain::IncreaseOpacity()
 	}
 	m_alpha += 10;
 
-	SetWindowLong ( m_hMainDlg, GWL_EXSTYLE, GetWindowLong(m_hMainDlg, GWL_EXSTYLE) | WS_EX_LAYERED );
-	SetLayeredWindowAttributes(m_hMainDlg, 0, m_alpha, LWA_ALPHA);
+	SetWindowLong ( main_window_handle_, GWL_EXSTYLE, GetWindowLong(main_window_handle_, GWL_EXSTYLE) | WS_EX_LAYERED );
+	SetLayeredWindowAttributes(main_window_handle_, 0, m_alpha, LWA_ALPHA);
 }
 
 
-void ZMain::SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyle style)
-{
-	if ( NULL == m_pCurrentImage || m_bCurrentImageLoaded == false )
-	{
-		assert(m_pCurrentImage);
+void ZMain::SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyle style) {
+	if ( current_image_ == nullptr ) {
+		assert(current_image_);
 		return;
 	}
 
@@ -1656,7 +1580,7 @@ void ZMain::SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyle style)
 	strSaveFileName += szFileName;
 	strSaveFileName += TEXT(".bmp");
 
-	if ( FALSE == m_pCurrentImage->SaveToFile(strSaveFileName, BMP_DEFAULT) )
+	if ( FALSE == current_image_->SaveToFile(strSaveFileName, BMP_DEFAULT) )
 	{
 		assert(false);
 		return;
@@ -1667,21 +1591,20 @@ void ZMain::SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyle style)
 
 
 /// 현재 화면의 그릴 수 있는 영역의 크기를 받아온다.
-bool ZMain::getCurrentScreenRect(RECT & rect)
-{
-	if ( NULL == m_hShowWindow )
-	{
+bool ZMain::getCurrentScreenRect(RECT & rect) {
+	if ( NULL == m_hShowWindow ) {
 		assert(m_hShowWindow);
 		return false;
 	}
 
-	if ( FALSE == GetClientRect(m_hShowWindow, &rect) ) return false;
+  if (FALSE == GetClientRect(m_hShowWindow, &rect)) {
+    return false;
+  }
 	return true;
 }
 
 /// On Window is resized
-void ZMain::OnWindowResized()
-{
+void ZMain::OnWindowResized() {
 	RECT rt;
 	getCurrentScreenRect(rt);
 
@@ -1689,58 +1612,39 @@ void ZMain::OnWindowResized()
 }
 
 /// 마우스 휠을 돌렸을 때. delta 는 돌린 방향과 돌린 정도, bControlPushed 는 Control 키가 눌려졌으면 true
-void ZMain::OnMouseWheel(const short delta, bool bControlPushed)
-{
-	if ( bControlPushed )
-	{
-		if ( delta < 0 )
-		{
+void ZMain::OnMouseWheel(const short delta, bool bControlPushed) {
+	if ( bControlPushed ) {
+		if ( delta < 0 ) {
 			ZMain::GetInstance().ZoomOut();
-		}
-		else
-		{
+		} else {
 			ZMain::GetInstance().ZoomIn();
 		}
-	}
-	else
-	{
-		if ( delta < 0 )
-		{
+	} else {
+		if ( delta < 0 ) {
 			ZMain::GetInstance().NextImage();
-		}
-		else
-		{
+		} else {
 			ZMain::GetInstance().PrevImage();
 		}
 	}
 }
 
-void ZMain::OnPressedESCKey()
-{
-	if (ZOption::GetInstance().IsFullScreen())	// 현재 풀스크린이면 원래 화면으로 돌아간다.
-	{
+void ZMain::OnPressedESCKey() {
+	if (ZOption::GetInstance().IsFullScreen()) {// 현재 풀스크린이면 원래 화면으로 돌아간다.
 		ToggleFullScreen();
-	}
-	else
-	{
+	} else {
 		CloseProgram();
 	}
 }
 
 /// 상태 표시 윈도우를 만든다.
-void ZMain::CreateStatusBar()
-{
+void ZMain::CreateStatusBar() {
 	// StatusBar 를 생성한다.
-	m_hStatusBar = CreateStatusWindow(WS_CHILD | WS_VISIBLE, TEXT("No Image"), m_hMainDlg, 0);
+	m_hStatusBar = CreateStatusWindow(WS_CHILD | WS_VISIBLE, TEXT("No Image"), main_window_handle_, 0);
 
 	// StatusBar 를 split 한다. 아래의 숫자는 크기가 아니라 절대 위치라는 것을 명심!!!!!!!
-	enum
-	{
-		STATUS_SPLIT_NUM = 8
-	};
+  static const int kStatusSplitCount = 8;
 
-	int SBPart[STATUS_SPLIT_NUM] =
-	{
+	int SBPart[kStatusSplitCount] = {
 		70,		///< %d/%d 현재보고 있는 이미지 파일의 index number
 		200,	///< %dx%dx%dbpp 해상도와 color depth, image size
 		300,	///< image size
@@ -1750,12 +1654,11 @@ void ZMain::CreateStatusBar()
 		633,	///< cache status
 		1910,	///< 파일명표시
 	};
-	SendMessage(m_hStatusBar, SB_SETPARTS, STATUS_SPLIT_NUM, (LPARAM)SBPart);
+	SendMessage(m_hStatusBar, SB_SETPARTS, kStatusSplitCount, (LPARAM)SBPart);
 }
 
 /// 메뉴 중 체크표시 되는 것을 확인하여 설정해준다.
-void ZMain::SetCheckMenus()
-{
+void ZMain::SetCheckMenus() {
 	/// start of checking main menu
 	CheckMenuItem(m_hMainMenu, ID_OPTION_VIEWLOOP, ZOption::GetInstance().IsLoopImages() ? MF_CHECKED : MF_UNCHECKED);
 	CheckMenuItem(m_hMainMenu, ID_VIEW_FULLSCREEN, ZOption::GetInstance().IsFullScreen() ? MF_CHECKED : MF_UNCHECKED);
@@ -1767,8 +1670,6 @@ void ZMain::SetCheckMenus()
 	CheckMenuItem(m_hMainMenu, ID_VIEW_ALWAYSONTOP, ZOption::GetInstance().m_bAlwaysOnTop ? MF_CHECKED : MF_UNCHECKED);
 	/// end of checking main menu
 
-
-
 	/// start of checking popup menu
 	CheckMenuItem(m_hPopupMenu, ID_VIEW_RIGHTTOPFIRSTDRAW, ZOption::GetInstance().m_bRightTopFirstDraw ? MF_CHECKED : MF_UNCHECKED);
 	CheckMenuItem(m_hPopupMenu, ID_VIEW_FULLSCREEN, ZOption::GetInstance().IsFullScreen() ? MF_CHECKED : MF_UNCHECKED);
@@ -1777,60 +1678,50 @@ void ZMain::SetCheckMenus()
 	/// end of checking popup menu
 }
 
-void ZMain::StartSlideMode()
-{
+void ZMain::StartSlideMode() {
 	ZOption::GetInstance().m_bSlideMode = true;
 	ZOption::GetInstance().m_LastSlidedTime = system_clock::now();
 }
 
-void ZMain::ToggleAutoRotation()
-{
+void ZMain::ToggleAutoRotation() {
 	ZOption::GetInstance().SetAutoRotation(!ZOption::GetInstance().IsUseAutoRotation());
 	SetCheckMenus();
 }
 
-void ZMain::ToggleAlwaysOnTop()
-{
+void ZMain::ToggleAlwaysOnTop() {
 	ZOption::GetInstance().m_bAlwaysOnTop = !ZOption::GetInstance().m_bAlwaysOnTop;
 
-	if ( ZOption::GetInstance().m_bAlwaysOnTop )
-	{
-		SetWindowPos(m_hMainDlg, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
-	}
-	else
-	{
-		SetWindowPos(m_hMainDlg, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
+	if ( ZOption::GetInstance().m_bAlwaysOnTop ) {
+		SetWindowPos(main_window_handle_, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
+	} else {
+		SetWindowPos(main_window_handle_, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
 
 	}
 	SetCheckMenus();
 }
 
 /// 배경을 지운다.
-void ZMain::_eraseBackground(HDC mainDC, LONG right, LONG bottom)
-{
+void ZMain::EraseBackground(HDC mainDC, LONG right, LONG bottom) {
 	SelectObject(mainDC, m_bgBrush);
 	Rectangle(mainDC, 0, 0, right, bottom);
 }
 
 /// Zoom in & out 전의 센터 위치로 그림을 드래그함. ZoomOut, ZoomIn 중에 호출됨
-void ZMain::_PositionPreviousCenter()
-{
-	if ( NULL == m_pCurrentImage || m_bCurrentImageLoaded == false )
-	{
-		assert(m_pCurrentImage);
+void ZMain::_PositionPreviousCenter() {
+	if ( current_image_ == nullptr ) {
+		assert(current_image_);
 		return;
 	}
 
-	RECT cr;
-	getCurrentScreenRect(cr);
-	int moveX = (int)(m_pCurrentImage->GetWidth() * m_fCurrentZoomRate * m_fCenterX - (cr.right / 2));
-	int moveY = (int)(m_pCurrentImage->GetHeight() * m_fCurrentZoomRate * m_fCenterY - (cr.bottom / 2));
+	RECT current_screen_rect;
+	getCurrentScreenRect(current_screen_rect);
+	int moveX = (int)(current_image_->GetWidth() * m_fCurrentZoomRate * m_fCenterX - (current_screen_rect.right / 2));
+	int moveY = (int)(current_image_->GetHeight() * m_fCurrentZoomRate * m_fCenterY - (current_screen_rect.bottom / 2));
 	OnDrag(moveX, moveY);
 }
 
-void ZMain::ZoomIn()
-{
-	double fBeforeModify = m_fCurrentZoomRate;
+void ZMain::ZoomIn() {
+	const double original_zoom_rate = m_fCurrentZoomRate;
 
 	if ( m_fCurrentZoomRate < 1.9999 )
 	{
@@ -1843,14 +1734,13 @@ void ZMain::ZoomIn()
 
 	if ( m_fCurrentZoomRate >= 20.0 )
 	{
-		m_fCurrentZoomRate = fBeforeModify;
+		m_fCurrentZoomRate = original_zoom_rate;
 	}
 
 	/// 실수 연산이 딱 떨어지지 않기 때문에 처리해준다.
 	m_fCurrentZoomRate = ((int)((m_fCurrentZoomRate * 10.0)+0.5) / 10.0f);
 
-	if ( fBeforeModify != m_fCurrentZoomRate )
-	{
+	if ( original_zoom_rate != m_fCurrentZoomRate ) {
 		m_iShowingX = 0;
 		m_iShowingY = 0;
 
@@ -1860,28 +1750,23 @@ void ZMain::ZoomIn()
 	}
 }
 
-void ZMain::ZoomOut()
-{
-	double fBeforeModify = m_fCurrentZoomRate;
+void ZMain::ZoomOut() {
+	const double original_zoom_rate = m_fCurrentZoomRate;
 
-	if ( m_fCurrentZoomRate <= 2.000001 )
-	{
+	if ( m_fCurrentZoomRate <= 2.000001 ) {
 		m_fCurrentZoomRate -= 0.1;
-	}
-	else
-	{
+	} else {
 		m_fCurrentZoomRate -= 1.0;
 	}
 
-	if ( m_fCurrentZoomRate < 0.1 )
-	{
-		m_fCurrentZoomRate = fBeforeModify;
+	if ( m_fCurrentZoomRate < 0.1 ) {
+		m_fCurrentZoomRate = original_zoom_rate;
 	}
 
 	/// 실수 연산이 딱 떨어지지 않기 때문에 처리해준다.
 	m_fCurrentZoomRate = ((int)((m_fCurrentZoomRate * 10.0)+0.5) / 10.0f);
 
-	if ( fBeforeModify != m_fCurrentZoomRate )
+	if ( original_zoom_rate != m_fCurrentZoomRate )
 	{
 		m_iShowingX = 0;
 		m_iShowingY = 0;
@@ -1892,8 +1777,7 @@ void ZMain::ZoomOut()
 	}
 }
 
-void ZMain::ZoomNone()
-{
+void ZMain::ZoomNone() {
 	if ( m_fCurrentZoomRate == 1.0 ) return;
 
 	m_fCurrentZoomRate = 1.0;
@@ -1905,34 +1789,27 @@ void ZMain::ZoomNone()
 }
 
 /// 현재보는 이미지를 클립보드에 복사한다.
-void ZMain::CopyToClipboard()
-{
-	if ( NULL == m_pCurrentImage || m_bCurrentImageLoaded == false )
-	{
-		assert(m_pCurrentImage);
+void ZMain::CopyToClipboard() {
+	if ( current_image_ == nullptr ) {
+		assert(false);
 		return;
 	}
 
-	if ( m_pCurrentImage->IsValid() )
-	{
-		m_pCurrentImage->CopyToClipboard(m_hMainDlg);
-	}
-	else
-	{
+	if ( current_image_->IsValid() ) {
+		current_image_->CopyToClipboard(main_window_handle_);
+	} else {
 		assert(false);
 	}
 }
 
-void ZMain::CloseProgram(void)
-{
-	SendMessage(m_hMainDlg, WM_CLOSE, 0, 0);
+void ZMain::CloseProgram(void) {
+	SendMessage(main_window_handle_, WM_CLOSE, 0, 0);
 }
 
 /// 그림을 보여줄 윈도우를 만든다.
-void ZMain::CreateShowWindow()
-{
+void ZMain::CreateShowWindow() {
 	m_hShowWindow = CreateWindow(TEXT("static"), TEXT(""), WS_CHILD | WS_VISIBLE , 0,0,100,100,
-	m_hMainDlg, (HMENU)-1, ZResourceManager::GetInstance().GetHInstance(), NULL);
+	main_window_handle_, (HMENU)-1, ZResourceManager::GetInstance().GetHInstance(), NULL);
 
 	AdjustShowWindowScreen();
 
@@ -1941,24 +1818,17 @@ void ZMain::CreateShowWindow()
 
 
 /// 현재 크기에 맞는 ShowWindow 크기를 정한다.
-void ZMain::AdjustShowWindowScreen()
-{
+void ZMain::AdjustShowWindowScreen() {
 	RECT rect;
-	GetClientRect(m_hMainDlg, &rect);
+	GetClientRect(main_window_handle_, &rect);
 
-	if ( false == ZOption::GetInstance().IsFullScreen() ) /// 풀 스크린이 아닐 때는 작업표시줄의 영역만큼은 빼줘야함
-	{
-		enum
-		{
-			STATUSBAR_HEIGHT = 20
-		};
-
-		rect.bottom -= STATUSBAR_HEIGHT;
+	if ( false == ZOption::GetInstance().IsFullScreen() ) { /// 풀 스크린이 아닐 때는 작업표시줄의 영역만큼은 빼줘야함
+    static const int kStatusbarHeight = 20;
+		rect.bottom -= kStatusbarHeight;
 	}
 	SetWindowPos(m_hShowWindow, HWND_TOP, 0, 0, rect.right, rect.bottom, SWP_NOMOVE);
 }
 
-void ZMain::SendMsg(UINT Msg, WPARAM wParam, LPARAM lParam)
-{
-	SendMessage(m_hMainDlg, Msg, wParam, lParam);
+void ZMain::SendMsg(UINT Msg, WPARAM wParam, LPARAM lParam) {
+	SendMessage(main_window_handle_, Msg, wParam, lParam);
 }
