@@ -500,7 +500,7 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 				break;
 
 			case ID_SHOW_CACHED_FILENAME:
-				ZCacheImage::GetInstance().ShowCachedImageToOutputWindow();
+				ZCacheImage::GetInstance().ShowCachedImageList();
 				break;
 
 			case ID_MAINMENU_FILE_EXIT:

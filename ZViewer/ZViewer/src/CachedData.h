@@ -11,111 +11,88 @@
 
 #include "../../commonSrc/ZImage.h"
 #include "../../commonSrc/LockUtil.h"
+#include "FileMap.h"
 
-class CachedData : NonCopyable
-{
+class CachedData final : NonCopyable {
 public:
-	CachedData()
-	{
-		m_lCacheSize = 0;
-		m_numImageVectorSize = 0;
-	
-	}
-	virtual ~CachedData()
-	{
-		ClearCachedImageData();
-	}
+  CachedData() : m_lCacheSize(0), m_numImageVectorSize(0) {
+    /* do nothing */
+  }
 
-	void ClearCachedImageData();
-	size_t Size() const { return m_cacheData.size(); }
+  void ClearCachedImageData();
+  size_t Size() const { return m_cacheData.size(); }
 
-	void PrintCachedData() const;
+  void PrintCachedData() const;
 
-	bool IsEmpty() const
-	{
-		CLockObjUtil lock(m_cacheLock);
+  bool IsEmpty() const
+  {
+    CLockObjUtil lock(m_cacheLock);
 
-		if ( m_cacheData.empty() ) return true;
-		return false;
-	}
+    if ( m_cacheData.empty() ) return true;
+    return false;
+  }
 
-	void InsertData(const tstring & strFilename, std::shared_ptr<ZImage> image, bool bForceCache);
+  void InsertData(const tstring& strFilename, std::shared_ptr<ZImage> image, const bool bForceCache);
 
-	void ShowCacheInfo() const;
+  void ShowCacheInfo() const;
 
-	bool HasCachedData(const int index) const;
+  bool HasCachedDataByIndex(const int index) const;
 
-	bool HasCachedData(const tstring & strFilename) const
-	{
-		CLockObjUtil lock(m_cacheLock);
-		return (m_cacheData.count(strFilename) > 0);
-	}
+  bool HasCachedDataByFilename(const tstring & strFilename) const;
 
-	size_t GetIndex2FilenameMapSize() const
-	{
-		CLockObjUtil lock(m_cacheLock);
-		return m_imageIndex2FilenameMap.size();
-	}
+  size_t GetIndex2FilenameMapSize() const {
+    CLockObjUtil lock(m_cacheLock);
+    return file_map_.size();
+  }
 
-	void SetNewFileList(const std::vector < FileData > & v);
-
-	size_t GetImageVectorSize()
-	{
-		CLockObjUtil lock(m_cacheLock);
-		return m_numImageVectorSize;
-	}
+  size_t GetImageVectorSize()
+  {
+    CLockObjUtil lock(m_cacheLock);
+    return m_numImageVectorSize;
+  }
 
   std::shared_ptr<ZImage> GetCachedData(const tstring& strFilename) const;
-	bool ClearFarthestDataFromCurrent(const int iFarthestIndex);
+  bool ClearFarthestDataFromCurrent(const int iFarthestIndex);
 
-	/// 캐시되어 있는 데이터들 중 현재 인덱스로부터 가장 멀리있는 인덱스를 얻는다.
-	int GetFarthestIndexFromCurrentIndex(volatile const int & iCurrentIndex);
+  /// 캐시되어 있는 데이터들 중 현재 인덱스로부터 가장 멀리있는 인덱스를 얻는다.
+  int GetFarthestIndexFromCurrentIndex(volatile const int & iCurrentIndex);
 
-	tstring GetFilenameFromIndex(const int iIndex)
-	{
-		if (m_imageIndex2FilenameMap.find(iIndex) == m_imageIndex2FilenameMap.end())
-		{
-			assert(false);
-			return _T("");
-		}
-		return m_imageIndex2FilenameMap[iIndex];
-	}
+  tstring GetFilenameFromIndex(const int index) {
+    CLockObjUtil lock(m_cacheLock);
+    return file_map_.FindFilenameByIndex(index);
+  }
 
-	void WaitCacheLock()
-	{
-		CLockObjUtil lock(m_cacheLock);
-	}
+  void WaitCacheLock() {
+    CLockObjUtil lock(m_cacheLock);
+  }
 
-	void SetImageVector(const std::vector < FileData > & v)
-	{
-		CLockObjUtil lock(m_cacheLock);
+  void SetImageVector(const std::vector < FileData > & filedata_list) {
+    CLockObjUtil lock(m_cacheLock);
 
-		m_numImageVectorSize = v.size();
+    m_numImageVectorSize = filedata_list.size();
 
-		SetNewFileList(v);
+    file_map_.Set(filedata_list);
 
-		ClearCachedImageData();
-		m_lCacheSize = 0;
+    ClearCachedImageData();
+    m_lCacheSize = 0;
 
-		DebugPrintf(TEXT("imageVecSize : %d"), m_numImageVectorSize);
-	}
+    DebugPrintf(TEXT("imageVecSize : %d"), m_numImageVectorSize);
+  }
 
-	const long GetCachedTotalSize() const
-	{
-		CLockObjUtil lock(m_cacheLock);
-		return m_lCacheSize;
-	}
+  const long GetCachedTotalSize() const {
+    CLockObjUtil lock(m_cacheLock);
+    return m_lCacheSize;
+  }
 
-protected:
-	std::map < tstring, std::shared_ptr<ZImage> > m_cacheData;		///< 실제로 캐쉬된 데이터를 가지고 있는 맵
-	std::map < int , tstring > m_imageIndex2FilenameMap;	///< 이미지 파일의 인덱스 번호,파일이름 맵
-	std::map < tstring, int > m_imageFilename2IndexMap;		///< 이미지 파일이름,인덱스 번호 맵
+private:
+  std::map< tstring/*filename*/, std::shared_ptr<ZImage> > m_cacheData;
+  FileMap file_map_;
 
-	size_t m_numImageVectorSize;
+  size_t m_numImageVectorSize;
 
-	/// 캐시된 데이터 용량
-	long m_lCacheSize;
+  /// 캐시된 데이터 용량
+  long m_lCacheSize;
 
-	mutable CLockObj m_cacheLock;
+  mutable CLockObj m_cacheLock;
 };
 

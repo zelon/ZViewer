@@ -111,6 +111,12 @@
     </ClCompile>
     <ClCompile Include="..\..\ZViewer\stdafx.cpp" />
     <ClCompile Include="..\..\ZViewer\Main.cpp" />
+    <ClCompile Include="..\..\ZViewer\src\FileMap.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ZViewer\src\FileReader.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\ZViewer\res\MoveHand.cur">
@@ -230,6 +236,12 @@
       <Filter>lib\freeimage</Filter>
     </ClInclude>
     <ClInclude Include="..\..\ZViewer\stdafx.h" />
+    <ClInclude Include="..\..\ZViewer\src\FileMap.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ZViewer\src\FileReader.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\ZViewer\res\ZViewer.rc">

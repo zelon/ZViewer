@@ -91,16 +91,15 @@ public:
 	}
 
 	/// 다음 이미지 파일로 이동
-	bool NextImage()
-	{
-		ZCacheImage::GetInstance().SetLastActionDirection(eLastActionDirection_FORWARD);
+	bool NextImage() {
+		ZCacheImage::GetInstance().SetViewDirection(ViewDirection::kForward);
 		return MoveRelateIndex(+1);
 	}
 
 	/// 이전 이미지 파일로 이동
 	bool PrevImage()
 	{
-		ZCacheImage::GetInstance().SetLastActionDirection(eLastActionDirection_BACKWARD);
+		ZCacheImage::GetInstance().SetViewDirection(ViewDirection::kBackward);
 		return MoveRelateIndex(-1);
 	}
 

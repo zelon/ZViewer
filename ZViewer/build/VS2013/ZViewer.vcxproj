@@ -241,6 +241,8 @@ python testLang.py
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\ZViewer\Main.cpp" />
+    <ClCompile Include="..\..\ZViewer\src\FileMap.cpp" />
+    <ClCompile Include="..\..\ZViewer\src\FileReader.cpp" />
     <ClCompile Include="..\..\ZViewer\src\ShortCut.cpp" />
     <ClCompile Include="..\..\ZViewer\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -285,6 +287,8 @@ python testLang.py
     <ClInclude Include="..\..\lib\freeimage\FreeImage.h" />
     <ClInclude Include="..\..\lib\vld\vld_def.h" />
     <ClInclude Include="..\..\ZViewer\res\resource.h" />
+    <ClInclude Include="..\..\ZViewer\src\FileMap.h" />
+    <ClInclude Include="..\..\ZViewer\src\FileReader.h" />
     <ClInclude Include="..\..\ZViewer\src\ShortCut.h" />
     <ClInclude Include="..\..\ZViewer\stdafx.h" />
     <ClInclude Include="..\..\ZViewer\src\AboutWindow.h" />

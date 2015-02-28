@@ -1071,7 +1071,7 @@ void ZMain::LoadCurrent()
 		bFirst = false;
 
 		ZCacheImage::GetInstance().SetImageVector(m_vFile);
-		ZCacheImage::GetInstance().StartThread();
+		ZCacheImage::GetInstance().StartCacheThread();
 	}
 
 	system_clock::time_point start = system_clock::now();
