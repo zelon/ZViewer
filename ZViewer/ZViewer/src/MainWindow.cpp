@@ -216,13 +216,13 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 /// 디버그 모드에서만 작동하는 단축키들
 #ifdef _DEBUG
 			case '`':
-				CacheManager::GetInstance().debugShowCacheInfo();
+				CacheManager::GetInstance().DebugShowCacheInfo();
 				break;
 
 			case '~':
 				{
 					TIMECHECK_START("clear spend time");
-					CacheManager::GetInstance().clearCache();
+					CacheManager::GetInstance().ClearCache();
 					TIMECHECK_END();
 				}
 				break;

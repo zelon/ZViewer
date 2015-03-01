@@ -8,8 +8,9 @@
  */
 
 #include "stdafx.h"
-
 #include "CachedData.h"
+
+#include "ZImage.h"
 #include "ZOption.h"
 
 void CachedData::ClearCachedImageData() {
@@ -18,10 +19,14 @@ void CachedData::ClearCachedImageData() {
   m_lCacheSize = 0;
 }
 
+size_t CachedData::GetCachedCount() const {
+  CLockObjUtil lock(m_cacheLock);
+  return m_cacheData.size();
+}
+
 void CachedData::ShowCacheInfo() const {
   CLockObjUtil lock(m_cacheLock);
-  for ( auto it = m_cacheData.begin(); it != m_cacheData.end(); ++it )
-  {
+  for ( auto it = m_cacheData.begin(); it != m_cacheData.end(); ++it ) {
     DebugPrintf(TEXT("[%s] %dbyte"), it->first.c_str(), it->second->GetImageSize());
   }
 }
@@ -41,12 +46,27 @@ bool CachedData::HasCachedDataByFilename(const tstring& strFilename) const {
   return (m_cacheData.count(strFilename) > 0);
 }
 
+size_t CachedData::GetIndex2FilenameMapSize() const {
+  CLockObjUtil lock(m_cacheLock);
+  return file_map_.size();
+}
+
+size_t CachedData::GetImageVectorSize() {
+  CLockObjUtil lock(m_cacheLock);
+  return m_numImageVectorSize;
+}
+
 void CachedData::PrintCachedData() const {
   CLockObjUtil lock(m_cacheLock);
 
   for ( const auto& pair : m_cacheData ) {
     DebugPrintf(TEXT("Cacaed Filename : %s"), pair.first.c_str());
   }
+}
+
+bool CachedData::IsEmpty() const {
+  CLockObjUtil lock(m_cacheLock);
+  return m_cacheData.empty();
 }
 
 /// 캐시되어 있는 데이터들 중 현재 인덱스로부터 가장 멀리있는 인덱스를 얻는다.
@@ -75,6 +95,34 @@ int CachedData::GetFarthestIndexFromCurrentIndex(volatile const int & iCurrentIn
   assert(iFarthestIndex >= 0 );
 
   return iFarthestIndex;
+}
+
+tstring CachedData::GetFilenameFromIndex(const int index) {
+  CLockObjUtil lock(m_cacheLock);
+  return file_map_.FindFilenameByIndex(index);
+}
+
+void CachedData::WaitCacheLock() {
+  CLockObjUtil lock(m_cacheLock);
+}
+
+void CachedData::SetImageVector(const std::vector < FileData > & filedata_list) {
+  CLockObjUtil lock(m_cacheLock);
+
+  m_numImageVectorSize = filedata_list.size();
+
+  file_map_.Set(filedata_list);
+
+  ClearCachedImageData();
+  m_lCacheSize = 0;
+
+  DebugPrintf(TEXT("imageVecSize : %d"), m_numImageVectorSize);
+}
+
+const long CachedData::GetCachedTotalSize() const
+{
+  CLockObjUtil lock(m_cacheLock);
+  return m_lCacheSize;
 }
 
 std::shared_ptr<ZImage> CachedData::GetCachedData(const tstring& strFilename) const {

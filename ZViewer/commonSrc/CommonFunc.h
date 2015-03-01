@@ -1,13 +1,6 @@
-﻿/********************************************************************
-*
-* Created by zelon(Kim, Jinwook Korea)
-* 
-*   2005. 5. 7
-*	CommonFunc.h
-*
-*                                       http://www.wimy.com
-*********************************************************************/
-#pragma once
+﻿#pragma once
+
+#include <vector>
 
 #include "CommonDefine.h"
 
@@ -116,4 +109,8 @@ void SplitPath(const TCHAR * path, TCHAR * drive, size_t driveNumberOfElements, 
 #endif
 
 UINT_PTR CenterOFNHookProc(HWND hdlg, UINT uiMsg, WPARAM /*wParam*/, LPARAM /*lParam*/);
+
+
+void FindFile(const TCHAR *path, std::vector< FileData > & foundStorage, bool bFindRecursive);
+void FindFolders(const TCHAR *path, std::vector<tstring> & foundStorage, bool bFindRecursive = false);
 

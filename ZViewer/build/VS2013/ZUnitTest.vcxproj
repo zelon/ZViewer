@@ -194,6 +194,7 @@ ZUnitTest.exe
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\commonSrc\ExtInfoManager.cpp" />
     <ClCompile Include="..\..\ZUnitTest\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -206,6 +207,7 @@ ZUnitTest.exe
     <ClCompile Include="..\..\commonSrc\LogManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\commonSrc\ExtInfoManager.h" />
     <ClInclude Include="..\..\ZUnitTest\stdafx.h" />
     <ClInclude Include="..\..\commonSrc\CommonFunc.h" />
     <ClInclude Include="..\..\commonSrc\LogManager.h" />

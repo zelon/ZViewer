@@ -24,12 +24,12 @@ CacheManager & CacheManager::GetInstance() {
 }
 
 CacheManager::CacheManager()
-: m_bCacheGoOn(true)
-, m_iLogCacheHit(0)
-, m_iLogCacheMiss(0)
-, m_bNowCaching(false)
-, view_direction_(ViewDirection::kForward)
-, m_pImpl(new Impl) {
+  : m_bCacheGoOn(true)
+  , cache_hit_counter_(0)
+  , cache_miss_counter_(0)
+  , is_caching_(false)
+  , view_direction_(ViewDirection::kForward)
+  , m_pImpl(new Impl) {
 }
 
 CacheManager::~CacheManager() {
@@ -45,7 +45,7 @@ void CacheManager::CleanUpThread() {
 
   m_pImpl->m_hCacheEvent.setEvent();
 
-  if ( cache_thread_.joinable() ) {
+  if (cache_thread_.joinable()) {
     DebugPrintf(TEXT("Waiting for cache thread end"));
     cache_thread_.join();
     DebugPrintf(TEXT("Completed waiting for cache thread end"));
@@ -64,7 +64,7 @@ void CacheManager::StartCacheThread() {
   cache_thread_.swap(new_thread);
 
   // Cache 를 진행하는 쓰레드는
-  if ( SetThreadPriority(cache_thread_.native_handle(), THREAD_PRIORITY_BELOW_NORMAL) == FALSE ) {
+  if (SetThreadPriority(cache_thread_.native_handle(), THREAD_PRIORITY_BELOW_NORMAL) == FALSE) {
     assert(!"Can't SetThreadPriority!");
   }
 }
@@ -78,7 +78,7 @@ void CacheManager::ShowCachedImageList() {
 }
 
 size_t CacheManager::GetNumOfCacheImage() const {
-  return m_pImpl->m_cacheData.Size();
+  return m_pImpl->m_cacheData.GetCachedCount();
 }
 
 
@@ -86,13 +86,13 @@ bool CacheManager::_CacheIndex(int iIndex) {
   /*
   // 최대 캐시 크기를 넘었으면 더 이상 캐시하지 않는다.
   if ( m_iCurrentIndex != iIndex &&
-    ((m_lCacheSize / 1024 / 1024) > ZOption::GetInstance().GetMaxCacheMemoryMB()) )
+  ((m_lCacheSize / 1024 / 1024) > ZOption::GetInstance().GetMaxCacheMemoryMB()) )
   {
-    return false;
+  return false;
   }
   */
 
-  if ( iIndex < 0 )///< 캐시 매니저에서 현재 파일의 뒤를 캐시하려고 시도하기 때문에 이 if 문에 들어오게 된다. assert 상황이 아니다.
+  if (iIndex < 0)///< 캐시 매니저에서 현재 파일의 뒤를 캐시하려고 시도하기 때문에 이 if 문에 들어오게 된다. assert 상황이 아니다.
   {
     iIndex = 0;
   }
@@ -102,7 +102,7 @@ bool CacheManager::_CacheIndex(int iIndex) {
   }
 
   /// 이 상황은 현재 파일 목록이 하나도 없는 상황이다.
-  if ( iIndex < 0 ) return false;
+  if (iIndex < 0) return false;
 
   // 이미 캐시되어 있는지 찾는다.
   bool bCacheFound = false;
@@ -110,9 +110,9 @@ bool CacheManager::_CacheIndex(int iIndex) {
 
   strFileName = m_pImpl->m_cacheData.GetFilenameFromIndex(iIndex);;//m_imageIndex2FilenameMap[iIndex];
 
-  if ( strFileName.size() <= 0 ) return false;
+  if (strFileName.size() <= 0) return false;
 
-  if ( strFileName.length() <= 0 ) return false;
+  if (strFileName.length() <= 0) return false;
 
   if (m_pImpl->m_cacheData.HasCachedDataByFilename(strFileName)) {
     // found!
@@ -133,7 +133,8 @@ bool CacheManager::_CacheIndex(int iIndex) {
   if (file.IsOpened() == false) {
     assert(false);
     bLoadOK = false;
-  } else {
+  }
+  else {
     static const size_t kReadBufferSize = 2048;
     BYTE readBuffer[kReadBufferSize];
 
@@ -142,24 +143,26 @@ bool CacheManager::_CacheIndex(int iIndex) {
 
     system_clock::time_point startTime = system_clock::now();
 
-    while ( bReadOK ) {
-      if ( m_bNewChange && m_iCurrentIndex != iIndex ) {///< 새로운 그림으로 넘어갔는데 현재 인덱스가 아니면
+    while (bReadOK) {
+      if (m_bNewChange && m_iCurrentIndex != iIndex) {///< 새로운 그림으로 넘어갔는데 현재 인덱스가 아니면
         DebugPrintf(TEXT("---------------------------- stop readfile"));
         return false;	// 현재보고 있는 파일 인덱스가 바뀌었으면 빨리 다음 for 를 시작한다.
       }
       bReadOK = file.Read(readBuffer, kReadBufferSize, &dwReadBytes);
-      if ( m_bNewChange && m_iCurrentIndex != iIndex ) {///< 새로운 그림으로 넘어갔는데 현재 인덱스가 아니면
+      if (m_bNewChange && m_iCurrentIndex != iIndex) {///< 새로운 그림으로 넘어갔는데 현재 인덱스가 아니면
         DebugPrintf(TEXT("---------------------------- stop readfile"));
         return false;	// 현재보고 있는 파일 인덱스가 바뀌었으면 빨리 다음 for 를 시작한다.
       }
-      if ( FALSE == bReadOK ) {
+      if (FALSE == bReadOK) {
         assert(false);
         bLoadOK = false;
         break;
-      } else {
-        if ( dwReadBytes <= 0 ) {///< 파일의 끝까지 읽었다.
+      }
+      else {
+        if (dwReadBytes <= 0) {///< 파일의 끝까지 읽었다.
           break;
-        } else {
+        }
+        else {
           m_pImpl->file_read_buffer_.resize(m_pImpl->file_read_buffer_.size() + dwReadBytes);
 
           memcpy((&(m_pImpl->file_read_buffer_[0])) + m_pImpl->file_read_buffer_.size() - dwReadBytes, readBuffer, dwReadBytes);
@@ -174,7 +177,8 @@ bool CacheManager::_CacheIndex(int iIndex) {
     if (m_pImpl->file_read_buffer_.size() < kMinimumFileSize) {
       /// Too small image file
       bLoadOK = false;
-    } else {
+    }
+    else {
       /// todo: 아래 내용을 멤버 변수로 바꾸면 더 좋아질까
       fipMemoryIO mem(&m_pImpl->file_read_buffer_[0], (DWORD)m_pImpl->file_read_buffer_.size());
 
@@ -185,20 +189,21 @@ bool CacheManager::_CacheIndex(int iIndex) {
       TIMECHECK_END();
 
       /// 옵션에 따라 자동 회전을 시킨다.
-      if ( ZOption::GetInstance().IsUseAutoRotation() ) {
+      if (ZOption::GetInstance().IsUseAutoRotation()) {
         cache_image->AutoRotate();
       }
     }
   }
 
-  if ( bLoadOK == false ) {
+  if (bLoadOK == false) {
     assert(!"Can't load image");
 
     tstring strErrorFilename = GetProgramFolder();
     strErrorFilename += TEXT("LoadError.png");
-    if ( cache_image->LoadFromFile(strErrorFilename) ) {
+    if (cache_image->LoadFromFile(strErrorFilename)) {
       bLoadOK = true; ///< error image 라도 load ok
-    } else {
+    }
+    else {
       MessageBox(HWND_DESKTOP, TEXT("Please check LoadError.png in ZViewer installed folder"), TEXT("ZViewer"), MB_OK);
       const HBITMAP hBitmap = CreateBitmap(100, 100, 1, 1, NULL);
       cache_image->CopyFromBitmap(hBitmap);
@@ -206,7 +211,7 @@ bool CacheManager::_CacheIndex(int iIndex) {
     }
   }
 
-  if ( iIndex == m_iCurrentIndex ) {///< 현재 보는 이미지면 무조건 넣는다.
+  if (iIndex == m_iCurrentIndex) {///< 현재 보는 이미지면 무조건 넣는다.
     AddCacheData(strFileName, cache_image, true);
     return true;
   }
@@ -224,14 +229,16 @@ bool CacheManager::_CacheIndex(int iIndex) {
       if ((m_pImpl->m_cacheData.GetCachedTotalSize() + CachedImageSize) / 1024 / 1024 <= ZOption::GetInstance().GetMaxCacheMemoryMB()) {
         AddCacheData(strFileName, cache_image);
         return true;
-      } else {
+      }
+      else {
         DebugPrintf(TEXT("There is no vacant space"));
       }
       assert(i <= 99);
     }
-  } else {
+  }
+  else {
     AddCacheData(strFileName, cache_image);
-    if ( m_bNewChange) return false;	// 현재보고 있는 파일 인덱스가 바뀌었으면 빨리 다음 for 를 시작한다.
+    if (m_bNewChange) return false;	// 현재보고 있는 파일 인덱스가 바뀌었으면 빨리 다음 for 를 시작한다.
   }
   return true;
 }
@@ -239,26 +246,28 @@ bool CacheManager::_CacheIndex(int iIndex) {
 bool CacheManager::ClearFarthestCache(const int index) {
   // 캐시되어 있는 것들 중 가장 현재 index 에서 먼것을 찾는다.
   const int iFarthestIndex = m_pImpl->m_cacheData.GetFarthestIndexFromCurrentIndex(m_iCurrentIndex);
-  assert(iFarthestIndex >= 0 );
+  assert(iFarthestIndex >= 0);
 
   const size_t nCachedFarthestDiff = abs(iFarthestIndex - m_iCurrentIndex);
-  const size_t nToCacheDiff = abs(index - m_iCurrentIndex );
+  const size_t nToCacheDiff = abs(index - m_iCurrentIndex);
 
-  if ( nCachedFarthestDiff < nToCacheDiff ) {
+  if (nCachedFarthestDiff < nToCacheDiff) {
     // 캐시 했는 것 중 가장 멀리있는 것이 이번거보다 가까운데 있으면 더이상 캐시하지 않는다
     return false;
-  } else if ( nCachedFarthestDiff == nToCacheDiff ) {
+  }
+  else if (nCachedFarthestDiff == nToCacheDiff) {
     // 캐시했는 거랑 이번에 캐시할 것이 동등한 위치에 있으면
 
-    if ( view_direction_ == ViewDirection::kForward ) {
+    if (view_direction_ == ViewDirection::kForward) {
       // 앞으로 진행 중이면 가장 멀리있는 것이 prev 이면 지운다(앞으로 가고 있을 때는 next image 가 우선순위가 높다)
-      if ( iFarthestIndex >= index ) {
+      if (iFarthestIndex >= index) {
         // 캐시되어 있는 것을 비우지 않는다.
         return false;
       }
-    } else {
+    }
+    else {
       // 뒤로 진행 중이면 가장 멀리있는 것이 next 이면 지운다.
-      if ( iFarthestIndex <= index ) {
+      if (iFarthestIndex <= index) {
         return false;
       }
     }
@@ -273,9 +282,9 @@ bool CacheManager::ClearFarthestCache(const int index) {
 
 void CacheManager::ThreadFunc() {
   m_bNewChange = false;
-  while ( m_bCacheGoOn ) // thread loop
+  while (m_bCacheGoOn) // thread loop
   {
-    m_bNowCaching = true;
+    is_caching_ = true;
     int iPos = 0;
     assert((int)m_pImpl->m_cacheData.GetImageVectorSize() == (int)m_pImpl->m_cacheData.GetIndex2FilenameMapSize());
     assert(m_iCurrentIndex <= (int)m_pImpl->m_cacheData.GetIndex2FilenameMapSize());
@@ -288,33 +297,35 @@ void CacheManager::ThreadFunc() {
     }
 #endif
 
-    for ( int i=0; i<ZOption::GetInstance().m_iMaxCacheImageNum/2; ++i) {
-      if ( false == m_bCacheGoOn ) break; ///< 프로그램이 종료되었으면 for 를 끝낸다.
-      if ( m_bNewChange) break;	// 현재보고 있는 파일 인덱스가 바뀌었으면 빨리 다음 for 를 시작한다.
+    for (int i = 0; i < ZOption::GetInstance().m_iMaxCacheImageNum / 2; ++i) {
+      if (false == m_bCacheGoOn) break; ///< 프로그램이 종료되었으면 for 를 끝낸다.
+      if (m_bNewChange) break;	// 현재보고 있는 파일 인덱스가 바뀌었으면 빨리 다음 for 를 시작한다.
 
       /// 항상 현재 이미지를 먼저 캐쉬한다.
       _CacheIndex(m_iCurrentIndex);
-      if ( m_bNewChange) break;	// 현재보고 있는 파일 인덱스가 바뀌었으면 빨리 다음 for 를 시작한다.
+      if (m_bNewChange) break;	// 현재보고 있는 파일 인덱스가 바뀌었으면 빨리 다음 for 를 시작한다.
 
       /// 현재보고 있는 방향에 따라서 어디쪽 이미지를 먼저 캐시할 것인지 판단한다.
 
-      if ( view_direction_ == ViewDirection::kForward ) {
+      if (view_direction_ == ViewDirection::kForward) {
         // right side
-        if ( false == _CacheIndex(m_iCurrentIndex + iPos) ) break;
-        if ( m_bNewChange) break;	// 현재보고 있는 파일 인덱스가 바뀌었으면 빨리 다음 for 를 시작한다.
+        if (false == _CacheIndex(m_iCurrentIndex + iPos)) break;
+        if (m_bNewChange) break;	// 현재보고 있는 파일 인덱스가 바뀌었으면 빨리 다음 for 를 시작한다.
 
         // left side
-        if ( false == _CacheIndex(m_iCurrentIndex - iPos) ) break;
-        if ( m_bNewChange) break;	// 현재보고 있는 파일 인덱스가 바뀌었으면 빨리 다음 for 를 시작한다.
-      } else if ( view_direction_ == ViewDirection::kBackward ) {
+        if (false == _CacheIndex(m_iCurrentIndex - iPos)) break;
+        if (m_bNewChange) break;	// 현재보고 있는 파일 인덱스가 바뀌었으면 빨리 다음 for 를 시작한다.
+      }
+      else if (view_direction_ == ViewDirection::kBackward) {
         // left side
-        if ( false == _CacheIndex(m_iCurrentIndex - iPos) ) break;
-        if ( m_bNewChange) break;	// 현재보고 있는 파일 인덱스가 바뀌었으면 빨리 다음 for 를 시작한다.
+        if (false == _CacheIndex(m_iCurrentIndex - iPos)) break;
+        if (m_bNewChange) break;	// 현재보고 있는 파일 인덱스가 바뀌었으면 빨리 다음 for 를 시작한다.
 
         // right side
-        if ( false == _CacheIndex(m_iCurrentIndex + iPos) ) break;
-        if ( m_bNewChange) break;	// 현재보고 있는 파일 인덱스가 바뀌었으면 빨리 다음 for 를 시작한다.
-      } else {
+        if (false == _CacheIndex(m_iCurrentIndex + iPos)) break;
+        if (m_bNewChange) break;	// 현재보고 있는 파일 인덱스가 바뀌었으면 빨리 다음 for 를 시작한다.
+      }
+      else {
         assert(false);
       }
 
@@ -323,7 +334,7 @@ void CacheManager::ThreadFunc() {
 
     //DebugPrintf("wait event");
 
-    m_bNowCaching = false;
+    is_caching_ = false;
     m_pImpl->m_hCacheEvent.wait();
     m_bNewChange = false;
 
@@ -331,7 +342,7 @@ void CacheManager::ThreadFunc() {
   }
 }
 
-bool CacheManager::hasCachedData(const tstring & strFilename, int iIndex) {
+bool CacheManager::HasCachedData(const tstring & strFilename, int iIndex) {
   // index 를 체크한다.
   m_iCurrentIndex = iIndex;
   m_strCurrentFileName = strFilename;
@@ -351,7 +362,7 @@ std::shared_ptr<ZImage> CacheManager::GetCachedData(const tstring & strFilename)
 }
 
 void CacheManager::AddCacheData(const tstring & strFilename, std::shared_ptr<ZImage> pImage, const bool bForceCache) {
-  if ( false == pImage->IsValid() ) {
+  if (false == pImage->IsValid()) {
     assert(false);
     return;
   }
@@ -363,13 +374,13 @@ void CacheManager::AddCacheData(const tstring & strFilename, std::shared_ptr<ZIm
   m_pImpl->m_cacheData.InsertData(strFilename, pImage, bForceCache);
 }
 
-/// 다음 파일이 캐쉬되었나를 체크해서 돌려준다.
 bool CacheManager::IsNextFileCached() const {
   int iNextIndex = m_iCurrentIndex;
 
-  if ( view_direction_ == ViewDirection::kForward ) {
+  if (view_direction_ == ViewDirection::kForward) {
     ++iNextIndex;
-  } else {
+  }
+  else {
     --iNextIndex;
   }
 
@@ -382,10 +393,9 @@ void CacheManager::WaitCacheLock() {
   m_pImpl->m_cacheData.WaitCacheLock();
 }
 
-/// 현재 캐쉬 정보를 디버그 콘솔에 보여준다. 디버깅모드 전용
-void CacheManager::debugShowCacheInfo() {
+void CacheManager::DebugShowCacheInfo() {
   RECT rt;
-  if ( false == ZMain::GetInstance().getCurrentScreenRect(rt) )
+  if (false == ZMain::GetInstance().getCurrentScreenRect(rt))
   {
     DebugPrintf(TEXT("CurrentScreenSize : Cannot getCurrentScreenRect"));
     return;
@@ -395,17 +405,24 @@ void CacheManager::debugShowCacheInfo() {
   m_pImpl->m_cacheData.ShowCacheInfo();
 }
 
-
-void CacheManager::clearCache() {
+void CacheManager::ClearCache() {
   m_pImpl->m_cacheData.ClearCachedImageData();
   DebugPrintf(TEXT("Clear cache data"));
 }
 
-void CacheManager::setCacheEvent() {
+void CacheManager::SetCacheEvent() {
   m_pImpl->m_hCacheEvent.setEvent();
 }
 
-
 long CacheManager::GetCachedKByte() const {
   return (m_pImpl->m_cacheData.GetCachedTotalSize() / 1024);
+}
+
+int CacheManager::GetLogCacheHitRate() const
+{
+  if ((cache_hit_counter_ + cache_miss_counter_) == 0)
+  {
+    return 0;
+  }
+  return (cache_hit_counter_ * 100 / (cache_miss_counter_ + cache_hit_counter_));
 }

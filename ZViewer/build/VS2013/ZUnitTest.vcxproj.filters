@@ -15,6 +15,9 @@
     <ClCompile Include="..\..\ZUnitTest\stdafx.cpp" />
     <ClCompile Include="..\..\ZUnitTest\UnitTestFlag.cpp" />
     <ClCompile Include="..\..\ZUnitTest\ZUnitTest.cpp" />
+    <ClCompile Include="..\..\commonSrc\ExtInfoManager.cpp">
+      <Filter>commonSrc</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\commonSrc\CommonFunc.h">
@@ -24,5 +27,8 @@
       <Filter>commonSrc</Filter>
     </ClInclude>
     <ClInclude Include="..\..\ZUnitTest\stdafx.h" />
+    <ClInclude Include="..\..\commonSrc\ExtInfoManager.h">
+      <Filter>commonSrc</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

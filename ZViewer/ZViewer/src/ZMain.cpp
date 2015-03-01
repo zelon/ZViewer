@@ -1,5 +1,4 @@
 ﻿#include "stdafx.h"
-
 #include "ZMain.h"
 
 #include "../commonSrc/CommonFunc.h"
@@ -7,15 +6,13 @@
 #include "../commonSrc/ExtInfoManager.h"
 #include "../commonSrc/SaveAs.h"
 #include "../commonSrc/ZOption.h"
+#include "MessageManager.h"
+#include "resource.h"
+#include "src/ExifDlg.h"
 #include "src/SelectToFolderDlg.h"
 #include "src/ZFileExtDlg.h"
 #include "src/ZResourceManager.h"
-#include "MessageManager.h"
 #include "TaskBar.h"
-
-#include "src/ExifDlg.h"
-
-#include "resource.h"
 
 using namespace std;
 using namespace std::chrono;
@@ -28,79 +25,55 @@ ZMain& ZMain::GetInstance() {
 }
 
 ZMain::ZMain(void)
-:	main_window_handle_(NULL)
+:	main_window_handle_(nullptr)
 ,	m_sortOrder(eFileSortOrder_FILENAME)
+, m_hBufferDC(nullptr)
 ,	m_alpha(255) {
   memset( &m_lastPosition, 0, sizeof( m_lastPosition ) );
-  m_hBufferDC = NULL;
-
-  current_image_ = NULL;
+  
   m_bgBrush = CreateSolidBrush(RGB(128,128,128));
   m_hEraseRgb = CreateRectRgn(0,0,1,1);
 
-  if ( INVALID_HANDLE_VALUE == m_bgBrush )
-  {
+  if ( INVALID_HANDLE_VALUE == m_bgBrush ) {
     assert(false);
   }
 }
 
-ZMain::~ZMain(void)
-{
-  if ( NULL != m_hBufferDC )
-  {
+ZMain::~ZMain() {
+  if (m_hBufferDC != nullptr) {
     DebugPrintf(TEXT("Before delete bufferDC"));
-    BOOL bRet = DeleteDC(m_hBufferDC);
+    const BOOL bRet = DeleteDC(m_hBufferDC);
+    assert(bRet != FALSE);
 
     DebugPrintf(TEXT("after delete bufferDC"));
 
-    if ( bRet == FALSE )
-    {
-      assert(bRet);
-    }
-
-    m_hBufferDC = NULL;
+    m_hBufferDC = nullptr;
   }
 
-  if ( m_bgBrush != INVALID_HANDLE_VALUE )
-  {
+  if ( m_bgBrush != INVALID_HANDLE_VALUE ) {
     DeleteObject(m_bgBrush);
   }
 }
 
-
 /// 버퍼로 쓰이는 DC 를 릴리즈한다.
-void ZMain::_releaseBufferDC()
-{
-  if ( m_hBufferDC != NULL )
-  {
-    BOOL bRet = DeleteDC(m_hBufferDC);
+void ZMain::_releaseBufferDC() {
+  if ( m_hBufferDC != nullptr) {
+    const BOOL bRet = DeleteDC(m_hBufferDC);
 
-    if ( bRet == FALSE )
-    {
-      assert(bRet);
-    }
-    m_hBufferDC = NULL;
+    assert(bRet != FALSE);
+    m_hBufferDC = nullptr;
   }
 }
 
-/// Timer 를 받았을 때
-void ZMain::onTimer()
-{
-  if ( ZOption::GetInstance().m_bSlideMode )
-  {/// check slidemode
+void ZMain::onTimer() {
+  if ( ZOption::GetInstance().m_bSlideMode ) {/// check slidemode
     long long slideShowedTime = duration_cast<milliseconds>(system_clock::now() - ZOption::GetInstance().m_LastSlidedTime).count();
 
-    if ( slideShowedTime > ZOption::GetInstance().m_iSlideModePeriodMiliSeconds )
-    {
+    if ( slideShowedTime > ZOption::GetInstance().m_iSlideModePeriodMiliSeconds ) {
       NextImage();
       Draw();
       ZOption::GetInstance().m_LastSlidedTime = system_clock::now();
     }
-  }
-
-  if ( CacheManager::GetInstance().isCachingNow() )
-  {
-    //DebugPrintf("now cache status...");
   }
 
   if (current_image_ == nullptr) {
@@ -110,31 +83,25 @@ void ZMain::onTimer()
   ShowCacheStatus();
 }
 
-
 /// ZViewer 전용 메시지 박스
-int ZMain::ShowMessageBox(const TCHAR * msg, UINT button)
-{
+int ZMain::ShowMessageBox(const TCHAR * msg, UINT button) {
   return ::MessageBox(main_window_handle_, msg, TEXT("ZViewer"), button);
 }
 
-int ZMain::GetLogCacheHitRate() const
-{
+int ZMain::GetLogCacheHitRate() const {
   return CacheManager::GetInstance().GetLogCacheHitRate();
 }
 
-long ZMain::GetCachedKByte() const
-{
+long ZMain::GetCachedKByte() const {
   return CacheManager::GetInstance().GetCachedKByte();
 }
 
-void ZMain::SetHWND(HWND hWnd)
-{
+void ZMain::SetHWND(const HWND hWnd) {
   main_window_handle_ = hWnd;
   InitOpenFileDialog();
 }
 
-void ZMain::InitOpenFileDialog()
-{
+void ZMain::InitOpenFileDialog() {
   // Initialize OPENFILENAME
   ZeroMemory(&ofn, sizeof(ofn));
   ofn.lStructSize = sizeof(ofn);
@@ -156,12 +123,9 @@ void ZMain::InitOpenFileDialog()
   ofn.lpfnHook = (LPOFNHOOKPROC)CenterOFNHookProc;
 }
 
-void ZMain::OpenFileDialog()
-{
+void ZMain::OpenFileDialog() {
   // 현재 폴더를 세팅해 준다.
   ofn.lpstrInitialDir = m_strCurrentFolder.c_str();
-
-  //m_bOpeningFileDialog = true;
 
   // Display the Open dialog box.
   if (GetOpenFileName(&ofn)==TRUE)
@@ -190,17 +154,13 @@ void ZMain::SaveFileDialog() {
   }
 }
 
-void ZMain::OnInit()
-{
+void ZMain::OnInit() {
   /// 불러온 최종 옵션을 점검하여 메뉴 중 체크표시할 것들을 표시한다.
   SetCheckMenus();
 
-  if ( m_strInitArg.empty() )
-  {
+  if ( m_strInitArg.empty() ) {
     RescanFolder();
-  }
-  else
-  {
+  } else {
     // 시작 인자가 있으면 그 파일을 보여준다.
     OpenFile(m_strInitArg);
   }
@@ -230,8 +190,7 @@ void ZMain::Draw(HDC toDrawDC, bool need_to_erase_background) {
     mainDC = toDrawDC;
   }
 
-  if ( NULL == mainDC )
-  {
+  if ( NULL == mainDC ) {
     assert(mainDC != NULL);
     return;
   }
@@ -277,22 +236,19 @@ void ZMain::Draw(HDC toDrawDC, bool need_to_erase_background) {
     need_to_erase_background = false;
   }
 
-  if ( zoomedImageWidth <= currentScreenRect.right )
-  {
+  if ( zoomedImageWidth <= currentScreenRect.right ) {
     // 가로 길이가 화면보다 작을 때는 중앙에 오게
     m_iShowingX = -((currentScreenRect.right/2) - (zoomedImageWidth/2));
   }
 
-  if ( zoomedImageHeight <= currentScreenRect.bottom )
-  {
+  if ( zoomedImageHeight <= currentScreenRect.bottom ) {
     // 세로 길이가 화면보다 작을 때는 중앙에 오게
     m_iShowingY = -((currentScreenRect.bottom/2) - (zoomedImageHeight/2));
   }
 
   RECT drawRect = { -m_iShowingX, -m_iShowingY, zoomedImageWidth-m_iShowingX, zoomedImageHeight-m_iShowingY };
 
-  if ( need_to_erase_background )	// 배경을 지워야 하면 지운다. 그림이 그려지는 부분을 제외하고 지운다.
-  {
+  if ( need_to_erase_background ) {// 배경을 지워야 하면 지운다. 그림이 그려지는 부분을 제외하고 지운다.
     HRGN hScreenRGN = CreateRectRgn(currentScreenRect.left, currentScreenRect.top, currentScreenRect.right, currentScreenRect.bottom);
     HRGN hDrawRGN = CreateRectRgn(drawRect.left, drawRect.top, drawRect.right, drawRect.bottom);
     CombineRgn(m_hEraseRgb, hScreenRGN, hDrawRGN, RGN_DIFF);
@@ -321,111 +277,29 @@ void ZMain::Draw(HDC toDrawDC, bool need_to_erase_background) {
   ReleaseDC(main_window_handle_, mainDC);
 
   // 마우스 커서 모양
-  if ( zoomedImageWidth > currentScreenRect.right || zoomedImageHeight > currentScreenRect.bottom )
-  {
+  if ( zoomedImageWidth > currentScreenRect.right || zoomedImageHeight > currentScreenRect.bottom ) {
     // 마우스 커서를 hand 로
     SetHandCursor(true);
-  }
-  else
-  {
+  } else {
     // 마우스 커서를 원래대로
     SetHandCursor(false);
   }
   PostMessage(main_window_handle_, WM_SETCURSOR, 0, 0);
 
   // 풀 스크린이 아닐 때는 상태 표시줄을 다시 그린다.
-  if ( false == ZOption::GetInstance().IsFullScreen() )
-  {
+  if ( false == ZOption::GetInstance().IsFullScreen() ) {
     PostMessage(m_hStatusBar, WM_PAINT, 0, 0);
   }
 
   DeleteObject(hrgn);
-  if ( NULL == toDrawDC )
-  {
+  if ( NULL == toDrawDC ) {
     ReleaseDC(main_window_handle_, mainDC);
   }
   TIMECHECK_END();
 }
 
-void ZMain::FindFile(const TCHAR * path, std::vector< FileData > & foundStorage, bool bFindRecursive)
-{
-  HANDLE hSrch;
-  WIN32_FIND_DATA wfd;
 
-  BOOL bResult=TRUE;
-  TCHAR drive[_MAX_DRIVE] = { 0 };
-  TCHAR dir[_MAX_DIR] = { 0 };
-  TCHAR fname[_MAX_FNAME] = { 0 };
-  TCHAR newpath[MAX_PATH] = { 0 };
-
-  hSrch=FindFirstFile(path,&wfd);
-  while (bResult)
-  {
-    SplitPath(path, drive,_MAX_DRIVE ,dir,_MAX_DIR, NULL,0 ,NULL,0);
-    if (wfd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
-    {
-      if (wfd.cFileName[0]!='.' && bFindRecursive == true)
-      {
-        SPrintf(newpath, MAX_PATH, L"%s%s%s\\*.*",drive,dir,wfd.cFileName);
-        FindFile(newpath, foundStorage, bFindRecursive);
-      }
-    }
-    else
-    {
-      SPrintf(fname, _MAX_FNAME, L"%s%s%s",drive,dir,wfd.cFileName);
-
-      if ( ExtInfoManager::GetInstance().IsValidImageFileExt(wfd.cFileName) )
-      {
-        FileData aData;
-        aData.m_timeModified = wfd.ftLastWriteTime;
-        aData.m_strFileName = fname;
-        aData.m_nFileSize = wfd.nFileSizeLow;
-        foundStorage.push_back(aData);
-      }
-    }
-    bResult=FindNextFile(hSrch,&wfd);
-  }
-  FindClose(hSrch);
-}
-
-void ZMain::FindFolders(const TCHAR *path, std::vector<tstring> & foundStorage, bool bFindRecursive)
-{
-  HANDLE hSrch;
-  WIN32_FIND_DATA wfd;
-  //memset(&wfd, 0, sizeof(wfd));
-  TCHAR fname[MAX_PATH] = { 0 };
-  BOOL bResult=TRUE;
-  TCHAR drive[_MAX_DRIVE] = { 0 };
-  TCHAR dir[_MAX_DIR] = { 0 };
-  TCHAR newpath[MAX_PATH] = { 0 };
-
-  hSrch=FindFirstFile(path,&wfd);
-  while (bResult)
-  {
-    SplitPath(path, drive,_MAX_DRIVE, dir,_MAX_DIR, NULL,0, NULL,0);
-    if (wfd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
-    {
-      if (wfd.cFileName[0]!='.' )
-      {
-        SPrintf(fname, MAX_PATH, L"%s%s%s",drive,dir,wfd.cFileName);
-
-        foundStorage.push_back(fname);
-
-        if ( bFindRecursive == true )
-        {
-          SPrintf(newpath, MAX_PATH, L"%s%s%s\\*.*",drive,dir,wfd.cFileName);
-          FindFolders(newpath, foundStorage, bFindRecursive);
-        }
-      }
-    }
-    bResult=FindNextFile(hSrch,&wfd);
-  }
-  FindClose(hSrch);
-}
-
-
-void ZMain::RescanFolder()
-{
+void ZMain::RescanFolder() {
   tstring strToFindFolder = m_strCurrentFolder;
 
   strToFindFolder += TEXT("*.*");
@@ -446,15 +320,13 @@ void ZMain::RescanFolder()
   }
 }
 
-bool ZMain::GetNeighborFolders(std::vector < tstring > & vFolders)
-{
+bool ZMain::GetNeighborFolders(std::vector < tstring > & vFolders) {
   // 현재 폴더의 상위 폴더를 검색한다.
   {
     // 현재 폴더에서 오른쪽부터 2번째의 \ 를 얻는다.
     size_t pos = m_strCurrentFolder.find_last_of(TEXT("\\"));
 
-    if ( pos == m_strCurrentFolder.npos )
-    {
+    if ( pos == m_strCurrentFolder.npos ) {
       ShowMessageBox(GetMessage(TEXT("CANNOT_FIND_PARENT_DIRECTORY")));
       return false;
     }
@@ -463,8 +335,7 @@ bool ZMain::GetNeighborFolders(std::vector < tstring > & vFolders)
 
     pos = strParentFolder.find_last_of(TEXT("\\"));
 
-    if ( pos == strParentFolder.npos )
-    {
+    if ( pos == strParentFolder.npos ) {
       ShowMessageBox(GetMessage(TEXT("CANNOT_FIND_PARENT_DIRECTORY")));
       return false;
     }
@@ -475,33 +346,22 @@ bool ZMain::GetNeighborFolders(std::vector < tstring > & vFolders)
     // 상위 폴더의 하위 폴더들을 얻는다.
     FindFolders(strParentFolder.c_str(), vFolders, false);
 
-    if ( vFolders.size() <= 0 )
-    {
+    if ( vFolders.size() <= 0 ) {
       assert(vFolders.size() > 0 );
       return false;
     }
   }
 
-  // 상위 폴더의 하위 폴더들을 정렬한다.
-  /*
-  if ( IsWindowsXPOrGreater() )
-  {
-    sort(vFolders.begin(), vFolders.end(), CStringCompareIgnoreCase_LengthFirst());
-  }
-  else
-  */
-  {
-    sort(vFolders.begin(), vFolders.end(), CStringCompareIgnoreCase());
-  }
+  sort(vFolders.begin(), vFolders.end(), CStringCompareIgnoreCase());
 
   return true;
 }
 
-void ZMain::NextFolder()
-{
+void ZMain::NextFolder() {
   std::vector < tstring > vFolders;
-
-  if ( !GetNeighborFolders(vFolders) ) return;
+  if (!GetNeighborFolders(vFolders)) {
+    return;
+  }
 
   // 상위 폴더의 하위 폴더 중 현재 폴더의 다음 폴더가 있으면 다음 폴더를 검색한 후, 처음 이미지를 연다.
   {
@@ -518,22 +378,18 @@ void ZMain::NextFolder()
 
     assert(iFoundIndex != -1);
 
-    if ( (iFoundIndex + 1) >= (int)vFolders.size() )
-    {
+    if ( (iFoundIndex + 1) >= (int)vFolders.size() ) {
       // 마지막 폴더이다.
       ShowMessageBox(GetMessage(TEXT("LAST_DIRECTORY")));
       return;
-    }
-    else
-    {
+    } else {
       OpenFolder(vFolders[iFoundIndex+1]);
     }
   }
 }
 
 
-void ZMain::PrevFolder()
-{
+void ZMain::PrevFolder() {
   std::vector < tstring > vFolders;
 
   if ( !GetNeighborFolders(vFolders) ) return;
@@ -553,39 +409,24 @@ void ZMain::PrevFolder()
 
     assert(iFoundIndex != -1);
 
-    if ( (iFoundIndex-1 < 0 ) )
-    {
+    if ( (iFoundIndex-1 < 0 ) ) {
       // 마지막 폴더이다.
       ShowMessageBox(GetMessage(TEXT("FIRST_FOLDER")));
       return;
-    }
-    else
-    {
+    } else {
       OpenFolder(vFolders[iFoundIndex-1]);
     }
   }
 }
 
-void ZMain::_GetFileListAndSort(const tstring & strFolderPathAndWildCard, FileListVector & vFileList)
-{
+void ZMain::_GetFileListAndSort(const tstring & strFolderPathAndWildCard, FileListVector & vFileList) {
   vFileList.resize(0);
   FindFile(strFolderPathAndWildCard.c_str(), vFileList, false);
 
   // 얻은 파일을 정렬한다.
-  switch ( m_sortOrder )
-  {
+  switch ( m_sortOrder ) {
   case eFileSortOrder_FILENAME:
-
-    /*
-    if ( IsWindowsXPOrGreater() )
-    {
-      sort(vFileList.begin(), vFileList.end(), CFileDataSort_OnlyFilenameCompare_XP());
-    }
-    else
-    */
-    {
-      sort(vFileList.begin(), vFileList.end(), CFileDataSort_OnlyFilenameCompare());
-    }
+    sort(vFileList.begin(), vFileList.end(), CFileDataSort_OnlyFilenameCompare());
     break;
 
   case eFileSortOrder_FILESIZE:
@@ -598,14 +439,11 @@ void ZMain::_GetFileListAndSort(const tstring & strFolderPathAndWildCard, FileLi
 
   default:
     assert(false);
-
   }
 }
 
-void ZMain::OpenFolder(const tstring & strFolder)
-{
+void ZMain::OpenFolder(const tstring & strFolder) {
   // 특정 폴더의 하위 파일들을 검색해서 정렬 후 첫번째 파일을 연다.
-
   tstring strTemp = strFolder;
   strTemp += TEXT("\\*.*");
 
@@ -613,22 +451,17 @@ void ZMain::OpenFolder(const tstring & strFolder)
 
   _GetFileListAndSort(strTemp, vFiles);
 
-  if ( vFiles.size() == 0 )
-  {
+  if ( vFiles.size() == 0 ) {
     TCHAR msg[COMMON_BUFFER_SIZE];
     SPrintf(msg, COMMON_BUFFER_SIZE, GetMessage(TEXT("THIS_DIRECTORY_HAS_NO_IMAGE")), strFolder.c_str());
     ::MessageBox(main_window_handle_, msg, TEXT("ZViewer"), MB_OK);
     return;
-  }
-  else
-  {
+  } else {
     OpenFile(vFiles[0].m_strFileName);
   }
 }
 
-
-void ZMain::OpenFile(const tstring & strFilename)
-{
+void ZMain::OpenFile(const tstring & strFilename) {
   current_image_ = nullptr;
 
   m_strCurrentFolder = GetFolderNameFromFullFileName(strFilename);
@@ -637,16 +470,13 @@ void ZMain::OpenFile(const tstring & strFilename)
   // 스캔한 파일 중 현재 파일을 찾는다.
   std::vector< FileData >::const_iterator it, endit = m_vFile.end();
 
-  for ( it = m_vFile.begin(); it != endit; ++it)
-  {
-    if ( it->m_strFileName == strFilename )
-    {
+  for ( it = m_vFile.begin(); it != endit; ++it) {
+    if ( it->m_strFileName == strFilename ) {
       break;
     }
   }
 
-  if ( m_vFile.empty() )
-  {
+  if ( m_vFile.empty() ) {
     assert(!"size of scanned file list is 0. Check folder name or path!!");
 
     return;
@@ -654,8 +484,7 @@ void ZMain::OpenFile(const tstring & strFilename)
 
   assert(it != m_vFile.end());	// 그 파일이 없을리가 없다.
 
-  if ( it != m_vFile.end() )
-  {
+  if ( it != m_vFile.end() ) {
     m_iCurretFileIndex = (int)(it - m_vFile.begin());//i;
     m_strCurrentFilename = strFilename;
 
@@ -664,9 +493,10 @@ void ZMain::OpenFile(const tstring & strFilename)
 }
 
 
-bool ZMain::MoveIndex(int iIndex)
-{
-  if ( m_vFile.empty() ) return false;
+bool ZMain::MoveIndex(int iIndex) {
+  if (m_vFile.empty()) {
+    return false;
+  }
 
   iIndex = GetCalculatedMovedIndex(iIndex);
 
@@ -681,43 +511,32 @@ bool ZMain::MoveIndex(int iIndex)
 }
 
 /// 새로 이동할 인덱스 번호를 주면 지금 상황에 맞는 인덱스 번호를 돌려준다.
-int ZMain::GetCalculatedMovedIndex(int iIndex)
-{
-  if ( iIndex < 0 )
-  {
-    if ( ZOption::GetInstance().IsLoopImages() )
-    {
+int ZMain::GetCalculatedMovedIndex(int iIndex) {
+  if ( iIndex < 0 ) {
+    if ( ZOption::GetInstance().IsLoopImages() ) {
       iIndex = (int)(m_vFile.size() - ((-1*iIndex) % m_vFile.size()));
-    }
-    else
-    {
+    } else {
       iIndex = 0;
     }
   }
 
-  if ( iIndex >= (int)m_vFile.size() )
-  {
-    if ( ZOption::GetInstance().IsLoopImages() || ZOption::GetInstance().m_bSlideMode )
-    {
+  if ( iIndex >= (int)m_vFile.size() ) {
+    if ( ZOption::GetInstance().IsLoopImages() || ZOption::GetInstance().m_bSlideMode ) {
       iIndex = (int)( iIndex % m_vFile.size() );
-    }
-    else
-    {
+    } else {
       iIndex = (int)m_vFile.size() - 1;
     }
   }
   return iIndex;
 }
 
-bool ZMain::FirstImage()
-{
+bool ZMain::FirstImage() {
   // 현재의 위치를 History 에 저장해놓는다.
   m_history.push_lastImageIndex(m_iCurretFileIndex);
   return MoveIndex(0);
 }
 
-bool ZMain::LastImage()
-{
+bool ZMain::LastImage() {
   // 현재의 위치를 History 에 저장해놓는다.
   m_history.push_lastImageIndex(m_iCurretFileIndex);
   return MoveIndex((int)m_vFile.size() - 1);
@@ -728,21 +547,23 @@ void ZMain::OnChangeCurrentSize(int iWidth, int iHeight) {
     return;
   }
 
-  if ( m_iShowingX + iWidth > current_image_->GetWidth() )
-  {
+  if ( m_iShowingX + iWidth > current_image_->GetWidth() ) {
     m_iShowingX -= (m_iShowingX + iWidth - current_image_->GetWidth());
 
-    if ( m_iShowingX < 0 ) m_iShowingX = 0;
+    if (m_iShowingX < 0) {
+      m_iShowingX = 0;
+    }
   }
-  if ( m_iShowingY + iHeight > current_image_->GetHeight() )
-  {
+
+  if ( m_iShowingY + iHeight > current_image_->GetHeight() ) {
     m_iShowingY -= (m_iShowingY + iHeight - current_image_->GetHeight());
-    if ( m_iShowingY < 0 ) m_iShowingY = 0;
+    if (m_iShowingY < 0) {
+      m_iShowingY = 0;
+    }
   }
 }
 
-void ZMain::FormHide()
-{
+void ZMain::FormHide() {
   LONG style = GetWindowLong(main_window_handle_, GWL_STYLE);
   style &= ~WS_CAPTION;
   style &= ~WS_THICKFRAME;
@@ -751,8 +572,7 @@ void ZMain::FormHide()
   SetWindowLong(main_window_handle_, GWL_STYLE, style);
 }
 
-void ZMain::FormShow()
-{
+void ZMain::FormShow() {
   LONG style = GetWindowLong(main_window_handle_, GWL_STYLE);
   style |= WS_CAPTION;
   style |= WS_THICKFRAME;
@@ -761,8 +581,7 @@ void ZMain::FormShow()
   SetWindowLong(main_window_handle_, GWL_STYLE, style);
 }
 
-void ZMain::StartTimer()
-{
+void ZMain::StartTimer() {
   /// Add Timer
   m_timerPtr = SetTimer(main_window_handle_, kTimerId, 100, NULL);
 
@@ -773,100 +592,46 @@ void ZMain::StartTimer()
   }
 }
 
-void ZMain::StopTimer()
-{
-  /// KillTimer
-  if ( m_timerPtr != 0 )
-  {
+void ZMain::StopTimer() {
+  if ( m_timerPtr != 0 ) {
     BOOL bRet = KillTimer(main_window_handle_, kTimerId);
 
-    if ( FALSE == bRet )
-    {
+    if ( FALSE == bRet ) {
       assert(bRet);
-    }
-    else
-    {
+    } else {
       m_timerPtr = 0;
     }
   }
 }
 
 /// Cache status 를 상태 표시줄에 표시한다.
-void ZMain::ShowCacheStatus()
-{
+void ZMain::ShowCacheStatus() {
   static bool bLastActionIsCache = false;
 
-  bool bNowActionIsCache = CacheManager::GetInstance().isCachingNow();
+  const bool bNowActionIsCache = CacheManager::GetInstance().is_cacahing();
 
-  if ( bLastActionIsCache != bNowActionIsCache )
-  {
+  if (bNowActionIsCache != bLastActionIsCache) {
     bLastActionIsCache = bNowActionIsCache;
 
     static tstring strStatusMsg=TEXT("...");	///< PostMessage() 로 호출하므로, 메모리가 없어지지 않게 하기 위해 static
 
-    if ( m_vFile.empty() )
-    {
+    if ( m_vFile.empty() ) {
       strStatusMsg = TEXT("");
-    }
-    else if ( false == bNowActionIsCache ) ///< 캐쉬가 끝났으면
-    {
+    } else if ( false == bNowActionIsCache ) {///< 캐쉬가 끝났으면
       strStatusMsg = TEXT("Cached");
-    }
-    else///< 아직 캐쉬 중이면
-    {
-      if ( CacheManager::GetInstance().IsNextFileCached() )	///< 다음 파일의 캐쉬가 끝났으면
-      {
+    } else {///< 아직 캐쉬 중이면
+      if ( CacheManager::GetInstance().IsNextFileCached() ) {///< 다음 파일의 캐쉬가 끝났으면
         strStatusMsg = TEXT("Caching files");
-      }
-      else ///< 아직 다음 파일도 캐쉬가 안 끝났으면,
-      {
+      } else {///< 아직 다음 파일도 캐쉬가 안 끝났으면,
         strStatusMsg = TEXT("Caching next");
       }
     }
     PostMessage(m_hStatusBar, SB_SETTEXT, 6, (LPARAM)strStatusMsg.c_str());
-
-    /*
-    HDC hDC = ::GetDC(m_hStatusBar);
-
-    enum
-    {
-      eCacheShowWindowSize = 20
-    };
-    RECT drawRect;
-    drawRect.left  = 503;
-    drawRect.right = drawRect.left + eCacheShowWindowSize;
-    drawRect.top = 3;
-    drawRect.bottom = 19;
-
-    static int percentage = 0;
-
-    if ( ZCacheImage::GetInstance().isCachingNow() )
-    {
-      ++percentage;
-
-      if ( percentage > 100 ) percentage = 0;
-
-      drawRect.right = drawRect.left + (eCacheShowWindowSize * ( percentage / 100.0 ));
-    }
-
-    LOGBRUSH logBrush;
-    logBrush.lbStyle = BS_SOLID;
-    logBrush.lbColor = RGB(100, 200, 200);
-    logBrush.lbHatch = 0;
-    HBRUSH hBrush = CreateBrushIndirect(&logBrush);
-    HBRUSH hOldBrush = (HBRUSH)SelectObject(hDC, hBrush);
-    Rectangle(hDC, drawRect.left, drawRect.top, drawRect.right, drawRect.bottom);
-    SelectObject(hDC, hOldBrush);
-    DeleteObject(hBrush);
-    */
   }
 }
 
-
-void ZMain::ToggleFullScreen()
-{
-  if ( ZOption::GetInstance().IsFullScreen() )	// 현재 풀스크린이면 원래 화면으로 돌아간다.
-  {
+void ZMain::ToggleFullScreen() {
+  if ( ZOption::GetInstance().IsFullScreen() ) {// 현재 풀스크린이면 원래 화면으로 돌아간다.
     ZOption::GetInstance().SetFullScreen(!ZOption::GetInstance().IsFullScreen());
 
     TaskBar::ShellTrayShow();	// 숨겨졌던 작업 표시줄을 보여준다.
@@ -874,11 +639,9 @@ void ZMain::ToggleFullScreen()
     FormShow();	// 메뉴, 상태 표시줄등을 보여준다.
 
     SetWindowPos(main_window_handle_, HWND_TOP, m_lastPosition.left, m_lastPosition.top, m_lastPosition.right - m_lastPosition.left, m_lastPosition.bottom - m_lastPosition.top, SWP_SHOWWINDOW);
-  }
-  else	// 현재 풀스크린이 아니면 풀스크린으로 만든다.
-  {
+  } else {// 현재 풀스크린이 아니면 풀스크린으로 만든다.
     ZOption::GetInstance().SetFullScreen(!ZOption::GetInstance().IsFullScreen());
-    // 현재 크기를 기억한다.
+    // Save current size
     GetWindowRect(main_window_handle_, &m_lastPosition);
 
     FormHide();// 메뉴, 상태 표시줄등을 숨긴다.
@@ -893,23 +656,11 @@ void ZMain::ToggleFullScreen()
     SetWindowPos(main_window_handle_, HWND_TOPMOST, screenX, screenY, screenWidth, screenHeight, SWP_NOMOVE|SWP_NOSIZE);
     MoveWindow(main_window_handle_, screenX, screenY, screenWidth, screenHeight, TRUE);
 
-
-    /* patch 적용하기 전의 소스
-    SetWindowPos(m_hMainDlg, HWND_TOPMOST, 0, 0, ::GetSystemMetrics(SM_CXSCREEN),::GetSystemMetrics(SM_CYSCREEN), SWP_NOMOVE|SWP_NOSIZE);
-    MoveWindow(m_hMainDlg, 0,0,::GetSystemMetrics(SM_CXSCREEN),::GetSystemMetrics(SM_CYSCREEN), TRUE);
-    */
-
     // 작업 표시줄을 가려준다.
     TaskBar::ShellTrayHide();
 
     // 포커스를 잃으면 원래대로 돌아가야하므로 풀어놓는다.
     SetWindowPos(main_window_handle_, HWND_NOTOPMOST, screenX, screenY, screenWidth, screenHeight, SWP_NOMOVE|SWP_NOSIZE);
-    /* patch 적용하기 전의 소스
-    SetWindowPos(m_hMainDlg, HWND_NOTOPMOST, 0, 0, ::GetSystemMetrics(SM_CXSCREEN),::GetSystemMetrics(SM_CYSCREEN), SWP_NOMOVE|SWP_NOSIZE);
-    */
-
-    //MoveWindow(m_hMainDlg, )
-    //m_iRestoreX =
   }
 
   SetCheckMenus();
@@ -919,8 +670,7 @@ void ZMain::ToggleFullScreen()
 }
 
 
-void ZMain::ToggleSmallToScreenStretch()
-{
+void ZMain::ToggleSmallToScreenStretch() {
   ZOption::GetInstance().ToggleSmallToBigStretchImage();
 
   SetCheckMenus();
@@ -929,8 +679,7 @@ void ZMain::ToggleSmallToScreenStretch()
   Draw();
 }
 
-void ZMain::ToggleBigToScreenStretch()
-{
+void ZMain::ToggleBigToScreenStretch() {
   ZOption::GetInstance().ToggleBigToSmallStretchImage();
 
   SetCheckMenus();
@@ -939,15 +688,13 @@ void ZMain::ToggleBigToScreenStretch()
   Draw();
 }
 
-void ZMain::ToggleLoopImage()
-{
+void ZMain::ToggleLoopImage() {
   ZOption::GetInstance().ToggleLoopImages();
 
   SetCheckMenus();
 }
 
-void ZMain::SetStatusBarText()
-{
+void ZMain::SetStatusBarText() {
   TCHAR szTemp[COMMON_BUFFER_SIZE];
   tstring strTemp;
 
@@ -971,20 +718,15 @@ void ZMain::SetStatusBarText()
     SendMessage(m_hStatusBar, SB_SETTEXT, 5, (LPARAM)TEXT(""));
 
     // 캐시 중인가
-    if ( m_vFile.size() == 0 )
-    {
+    if ( m_vFile.size() == 0 ) {
       SendMessage(m_hStatusBar, SB_SETTEXT, 6, (LPARAM)TEXT(""));
-    }
-    else
-    {
+    } else {
       ShowCacheStatus(); ///< 6
     }
 
     // 파일명
     SendMessage(m_hStatusBar, SB_SETTEXT, 7, (LPARAM)TEXT("No File"));
-  }
-  else
-  {
+  } else {
     // File Index
     SPrintf(szTemp, COMMON_BUFFER_SIZE, TEXT("%d/%u"), m_iCurretFileIndex+1, static_cast<unsigned int>(m_vFile.size()));
     SendMessage(m_hStatusBar, SB_SETTEXT, 0, (LPARAM)szTemp);
@@ -996,19 +738,13 @@ void ZMain::SetStatusBarText()
     // image size
     long imageSize = m_vFile[m_iCurretFileIndex].m_nFileSize;
 
-    if ( imageSize > 1024 )
-    {
-      if ( imageSize/1024 > 1024 )
-      {
+    if ( imageSize > 1024 ) {
+      if ( imageSize/1024 > 1024 ) {
         SPrintf(szTemp, COMMON_BUFFER_SIZE, TEXT("%.2fMByte"), imageSize/1024/1024.0f);
-      }
-      else
-      {
+      } else {
         SPrintf(szTemp, COMMON_BUFFER_SIZE, TEXT("%dKByte"), imageSize/1024);
       }
-    }
-    else
-    {
+    } else {
       SPrintf(szTemp, COMMON_BUFFER_SIZE, TEXT("%dByte"), imageSize);
     }
     SendMessage(m_hStatusBar, SB_SETTEXT, 2, (LPARAM)szTemp);
@@ -1035,39 +771,32 @@ void ZMain::SetStatusBarText()
   }
 }
 
-void ZMain::SetTitle()
-{
+void ZMain::SetTitle() {
   TCHAR szTemp[MAX_PATH+256];
 
-  if ( m_strCurrentFilename.empty() )	// 현재보고 있는 파일명이 없으면
-  {
+  if ( m_strCurrentFilename.empty() ) {// 현재보고 있는 파일명이 없으면
     SPrintf(szTemp, MAX_PATH+256, TEXT("ZViewer v%s"), g_strVersion.c_str());
-  }
-  else // 현재보고 있는 파일명이 있으면
-  {
+  } else {// 현재보고 있는 파일명이 있으면
     TCHAR szFileName[FILENAME_MAX] = { 0 };
     TCHAR szFileExt[MAX_PATH] = { 0 };
     SplitPath(m_strCurrentFilename.c_str(), NULL,0, NULL,0, szFileName,FILENAME_MAX, szFileExt,MAX_PATH);
 
     SPrintf(szTemp, MAX_PATH+256, TEXT("%s%s - %s"), szFileName, szFileExt, m_strCurrentFilename.c_str());
   }
-  BOOL bRet = SetWindowText(main_window_handle_, szTemp);
+  const BOOL bRet = SetWindowText(main_window_handle_, szTemp);
 
-  if ( FALSE == bRet )
-  {
+  if ( FALSE == bRet ) {
     assert(!"Can't SetWindowText");
   }
 }
 
-void ZMain::LoadCurrent()
-{
+void ZMain::LoadCurrent() {
   /// 파일 목록이 하나도 없으면 로딩을 시도하지 않는다.
   if ( m_vFile.empty() ) return;
 
   static bool bFirst = true;
 
-  if ( bFirst )
-  {
+  if ( bFirst ) {
     bFirst = false;
 
     CacheManager::GetInstance().SetImageVector(m_vFile);
@@ -1081,8 +810,7 @@ void ZMain::LoadCurrent()
   static tstring lastCheckFileName;
 
   /// 캐시된 데이터에 있으면
-  if ( CacheManager::GetInstance().hasCachedData(m_strCurrentFilename, m_iCurretFileIndex) )
-  {
+  if ( CacheManager::GetInstance().HasCachedData(m_strCurrentFilename, m_iCurretFileIndex) ) {
     {/// 캐시된 데이터를 읽어온다.
       current_image_ = CacheManager::GetInstance().GetCachedData(m_strCurrentFilename);
 
@@ -1092,7 +820,7 @@ void ZMain::LoadCurrent()
 
     DebugPrintf(TEXT("Cache Hit!!!!!!!!!!!!!"));
 
-    CacheManager::GetInstance().LogCacheHit();
+    CacheManager::GetInstance().IncreaseCacheHitCounter();
 
     m_dwLoadingTime = duration_cast<milliseconds>(system_clock::now() - start).count();
     SetTitle();			///< 파일명을 윈도우 타이틀바에 적는다.
@@ -1140,8 +868,7 @@ void ZMain::LoadCurrent()
   }
 }
 
-void ZMain::OnDrag(int x, int y)
-{
+void ZMain::OnDrag(const int x, const int y) {
   if ( current_image_ == nullptr) {
     return;
   }
@@ -1152,8 +879,8 @@ void ZMain::OnDrag(int x, int y)
   RECT rt;
   getCurrentScreenRect(rt);
 
-  int iNowShowingX = m_iShowingX;
-  int iNowShowingY = m_iShowingY;
+  const int iNowShowingX = m_iShowingX;
+  const int iNowShowingY = m_iShowingY;
 
   const int iZoomedWidth = (int)(current_image_->GetWidth() * m_fCurrentZoomRate);
   const int iZoomedHeight = (int)(current_image_->GetHeight() * m_fCurrentZoomRate);
@@ -1194,15 +921,13 @@ void ZMain::OnDrag(int x, int y)
 }
 
 
-void ZMain::ChangeFileSort(eFileSortOrder sortOrder)
-{
+void ZMain::ChangeFileSort(eFileSortOrder sortOrder) {
   m_sortOrder = sortOrder;
   ReLoadFileList();
 }
 
-void ZMain::ReLoadFileList()
-{
-  tstring strFileName = m_strCurrentFilename;
+void ZMain::ReLoadFileList() {
+  const tstring strFileName = m_strCurrentFilename;
   RescanFolder();
 
   OpenFile(strFileName);
@@ -1214,8 +939,7 @@ void ZMain::_ProcAfterRemoveThisFile() {
   m_strCurrentFilename.resize(0);
 
   // 현재 파일이 마지막 파일인가?
-  if ( m_vFile.size() <= 1 )
-  {
+  if ( m_vFile.size() <= 1 ) {
     m_iCurretFileIndex = 0;
     m_strCurrentFilename = TEXT("");
 
@@ -1227,20 +951,15 @@ void ZMain::_ProcAfterRemoveThisFile() {
     SetTitle();
     SetStatusBarText();
     Draw(NULL, true);
-  }
-  else
-  {
+  } else {
     tstring strNextFilename;
 
     assert(m_vFile.size() > 1);
     assert(m_iCurretFileIndex >= 0);
 
-    if ( m_iCurretFileIndex == (int)(m_vFile.size() - 1) )	///< 마지막 파일이면 이전 파일이고,
-    {
+    if ( m_iCurretFileIndex == (int)(m_vFile.size() - 1) ) {///< 마지막 파일이면 이전 파일이고,
       strNextFilename = m_vFile[m_iCurretFileIndex-1].m_strFileName;
-    }
-    else/// 마지막 파일이 아니면 다음 파일을 보여준다.
-    {
+    } else {/// 마지막 파일이 아니면 다음 파일을 보여준다.
       strNextFilename = m_vFile[m_iCurretFileIndex+1].m_strFileName;
     }
     ZMain::GetInstance().OpenFile(strNextFilename);
@@ -1249,27 +968,12 @@ void ZMain::_ProcAfterRemoveThisFile() {
 }
 
 
-void ZMain::OnFocusLose()
-{
-  //DebugPrintf("OnFocusLose()");
-
+void ZMain::OnFocusLose() {
   TaskBar::ShellTrayShow();
-  /*
-//	if ( m_bOpeningFileDialog )
-  {
-    m_bOpeningFileDialog = false;
-  }
-//	else
-  {
-  }
-  */
 }
 
-void ZMain::OnFocusGet()
-{
-  //DebugPrintf("OnFocusGet()");
-  if ( ZOption::GetInstance().IsFullScreen() )
-  {
+void ZMain::OnFocusGet() {
+  if ( ZOption::GetInstance().IsFullScreen() ) {
     DebugPrintf(TEXT("OnFocusGet() at fullscreen"));
 
     const int screenWidth = ::GetSystemMetrics( SM_CXSCREEN );
@@ -1283,25 +987,17 @@ void ZMain::OnFocusGet()
     MoveWindow(main_window_handle_, screenX, screenY, screenWidth, screenHeight, TRUE);
     SetWindowPos(main_window_handle_, HWND_NOTOPMOST, screenX, screenY, screenWidth, screenHeight, SWP_NOMOVE|SWP_NOSIZE);
 
-    /*
-    SetWindowPos(m_hMainDlg, HWND_TOPMOST, 0, 0, ::GetSystemMetrics(SM_CXSCREEN),::GetSystemMetrics(SM_CYSCREEN), SWP_NOMOVE|SWP_NOSIZE);
-    MoveWindow(m_hMainDlg, 0,0,::GetSystemMetrics(SM_CXSCREEN),::GetSystemMetrics(SM_CYSCREEN), TRUE);
-    SetWindowPos(m_hMainDlg, HWND_NOTOPMOST, 0, 0, ::GetSystemMetrics(SM_CXSCREEN),::GetSystemMetrics(SM_CYSCREEN), SWP_NOMOVE|SWP_NOSIZE);
-    */
     TaskBar::ShellTrayHide();
   }
 }
 
-void ZMain::Undo()
-{
-  if ( m_history.CanUndo() )
-  {
-    int iLast = m_history.Undo();
+void ZMain::Undo() {
+  if ( m_history.CanUndo() ) {
+    const int iLast = m_history.Undo();
 
     // 혹시나 범위를 벗어나면 안됨
-    if ( iLast < 0 || iLast >= (int)m_vFile.size() )
-    {
-      assert(!"Over range...");
+    if ( iLast < 0 || iLast >= (int)m_vFile.size() ) {
+      assert(!"Out of range...");
       return;
     }
 
@@ -1313,23 +1009,19 @@ void ZMain::Undo()
   }
 }
 
-void ZMain::Redo()
-{
-  if ( m_history.CanRedo() )
-  {
+void ZMain::Redo() {
+  if ( m_history.CanRedo() ) {
     m_history.Redo();
   }
 }
 
-void ZMain::OnRightTopFirstDraw()
-{
+void ZMain::OnRightTopFirstDraw() {
   ZOption::GetInstance().m_bRightTopFirstDraw = !ZOption::GetInstance().m_bRightTopFirstDraw;
 
   SetCheckMenus();
 }
 
-void ZMain::ShowFileExtDlg()
-{
+void ZMain::ShowFileExtDlg() {
   ZFileExtDlg::GetInstance().ShowDlg();
 }
 
@@ -1341,17 +1033,13 @@ void ZMain::DeleteThisFile() {
   TCHAR szDeleteMsg[COMMON_BUFFER_SIZE];
 
   SPrintf(szDeleteMsg, COMMON_BUFFER_SIZE, GetMessage(TEXT("DELETE_THIS_FILE")), GetFileNameFromFullFileName(m_strCurrentFilename).c_str());
-  int iRet = ::MessageBox(main_window_handle_, szDeleteMsg, TEXT("ZViewer"), MB_YESNO);
+  const int iRet = ::MessageBox(main_window_handle_, szDeleteMsg, TEXT("ZViewer"), MB_YESNO);
 
-  if ( iRet == IDYES )
-  {
-    if ( 0 == _tunlink(m_strCurrentFilename.c_str()) )
-    {
+  if ( iRet == IDYES ) {
+    if ( 0 == _tunlink(m_strCurrentFilename.c_str()) ) {
       DebugPrintf(TEXT("-- %s deleted --"), m_strCurrentFilename.c_str());
       _ProcAfterRemoveThisFile();
-    }
-    else
-    {
+    } else {
       ShowMessageBox(GetMessage(TEXT("CANNOT_DELETE_THIS_FILE")));
     }
   }
@@ -1374,33 +1062,26 @@ void ZMain::DeleteThisFileToRecycleBin() {
   fo.pTo = NULL;
   fo.fFlags = FOF_ALLOWUNDO;
 
-  if ( 0 == SHFileOperation(&fo))
-  {
-    if ( fo.fAnyOperationsAborted == FALSE )
-    {
+  if ( 0 == SHFileOperation(&fo)) {
+    if ( fo.fAnyOperationsAborted == FALSE ) {
       DebugPrintf(TEXT("-- %s deleted --"), m_strCurrentFilename.c_str());
       _ProcAfterRemoveThisFile();
     }
-  }
-  else
-  {
+  } else {
     ShowMessageBox(GetMessage(TEXT("CANNOT_DELETE_THIS_FILE")));
   }
 }
 
 
-void ZMain::MoveThisFile()
-{
+void ZMain::MoveThisFile() {
   /// 현재 보고 있는 파일이 없으면 바로 리턴한다.
-  if ( m_strCurrentFilename.empty() )
-  {
+  if ( m_strCurrentFilename.empty() ) {
     return;
   }
 
   CSelectToFolderDlg aDlg(ZOption::GetInstance().GetLastMoveDirectory());
 
-  if ( !aDlg.DoModal() )
-  {
+  if ( !aDlg.DoModal() ) {
     return;
   }
 
@@ -1409,8 +1090,7 @@ void ZMain::MoveThisFile()
   tstring filename = GetFileNameFromFullFileName(m_strCurrentFilename);
   tstring strToFileName = aDlg.GetSelectedFolder();
 
-  if ( strToFileName.size() <= 2 )
-  {
+  if ( strToFileName.size() <= 2 ) {
     ShowMessageBox(GetMessage(TEXT("MOVE_DESTINATION_IS_TOO_SHORT")));
     return;
   }
@@ -1419,28 +1099,22 @@ void ZMain::MoveThisFile()
   strToFileName += filename;
 
   // 옮겨갈 폴더에 같은 파일이 있는지 확인한다.
-  if ( 0 != _taccess(aDlg.GetSelectedFolder().c_str(), 00) )
-  {
+  if ( 0 != _taccess(aDlg.GetSelectedFolder().c_str(), 00) ) {
     ShowMessageBox(GetMessage(TEXT("WRONG_DIRECTORY_NAME")));
     return;
   }
 
   // 같은 파일이 존재하는지 확인한다.
-  if ( 0 == _taccess(strToFileName.c_str(), 00) )
-  {
+  if ( 0 == _taccess(strToFileName.c_str(), 00) ) {
     // 이미 존재하면
-    if ( IDNO == ShowMessageBox(GetMessage(TEXT("ASK_OVERWRITE_FILE")), MB_YESNO) )
-    {
+    if ( IDNO == ShowMessageBox(GetMessage(TEXT("ASK_OVERWRITE_FILE")), MB_YESNO) ) {
       return;
     }
   }
 
-  if ( FALSE == MoveFileEx(m_strCurrentFilename.c_str(), strToFileName.c_str(), MOVEFILE_COPY_ALLOWED | MOVEFILE_REPLACE_EXISTING) )
-  {
+  if ( FALSE == MoveFileEx(m_strCurrentFilename.c_str(), strToFileName.c_str(), MOVEFILE_COPY_ALLOWED | MOVEFILE_REPLACE_EXISTING) ) {
     ShowMessageBox(GetMessage(TEXT("CANNOT_MOVE_FILE")));
-  }
-  else
-  {
+  } else {
     ZOption::GetInstance().SetLastMoveDirectory(aDlg.GetSelectedFolder());
   }
   _ProcAfterRemoveThisFile();
@@ -1448,18 +1122,15 @@ void ZMain::MoveThisFile()
 
 
 /// 현재 파일을 복사한다.
-void ZMain::CopyThisFile()
-{
+void ZMain::CopyThisFile() {
   /// 현재 보고 있는 파일이 없으면 바로 리턴한다.
-  if ( m_strCurrentFilename.empty() )
-  {
+  if ( m_strCurrentFilename.empty() ) {
     return;
   }
 
   CSelectToFolderDlg aDlg(ZOption::GetInstance().GetLastCopyDirectory());
 
-  if ( !aDlg.DoModal() )
-  {
+  if ( !aDlg.DoModal() ) {
     return;
   }
 
@@ -1468,8 +1139,7 @@ void ZMain::CopyThisFile()
   tstring filename = GetFileNameFromFullFileName(m_strCurrentFilename);
   tstring strToFileName = aDlg.GetSelectedFolder();
 
-  if ( strToFileName.size() <= 2 )
-  {
+  if ( strToFileName.size() <= 2 ) {
     ShowMessageBox(GetMessage(TEXT("MOVE_DESTINATION_IS_TOO_SHORT")));
     return;
   }
@@ -1478,28 +1148,22 @@ void ZMain::CopyThisFile()
   strToFileName += filename;
 
   // 옮겨갈 폴더에 같은 파일이 있는지 확인한다.
-  if ( 0 != _taccess(aDlg.GetSelectedFolder().c_str(), 00) )
-  {
+  if ( 0 != _taccess(aDlg.GetSelectedFolder().c_str(), 00) ) {
     ShowMessageBox(GetMessage(TEXT("WRONG_DIRECTORY_NAME")));
     return;
   }
 
   // 같은 파일이 존재하는지 확인한다.
-  if ( 0 == _taccess(strToFileName.c_str(), 00) )
-  {
+  if ( 0 == _taccess(strToFileName.c_str(), 00) ) {
     // 이미 존재하면
-    if ( IDNO == ShowMessageBox(GetMessage(TEXT("ASK_OVERWRITE_FILE")), MB_YESNO) )
-    {
+    if ( IDNO == ShowMessageBox(GetMessage(TEXT("ASK_OVERWRITE_FILE")), MB_YESNO) ) {
       return;
     }
   }
 
-  if ( FALSE == CopyFile(m_strCurrentFilename.c_str(), strToFileName.c_str(), FALSE) )
-  {
+  if ( FALSE == CopyFile(m_strCurrentFilename.c_str(), strToFileName.c_str(), FALSE) ) {
     ShowMessageBox(GetMessage(TEXT("CANNOT_COPY_FILE")));
-  }
-  else
-  {
+  } else {
     ZOption::GetInstance().SetLastCopyDirectory(aDlg.GetSelectedFolder());
   }
 }
@@ -1511,14 +1175,10 @@ void ZMain::Rotate(bool bClockWise) {
     return;
   }
 
-  if ( current_image_->IsValid() )
-  {
-    if ( bClockWise )
-    {
+  if ( current_image_->IsValid() ) {
+    if ( bClockWise ) {
       current_image_->Rotate(-90);
-    }
-    else
-    {
+    } else {
       current_image_->Rotate(90);
     }
 
@@ -1531,10 +1191,8 @@ void ZMain::Rotate(bool bClockWise) {
   }
 }
 
-void ZMain::DecreaseOpacity()
-{
-  if ( m_alpha < 20 )
-  {
+void ZMain::DecreaseOpacity() {
+  if ( m_alpha < 20 ) {
     m_alpha = 20;
   }
   m_alpha -= 10;
@@ -1544,10 +1202,8 @@ void ZMain::DecreaseOpacity()
   SetLayeredWindowAttributes(main_window_handle_, 0, m_alpha, LWA_ALPHA);
 }
 
-void ZMain::IncreaseOpacity()
-{
-  if ( m_alpha >= 245 )
-  {
+void ZMain::IncreaseOpacity() {
+  if ( m_alpha >= 245 ) {
     m_alpha = 245;
   }
   m_alpha += 10;
@@ -1566,8 +1222,7 @@ void ZMain::SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyle style)
   // 현재보고 있는 파일을 윈도우 폴더에 저장한다.
   TCHAR szSystemFolder[_MAX_PATH] = { 0 };
 
-  if ( E_FAIL == SHGetFolderPath(NULL, CSIDL_WINDOWS, NULL, SHGFP_TYPE_CURRENT, szSystemFolder) )
-  {
+  if ( E_FAIL == SHGetFolderPath(NULL, CSIDL_WINDOWS, NULL, SHGFP_TYPE_CURRENT, szSystemFolder) ) {
     assert(false);
     return;
   }
@@ -1580,8 +1235,7 @@ void ZMain::SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyle style)
   strSaveFileName += szFileName;
   strSaveFileName += TEXT(".bmp");
 
-  if ( FALSE == current_image_->SaveToFile(strSaveFileName, BMP_DEFAULT) )
-  {
+  if ( FALSE == current_image_->SaveToFile(strSaveFileName, BMP_DEFAULT) ) {
     assert(false);
     return;
   }
@@ -1723,17 +1377,13 @@ void ZMain::_PositionPreviousCenter() {
 void ZMain::ZoomIn() {
   const double original_zoom_rate = m_fCurrentZoomRate;
 
-  if ( m_fCurrentZoomRate < 1.9999 )
-  {
+  if ( m_fCurrentZoomRate < 1.9999 ) {
     m_fCurrentZoomRate += 0.1;
-  }
-  else
-  {
+  } else {
     m_fCurrentZoomRate += 1.0;
   }
 
-  if ( m_fCurrentZoomRate >= 20.0 )
-  {
+  if ( m_fCurrentZoomRate >= 20.0 ) {
     m_fCurrentZoomRate = original_zoom_rate;
   }
 
@@ -1766,8 +1416,7 @@ void ZMain::ZoomOut() {
   /// 실수 연산이 딱 떨어지지 않기 때문에 처리해준다.
   m_fCurrentZoomRate = ((int)((m_fCurrentZoomRate * 10.0)+0.5) / 10.0f);
 
-  if ( original_zoom_rate != m_fCurrentZoomRate )
-  {
+  if ( original_zoom_rate != m_fCurrentZoomRate ) {
     m_iShowingX = 0;
     m_iShowingY = 0;
 

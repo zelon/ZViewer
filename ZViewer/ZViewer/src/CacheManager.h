@@ -1,6 +1,5 @@
 ﻿#pragma once
 
-class CachedData;
 class ZImage;
 
 /// 캐시를 어느 방향부터 먼저할 것인지, 우선시할 것인지를 위해...
@@ -15,10 +14,7 @@ enum class ViewDirection {
 
 
 /// 이미지를 캐쉬하여 관리하는 클래스
-class CacheManager {
-private:
-  CacheManager();
-
+class CacheManager final : NonCopyable {
 public:
   static CacheManager & GetInstance();
 
@@ -27,27 +23,20 @@ public:
   void CleanUpCache();
   void CleanUpThread();
 
-  inline void LogCacheHit() { ++m_iLogCacheHit; }
-  inline void LogCacheMiss() { ++m_iLogCacheMiss; }
+  inline void IncreaseCacheHitCounter() { ++cache_hit_counter_; }
+  inline void IncreaseCacheMissCounter() { ++cache_miss_counter_; }
 
-  /// 다음 파일이 캐쉬되었나를 체크해서 돌려준다.
   bool IsNextFileCached() const;
 
   void WaitCacheLock();
 
-  void debugShowCacheInfo();		///< 현재 캐쉬 정보를 디버그 콘솔에 보여준다. 디버깅모드 전용
+  void DebugShowCacheInfo();
 
-  void clearCache();
-  void setCacheEvent();
+  void ClearCache();
+  void SetCacheEvent();
 
   long GetCachedKByte() const;
-  int GetLogCacheHitRate() const {
-    if ( (m_iLogCacheHit + m_iLogCacheMiss ) == 0 )
-    {
-      return 0;
-    }
-    return (m_iLogCacheHit * 100 / (m_iLogCacheMiss+m_iLogCacheHit)); 
-  }
+  int GetLogCacheHitRate() const;
 
   void StartCacheThread();
 
@@ -58,29 +47,26 @@ public:
   void ThreadFunc();
 
   void SetImageVector(const std::vector < FileData > & v);
-  bool hasCachedData(const tstring & strFilename, int iIndex);	///< 이 파일에 해당하는 정보를 캐쉬해서 가지고 있는지 체크하는 함수
+  bool HasCachedData(const tstring & strFilename, int iIndex);	///< 이 파일에 해당하는 정보를 캐쉬해서 가지고 있는지 체크하는 함수
   std::shared_ptr<ZImage> GetCachedData(const tstring& strFilename) const;	///< 이 파일에 해당하는 ZImage 정보를 받아오는 함수
   void AddCacheData(const tstring & strFilename, std::shared_ptr<ZImage> image, bool bForceCache = false);		///< 이 파일에 해당하는 ZImage 정보를 새로 추가해라.
 
-  void SetViewDirection(const ViewDirection direction) {
+  void set_view_direction(const ViewDirection direction) {
     view_direction_ = direction;
   }
 
-  bool isCachingNow() const { return m_bNowCaching; }
+  bool is_cacahing() const { return is_caching_; }
 
 private:
+  CacheManager();
 
-  /// 현재 캐쉬 중인가...
-  bool m_bNowCaching;
+  bool is_caching_;
 
   /// 캐쉬의 효율성을 위해서 사용자가 마지막으로 어느 방향으로 움직였는지를 기억해놓는다.
   ViewDirection view_direction_;
 
-  /// 캐시가 hit 한 횟수. 통계용
-  unsigned int m_iLogCacheHit;
-
-  /// 캐시가 miss 한 횟수. 통계용
-  unsigned int m_iLogCacheMiss;
+  unsigned int cache_hit_counter_;
+  unsigned int cache_miss_counter_;
 
   volatile bool m_bNewChange;
 
