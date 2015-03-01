@@ -216,13 +216,13 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 /// 디버그 모드에서만 작동하는 단축키들
 #ifdef _DEBUG
 			case '`':
-				ZCacheImage::GetInstance().debugShowCacheInfo();
+				CacheManager::GetInstance().debugShowCacheInfo();
 				break;
 
 			case '~':
 				{
 					TIMECHECK_START("clear spend time");
-					ZCacheImage::GetInstance().clearCache();
+					CacheManager::GetInstance().clearCache();
 					TIMECHECK_END();
 				}
 				break;
@@ -500,7 +500,7 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 				break;
 
 			case ID_SHOW_CACHED_FILENAME:
-				ZCacheImage::GetInstance().ShowCachedImageList();
+				CacheManager::GetInstance().ShowCachedImageList();
 				break;
 
 			case ID_MAINMENU_FILE_EXIT:

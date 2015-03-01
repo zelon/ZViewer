@@ -11,38 +11,36 @@
 using namespace std;
 using namespace std::chrono;
 
-class ZCacheImage::Impl {
+class CacheManager::Impl {
 public:
   std::vector<BYTE> file_read_buffer_;
   CachedData m_cacheData;
   CEventObj m_hCacheEvent;
 };
 
-ZCacheImage & ZCacheImage::GetInstance() {
-  static ZCacheImage ins;
+CacheManager & CacheManager::GetInstance() {
+  static CacheManager ins;
   return ins;
 }
 
-ZCacheImage::ZCacheImage()
-:	m_bCacheGoOn(true)
-,	m_iLogCacheHit(0)
-,	m_iLogCacheMiss(0)
-,	view_direction_(ViewDirection::kForward)
-,	m_pImpl(new Impl)
-{
-  m_bNowCaching = false;
+CacheManager::CacheManager()
+: m_bCacheGoOn(true)
+, m_iLogCacheHit(0)
+, m_iLogCacheMiss(0)
+, m_bNowCaching(false)
+, view_direction_(ViewDirection::kForward)
+, m_pImpl(new Impl) {
 }
 
-ZCacheImage::~ZCacheImage() {
+CacheManager::~CacheManager() {
   CleanUpThread();
 }
 
-void ZCacheImage::CleanUpCache() {
+void CacheManager::CleanUpCache() {
   m_pImpl->m_cacheData.ClearCachedImageData();
 }
 
-
-void ZCacheImage::CleanUpThread() {
+void CacheManager::CleanUpThread() {
   m_bCacheGoOn = false;
 
   m_pImpl->m_hCacheEvent.setEvent();
@@ -54,13 +52,13 @@ void ZCacheImage::CleanUpThread() {
   }
 }
 
-void ZCacheImage::SetImageVector(const std::vector <FileData> & filedata_list) {
+void CacheManager::SetImageVector(const std::vector <FileData> & filedata_list) {
   m_pImpl->m_cacheData.SetImageVector(filedata_list);
 }
 
-void ZCacheImage::StartCacheThread() {
+void CacheManager::StartCacheThread() {
   std::thread new_thread([]() {
-    ZCacheImage::GetInstance().ThreadFunc();
+    CacheManager::GetInstance().ThreadFunc();
     DebugPrintf(TEXT("End of Cache Thread"));
   });
   cache_thread_.swap(new_thread);
@@ -71,7 +69,7 @@ void ZCacheImage::StartCacheThread() {
   }
 }
 
-void ZCacheImage::ShowCachedImageList() {
+void CacheManager::ShowCachedImageList() {
 #ifndef _DEBUG
   return; // 릴리즈 모드에서는 그냥 리턴
 #else
@@ -79,12 +77,12 @@ void ZCacheImage::ShowCachedImageList() {
 #endif
 }
 
-size_t ZCacheImage::GetNumOfCacheImage() const {
+size_t CacheManager::GetNumOfCacheImage() const {
   return m_pImpl->m_cacheData.Size();
 }
 
 
-bool ZCacheImage::_CacheIndex(int iIndex) {
+bool CacheManager::_CacheIndex(int iIndex) {
   /*
   // 최대 캐시 크기를 넘었으면 더 이상 캐시하지 않는다.
   if ( m_iCurrentIndex != iIndex &&
@@ -238,7 +236,7 @@ bool ZCacheImage::_CacheIndex(int iIndex) {
   return true;
 }
 
-bool ZCacheImage::ClearFarthestCache(const int index) {
+bool CacheManager::ClearFarthestCache(const int index) {
   // 캐시되어 있는 것들 중 가장 현재 index 에서 먼것을 찾는다.
   const int iFarthestIndex = m_pImpl->m_cacheData.GetFarthestIndexFromCurrentIndex(m_iCurrentIndex);
   assert(iFarthestIndex >= 0 );
@@ -273,7 +271,7 @@ bool ZCacheImage::ClearFarthestCache(const int index) {
   return true;
 }
 
-void ZCacheImage::ThreadFunc() {
+void CacheManager::ThreadFunc() {
   m_bNewChange = false;
   while ( m_bCacheGoOn ) // thread loop
   {
@@ -333,7 +331,7 @@ void ZCacheImage::ThreadFunc() {
   }
 }
 
-bool ZCacheImage::hasCachedData(const tstring & strFilename, int iIndex) {
+bool CacheManager::hasCachedData(const tstring & strFilename, int iIndex) {
   // index 를 체크한다.
   m_iCurrentIndex = iIndex;
   m_strCurrentFileName = strFilename;
@@ -348,11 +346,11 @@ bool ZCacheImage::hasCachedData(const tstring & strFilename, int iIndex) {
   return false;
 }
 
-std::shared_ptr<ZImage> ZCacheImage::GetCachedData(const tstring & strFilename) const {
+std::shared_ptr<ZImage> CacheManager::GetCachedData(const tstring & strFilename) const {
   return m_pImpl->m_cacheData.GetCachedData(strFilename);
 }
 
-void ZCacheImage::AddCacheData(const tstring & strFilename, std::shared_ptr<ZImage> pImage, const bool bForceCache) {
+void CacheManager::AddCacheData(const tstring & strFilename, std::shared_ptr<ZImage> pImage, const bool bForceCache) {
   if ( false == pImage->IsValid() ) {
     assert(false);
     return;
@@ -366,7 +364,7 @@ void ZCacheImage::AddCacheData(const tstring & strFilename, std::shared_ptr<ZIma
 }
 
 /// 다음 파일이 캐쉬되었나를 체크해서 돌려준다.
-bool ZCacheImage::IsNextFileCached() const {
+bool CacheManager::IsNextFileCached() const {
   int iNextIndex = m_iCurrentIndex;
 
   if ( view_direction_ == ViewDirection::kForward ) {
@@ -380,12 +378,12 @@ bool ZCacheImage::IsNextFileCached() const {
   return m_pImpl->m_cacheData.HasCachedDataByIndex(iNextIndex);
 }
 
-void ZCacheImage::WaitCacheLock() {
+void CacheManager::WaitCacheLock() {
   m_pImpl->m_cacheData.WaitCacheLock();
 }
 
 /// 현재 캐쉬 정보를 디버그 콘솔에 보여준다. 디버깅모드 전용
-void ZCacheImage::debugShowCacheInfo() {
+void CacheManager::debugShowCacheInfo() {
   RECT rt;
   if ( false == ZMain::GetInstance().getCurrentScreenRect(rt) )
   {
@@ -398,16 +396,16 @@ void ZCacheImage::debugShowCacheInfo() {
 }
 
 
-void ZCacheImage::clearCache() {
+void CacheManager::clearCache() {
   m_pImpl->m_cacheData.ClearCachedImageData();
   DebugPrintf(TEXT("Clear cache data"));
 }
 
-void ZCacheImage::setCacheEvent() {
+void CacheManager::setCacheEvent() {
   m_pImpl->m_hCacheEvent.setEvent();
 }
 
 
-long ZCacheImage::GetCachedKByte() const {
+long CacheManager::GetCachedKByte() const {
   return (m_pImpl->m_cacheData.GetCachedTotalSize() / 1024);
 }

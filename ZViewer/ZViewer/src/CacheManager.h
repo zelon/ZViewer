@@ -15,14 +15,14 @@ enum class ViewDirection {
 
 
 /// 이미지를 캐쉬하여 관리하는 클래스
-class ZCacheImage {
+class CacheManager {
 private:
-  ZCacheImage();
+  CacheManager();
 
 public:
-  static ZCacheImage & GetInstance();
+  static CacheManager & GetInstance();
 
-  ~ZCacheImage();
+  ~CacheManager();
 
   void CleanUpCache();
   void CleanUpThread();

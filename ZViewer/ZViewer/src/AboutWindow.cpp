@@ -64,7 +64,7 @@ LRESULT CALLBACK AboutWndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lPara
 			SPrintf(szTemp, MAX_PATH, TEXT("%d"),ZMain::GetInstance().GetCachedKByte());
 			::GetNumberFormat((LCID)NULL, (DWORD)NULL, szTemp, &nFmt, szOUT, 20);
 
-			SPrintf(szTemp, MAX_PATH, TEXT("CachedMemory : %sKB, Num of Cached Image : %u"), szOUT, static_cast<unsigned int>(ZCacheImage::GetInstance().GetNumOfCacheImage()));
+			SPrintf(szTemp, MAX_PATH, TEXT("CachedMemory : %sKB, Num of Cached Image : %u"), szOUT, static_cast<unsigned int>(CacheManager::GetInstance().GetNumOfCacheImage()));
 			CreateLabel(hWnd, szTemp, y);
 
 			SPrintf(szTemp, MAX_PATH, TEXT("ProgramPath : %s"), GetProgramFolder().c_str());
