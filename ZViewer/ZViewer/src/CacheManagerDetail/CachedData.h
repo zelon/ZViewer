@@ -18,7 +18,7 @@ public:
 
   bool IsEmpty() const;
 
-  void InsertData(const tstring& strFilename, std::shared_ptr<ZImage> image, const bool bForceCache);
+  bool InsertData(const tstring& strFilename, std::shared_ptr<ZImage> image, const bool bForceCache);
 
   void ShowCacheInfo() const;
 

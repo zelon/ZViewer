@@ -14,10 +14,12 @@ enum eFileSortOrder
 };
 
 /// 대부분의 작업을 처리하는 메인 클래스
-class ZMain final {
+class ZMain final : public CacheEventListenerInterface {
 public:
   static ZMain & GetInstance();
   ~ZMain();
+
+  void OnFileCached(const tstring& filename) override;
 
   void StartSlideMode();
 

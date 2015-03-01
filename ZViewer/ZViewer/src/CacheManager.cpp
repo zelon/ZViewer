@@ -42,6 +42,7 @@ void CacheManager::CleanUpCache() {
 
 void CacheManager::CleanUpThread() {
   m_bCacheGoOn = false;
+  listener_ = nullptr;
 
   m_pImpl->m_hCacheEvent.setEvent();
 
@@ -371,7 +372,11 @@ void CacheManager::AddCacheData(const tstring & strFilename, std::shared_ptr<ZIm
     return;
   }
 
-  m_pImpl->m_cacheData.InsertData(strFilename, pImage, bForceCache);
+  if (m_pImpl->m_cacheData.InsertData(strFilename, pImage, bForceCache)) {
+    if (listener_ != nullptr) {
+      listener_->OnFileCached(strFilename);
+    }
+  }
 }
 
 bool CacheManager::IsNextFileCached() const {

@@ -158,6 +158,8 @@ void ZMain::OnInit() {
   /// 불러온 최종 옵션을 점검하여 메뉴 중 체크표시할 것들을 표시한다.
   SetCheckMenus();
 
+  CacheManager::GetInstance().set_listener(this);
+
   if ( m_strInitArg.empty() ) {
     RescanFolder();
   } else {
@@ -1480,4 +1482,8 @@ void ZMain::AdjustShowWindowScreen() {
 
 void ZMain::SendMsg(UINT Msg, WPARAM wParam, LPARAM lParam) {
   SendMessage(main_window_handle_, Msg, wParam, lParam);
+}
+
+void ZMain::OnFileCached(const tstring& filename) {
+  DebugPrintf(TEXT("OnFileCached %s"), filename.c_str());
 }

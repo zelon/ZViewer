@@ -724,7 +724,6 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 
 		hdc=BeginPaint(ZMain::GetInstance().GetShowWindow(), &ps);
 		ZMain::GetInstance().Draw(hdc);
-		//ZMain::GetInstance().LoadCurrent();
 		EndPaint(ZMain::GetInstance().GetShowWindow(), &ps);
 
 		DebugPrintf(TEXT("Recv WM_PAINT"));

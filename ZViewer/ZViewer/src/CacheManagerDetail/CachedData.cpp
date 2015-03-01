@@ -172,11 +172,12 @@ bool CachedData::ClearFarthestDataFromCurrent(const int iFarthestIndex) {
   return true;
 }
 
-void CachedData::InsertData(const tstring& strFilename, std::shared_ptr<ZImage> pImage, const bool bForceCache) {
+// return true if cached
+bool CachedData::InsertData(const tstring& strFilename, std::shared_ptr<ZImage> pImage, const bool bForceCache) {
   /// 이미 캐시되어 있으면 캐시하지 않는다.
   if ( HasCachedDataByFilename(strFilename) ) {
     assert(false);
-    return;
+    return true;
   }
 
   if ( false == bForceCache ) {
@@ -184,7 +185,7 @@ void CachedData::InsertData(const tstring& strFilename, std::shared_ptr<ZImage> 
     if ( (GetCachedTotalSize() + pImage->GetImageSize()) /1024/1024 > ZOption::GetInstance().GetMaxCacheMemoryMB() )
     {
       DebugPrintf(_T("-- 이 이미지를 캐시하면 용량제한을 넘어서 캐시하지 않습니다 -- : %s"), strFilename.c_str());
-      return;
+      return false;
     }
   }
 
@@ -194,7 +195,7 @@ void CachedData::InsertData(const tstring& strFilename, std::shared_ptr<ZImage> 
   {
     if ( m_cacheData.find(strFilename) != m_cacheData.end() ) {
       assert(!"--- 이미 캐시에 있는 파일을 다시 넣으려고 합니다 ---");
-      return;
+      return true;
     }
     m_cacheData[strFilename] = pImage;
   }
@@ -205,5 +206,6 @@ void CachedData::InsertData(const tstring& strFilename, std::shared_ptr<ZImage> 
   long long diffTime = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime).count();
 
   DebugPrintf(TEXT("Cache insert time : %d filename(%s)"), diffTime, strFilename.c_str());
-}
 
+  return true;
+}
