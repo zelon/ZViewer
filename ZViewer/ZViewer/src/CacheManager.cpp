@@ -1,9 +1,9 @@
 ﻿#include "stdafx.h"
 
-#include "ZCacheImage.h"
+#include "CacheManager.h"
 
-#include "CachedData.h"
-#include "FileReader.h"
+#include "CacheManagerDetail/CachedData.h"
+#include "CacheManagerDetail/FileReader.h"
 #include "ZOption.h"
 #include "ZMain.h"
 #include "../../commonSrc/MessageManager.h"

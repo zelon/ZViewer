@@ -12,7 +12,7 @@
 #include "src/ZHistory.h"
 #include "../commonSrc/DesktopWallPaper.h"
 #include "../commonSrc/ZImage.h"
-#include "src/ZCacheImage.h"
+#include "src/CacheManager.h"
 
 /// 파일을 보여줄 때의 정렬 순서
 enum eFileSortOrder

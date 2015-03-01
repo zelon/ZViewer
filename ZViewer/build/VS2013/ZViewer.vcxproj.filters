@@ -26,12 +26,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx</Extensions>
     </Filter>
+    <Filter Include="src\CacheManagerDetail">
+      <UniqueIdentifier>{195e3a90-2b68-4379-b668-0f69b19a1f65}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\ZViewer\src\AboutWindow.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ZViewer\src\CachedData.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\ZViewer\src\ExifDlg.cpp">
@@ -47,9 +47,6 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\ZViewer\src\TaskBar.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ZViewer\src\ZCacheImage.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\ZViewer\src\ZFileExtDlg.cpp">
@@ -111,10 +108,16 @@
     </ClCompile>
     <ClCompile Include="..\..\ZViewer\stdafx.cpp" />
     <ClCompile Include="..\..\ZViewer\Main.cpp" />
-    <ClCompile Include="..\..\ZViewer\src\FileMap.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="..\..\ZViewer\src\CacheManagerDetail\FileMap.cpp">
+      <Filter>src\CacheManagerDetail</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\ZViewer\src\FileReader.cpp">
+    <ClCompile Include="..\..\ZViewer\src\CacheManagerDetail\FileReader.cpp">
+      <Filter>src\CacheManagerDetail</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ZViewer\src\CacheManagerDetail\CachedData.cpp">
+      <Filter>src\CacheManagerDetail</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ZViewer\src\CacheManager.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -139,9 +142,6 @@
     <ClInclude Include="..\..\ZViewer\src\AboutWindow.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\ZViewer\src\CachedData.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\ZViewer\src\ExifDlg.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -155,9 +155,6 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\..\ZViewer\src\TaskBar.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\ZViewer\src\ZCacheImage.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\..\ZViewer\src\ZFileExtDlg.h">
@@ -236,10 +233,16 @@
       <Filter>lib\freeimage</Filter>
     </ClInclude>
     <ClInclude Include="..\..\ZViewer\stdafx.h" />
-    <ClInclude Include="..\..\ZViewer\src\FileMap.h">
-      <Filter>src</Filter>
+    <ClInclude Include="..\..\ZViewer\src\CacheManagerDetail\FileMap.h">
+      <Filter>src\CacheManagerDetail</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\ZViewer\src\FileReader.h">
+    <ClInclude Include="..\..\ZViewer\src\CacheManagerDetail\FileReader.h">
+      <Filter>src\CacheManagerDetail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ZViewer\src\CacheManagerDetail\CachedData.h">
+      <Filter>src\CacheManagerDetail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ZViewer\src\CacheManager.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
