@@ -343,27 +343,25 @@ void CacheManager::ThreadFunc() {
   }
 }
 
-bool CacheManager::HasCachedData(const tstring & strFilename, int iIndex) {
-  // index 를 체크한다.
-  m_iCurrentIndex = iIndex;
+void CacheManager::SetCurrent(const int index, const tstring & strFilename) {
+  m_iCurrentIndex = index;
   m_strCurrentFileName = strFilename;
 
   m_bNewChange = true;
 
   m_pImpl->m_hCacheEvent.setEvent();
+}
 
-  if (m_pImpl->m_cacheData.HasCachedDataByFilename(strFilename)) {
-    return true;
-  }
-  return false;
+bool CacheManager::HasCachedData(const tstring & strFilename) {
+  return m_pImpl->m_cacheData.HasCachedDataByFilename(strFilename);
 }
 
 std::shared_ptr<ZImage> CacheManager::GetCachedData(const tstring & strFilename) const {
   return m_pImpl->m_cacheData.GetCachedData(strFilename);
 }
 
-void CacheManager::AddCacheData(const tstring & strFilename, std::shared_ptr<ZImage> pImage, const bool bForceCache) {
-  if (false == pImage->IsValid()) {
+void CacheManager::AddCacheData(const tstring & strFilename, std::shared_ptr<ZImage> image, const bool bForceCache) {
+  if (false == image->IsValid()) {
     assert(false);
     return;
   }
@@ -372,9 +370,9 @@ void CacheManager::AddCacheData(const tstring & strFilename, std::shared_ptr<ZIm
     return;
   }
 
-  if (m_pImpl->m_cacheData.InsertData(strFilename, pImage, bForceCache)) {
+  if (m_pImpl->m_cacheData.InsertData(strFilename, image, bForceCache)) {
     if (listener_ != nullptr) {
-      listener_->OnFileCached(strFilename);
+      listener_->OnFileCached(strFilename, image);
     }
   }
 }
@@ -431,3 +429,4 @@ int CacheManager::GetLogCacheHitRate() const
   }
   return (cache_hit_counter_ * 100 / (cache_miss_counter_ + cache_hit_counter_));
 }
+

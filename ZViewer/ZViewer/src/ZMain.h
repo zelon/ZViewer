@@ -19,7 +19,9 @@ public:
   static ZMain & GetInstance();
   ~ZMain();
 
-  void OnFileCached(const tstring& filename) override;
+  void OnFileCached(const tstring& filename, std::shared_ptr<ZImage> image) override;
+
+  void SetImageAndShow(std::shared_ptr<ZImage> image);
 
   void StartSlideMode();
 

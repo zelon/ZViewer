@@ -16,7 +16,7 @@ class CacheEventListenerInterface {
 public:
   virtual ~CacheEventListenerInterface() { /* do nothing */ }
 
-  virtual void OnFileCached(const tstring& filename) = 0;
+  virtual void OnFileCached(const tstring& filename, std::shared_ptr<ZImage> image) = 0;
 };
 
 /// 이미지를 캐쉬하여 관리하는 클래스
@@ -55,7 +55,10 @@ public:
   void ThreadFunc();
 
   void SetImageVector(const std::vector < FileData > & v);
-  bool HasCachedData(const tstring & strFilename, int iIndex);	///< 이 파일에 해당하는 정보를 캐쉬해서 가지고 있는지 체크하는 함수
+
+  void SetCurrent(const int index, const tstring & filename);
+  bool HasCachedData(const tstring & strFilename);
+
   std::shared_ptr<ZImage> GetCachedData(const tstring& strFilename) const;	///< 이 파일에 해당하는 ZImage 정보를 받아오는 함수
   void AddCacheData(const tstring & strFilename, std::shared_ptr<ZImage> image, bool bForceCache = false);		///< 이 파일에 해당하는 ZImage 정보를 새로 추가해라.
 

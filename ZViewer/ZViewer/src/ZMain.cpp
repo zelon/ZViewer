@@ -55,6 +55,60 @@ ZMain::~ZMain() {
   }
 }
 
+void ZMain::OnFileCached(const tstring& filename, std::shared_ptr<ZImage> image) {
+  DebugPrintf(TEXT("OnFileCached %s"), filename.c_str());
+
+  if (filename == m_strCurrentFilename) {
+    SetImageAndShow(image);
+  }
+}
+
+void ZMain::SetImageAndShow(std::shared_ptr<ZImage> image) {
+  current_image_ = image;
+  assert(current_image_);
+  assert(current_image_->IsValid());
+
+  m_iShowingX = 0;
+  m_iShowingY = 0;
+
+  if ( ZOption::GetInstance().m_bRightTopFirstDraw ) {// 우측 상단부터 시작해야하면
+    RECT rt;
+    getCurrentScreenRect(rt);
+
+    if ( current_image_->GetWidth() > rt.right ) {
+      m_iShowingX = current_image_->GetWidth() - rt.right;
+    }
+  }
+
+  /// 기본적으로 그림의 zoom rate 를 설정한다.
+  m_fCurrentZoomRate = 1.0f;
+  RECT currentScreenRect;
+  if ( false == getCurrentScreenRect(currentScreenRect) ) {
+    assert(false);
+  } else {
+    if ( ZOption::GetInstance().IsBigToSmallStretchImage() || ZOption::GetInstance().IsSmallToBigStretchImage() ) {
+      RECT toRect;
+      SetRect(&toRect, 0, 0, current_image_->GetWidth(), current_image_->GetHeight());
+
+      if ( ZOption::GetInstance().IsBigToSmallStretchImage() ) {
+        if ( current_image_->GetWidth() > (currentScreenRect.right - currentScreenRect.left) || current_image_->GetHeight() > (currentScreenRect.bottom - currentScreenRect.top) ) {
+          toRect = GetResizedRectForBigToSmall(currentScreenRect, toRect);
+        }
+      }
+
+      if ( ZOption::GetInstance().IsSmallToBigStretchImage() ) {
+        if ( current_image_->GetWidth() < (currentScreenRect.right - currentScreenRect.left) && current_image_->GetHeight() < (currentScreenRect.bottom - currentScreenRect.top) ) {
+          toRect = GetResizedRectForSmallToBig(currentScreenRect, toRect);
+        }
+      }
+      m_fCurrentZoomRate = (float)(toRect.right - toRect.left) / (float)(current_image_->GetWidth());
+    }
+  }
+  Draw();
+
+  SetStatusBarText();	///< 상태 표시줄 내용을 설정한다.
+}
+
 /// 버퍼로 쓰이는 DC 를 릴리즈한다.
 void ZMain::_releaseBufferDC() {
   if ( m_hBufferDC != nullptr) {
@@ -74,10 +128,6 @@ void ZMain::onTimer() {
       Draw();
       ZOption::GetInstance().m_LastSlidedTime = system_clock::now();
     }
-  }
-
-  if (current_image_ == nullptr) {
-    LoadCurrent();
   }
 
   ShowCacheStatus();
@@ -204,16 +254,12 @@ void ZMain::Draw(HDC toDrawDC, bool need_to_erase_background) {
   }
 
   /// 파일이 하나도 없을 때는 배경만 지우고 바로 리턴한다.
-  if ( m_vFile.size() <= 0 ) {
+  if ( m_vFile.size() <= 0 || current_image_ == nullptr) {
     EraseBackground(mainDC, currentScreenRect.right, currentScreenRect.bottom);
 
     if ( NULL == toDrawDC ) {
       ReleaseDC(main_window_handle_, mainDC);
     }
-    return;
-  }
-
-  if ( current_image_ == nullptr ) {
     return;
   }
 
@@ -723,7 +769,7 @@ void ZMain::SetStatusBarText() {
     if ( m_vFile.size() == 0 ) {
       SendMessage(m_hStatusBar, SB_SETTEXT, 6, (LPARAM)TEXT(""));
     } else {
-      ShowCacheStatus(); ///< 6
+      ShowCacheStatus();
     }
 
     // 파일명
@@ -794,7 +840,9 @@ void ZMain::SetTitle() {
 
 void ZMain::LoadCurrent() {
   /// 파일 목록이 하나도 없으면 로딩을 시도하지 않는다.
-  if ( m_vFile.empty() ) return;
+  if (m_vFile.empty()) {
+    return;
+  }
 
   static bool bFirst = true;
 
@@ -809,65 +857,29 @@ void ZMain::LoadCurrent() {
 
   _releaseBufferDC();
 
-  static tstring lastCheckFileName;
+  CacheManager::GetInstance().SetCurrent(m_iCurretFileIndex, m_strCurrentFilename);
 
-  /// 캐시된 데이터에 있으면
-  if ( CacheManager::GetInstance().HasCachedData(m_strCurrentFilename, m_iCurretFileIndex) ) {
-    {/// 캐시된 데이터를 읽어온다.
-      current_image_ = CacheManager::GetInstance().GetCachedData(m_strCurrentFilename);
-
-      assert(current_image_);
-      assert(current_image_->IsValid());
-    }
-
+  if ( CacheManager::GetInstance().HasCachedData(m_strCurrentFilename) ) {
     DebugPrintf(TEXT("Cache Hit!!!!!!!!!!!!!"));
-
     CacheManager::GetInstance().IncreaseCacheHitCounter();
 
     m_dwLoadingTime = duration_cast<milliseconds>(system_clock::now() - start).count();
-    SetTitle();			///< 파일명을 윈도우 타이틀바에 적는다.
-    SetStatusBarText();	///< 상태 표시줄 내용을 설정한다.
 
-    m_iShowingX = 0;
-    m_iShowingY = 0;
-
-    if ( ZOption::GetInstance().m_bRightTopFirstDraw ) {// 우측 상단부터 시작해야하면
-      RECT rt;
-      getCurrentScreenRect(rt);
-
-      if ( current_image_->GetWidth() > rt.right ) {
-        m_iShowingX = current_image_->GetWidth() - rt.right;
-      }
+    shared_ptr<ZImage> image = CacheManager::GetInstance().GetCachedData(m_strCurrentFilename);
+    if (image != nullptr) {
+      SetImageAndShow(image);
     }
 
-    /// 기본적으로 그림의 zoom rate 를 설정한다.
-    m_fCurrentZoomRate = 1.0f;
-    RECT currentScreenRect;
-    if ( false == getCurrentScreenRect(currentScreenRect) ) {
-      assert(false);
-    } else {
-      if ( ZOption::GetInstance().IsBigToSmallStretchImage() || ZOption::GetInstance().IsSmallToBigStretchImage() ) {
-        RECT toRect;
-        SetRect(&toRect, 0, 0, current_image_->GetWidth(), current_image_->GetHeight());
-
-        if ( ZOption::GetInstance().IsBigToSmallStretchImage() ) {
-          if ( current_image_->GetWidth() > (currentScreenRect.right - currentScreenRect.left) || current_image_->GetHeight() > (currentScreenRect.bottom - currentScreenRect.top) ) {
-            toRect = GetResizedRectForBigToSmall(currentScreenRect, toRect);
-          }
-        }
-
-        if ( ZOption::GetInstance().IsSmallToBigStretchImage() ) {
-          if ( current_image_->GetWidth() < (currentScreenRect.right - currentScreenRect.left) && current_image_->GetHeight() < (currentScreenRect.bottom - currentScreenRect.top) ) {
-            toRect = GetResizedRectForSmallToBig(currentScreenRect, toRect);
-          }
-        }
-        m_fCurrentZoomRate = (float)(toRect.right - toRect.left) / (float)(current_image_->GetWidth());
-      }
-    }
-    Draw();
   } else {
+    current_image_ = nullptr;
+    Draw(); //< erase background
+
     DebugPrintf(TEXT("Can't find in cache. load now..."));
+    CacheManager::GetInstance().IncreaseCacheMissCounter();
   }
+
+  SetTitle();
+  SetStatusBarText();
 }
 
 void ZMain::OnDrag(const int x, const int y) {
@@ -1484,6 +1496,3 @@ void ZMain::SendMsg(UINT Msg, WPARAM wParam, LPARAM lParam) {
   SendMessage(main_window_handle_, Msg, wParam, lParam);
 }
 
-void ZMain::OnFileCached(const tstring& filename) {
-  DebugPrintf(TEXT("OnFileCached %s"), filename.c_str());
-}
