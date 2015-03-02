@@ -284,6 +284,7 @@ python testLang.py
     <None Include="..\..\ZViewer\res\ZViewer.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\commonSrc\ElapseTime.h" />
     <ClInclude Include="..\..\lib\freeimage\FreeImage.h" />
     <ClInclude Include="..\..\lib\vld\vld_def.h" />
     <ClInclude Include="..\..\ZViewer\res\resource.h" />

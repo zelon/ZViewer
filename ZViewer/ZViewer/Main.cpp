@@ -185,7 +185,6 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
   }
 
   CacheManager::GetInstance().CleanUpCache();
-  CacheManager::GetInstance().WaitCacheLock();	///< cacheimage 를 cleanup 한 후 lock 을 기다려 제대로 끝나기를 기다린다.
   CacheManager::GetInstance().CleanUpThread();
 
   CLogManager::getInstance().CleanUp();

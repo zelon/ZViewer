@@ -36,15 +36,13 @@ public:
 
   bool IsNextFileCached() const;
 
-  void WaitCacheLock();
-
   void DebugShowCacheInfo();
 
   void ClearCache();
   void SetCacheEvent();
 
   long GetCachedKByte() const;
-  int GetLogCacheHitRate() const;
+  int GetCacheHitRate() const;
 
   void StartCacheThread();
 
@@ -54,9 +52,9 @@ public:
 
   void ThreadFunc();
 
-  void SetImageVector(const std::vector < FileData > & v);
+  void SetFilelist(const std::vector<FileData>& filelist);
 
-  void SetCurrent(const int index, const tstring & filename);
+  void SetCurrent(const int index, const tstring& filename);
   bool HasCachedData(const tstring & strFilename);
 
   std::shared_ptr<ZImage> GetCachedData(const tstring& strFilename) const;	///< 이 파일에 해당하는 ZImage 정보를 받아오는 함수
@@ -81,24 +79,22 @@ private:
   unsigned int cache_hit_counter_;
   unsigned int cache_miss_counter_;
 
-  volatile bool m_bNewChange;
+  volatile bool is_new_change_;
 
   /// threadfunc 를 계속 실행시킬 것인가. 프로그램이 끝날 때 false 로 해주면 캐쉬 쓰레드를 최대한 빨리 끝낼 때 쓰임
   volatile bool m_bCacheGoOn;
 
-  /// 현재보고 있는 index;
-  volatile int m_iCurrentIndex;
+  volatile int current_index_;
 
-  /// 현재보고 있는 파일이름
-  tstring m_strCurrentFileName;
+  tstring current_filename_;
 
   std::thread cache_thread_;
   
   /// 지정된 번호의 파일을 캐시할 수 있으면 캐시한다. 반환값은 캐쉬성공이면 true
-  bool _CacheIndex(int iIndex);
+  bool CacheImageByIndex(int iIndex);
 
   bool ClearFarthestCache(const int index);
 
   class Impl;
-  std::unique_ptr<Impl> m_pImpl;
+  std::unique_ptr<Impl> impl_;
 };

@@ -9,51 +9,51 @@ const tstring GetOnlyFileNameWithoutExt(const tstring & strFullFileName);
 class CStringCompareIgnoreCase
 {
 public:
-	bool operator()(const tstring & a, const tstring & b)
-	{
-		/*
-		// 문자열 비교를 할 때 모두 소문자로 바꿔서 비교한다.
-		char szTempA[FILENAME_MAX], szTempB[FILENAME_MAX];
-		_snprintf(szTempA, sizeof(szTempA), a.c_str());
-		_snprintf(szTempB, sizeof(szTempB), b.c_str());
-		strlwr(szTempA);
-		strlwr(szTempB);
+  bool operator()(const tstring & a, const tstring & b)
+  {
+    /*
+    // 문자열 비교를 할 때 모두 소문자로 바꿔서 비교한다.
+    char szTempA[FILENAME_MAX], szTempB[FILENAME_MAX];
+    _snprintf(szTempA, sizeof(szTempA), a.c_str());
+    _snprintf(szTempB, sizeof(szTempB), b.c_str());
+    strlwr(szTempA);
+    strlwr(szTempB);
 
-		return (strcmp(szTempB, szTempA) > 0);
-		*/
-		return (_tcscmp(b.c_str(), a.c_str()) > 0);
-	}
+    return (strcmp(szTempB, szTempA) > 0);
+    */
+    return (_tcscmp(b.c_str(), a.c_str()) > 0);
+  }
 };
 
 class CStringCompareIgnoreCase_LengthFirst
 {
 public:
-	bool operator()(const tstring & a, tstring & b)
-	{
-		// 길이를 우선.
-		if ( a.size() < b.size() )
-		{
-			return true;
-		}
+  bool operator()(const tstring & a, tstring & b)
+  {
+    // 길이를 우선.
+    if ( a.size() < b.size() )
+    {
+      return true;
+    }
 
-		if ( a.size() > b.size() )
-		{
-			return false;
-		}
+    if ( a.size() > b.size() )
+    {
+      return false;
+    }
 
-		/*
-		// 문자열 비교를 할 때 모두 소문자로 바꿔서 비교한다.
-		char szTempA[FILENAME_MAX], szTempB[FILENAME_MAX];
-		_snprintf(szTempA, sizeof(szTempA), a.c_str());
-		_snprintf(szTempB, sizeof(szTempB), b.c_str());
-		strlwr(szTempA);
-		strlwr(szTempB);
+    /*
+    // 문자열 비교를 할 때 모두 소문자로 바꿔서 비교한다.
+    char szTempA[FILENAME_MAX], szTempB[FILENAME_MAX];
+    _snprintf(szTempA, sizeof(szTempA), a.c_str());
+    _snprintf(szTempB, sizeof(szTempB), b.c_str());
+    strlwr(szTempA);
+    strlwr(szTempB);
 
-		return (strcmp(szTempB, szTempA) > 0);
-		*/
-		return (_tcscmp(b.c_str(), a.c_str()) > 0);
+    return (strcmp(szTempB, szTempA) > 0);
+    */
+    return (_tcscmp(b.c_str(), a.c_str()) > 0);
 
-	}
+  }
 };
 
 void DebugPrintf( const TCHAR *fmt, ... );
@@ -91,7 +91,7 @@ tstring GetProgramFolder();
 
 /// 컴파일러 버젼에 맞게 함수 정의
 void SplitPath(const TCHAR * path, TCHAR * drive, size_t driveNumberOfElements, TCHAR * dir, size_t dirNumberOfElements,
-				TCHAR * fname, size_t nameNumberOfElements, TCHAR * ext, size_t extNumberOfElements);
+        TCHAR * fname, size_t nameNumberOfElements, TCHAR * ext, size_t extNumberOfElements);
 
 #ifdef _MSC_VER
 #define SPrintf	StringCchPrintf
@@ -110,7 +110,10 @@ void SplitPath(const TCHAR * path, TCHAR * drive, size_t driveNumberOfElements, 
 
 UINT_PTR CenterOFNHookProc(HWND hdlg, UINT uiMsg, WPARAM /*wParam*/, LPARAM /*lParam*/);
 
+void GetSortedFileList(const tstring & strFolderPathAndWildCard, const eFileSortOrder sort_order,
+  std::vector<FileData>* filelist);
 
-void FindFile(const TCHAR *path, std::vector< FileData > & foundStorage, bool bFindRecursive);
+void FindFile(const tstring& path, const bool bFindRecursive, std::vector< FileData >* foundStorage);
 void FindFolders(const TCHAR *path, std::vector<tstring> & foundStorage, bool bFindRecursive = false);
 
+tstring ConvertFileSize(const int32_t filesize_bytes);

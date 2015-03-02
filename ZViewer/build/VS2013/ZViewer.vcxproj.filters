@@ -245,6 +245,9 @@
     <ClInclude Include="..\..\ZViewer\src\CacheManager.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\commonSrc\ElapseTime.h">
+      <Filter>commonSrc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\ZViewer\res\ZViewer.rc">

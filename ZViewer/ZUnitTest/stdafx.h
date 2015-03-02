@@ -15,6 +15,7 @@
 #include <tchar.h>
 #include <strsafe.h>
 
+#include <algorithm>
 #include <mutex>
 #include <iostream>
 #include <vector>

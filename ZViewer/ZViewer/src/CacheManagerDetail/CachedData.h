@@ -7,7 +7,7 @@ class ZImage;
 
 class CachedData final : NonCopyable {
 public:
-  CachedData() : m_lCacheSize(0), m_numImageVectorSize(0) {
+  CachedData() : cached_bytes_total_(0) {
     /* do nothing */
   }
 
@@ -25,9 +25,7 @@ public:
   bool HasCachedDataByIndex(const int index) const;
   bool HasCachedDataByFilename(const tstring & strFilename) const;
 
-  size_t GetIndex2FilenameMapSize() const;
-
-  size_t GetImageVectorSize();
+  size_t GetFilelistSize() const;
 
   std::shared_ptr<ZImage> GetCachedData(const tstring& strFilename) const;
   bool ClearFarthestDataFromCurrent(const int iFarthestIndex);
@@ -37,20 +35,15 @@ public:
 
   tstring GetFilenameFromIndex(const int index);
 
-  void WaitCacheLock();
+  void SetFilelist(const std::vector < FileData > & filedata_list);
 
-  void SetImageVector(const std::vector < FileData > & filedata_list);
-
-  const long GetCachedTotalSize() const;
+  const long GetCachedTotalBytes() const;
 
 private:
   std::map< tstring/*filename*/, std::shared_ptr<ZImage> > m_cacheData;
   FileMap file_map_;
 
-  size_t m_numImageVectorSize;
-
-  /// 캐시된 데이터 용량
-  long m_lCacheSize;
+  long cached_bytes_total_;
 
   mutable CLockObj m_cacheLock;
 };

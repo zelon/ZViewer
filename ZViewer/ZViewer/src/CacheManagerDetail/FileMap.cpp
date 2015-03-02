@@ -20,6 +20,7 @@ void FileMap::Set(const std::vector<FileData>& filedata_list) {
   }
 
   assert(index_to_filename_.size() == filename_to_index_.size());
+  assert(index_to_filename_.size() == filedata_list.size());
 }
 
 tstring FileMap::FindFilenameByIndex(const int index) const {

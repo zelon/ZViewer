@@ -5,14 +5,6 @@
 #include "../commonSrc/ZImage.h"
 #include "src/CacheManager.h"
 
-/// 파일을 보여줄 때의 정렬 순서
-enum eFileSortOrder
-{
-  eFileSortOrder_FILENAME,
-  eFileSortOrder_LAST_MODIFY_TIME,
-  eFileSortOrder_FILESIZE,
-};
-
 /// 대부분의 작업을 처리하는 메인 클래스
 class ZMain final : public CacheEventListenerInterface {
 public:
@@ -115,8 +107,6 @@ public:
     m_hPopupMenu = hMenu;
   }
 
-  long GetCachedKByte() const;
-
   void SetStatusHandle(HWND hWnd) { m_hStatusBar = hWnd; }
   HWND GetStatusHandle() const { return m_hStatusBar; }
 
@@ -137,8 +127,6 @@ public:
 
   /// Loop Image 를 토글한다.
   void ToggleLoopImage();
-
-  int GetLogCacheHitRate() const;
 
   /// 현재 파일을 휴지통으로 삭제한다.
   void DeleteThisFileToRecycleBin();
@@ -204,28 +192,36 @@ public:
   void CloseProgram();
 
 private:
+  enum class StatusBarPosition {
+    kFileIndex = 0,
+    kResolution,
+    kImageFileSize,
+    kZoomRatio,
+    kHomepageURL,
+    kLoadingTime,
+    kCacheInfo,
+    kFilename,
+  };
+
   ZMain();
 
   /// 현재 이미지를 드래그할 수 있어서, 손모양의 커서인가
   bool m_bHandCursor;
 
   void SetStatusBarText();
+  void SetStatusBarTextInternal(const StatusBarPosition position, const TCHAR* text);
   void SetTitle();
 
   void InitOpenFileDialog();
-
-  typedef std::vector< FileData > FileListVector;
-
-  void _GetFileListAndSort(const tstring & strFolderPathAndWildCard, FileListVector & vFileList);
 
   /// 현재 파일이 지워졌을 때 후의 처리. 파일 삭제, 이동 후에 불리는 함수이다.
   void _ProcAfterRemoveThisFile();
 
   /// 메뉴, 상태 표시줄등을 보여준다.
-  void FormShow();
+  void ShowForm();
 
   /// 메뉴, 상태 표시줄등을 숨긴다.
-  void FormHide();
+  void HideForm();
 
   tstring m_strInitArg;			///< 프로그램 시작 인자.
 
@@ -233,7 +229,7 @@ private:
   tstring m_strCurrentFilename;	///< 현재 보여주고 있는 파일이름
 
   /// TODO: 이 파일을 따로 클래스로 빼내어야 함. 왜냐하면 이 클래스 변동에 따라서 ZCacheImage 에 전달해줘야하기 때문임.
-  FileListVector m_vFile;			///< 현재 폴더의 파일들 목록
+  std::vector<FileData> filelist_;			///< 현재 폴더의 파일들 목록
 
   eFileSortOrder m_sortOrder;
 
@@ -280,7 +276,7 @@ private:
   void _releaseBufferDC();
 
   /// Brush for Background
-  HBRUSH m_bgBrush;
+  HBRUSH background_brush_;
 
   /// 배경을 지운다.
   void EraseBackground(HDC mainDC, LONG right, LONG bottom);

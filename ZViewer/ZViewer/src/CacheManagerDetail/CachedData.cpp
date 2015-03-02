@@ -12,11 +12,12 @@
 
 #include "ZImage.h"
 #include "ZOption.h"
+#include "../commonSrc/ElapseTime.h"
 
 void CachedData::ClearCachedImageData() {
   CLockObjUtil lock(m_cacheLock);
   m_cacheData.clear();
-  m_lCacheSize = 0;
+  cached_bytes_total_ = 0;
 }
 
 size_t CachedData::GetCachedCount() const {
@@ -46,14 +47,9 @@ bool CachedData::HasCachedDataByFilename(const tstring& strFilename) const {
   return (m_cacheData.count(strFilename) > 0);
 }
 
-size_t CachedData::GetIndex2FilenameMapSize() const {
+size_t CachedData::GetFilelistSize() const {
   CLockObjUtil lock(m_cacheLock);
   return file_map_.size();
-}
-
-size_t CachedData::GetImageVectorSize() {
-  CLockObjUtil lock(m_cacheLock);
-  return m_numImageVectorSize;
 }
 
 void CachedData::PrintCachedData() const {
@@ -82,6 +78,10 @@ int CachedData::GetFarthestIndexFromCurrentIndex(volatile const int & iCurrentIn
 
   for (auto it = m_cacheData.begin(); it != m_cacheData.end(); ++it) {
     iTempIndex = file_map_.FindIndexByFilename(it->first);
+    if (iTempIndex == -1) {// not in the folder. TODO: To be uncached
+      continue;
+    }
+
     iDistance = abs(iTempIndex - iCurrentIndex);
 
     if ( iDistance > iDistanceMax )
@@ -102,27 +102,21 @@ tstring CachedData::GetFilenameFromIndex(const int index) {
   return file_map_.FindFilenameByIndex(index);
 }
 
-void CachedData::WaitCacheLock() {
-  CLockObjUtil lock(m_cacheLock);
-}
-
-void CachedData::SetImageVector(const std::vector < FileData > & filedata_list) {
+void CachedData::SetFilelist(const std::vector < FileData > & filelist) {
   CLockObjUtil lock(m_cacheLock);
 
-  m_numImageVectorSize = filedata_list.size();
-
-  file_map_.Set(filedata_list);
+  file_map_.Set(filelist);
 
   ClearCachedImageData();
-  m_lCacheSize = 0;
+  cached_bytes_total_ = 0;
 
-  DebugPrintf(TEXT("imageVecSize : %d"), m_numImageVectorSize);
+  DebugPrintf(TEXT("filelist size: %d"), filelist.size());
 }
 
-const long CachedData::GetCachedTotalSize() const
+const long CachedData::GetCachedTotalBytes() const
 {
   CLockObjUtil lock(m_cacheLock);
-  return m_lCacheSize;
+  return cached_bytes_total_;
 }
 
 std::shared_ptr<ZImage> CachedData::GetCachedData(const tstring& strFilename) const {
@@ -151,21 +145,17 @@ bool CachedData::ClearFarthestDataFromCurrent(const int iFarthestIndex) {
   }
 
   auto it = m_cacheData.find(filename);
-  if ( it != m_cacheData.end() )
-  {
-    if ( NULL == it->second )
-    {
+  if ( it != m_cacheData.end() ) {
+    if ( NULL == it->second ) {
       assert(it->second);
       return false;
     }
-    m_lCacheSize -= it->second->GetImageSize();
+    cached_bytes_total_ -= it->second->GetImageSize();
     
     m_cacheData.erase(it);
 
     DebugPrintf(TEXT("Farthest one clear"));
-  }
-  else
-  {
+  } else {
     assert(!"Can't find the cache data.");
     return false;
   }
@@ -182,14 +172,15 @@ bool CachedData::InsertData(const tstring& strFilename, std::shared_ptr<ZImage> 
 
   if ( false == bForceCache ) {
     /// 용량을 체크해서 이 이미지를 캐시했을 때 제한을 넘어섰으면 캐시하지 않는다.
-    if ( (GetCachedTotalSize() + pImage->GetImageSize()) /1024/1024 > ZOption::GetInstance().GetMaxCacheMemoryMB() )
+    if ( (GetCachedTotalBytes() + pImage->GetImageSize()) /1024/1024 > ZOption::GetInstance().GetMaxCacheMemoryMB() )
     {
       DebugPrintf(_T("-- 이 이미지를 캐시하면 용량제한을 넘어서 캐시하지 않습니다 -- : %s"), strFilename.c_str());
       return false;
     }
   }
 
-  std::chrono::system_clock::time_point startTime = std::chrono::system_clock::now();
+  ElapseTime cache_insert_time;
+  const tstring only_filename = GetFileNameFromFullFileName(strFilename);
 
   CLockObjUtil lock(m_cacheLock);
   {
@@ -199,13 +190,9 @@ bool CachedData::InsertData(const tstring& strFilename, std::shared_ptr<ZImage> 
     }
     m_cacheData[strFilename] = pImage;
   }
-  m_lCacheSize += pImage->GetImageSize();
+  cached_bytes_total_ += pImage->GetImageSize();
 
-  DebugPrintf(TEXT("%s added to cache"), strFilename.c_str());
-  std::chrono::system_clock::time_point endTime = std::chrono::system_clock::now();
-  long long diffTime = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime).count();
-
-  DebugPrintf(TEXT("Cache insert time : %d filename(%s)"), diffTime, strFilename.c_str());
+  DebugPrintf(TEXT("Cache insert time: %d filename(%s)"), cache_insert_time.End(), only_filename.c_str());
 
   return true;
 }
