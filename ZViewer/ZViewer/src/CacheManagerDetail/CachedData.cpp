@@ -179,9 +179,6 @@ bool CachedData::InsertData(const tstring& strFilename, std::shared_ptr<ZImage> 
     }
   }
 
-  ElapseTime cache_insert_time;
-  const tstring only_filename = GetFileNameFromFullFileName(strFilename);
-
   CLockObjUtil lock(m_cacheLock);
   {
     if ( m_cacheData.find(strFilename) != m_cacheData.end() ) {
@@ -191,8 +188,6 @@ bool CachedData::InsertData(const tstring& strFilename, std::shared_ptr<ZImage> 
     m_cacheData[strFilename] = pImage;
   }
   cached_bytes_total_ += pImage->GetImageSize();
-
-  DebugPrintf(TEXT("Cache insert time: %d filename(%s)"), cache_insert_time.End(), only_filename.c_str());
 
   return true;
 }

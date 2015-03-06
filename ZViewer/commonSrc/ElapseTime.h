@@ -5,6 +5,10 @@
 class ElapseTime final {
 public:
   ElapseTime() {
+    Reset();
+  }
+
+  void Reset() {
     start_time_ = std::chrono::system_clock::now();
   }
 
