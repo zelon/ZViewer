@@ -6,6 +6,7 @@
 #include "../commonSrc/ExtInfoManager.h"
 #include "../commonSrc/SaveAs.h"
 #include "../commonSrc/ZOption.h"
+#include "MessageDefine.h"
 #include "MessageManager.h"
 #include "resource.h"
 #include "src/ExifDlg.h"
@@ -56,9 +57,7 @@ ZMain::~ZMain() {
 void ZMain::OnFileCached(const tstring& filename, std::shared_ptr<ZImage> image) {
   DebugPrintf(TEXT("OnFileCached %s"), GetFileNameFromFullFileName(filename).c_str());
 
-  if (filename == m_strCurrentFilename) {
-    SetImageAndShow(image);
-  }
+  PostMessage(main_window_handle_, WM_CHECK_CURRENT_IMAGE_IS_CACHED, 0, 0);
 }
 
 void ZMain::SetImageAndShow(std::shared_ptr<ZImage> image) {
@@ -820,25 +819,31 @@ void ZMain::LoadCurrent() {
     CacheManager::GetInstance().StartCacheThread();
   }
 
-  system_clock::time_point start = system_clock::now();
-
   _releaseBufferDC();
 
   CacheManager::GetInstance().SetCurrent(m_iCurretFileIndex, m_strCurrentFilename);
 
-  if ( CacheManager::GetInstance().HasCachedData(m_strCurrentFilename) ) {
-    DebugPrintf(TEXT("Cache Hit!!!!!!!!!!!!!"));
+  current_image_ = nullptr;
+
+  CheckCurrentImage();
+}
+
+void ZMain::CheckCurrentImage() {
+  if (current_image_ != nullptr) {
+    return;
+  }
+
+  shared_ptr<ZImage> image = CacheManager::GetInstance().GetCachedData(m_strCurrentFilename);
+  if ( image != nullptr) {
     CacheManager::GetInstance().IncreaseCacheHitCounter();
 
-    m_dwLoadingTime = duration_cast<milliseconds>(system_clock::now() - start).count();
+    //m_dwLoadingTime = duration_cast<milliseconds>(system_clock::now() - start).count();
+    m_dwLoadingTime = 0;
 
-    shared_ptr<ZImage> image = CacheManager::GetInstance().GetCachedData(m_strCurrentFilename);
     if (image != nullptr) {
       SetImageAndShow(image);
     }
-
   } else {
-    current_image_ = nullptr;
     Draw(); //< erase background
 
     DebugPrintf(TEXT("Can't find in cache. load now..."));

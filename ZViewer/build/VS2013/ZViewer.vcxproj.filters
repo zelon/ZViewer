@@ -120,6 +120,15 @@
     <ClCompile Include="..\..\ZViewer\src\CacheManager.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\ZViewer\src\CacheManagerDetail\EventManager.cpp">
+      <Filter>src\CacheManagerDetail</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ZViewer\src\CacheManagerDetail\JobExecutor.cpp">
+      <Filter>src\CacheManagerDetail</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ZViewer\src\CacheManagerDetail\ImageLoadJob.cpp">
+      <Filter>src\CacheManagerDetail</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\ZViewer\res\MoveHand.cur">
@@ -247,6 +256,21 @@
     </ClInclude>
     <ClInclude Include="..\..\commonSrc\ElapseTime.h">
       <Filter>commonSrc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ZViewer\src\CacheManagerDetail\EventManager.h">
+      <Filter>src\CacheManagerDetail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ZViewer\src\CacheManagerDetail\JobExecutor.h">
+      <Filter>src\CacheManagerDetail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ZViewer\src\CacheManagerDetail\JobInterface.h">
+      <Filter>src\CacheManagerDetail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ZViewer\src\MessageDefine.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ZViewer\src\CacheManagerDetail\ImageLoadJob.h">
+      <Filter>src\CacheManagerDetail</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -243,8 +243,11 @@ python testLang.py
     <ClCompile Include="..\..\ZViewer\Main.cpp" />
     <ClCompile Include="..\..\ZViewer\src\CacheManager.cpp" />
     <ClCompile Include="..\..\ZViewer\src\CacheManagerDetail\CachedData.cpp" />
+    <ClCompile Include="..\..\ZViewer\src\CacheManagerDetail\EventManager.cpp" />
     <ClCompile Include="..\..\ZViewer\src\CacheManagerDetail\FileMap.cpp" />
     <ClCompile Include="..\..\ZViewer\src\CacheManagerDetail\FileReader.cpp" />
+    <ClCompile Include="..\..\ZViewer\src\CacheManagerDetail\ImageLoadJob.cpp" />
+    <ClCompile Include="..\..\ZViewer\src\CacheManagerDetail\JobExecutor.cpp" />
     <ClCompile Include="..\..\ZViewer\src\ShortCut.cpp" />
     <ClCompile Include="..\..\ZViewer\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -290,8 +293,13 @@ python testLang.py
     <ClInclude Include="..\..\ZViewer\res\resource.h" />
     <ClInclude Include="..\..\ZViewer\src\CacheManager.h" />
     <ClInclude Include="..\..\ZViewer\src\CacheManagerDetail\CachedData.h" />
+    <ClInclude Include="..\..\ZViewer\src\CacheManagerDetail\EventManager.h" />
     <ClInclude Include="..\..\ZViewer\src\CacheManagerDetail\FileMap.h" />
     <ClInclude Include="..\..\ZViewer\src\CacheManagerDetail\FileReader.h" />
+    <ClInclude Include="..\..\ZViewer\src\CacheManagerDetail\ImageLoadJob.h" />
+    <ClInclude Include="..\..\ZViewer\src\CacheManagerDetail\JobExecutor.h" />
+    <ClInclude Include="..\..\ZViewer\src\CacheManagerDetail\JobInterface.h" />
+    <ClInclude Include="..\..\ZViewer\src\MessageDefine.h" />
     <ClInclude Include="..\..\ZViewer\src\ShortCut.h" />
     <ClInclude Include="..\..\ZViewer\stdafx.h" />
     <ClInclude Include="..\..\ZViewer\src\AboutWindow.h" />

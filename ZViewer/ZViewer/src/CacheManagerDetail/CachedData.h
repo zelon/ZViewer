@@ -34,6 +34,7 @@ public:
   int GetFarthestIndexFromCurrentIndex(volatile const int & iCurrentIndex);
 
   tstring GetFilenameFromIndex(const int index);
+  int GetIndexFromFilename(const tstring& filename);
 
   void SetFilelist(const std::vector < FileData > & filedata_list);
 

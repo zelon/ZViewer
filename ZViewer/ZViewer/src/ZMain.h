@@ -2,8 +2,9 @@
 
 #include "src/ZHistory.h"
 #include "../commonSrc/DesktopWallPaper.h"
-#include "../commonSrc/ZImage.h"
 #include "src/CacheManager.h"
+
+class ZImage;
 
 /// 대부분의 작업을 처리하는 메인 클래스
 class ZMain final : public CacheEventListenerInterface {
@@ -169,6 +170,8 @@ public:
   void ReLoadFileList();
 
   void LoadCurrent();
+
+  void CheckCurrentImage();
 
   /// 그림을 보여줄 윈도우를 만든다.
   void CreateShowWindow();

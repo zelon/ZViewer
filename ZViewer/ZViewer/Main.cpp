@@ -48,6 +48,7 @@
 #include "src/ZFileExtDlg.h"
 #include "src/ZMain.h"
 #include "src/ZResourceManager.h"
+#include "ZImage.h"
 
 void FreeImageMsg(FREE_IMAGE_FORMAT fif, const char * szMsg)
 {
@@ -169,6 +170,10 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
   CMainWindow aWindow;
 #ifdef _DEBUG
   FreeImage_SetOutputMessage(FreeImageMsg);
+#endif
+
+#if 0
+  CacheManagerSpeedTest();
 #endif
 
   aWindow.Create(hInstance, HWND_DESKTOP, nCmdShow);

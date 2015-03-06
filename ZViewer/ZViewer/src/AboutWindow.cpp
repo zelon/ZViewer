@@ -1,9 +1,11 @@
 #include "stdafx.h"
 #include "../res/resource.h"
 
+#include "../../commonSrc/CommonFunc.h"
 #include "AboutWindow.h"
 #include "src/ZMain.h"
 #include "src/ZResourceManager.h"
+#include "ZImage.h"
 
 LRESULT CALLBACK AboutWndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam);
 

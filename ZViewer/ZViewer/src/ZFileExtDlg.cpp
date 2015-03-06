@@ -1,14 +1,4 @@
-﻿/********************************************************************
-*
-* Created by zelon(Kim, Jinwook Korea)
-* 
-*   2005. 5. 7
-*	ZFileExtDlg.cpp
-*
-*                                       http://www.wimy.com
-*********************************************************************/
-
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "resource.h"
 #include "ZFileExtDlg.h"
 #include "ZMain.h"
@@ -16,6 +6,7 @@
 
 #include "ZFileExtReg.h"
 
+#include "../commonSrc/CommonFunc.h"
 #include "../commonSrc/ExtInfoManager.h"
 
 ZFileExtDlg * pThis = nullptr;

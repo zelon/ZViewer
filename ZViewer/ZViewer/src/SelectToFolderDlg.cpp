@@ -1,16 +1,7 @@
-/********************************************************************
-*
-* Created by zelon(Kim, Jinwook Korea)
-* 
-*   2005. 5. 7
-*	MoveToDlg.cpp
-*
-*                                       http://www.wimy.com
-*********************************************************************/
-
 #include "stdafx.h"
 #include "SelectToFolderDlg.h"
 
+#include "../../commonSrc/CommonFunc.h"
 #include "resource.h"
 #include "ZResourceManager.h"
 #include "ZMain.h"

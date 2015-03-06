@@ -102,6 +102,11 @@ tstring CachedData::GetFilenameFromIndex(const int index) {
   return file_map_.FindFilenameByIndex(index);
 }
 
+int CachedData::GetIndexFromFilename(const tstring& filename) {
+  CLockObjUtil lock(m_cacheLock);
+  return file_map_.FindIndexByFilename(filename);
+}
+
 void CachedData::SetFilelist(const std::vector < FileData > & filelist) {
   CLockObjUtil lock(m_cacheLock);
 
@@ -124,14 +129,8 @@ std::shared_ptr<ZImage> CachedData::GetCachedData(const tstring& strFilename) co
 
   auto it = m_cacheData.find(strFilename);
   if ( it == m_cacheData.end() ) {
-    assert(!"Can't get NOT CACHED");
     return nullptr;
   }
-  else
-  {
-    DebugPrintf(TEXT("Cache hit"));
-  }
-
   return it->second;
 }
 
@@ -191,3 +190,4 @@ bool CachedData::InsertData(const tstring& strFilename, std::shared_ptr<ZImage> 
 
   return true;
 }
+

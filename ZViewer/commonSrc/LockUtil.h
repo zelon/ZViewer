@@ -13,34 +13,32 @@
 #pragma once
 
 /// 윈도우의 Event 를 쉽게 쓰게 하는 유틸리티 클래스
-class CEventObj
-{
+class CEventObj final {
 public:
-	CEventObj()
-	{
+	CEventObj() {
 		m_hEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
 	}
 
-	~CEventObj()
-	{
+	~CEventObj() {
 		CloseHandle(m_hEvent);
 	}
 
-	bool setEvent()
-	{
+	bool setEvent() {
 		return SetEvent(m_hEvent) == TRUE;
 	}
 
-	DWORD wait()
-	{
+	DWORD wait() {
 		return WaitForSingleObject(m_hEvent, INFINITE);
 	}
 
-protected:
+private:
 	/// 내부적으로 가지고 있는 이벤트 핸들
 	HANDLE m_hEvent;
-
 };
 
+typedef CEventObj ConditionalVariable;
+
 typedef std::recursive_mutex CLockObj;
+typedef std::recursive_mutex Lock;
 typedef std::lock_guard<std::recursive_mutex> CLockObjUtil;
+typedef std::lock_guard<std::recursive_mutex> LockGuard;

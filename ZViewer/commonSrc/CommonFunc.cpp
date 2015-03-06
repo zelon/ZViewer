@@ -400,3 +400,10 @@ void GetSortedFileList(const tstring & strFolderPathAndWildCard, const eFileSort
   }
 }
 
+size_t GetProcessorNumber() {
+  SYSTEM_INFO system_info;
+  GetSystemInfo(&system_info);
+
+  return static_cast<size_t>(system_info.dwNumberOfProcessors);
+}
+

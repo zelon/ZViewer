@@ -117,3 +117,6 @@ void FindFile(const tstring& path, const bool bFindRecursive, std::vector< FileD
 void FindFolders(const TCHAR *path, std::vector<tstring> & foundStorage, bool bFindRecursive = false);
 
 tstring ConvertFileSize(const int32_t filesize_bytes);
+
+size_t GetProcessorNumber();
+

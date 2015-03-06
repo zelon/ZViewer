@@ -1,6 +1,8 @@
 ﻿#pragma once
 
+class EventManager;
 class ZImage;
+class DecodeThread;
 
 /// 캐시를 어느 방향부터 먼저할 것인지, 우선시할 것인지를 위해...
 /**
@@ -60,6 +62,8 @@ public:
   std::shared_ptr<ZImage> GetCachedData(const tstring& strFilename) const;	///< 이 파일에 해당하는 ZImage 정보를 받아오는 함수
   void AddCacheData(const tstring & strFilename, std::shared_ptr<ZImage> image, bool bForceCache = false);		///< 이 파일에 해당하는 ZImage 정보를 새로 추가해라.
 
+  void OnDecodeCompleted(const tstring& filename, std::shared_ptr<ZImage> image);
+
   void set_view_direction(const ViewDirection direction) {
     view_direction_ = direction;
   }
@@ -90,13 +94,14 @@ private:
 
   std::thread cache_thread_;
   
-  /// 지정된 번호의 파일을 캐시할 수 있으면 캐시한다. 반환값은 캐쉬성공이면 true
-  bool CacheImageByIndex(int iIndex);
+  void CacheImageByIndex(int iIndex);
 
   bool ClearFarthestCache(const int index);
 
   class Impl;
   std::unique_ptr<Impl> impl_;
+
+  std::unique_ptr<EventManager> event_manager_;
 };
 
 void CacheManagerSpeedTest();
