@@ -1,6 +1,7 @@
 ﻿#include "stdafx.h"
-
 #include "CacheManager.h"
+
+#include <atomic>
 
 #include "CacheManagerDetail/CachedData.h"
 #include "CacheManagerDetail/FileReader.h"
@@ -403,3 +404,44 @@ int CacheManager::GetCacheHitRate() const {
   return (cache_hit_counter_ * 100 / (cache_miss_counter_ + cache_hit_counter_));
 }
 
+
+void CacheManagerSpeedTest() {
+  class CachedCounter : public CacheEventListenerInterface {
+  public:
+    CachedCounter() {
+      count_ = 0;
+    }
+    void OnFileCached(const tstring& /*filename*/, std::shared_ptr<ZImage> /*image*/) override {
+      ++count_;
+
+      static const int kCheckCount = 3;
+      if (count_ == kCheckCount) {
+        DebugPrintf(TEXT("%d is cached. time ms: %d"), kCheckCount, caching_time.End());
+      }
+    }
+
+    int count() const { return count_; }
+
+  private:
+    ElapseTime caching_time;
+
+    std::atomic_int count_;
+  };
+  tstring strToFindFolder = TEXT("P:\\Temp\\");
+  strToFindFolder += TEXT("*.*");
+
+  std::vector<FileData> filelist;
+  GetSortedFileList(strToFindFolder, eFileSortOrder::eFileSortOrder_FILENAME, &filelist);
+
+  CacheManager::GetInstance().SetFilelist(filelist);
+  CachedCounter counter;
+  CacheManager::GetInstance().StartCacheThread();
+
+  CacheManager::GetInstance().SetCurrent(0, filelist[0].m_strFileName);
+
+  CacheManager::GetInstance().set_listener(&counter);
+
+  while (counter.count() < 100000) {
+    ::Sleep(100);
+  }
+}
