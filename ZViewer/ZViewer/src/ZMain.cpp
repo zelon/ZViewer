@@ -54,9 +54,7 @@ ZMain::~ZMain() {
   }
 }
 
-void ZMain::OnFileCached(const tstring& filename, std::shared_ptr<ZImage> image) {
-  DebugPrintf(TEXT("OnFileCached %s"), GetFileNameFromFullFileName(filename).c_str());
-
+void ZMain::OnFileCached() {
   PostMessage(main_window_handle_, WM_CHECK_CURRENT_IMAGE_IS_CACHED, 0, 0);
 }
 

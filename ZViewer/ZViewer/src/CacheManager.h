@@ -18,7 +18,7 @@ class CacheEventListenerInterface {
 public:
   virtual ~CacheEventListenerInterface() { /* do nothing */ }
 
-  virtual void OnFileCached(const tstring& filename, std::shared_ptr<ZImage> image) = 0;
+  virtual void OnFileCached() = 0;
 };
 
 /// 이미지를 캐쉬하여 관리하는 클래스

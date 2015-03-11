@@ -113,14 +113,12 @@ void CacheManager::CacheImageByIndex(int index) {
   }
 
   // check already cached
-  {
-    std::shared_ptr<ZImage> cached_image = impl_->m_cacheData.GetCachedData(filename);
-    if (cached_image != nullptr) {
-      if (listener_ != nullptr) {
-        listener_->OnFileCached(filename, cached_image);
-      }
-      return;
+  std::shared_ptr<ZImage> cached_image = impl_->m_cacheData.GetCachedData(filename);
+  if (cached_image != nullptr) {
+    if (listener_ != nullptr) {
+      listener_->OnFileCached();
     }
+    return;
   }
 
   event_manager_->AddJob(filename);
@@ -237,7 +235,7 @@ void CacheManager::AddCacheData(const tstring & strFilename, std::shared_ptr<ZIm
 
   if (impl_->m_cacheData.InsertData(strFilename, image, bForceCache)) {
     if (listener_ != nullptr) {
-      listener_->OnFileCached(strFilename, image);
+      listener_->OnFileCached();
     }
   }
 }
@@ -325,7 +323,7 @@ void CacheManagerSpeedTest() {
     CachedCounter() {
       count_ = 0;
     }
-    void OnFileCached(const tstring& /*filename*/, std::shared_ptr<ZImage> /*image*/) override {
+    void OnFileCached() override {
       ++count_;
 
       static const int kCheckCount = 3;

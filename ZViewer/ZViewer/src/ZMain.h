@@ -12,7 +12,7 @@ public:
   static ZMain & GetInstance();
   ~ZMain();
 
-  void OnFileCached(const tstring& filename, std::shared_ptr<ZImage> image) override;
+  void OnFileCached() override;
 
   void SetImageAndShow(std::shared_ptr<ZImage> image);
 
