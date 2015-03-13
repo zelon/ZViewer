@@ -88,9 +88,9 @@ void ZOption::SetDefaultOption()
 	m_bUseDebug = true;
 	m_bBigToSmallStretchImage = false;
 	m_bSmallToBigStretchImage = false;
-	m_iMaximumCacheMemoryMB = 50;
+	m_iMaximumCacheMemoryMB = 500;
 
-	m_iMaxCacheImageNum = 50;
+	m_iMaxCacheImageNum = 20;
 
 #ifdef _DEBUG
 	m_iMaxCacheImageNum = 10;
