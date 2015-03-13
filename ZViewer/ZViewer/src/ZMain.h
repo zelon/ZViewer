@@ -53,6 +53,8 @@ public:
 
   void Draw(HDC toDrawDC = NULL, bool need_to_erase_background = true);
 
+  void SetMouseCursor(const int image_width, const int image_height, const RECT& screen_rect);
+
   /// 현재보고 있는 이미지를 윈도우 바탕화면의 배경으로 지정한다.
   void SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyle style);
 

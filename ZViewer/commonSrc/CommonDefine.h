@@ -90,7 +90,7 @@ public:
 
 class NonCopyable {
 protected:
-  NonCopyable() { /* do nothgin */ }
+  NonCopyable() { /* do nothing */ }
 
 private:
   NonCopyable(const NonCopyable &);

@@ -31,8 +31,10 @@ void ImageLoadJob::DoJob() {
   }
 
   State new_state = state_;
-  assert(new_state != old_state);
-  switch (state_) {
+  if (new_state != old_state) {
+    assert(false);
+  }
+  switch (new_state) {
   case State::kReadyToDecode:
     event_manager_->DoDecodeJob(filename_);
     break;

@@ -3,6 +3,7 @@
 
 #include "../commonSrc/CommonFunc.h"
 #include "../commonSrc/DesktopWallPaper.h"
+#include "../commonSrc/ElapseTime.h"
 #include "../commonSrc/ExtInfoManager.h"
 #include "../commonSrc/SaveAs.h"
 #include "../commonSrc/ZOption.h"
@@ -42,7 +43,9 @@ ZMain::~ZMain() {
   if (m_hBufferDC != nullptr) {
     DebugPrintf(TEXT("Before delete bufferDC"));
     const BOOL bRet = DeleteDC(m_hBufferDC);
-    assert(bRet != FALSE);
+    if (bRet == FALSE) {
+      assert(false);
+    }
 
     DebugPrintf(TEXT("after delete bufferDC"));
 
@@ -108,8 +111,9 @@ void ZMain::SetImageAndShow(std::shared_ptr<ZImage> image) {
 void ZMain::_releaseBufferDC() {
   if ( m_hBufferDC != nullptr) {
     const BOOL bRet = DeleteDC(m_hBufferDC);
-
-    assert(bRet != FALSE);
+    if (bRet == FALSE) {
+      assert(false);
+    }
     m_hBufferDC = nullptr;
   }
 }
@@ -218,7 +222,7 @@ void ZMain::ShowExif() {
 }
 
 void ZMain::Draw(HDC toDrawDC, bool need_to_erase_background) {
-  TIMECHECK_START("StartDraw");
+  ElapseTime draw_time;
 
   HDC mainDC = NULL;
 
@@ -297,28 +301,11 @@ void ZMain::Draw(HDC toDrawDC, bool need_to_erase_background) {
   m_fCenterX = (float)((currentScreenRect.right/2.0f) - (float)drawRect.left) / (float)(drawRect.right-drawRect.left);
   m_fCenterY = (float)((currentScreenRect.bottom/2.0f) - (float)drawRect.top) / (float)(drawRect.bottom-drawRect.top);
 
-  //DebugPrintf(TEXT("center(%f,%f) on Draw()"), m_fCenterX, m_fCenterY);
-
-#ifdef _DEBUG
-//	DWORD dwStart = GetTickCount();
-#endif
   current_image_->Draw(mainDC, drawRect);
-#ifdef _DEBUG
-//	DWORD dwDiff = GetTickCount() - dwStart;
-  //DebugPrintf(TEXT("freeImagePlus.Draw spend time : %d"), dwDiff);
-#endif
 
   ReleaseDC(main_window_handle_, mainDC);
 
-  // 마우스 커서 모양
-  if ( zoomedImageWidth > currentScreenRect.right || zoomedImageHeight > currentScreenRect.bottom ) {
-    // 마우스 커서를 hand 로
-    SetHandCursor(true);
-  } else {
-    // 마우스 커서를 원래대로
-    SetHandCursor(false);
-  }
-  PostMessage(main_window_handle_, WM_SETCURSOR, 0, 0);
+  SetMouseCursor(zoomedImageWidth, zoomedImageHeight, currentScreenRect);
 
   // 풀 스크린이 아닐 때는 상태 표시줄을 다시 그린다.
   if ( false == ZOption::GetInstance().IsFullScreen() ) {
@@ -329,18 +316,26 @@ void ZMain::Draw(HDC toDrawDC, bool need_to_erase_background) {
   if ( NULL == toDrawDC ) {
     ReleaseDC(main_window_handle_, mainDC);
   }
-  TIMECHECK_END();
+  DebugPrintf(L"Draw time:%d", draw_time.End());
 }
 
+void ZMain::SetMouseCursor(const int image_width, const int image_height, const RECT& screen_rect) {
+  if ( image_width > screen_rect.right || image_height > screen_rect.bottom ) {
+    SetHandCursor(true);
+  } else {
+    SetHandCursor(false);
+  }
+  PostMessage(main_window_handle_, WM_SETCURSOR, 0, 0);
+}
 
 void ZMain::RescanFolder() {
   tstring strToFindFolder = m_strCurrentFolder;
 
   strToFindFolder += TEXT("*.*");
 
-  TIMECHECK_START("--- rescan folder");
+  ElapseTime folder_scan_time;
   GetSortedFileList(strToFindFolder, m_sortOrder, &filelist_);
-  TIMECHECK_END();
+  DebugPrintf(L"Folder scan time:%d", folder_scan_time.End());
 
   // Cache Thread 에 전달한다.
   CacheManager::GetInstance().SetFilelist(filelist_);
@@ -413,7 +408,6 @@ void ZMain::NextFolder() {
     assert(iFoundIndex != -1);
 
     if ( (iFoundIndex + 1) >= (int)vFolders.size() ) {
-      // 마지막 폴더이다.
       ShowMessageBox(GetMessage(TEXT("LAST_DIRECTORY")));
       return;
     } else {
@@ -842,10 +836,9 @@ void ZMain::CheckCurrentImage() {
       SetImageAndShow(image);
     }
   } else {
-    Draw(); //< erase background
-
-    DebugPrintf(TEXT("Can't find in cache. load now..."));
     CacheManager::GetInstance().IncreaseCacheMissCounter();
+
+    Draw(); //< erase background
   }
 
   SetTitle();
