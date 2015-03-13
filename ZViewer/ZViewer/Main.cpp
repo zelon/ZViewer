@@ -93,7 +93,7 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
   /// 기본 옵션을 불러온다.
   ZOption::GetInstance().LoadOption();
 
-  std::shared_ptr<MiniDumper> pDump;
+  std::unique_ptr<MiniDumper> dumper_object_holder;
   
   if ( ZOption::GetInstance().IsUseDebug() )
   {
@@ -102,7 +102,7 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
     SPrintf(szDumpMsg, _MAX_PATH, TEXT("%s\r\n\r\nFile : %s\r\nHomepage : %s"), GetMessage(TEXT("CRASH_MSG")), strDumpFilename.c_str(), g_strHomepage.c_str());
 
     /// 아래의 객체는 프로그램이 끝날 때에 삭제되어야 한다. 그전에 삭제되면 크래시되었을 때 제대로 덤프를 만들지 못한다.
-    pDump.reset(new MiniDumper(strDumpFilename.c_str(), szDumpMsg));
+    dumper_object_holder.reset(new MiniDumper(strDumpFilename.c_str(), szDumpMsg));
   }
 
   tstring strCmdString;

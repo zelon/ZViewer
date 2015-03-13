@@ -119,7 +119,7 @@ void ZMain::_releaseBufferDC() {
 }
 
 void ZMain::onTimer() {
-  if ( ZOption::GetInstance().m_bSlideMode ) {/// check slidemode
+  if ( ZOption::GetInstance().is_slide_mode ) {/// check slidemode
     long long slideShowedTime = duration_cast<milliseconds>(system_clock::now() - ZOption::GetInstance().m_LastSlidedTime).count();
 
     if ( slideShowedTime > ZOption::GetInstance().m_iSlideModePeriodMiliSeconds ) {
@@ -526,7 +526,7 @@ int ZMain::GetCalculatedMovedIndex(int iIndex) {
   }
 
   if ( iIndex >= (int)filelist_.size() ) {
-    if ( ZOption::GetInstance().IsLoopImages() || ZOption::GetInstance().m_bSlideMode ) {
+    if ( ZOption::GetInstance().IsLoopImages() || ZOption::GetInstance().is_slide_mode ) {
       iIndex = (int)( iIndex % filelist_.size() );
     } else {
       iIndex = (int)filelist_.size() - 1;
@@ -1297,7 +1297,7 @@ void ZMain::SetCheckMenus() {
   CheckMenuItem(m_hMainMenu, ID_VIEW_RIGHTTOPFIRSTDRAW, ZOption::GetInstance().m_bRightTopFirstDraw ? MF_CHECKED : MF_UNCHECKED);
 
   CheckMenuItem(m_hMainMenu, ID_AUTOROTATION, ZOption::GetInstance().IsUseAutoRotation() ? MF_CHECKED : MF_UNCHECKED);
-  CheckMenuItem(m_hMainMenu, ID_VIEW_ALWAYSONTOP, ZOption::GetInstance().m_bAlwaysOnTop ? MF_CHECKED : MF_UNCHECKED);
+  CheckMenuItem(m_hMainMenu, ID_VIEW_ALWAYSONTOP, ZOption::GetInstance().is_always_on_top_window_ ? MF_CHECKED : MF_UNCHECKED);
   /// end of checking main menu
 
   /// start of checking popup menu
@@ -1309,7 +1309,7 @@ void ZMain::SetCheckMenus() {
 }
 
 void ZMain::StartSlideMode() {
-  ZOption::GetInstance().m_bSlideMode = true;
+  ZOption::GetInstance().is_slide_mode = true;
   ZOption::GetInstance().m_LastSlidedTime = system_clock::now();
 }
 
@@ -1319,9 +1319,9 @@ void ZMain::ToggleAutoRotation() {
 }
 
 void ZMain::ToggleAlwaysOnTop() {
-  ZOption::GetInstance().m_bAlwaysOnTop = !ZOption::GetInstance().m_bAlwaysOnTop;
+  ZOption::GetInstance().is_always_on_top_window_ = !ZOption::GetInstance().is_always_on_top_window_;
 
-  if ( ZOption::GetInstance().m_bAlwaysOnTop ) {
+  if ( ZOption::GetInstance().is_always_on_top_window_ ) {
     SetWindowPos(main_window_handle_, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
   } else {
     SetWindowPos(main_window_handle_, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);

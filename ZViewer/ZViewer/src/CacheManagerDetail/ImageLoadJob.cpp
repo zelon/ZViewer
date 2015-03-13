@@ -31,7 +31,7 @@ void ImageLoadJob::DoJob() {
   }
 
   State new_state = state_;
-  if (new_state != old_state) {
+  if (new_state == old_state) {
     assert(false);
   }
   switch (new_state) {

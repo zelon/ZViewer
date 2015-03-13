@@ -1,92 +1,62 @@
-
 #include "stdafx.h"
 #include "StringToValue.h"
+
 #include "CommonFunc.h"
 
-void StringToValue::InsertValueToMap(iniMap & mapData)
-{
-	switch ( m_valueType )
-	{
-	case eValueType_BOOL:
-		{
-			bool * pData = (bool*)m_pData;
-			mapData[m_str] = (*pData) ? TEXT("true") : TEXT("false");
-		}
-		break;
+void StringToValue::InsertValueToMap(iniMap & mapData) {
+  switch (value_type_) {
+  case ValueType::kBool: {
+    bool * pData = (bool*)data_;
+    mapData[string_] = (*pData) ? TEXT("true") : TEXT("false");
+    break;
+  }
 
-	case eValueType_INT:
-		{
-			int * pData = (int*)m_pData;
-			mapData[m_str] = toString(*pData);
-		}
-		break;
+  case ValueType::kInt: {
+    const int int_value = *(int*)data_;
+    mapData[string_] = toString(int_value);
+    break;
+  }
 
-	case eValueType_STRING:
-		{
-			tstring * pData = (tstring*)m_pData;
-			mapData[m_str] = (*pData);
-		}
-		break;
-	default:
-		assert(false);
-	}
+  case ValueType::kString: {
+    const tstring string_value = *(tstring*)data_;
+    mapData[string_] = string_value;
+    break;
+  }
+  default:
+    assert(false);
+  }
 }
 
 
-void StringToValue::InsertMapToValue(iniMap & mapData)
-{
-	switch ( m_valueType )
-	{
-	case eValueType_BOOL:
-		{
-			iniMap::const_iterator it = mapData.find(m_str);
+void StringToValue::InsertMapToValue(iniMap& mapData) {
+  auto it = mapData.find(string_);
+  if (it == mapData.end()) {
+    return;
+  }
 
-			if ( it == mapData.end() )
-			{
-				return;
-			}
+  const tstring value = it->second;
 
-			const tstring value = it->second;
+  switch (value_type_) {
+  case ValueType::kBool: {
+    bool * pData = (bool*)data_;
+    *pData = (it->second == TEXT("true"));
 
-			bool * pData = (bool*)m_pData;
-			*pData = (it->second == TEXT("true"));
+    break;
+  }
 
-		}
-		break;
+  case ValueType::kInt: {
+    int * pData = (int*)data_;
+    *pData = _tstoi(value.c_str());
+    break;
+  }
 
-	case eValueType_INT:
-		{
-			iniMap::const_iterator it = mapData.find(m_str);
+  case ValueType::kString: {
+    tstring * pData = (tstring*)data_;
+    *pData = value;
+    break;
+  }
 
-			if ( it == mapData.end() )
-			{
-				return;
-			}
-
-			const tstring value = it->second;
-
-			int * pData = (int*)m_pData;
-			*pData = _tstoi(value.c_str());
-		}
-		break;
-
-	case eValueType_STRING:
-		{
-			iniMap::const_iterator it = mapData.find(m_str);
-
-			if ( it == mapData.end() )
-			{
-				return;
-			}
-
-			const tstring value = it->second;
-
-			tstring * pData = (tstring*)m_pData;
-			*pData = value;
-		}
-		break;
-
-	default:
-		assert(false);
-	}
+  default:
+    assert(false);
+  }
 }

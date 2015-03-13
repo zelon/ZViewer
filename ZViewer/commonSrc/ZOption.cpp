@@ -1,16 +1,5 @@
-﻿/********************************************************************
-*
-* Created by zelon(Kim, Jinwook Korea)
-* 
-*   2005. 5. 7
-*	ZOption.cpp
-*
-*                                       http://www.wimy.com
-*********************************************************************/
-
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "ZOption.h"
-
 
 ZOption & ZOption::GetInstance()
 {
@@ -79,12 +68,12 @@ void ZOption::SetDefaultOption()
 {
 	m_bUsePreviewInShell = true;
 	m_bUseOpenCMDInShell = false;
-	m_bAlwaysOnTop = false;
-	m_bSlideMode = false;
+	is_always_on_top_window_ = false;
+	is_slide_mode = false;
 	m_iSlideModePeriodMiliSeconds = 5000;	///< Default slide mode period is 5 seconds
 	m_bLoopImages = false;
 	m_bUseAutoRotation = true;
-	m_bFullScreen = false;
+	is_fullscreen_mode_ = false;
 	m_bUseDebug = true;
 	m_bBigToSmallStretchImage = false;
 	m_bSmallToBigStretchImage = false;

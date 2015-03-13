@@ -5,8 +5,9 @@
 #include "AboutWindow.h"
 #include "TaskBar.h"
 
-#include "../commonSrc/MessageManager.h"
+#include "../commonSrc/ElapseTime.h"
 #include "../commonSrc/ExtInfoManager.h"
+#include "../commonSrc/MessageManager.h"
 #include "../commonSrc/ZOption.h"
 
 #include "src/MessageDefine.h"
@@ -209,11 +210,10 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
         CacheManager::GetInstance().DebugShowCacheInfo();
         break;
 
-      case '~':
-        {
-          TIMECHECK_START("clear spend time");
+      case '~': {
+          ElapseTime clear_time;
           CacheManager::GetInstance().ClearCache();
-          TIMECHECK_END();
+          DebugPrintf(L"clear time: %d", clear_time.End());
         }
         break;
 
@@ -460,7 +460,7 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
 
   case WM_COMMAND:
     {
-      if ( ZOption::GetInstance().m_bSlideMode ) ZOption::GetInstance().m_bSlideMode = false;
+      if ( ZOption::GetInstance().is_slide_mode ) ZOption::GetInstance().is_slide_mode = false;
 
       int wMid = LOWORD(wParam);
       //int wmEvent = HIWORD(wParam);

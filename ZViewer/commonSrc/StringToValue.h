@@ -11,46 +11,42 @@
 
 #include "OptionFile.h"
 
-class StringToValue
-{
-	enum eValueType
-	{
-		eValueType_INT,
-		eValueType_BOOL,
-		eValueType_STRING,
-	};
+class StringToValue final {
+  enum class ValueType {
+    kInt,
+    kBool,
+    kString,
+  };
 
 public:
-	explicit StringToValue(tstring & val, int * iValue)
-	{
-		_Init(val, iValue, eValueType_INT);
-	}
+  explicit StringToValue(tstring & val, int * iValue)
+  {
+    _Init(val, iValue, ValueType::kInt);
+  }
 
-	explicit StringToValue(tstring & val, bool * bValue)
-	{
-		_Init(val, bValue, eValueType_BOOL);
-	}
+  explicit StringToValue(tstring & val, bool * bValue)
+  {
+    _Init(val, bValue, ValueType::kBool);
+  }
 
-	explicit StringToValue(tstring & val, tstring * bValue)
-	{
-		_Init(val, bValue, eValueType_STRING);
-	}
+  explicit StringToValue(tstring & val, tstring * bValue)
+  {
+    _Init(val, bValue, ValueType::kString);
+  }
 
-	void InsertValueToMap(iniMap & mapData);
-	void InsertMapToValue(iniMap & mapData);
-	const tstring & getString() const { return m_str; }
+  void InsertValueToMap(iniMap & mapData);
+  void InsertMapToValue(iniMap & mapData);
+  const tstring& getString() const { return string_; }
 
 protected:
+  void _Init(const tstring& str, void * pData, const ValueType valueType) {
+    string_ = str;
+    value_type_ = valueType;
+    data_ = pData;
+  }
 
-	void _Init(tstring & str, void * pData, eValueType valueType)
-	{
-		m_str = str;
-		m_valueType = valueType;
-		m_pData = pData;
-	}
-
-	void * m_pData;
-	tstring m_str;
-	eValueType m_valueType;
+  void* data_;
+  tstring string_;
+  ValueType value_type_;
 };
 
