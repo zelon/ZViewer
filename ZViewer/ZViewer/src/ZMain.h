@@ -173,6 +173,8 @@ public:
 
   void LoadCurrent();
 
+  void RefreshCurrentImage();
+
   void CheckCurrentImage();
 
   /// 그림을 보여줄 윈도우를 만든다.

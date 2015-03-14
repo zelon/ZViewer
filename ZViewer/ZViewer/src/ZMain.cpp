@@ -666,7 +666,10 @@ void ZMain::ToggleFullScreen() {
 
     // 포커스를 잃으면 원래대로 돌아가야하므로 풀어놓는다.
     SetWindowPos(main_window_handle_, HWND_NOTOPMOST, screenX, screenY, screenWidth, screenHeight, SWP_NOMOVE|SWP_NOSIZE);
+
   }
+
+  RefreshCurrentImage();
 
   SetCheckMenus();
 
@@ -677,20 +680,14 @@ void ZMain::ToggleFullScreen() {
 
 void ZMain::ToggleSmallToScreenStretch() {
   ZOption::GetInstance().ToggleSmallToBigStretchImage();
-
+  RefreshCurrentImage();
   SetCheckMenus();
-
-  LoadCurrent();
-  Draw();
 }
 
 void ZMain::ToggleBigToScreenStretch() {
   ZOption::GetInstance().ToggleBigToSmallStretchImage();
-
+  RefreshCurrentImage();
   SetCheckMenus();
-
-  LoadCurrent();
-  Draw();
 }
 
 void ZMain::ToggleLoopImage() {
@@ -815,8 +812,11 @@ void ZMain::LoadCurrent() {
 
   CacheManager::GetInstance().SetCurrent(m_iCurretFileIndex, m_strCurrentFilename);
 
-  current_image_ = nullptr;
+  RefreshCurrentImage();
+}
 
+void ZMain::RefreshCurrentImage() {
+  current_image_ = nullptr;
   CheckCurrentImage();
 }
 
@@ -915,7 +915,7 @@ void ZMain::_ProcAfterRemoveThisFile() {
   current_image_ = nullptr;
   m_strCurrentFilename.resize(0);
 
-  // 현재 파일이 마지막 파일인가?
+  // is this the last file?
   if ( filelist_.size() <= 1 ) {
     m_iCurretFileIndex = 0;
     m_strCurrentFilename = TEXT("");
