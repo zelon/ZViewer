@@ -27,33 +27,24 @@ HMENU g_hPopupMenu;
 
 int CALLBACK WndProc(HWND,UINT,WPARAM,LPARAM);
 
-CMainWindow::CMainWindow()
-{
+CMainWindow::CMainWindow() {
   SetWndProc();
 }
 
-
-CMainWindow::~CMainWindow()
-{
+CMainWindow::~CMainWindow() {
 }
 
-
-void CMainWindow::SetWndProc()
-{
+void CMainWindow::SetWndProc() {
   m_wndProc = (WNDPROC)WndProc;
 }
 
 
-HWND CMainWindow::Create(HINSTANCE hInstance, HWND hParentHWND, int nCmdShow)
-{
+HWND CMainWindow::Create(HINSTANCE hInstance, HWND /*parentHWND*/, int nCmdShow) {
   SetWndProc();
-  if ( NULL == m_wndProc)
-  {
+  if ( NULL == m_wndProc) {
     assert(!"before create, set WndProc");
     return (HWND)INVALID_HANDLE_VALUE;
   }
-
-  m_hParentWindow = hParentHWND;
 
   TCHAR lpszClass[256] = TEXT("ZViewer");
 
@@ -101,14 +92,12 @@ HWND CMainWindow::Create(HINSTANCE hInstance, HWND hParentHWND, int nCmdShow)
   ShowWindow(m_hWindow, nCmdShow);
 
   // 단축키 설정. 여기서 반환된 핸들은 프로그램이 종료될 때 자동적으로 close 됨.
-  m_hAccel = ShortCut::GetInstance().MakeAccelTable();
-
+  SetAccel(ShortCut::GetInstance().MakeAccelTable());
 
   return m_hWindow;
 }
 
-HMENU CMainWindow::CreatePopupMenu()
-{
+HMENU CMainWindow::CreatePopupMenu() {
   HMENU hPopupMenu = ::CreatePopupMenu();
 
   AppendMenu(hPopupMenu, MF_STRING, ID_MOVE_FIRSTIMAGE, GetMessage(TEXT("POPUPMENU_FIRST")));
@@ -137,17 +126,13 @@ HMENU CMainWindow::CreatePopupMenu()
   return hPopupMenu;
 }
 
-int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
-{
+int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam) {
   static int lastX;
   static int lastY;
 
-  switch(iMessage)
-  {
-  case WM_CHAR:
-    {
-      switch ( wParam )
-      {
+  switch(iMessage) {
+  case WM_CHAR: {
+      switch ( wParam ) {
       case '{':
         ZMain::GetInstance().DecreaseOpacity();
         break;
@@ -217,19 +202,13 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
         }
         break;
 
-      case 'n':
-        {
-        }
-        break;
-      case 'm':
-        {
+      case 'm': {
           fipMultiPage mimage;
           mimage.open("C:\\b.gif", FALSE, TRUE);
 
           int iCount = mimage.getPageCount();
 
-          for ( int i=0; i<iCount; ++i )
-          {
+          for ( int i=0; i<iCount; ++i ) {
             DebugPrintf(TEXT("-- pregress gif --"));
             fipWinImage k;
 
@@ -238,27 +217,19 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
             FIBITMAP* pDatap = mimage.lockPage(i);
 
             fipImage pre;
-            if ( pDatap )
-            {
+            if ( pDatap ) {
               pp = pDatap;
-              if ( pp.isValid() )
-              {
-                if ( i == 0 )
-                {
+              if ( pp.isValid() ) {
+                if ( i == 0 ) {
                   pre = pp;
                   k = pp;
                   k.convertTo32Bits();
-                }
-                else
-                {
-                  BOOL bRet = k.pasteSubImage(pp, 0, 0);
+                } else {
+                  const BOOL bRet = k.pasteSubImage(pp, 0, 0);
 
-                  if ( bRet )
-                  {
+                  if ( bRet ) {
                     DebugPrintf(TEXT("pastesubimage ok"));
-                  }
-                  else
-                  {
+                  } else {
                     DebugPrintf(TEXT("pastesubimage failed"));
                   }
                   k = pp;
@@ -285,7 +256,6 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
           }
 
           mimage.close(0);
-
         }
         break;
 #endif
@@ -293,25 +263,21 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
     }
     break;
 
-  case WM_DROPFILES:///< 탐색기에서 드래그 앤 드랍으로 놓았을 때
-    {
+  case WM_DROPFILES: {///< 탐색기에서 드래그 앤 드랍으로 놓았을 때
       HDROP hDrop = (HDROP)wParam;
 
-      UINT iFileNum = 0;
+      UINT iFileNum = DragQueryFile(hDrop, 0xffffffff, 0, 0);
 
-      iFileNum = DragQueryFile(hDrop, 0xffffffff, 0, 0);
-
-      if ( iFileNum <= 0 ) break;
+      if (iFileNum <= 0) {
+        break;
+      }
 
       TCHAR szFileName[MAX_PATH] = { 0 };
       DragQueryFile(hDrop, 0, szFileName, MAX_PATH);
 
-      if ( ExtInfoManager::GetInstance().IsValidImageFileExt(szFileName) )
-      {
+      if ( ExtInfoManager::GetInstance().IsValidImageFileExt(szFileName) ) {
         ZMain::GetInstance().OpenFile(szFileName);
-      }
-      else
-      {
+      } else {
         MessageBox(hWnd, GetMessage(TEXT("INVALID_IMAGE_FILE")), TEXT("ZViewer"), MB_OK);
       }
     }
@@ -322,43 +288,35 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
     break;
 
   case WM_LBUTTONDOWN:
-    {
-      m_bCapture = true;
-      SetCapture(hWnd);
+    m_bCapture = true;
+    SetCapture(hWnd);
 
-      lastX = LOWORD(lParam);
-      lastY = HIWORD(lParam);
+    lastX = LOWORD(lParam);
+    lastY = HIWORD(lParam);
 
-      HandCursorProc();
-    }
+    CMainWindow::HandCursorProc();
     break;
 
   case WM_LBUTTONUP:
-    {
-      m_bCapture = false;
-      ReleaseCapture();
-      HandCursorProc();
-    }
+    m_bCapture = false;
+    ReleaseCapture();
+    CMainWindow::HandCursorProc();
     break;
 
   case WM_MOUSEMOVE:
-    {
-      if ( m_bCapture )
-      {
-        int x = GET_X_LPARAM(lParam);
-        int y = GET_Y_LPARAM(lParam);
+    if ( m_bCapture ) {
+      int x = GET_X_LPARAM(lParam);
+      int y = GET_Y_LPARAM(lParam);
 
-        ZMain::GetInstance().OnDrag(-(x - lastX), -(y - lastY));
-        lastX = x;
-        lastY = y;
+      ZMain::GetInstance().OnDrag(-(x - lastX), -(y - lastY));
+      lastX = x;
+      lastY = y;
 
-        HandCursorProc();
-      }
+      CMainWindow::HandCursorProc();
     }
     break;
 
-  case WM_CREATE:
-    {
+  case WM_CREATE: {
       ZMain::GetInstance().SetHWND(hWnd);
 
       InitCommonControls();
@@ -383,11 +341,9 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
     }
     break;
 
-  case WM_CLOSE:
-    {
-      if ( ZOption::GetInstance().IsFullScreen() )
-      {
-        TaskBar::ShellTrayShow();
+  case WM_CLOSE: {
+      if ( ZOption::GetInstance().IsFullScreen() ) {
+        TaskBar::Show();
       }
 
       ZMain::GetInstance().StopTimer();
@@ -395,8 +351,7 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
     }
     break;
 
-  case WM_SETCURSOR:
-    {
+  case WM_SETCURSOR: {
       RECT rt;
       ZMain::GetInstance().getCurrentScreenRect(rt);
 
@@ -404,17 +359,14 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
       GetCursorPos(&pt);
       ScreenToClient(hWnd, &pt);
 
-      if ( PtInRect(&rt, pt) || m_bCapture )
-      {
-        HandCursorProc();
+      if ( PtInRect(&rt, pt) || m_bCapture ) {
+        CMainWindow::HandCursorProc();
         return 0;
       }
-
     }
     break;
 
-  case WM_MOUSEWHEEL:
-    {
+  case WM_MOUSEWHEEL: {
       bool bPushedControl = false;
       if ( (LOWORD(wParam) & MK_CONTROL) == MK_CONTROL )
       {
@@ -425,8 +377,7 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
     }
     break;
 
-  case WM_SIZE:
-    {
+  case WM_SIZE: {
       /// ShowWindow 크기를 조절한다.
       ZMain::GetInstance().AdjustShowWindowScreen();
 
@@ -448,8 +399,7 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
     ZMain::GetInstance().OnFocusLose();
     break;
 
-  case WM_CONTEXTMENU:
-    {
+  case WM_CONTEXTMENU: {
       ZMain::GetInstance().SetHandCursor(false);	///< When popup menu, change to arrow cursor
 
       POINT p;
@@ -458,12 +408,10 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
     }
     break;
 
-  case WM_COMMAND:
-    {
-      if ( ZOption::GetInstance().is_slide_mode ) ZOption::GetInstance().is_slide_mode = false;
-
-      int wMid = LOWORD(wParam);
-      //int wmEvent = HIWORD(wParam);
+  case WM_COMMAND: {
+      if (ZOption::GetInstance().is_slide_mode) {
+        ZOption::GetInstance().is_slide_mode = false;
+      }
 
       switch ( wParam )
       {
@@ -472,6 +420,8 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
         ZMain::GetInstance().CloseProgram();
         break;
       }
+
+      const int wMid = LOWORD(wParam);
 
       switch ( wMid )
       {
@@ -530,37 +480,25 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
         break;
 
       case ID_MOVE_NEXT_JUMP:
-        {
-          if ( ZMain::GetInstance().MoveRelateIndex(+10) )
-          {
-            ZMain::GetInstance().Draw();
-          }
+        if ( ZMain::GetInstance().MoveRelateIndex(+10) ) {
+          ZMain::GetInstance().Draw();
         }
         break;
 
       case ID_MOVE_PREV_JUMP:
-        {
-          if ( ZMain::GetInstance().MoveRelateIndex(-10) )
-          {
-            ZMain::GetInstance().Draw();
-          }
+        if ( ZMain::GetInstance().MoveRelateIndex(-10) ) {
+          ZMain::GetInstance().Draw();
         }
         break;
       case ID_MOVE_FIRSTIMAGE:
-        {
-          if ( ZMain::GetInstance().FirstImage() )
-          {
-            ZMain::GetInstance().Draw();
-          }
+        if ( ZMain::GetInstance().FirstImage() ) {
+          ZMain::GetInstance().Draw();
         }
         break;
 
       case ID_MOVE_LASTIMAGE:
-        {
-          if ( ZMain::GetInstance().LastImage() )
-          {
-            ZMain::GetInstance().Draw();
-          }
+        if ( ZMain::GetInstance().LastImage() ) {
+          ZMain::GetInstance().Draw();
         }
         break;
 
@@ -597,8 +535,7 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
         ZMain::GetInstance().ReLoadFileList();
         break;
 
-      case ID_HELP_ABOUT:
-        {
+      case ID_HELP_ABOUT: {
           CAboutWindow win;
           win.DoResource(hWnd);
         }
@@ -609,8 +546,7 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
         break;
       case ID_ACCELERATOR_CANCEL_FULLSCREEN:
         // 현재 풀 스크린 일 때만 풀스크린을 취소한다.
-        if ( ZOption::GetInstance().IsFullScreen() )
-        {
+        if ( ZOption::GetInstance().IsFullScreen() ) {
           ZMain::GetInstance().ToggleFullScreen();
         }
         break;
@@ -731,27 +667,16 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
     return 0;
   }
   return (int)(DefWindowProc(hWnd,iMessage,wParam,lParam));
-
 }
 
-void HandCursorProc()
-{
-  if ( ZMain::GetInstance().IsHandCursor() )
-  {
-    if ( m_bCapture )	// 마우스 왼쪽 버튼을 누르고 있으면 움켜쥔 커서를 그린다.
-    {
+void CMainWindow::HandCursorProc() {
+  if ( ZMain::GetInstance().IsHandCursor() ) {
+    if ( m_bCapture ) {// 마우스 왼쪽 버튼을 누르고 있으면 움켜쥔 커서를 그린다.
       SetCursor(LoadCursor(ZMain::GetInstance().GetHInstance(), MAKEINTRESOURCE(IDC_MOVE_HAND_CAPTURE_CURSOR)));
-    }
-    else
-    {
+    } else {
       SetCursor(LoadCursor(ZMain::GetInstance().GetHInstance(), MAKEINTRESOURCE(IDC_MOVE_HAND_CURSOR)));
     }
-
-    //DebugPrintf("LoadWait");
-  }
-  else
-  {
+  } else {
     SetCursor(LoadCursor(NULL, IDC_ARROW));
-    //DebugPrintf("LoadArrow");
   }
 }

@@ -1,40 +1,31 @@
-﻿/* ------------------------------------------------------------------------
- *
- * Copyright 2006
- *
- * ZWindow.h
- *
- * 2006.11.3 Jinwook Kim
- *
- * ------------------------------------------------------------------------
- */
-
-#pragma once
+﻿#pragma once
 
 class ZWindow {
 public:
-	ZWindow();
-	virtual ~ZWindow();
+  ZWindow();
+  virtual ~ZWindow();
 
-	virtual void SetWndProc() = 0;
+  virtual void SetWndProc() = 0;
 
-	virtual HWND Create(HINSTANCE hInstance, HWND hParentHWND, int nCmdShow, const tstring & dlgName, HMENU hMenu);
+  virtual HWND Create(HINSTANCE hInstance, HWND hParentHWND, int nCmdShow, const tstring & dlgName, HMENU hMenu);
 
-	WPARAM DoModal()
-	{
-		return MsgProc();
-	}
+  WPARAM DoModal() {
+    return MsgProc();
+  }
 
-	virtual void SetHWND(HWND hWnd)
-	{
-		m_hWindow = hWnd;
-	}
+  virtual void SetHWND(HWND hWnd) {
+    m_hWindow = hWnd;
+  }
+
+  void SetAccel(const HACCEL accel_handle) { m_hAccel = accel_handle; }
 
 protected:
-	WPARAM MsgProc();
-	HWND m_hParentWindow;
-	HWND m_hWindow;
-	HACCEL m_hAccel;
+  WPARAM MsgProc();
 
-	WNDPROC m_wndProc;
+  HWND m_hWindow;
+
+  WNDPROC m_wndProc;
+
+private:
+  HACCEL m_hAccel;
 };

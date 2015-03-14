@@ -639,7 +639,7 @@ void ZMain::ToggleFullScreen() {
   if ( ZOption::GetInstance().IsFullScreen() ) {// 현재 풀스크린이면 원래 화면으로 돌아간다.
     ZOption::GetInstance().SetFullScreen(!ZOption::GetInstance().IsFullScreen());
 
-    TaskBar::ShellTrayShow();	// 숨겨졌던 작업 표시줄을 보여준다.
+    TaskBar::Show();	// 숨겨졌던 작업 표시줄을 보여준다.
 
     ShowForm();	// 메뉴, 상태 표시줄등을 보여준다.
 
@@ -662,7 +662,7 @@ void ZMain::ToggleFullScreen() {
     MoveWindow(main_window_handle_, screenX, screenY, screenWidth, screenHeight, TRUE);
 
     // 작업 표시줄을 가려준다.
-    TaskBar::ShellTrayHide();
+    TaskBar::Hide();
 
     // 포커스를 잃으면 원래대로 돌아가야하므로 풀어놓는다.
     SetWindowPos(main_window_handle_, HWND_NOTOPMOST, screenX, screenY, screenWidth, screenHeight, SWP_NOMOVE|SWP_NOSIZE);
@@ -676,7 +676,6 @@ void ZMain::ToggleFullScreen() {
   m_iShowingX = 0;
   m_iShowingY = 0;
 }
-
 
 void ZMain::ToggleSmallToScreenStretch() {
   ZOption::GetInstance().ToggleSmallToBigStretchImage();
@@ -698,7 +697,6 @@ void ZMain::ToggleLoopImage() {
 
 void ZMain::SetStatusBarText() {
   TCHAR szTemp[COMMON_BUFFER_SIZE];
-  tstring strTemp;
 
   // file index
   {
@@ -945,7 +943,7 @@ void ZMain::_ProcAfterRemoveThisFile() {
 }
 
 void ZMain::OnFocusLose() {
-  TaskBar::ShellTrayShow();
+  TaskBar::Show();
 }
 
 void ZMain::OnFocusGet() {
@@ -963,7 +961,7 @@ void ZMain::OnFocusGet() {
     MoveWindow(main_window_handle_, screenX, screenY, screenWidth, screenHeight, TRUE);
     SetWindowPos(main_window_handle_, HWND_NOTOPMOST, screenX, screenY, screenWidth, screenHeight, SWP_NOMOVE|SWP_NOSIZE);
 
-    TaskBar::ShellTrayHide();
+    TaskBar::Hide();
   }
 }
 

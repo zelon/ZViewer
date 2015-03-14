@@ -66,6 +66,8 @@ public:
 private:
   ZOption();
 
+  static tstring GetOptionFileFullPath();
+
   template < class T >
   void _InsertSaveOptionSetting(TCHAR * str, T * value) {
     tstring val(str);
@@ -118,9 +120,6 @@ private:
 
   /// 이 값이 false 이면 singleton 을 끝낼 때 값을 저장하지 않는다(ZviewerAgent 의 종료 시점을 정확히 알 수 없기 때문)
   bool m_bDontSaveInstance;
-
-  /// 파일로부터 옵션을 읽어들여서 바뀐 옵션이 있나.
-  bool m_bOptionChanged;
 
   std::vector<StringToValue> m_saveOptions;
 };
