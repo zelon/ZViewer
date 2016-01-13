@@ -168,7 +168,7 @@ python testLang.py
     </PostBuildEvent>
     <PreBuildEvent>
       <Command>cd $(SolutionDir)../../lib/freeimage
-python PrepareBuild.py $(Platform) $(Configuration)</Command>
+csi PrepareBuild.csx $(Platform) $(Configuration)</Command>
     </PreBuildEvent>
     <PreBuildEvent>
       <Message>Copy dll files to output directory</Message>

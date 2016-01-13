@@ -1,34 +1,51 @@
-import os
-import glob
-import sys
-import shutil
 
-def copy(src_dir, platform, config):
-  src_file_names = src_dir + "/" + platform + "/" + config + "/*.*"
-  dest_dir = src_dir + "/" + "../../output"
-  print("src : " + src_file_names)
-  files = glob.glob(src_file_names)
+using System;
+using System.IO;
 
-  for file in files:
-    if file.lower().endswith(".dll"):
-      print(file + " to " + dest_dir)
-      shutil.copy(file, dest_dir)
+class CopyLibrary
+{
+  public static void Copy(string lib_dir, string platform, string config)
+  {
+    string src_dir = lib_dir + "\\" + platform + "\\" + config;
+    string dest_dir = lib_dir + "\\" + "..\\..\\output";
+    foreach (string src_filename in Directory.EnumerateFiles(src_dir)) {
+      string dest_filename = dest_dir + "\\" + Path.GetFileName(src_filename);
+      Console.WriteLine("Copying " + src_filename + " to " + dest_filename);
+      File.Copy(src_filename, dest_filename, /*overwrite=*/true);
+    }
+  }
 
-def printUsage():
-  print("Usage " + sys.argv[0] + " Win32|x64 Debug|Release")
+  public static void PrintUsage()
+  {
+    System.Console.WriteLine("Usage: csi.exe PrepareBuild.csx Win32|x64 Debug|Release");
+  }
 
-def main():
-  if len(sys.argv) == 3:
-    platform = sys.argv[1]
-    config = sys.argv[2]
+  public static void Main()
+  {
+    string[] argv = System.Environment.GetCommandLineArgs();
+    if (argv.Length != 4)
+    {
+      PrintUsage();
+      return;
+    }
 
-    if platform in {"Win32", "x64"} and config in {"Debug", "Release"}:
-      src_dir = os.path.abspath(os.path.dirname(sys.argv[0]))
-      
-      copy(src_dir, platform, config)
-      return
-  printUsage()
-  exit(1)
+    string platform = argv[2];
+    string config = argv[3];
+    if (platform != "Win32" && platform != "x64")
+    {
+      PrintUsage();
+      return;
+    }
+    if (config != "Debug" && config != "Release")
+    {
+      PrintUsage();
+      return;
+    }
 
-if __name__ == "__main__":
-  main()
+    string current_script_filename = argv[1];
+    string src_dir = Path.GetDirectoryName(Path.GetFullPath(current_script_filename));
+    Copy(src_dir, platform, config);
+  }
+}
+
+CopyLibrary.Main();
