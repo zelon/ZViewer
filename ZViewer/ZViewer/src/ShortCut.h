@@ -26,7 +26,7 @@ private:
 	class ShortCutData
 	{
 	public:
-		std::vector < const ModifierKeyType > m_modifierKeys;
+		std::vector<ModifierKeyType> m_modifierKeys;
 		WORD m_key;
 		WORD m_sendID;
 
