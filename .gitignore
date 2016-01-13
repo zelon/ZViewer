@@ -38,3 +38,7 @@ ZViewer/output/language/korean.ilk
 ZViewer/output/language/LangKor.pdb
 ZViewer/output/__pycache__/*.pyc
 ZViewer/_release
+ZViewer/build/VS2015/.vs/ZViewer/v14/.suo
+ZViewer/build/VS2015/ZViewer.VC.opendb
+ZViewer/output/ZUnitTest.iobj
+ZViewer/output/ZUnitTest.ipdb
