@@ -42,3 +42,7 @@ ZViewer/build/VS2015/.vs/ZViewer/v14/.suo
 ZViewer/build/VS2015/ZViewer.VC.opendb
 ZViewer/output/ZUnitTest.iobj
 ZViewer/output/ZUnitTest.ipdb
+ZViewer/output/FreeImage.lib
+ZViewer/output/FreeImagePlus.lib
+ZViewer/output/FreeImagePlusd.lib
+ZViewer/output/FreeImaged.lib
