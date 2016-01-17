@@ -163,7 +163,7 @@ python PrepareBuild.py $(Platform) $(Configuration)</Command>
     </Link>
     <PostBuildEvent>
       <Command>cd $(SolutionDir)../../
-python testLang.py
+csi testLang.csx
 </Command>
     </PostBuildEvent>
     <PreBuildEvent>
@@ -210,7 +210,7 @@ python testLang.py
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <PreBuildEvent>
       <Command>cd $(SolutionDir)../../lib/freeimage
-python PrepareBuild.py $(Platform) $(Configuration)</Command>
+csi PrepareBuild.csx $(Platform) $(Configuration)</Command>
       <Message>Copy dll files to output directory</Message>
     </PreBuildEvent>
     <ClCompile>
@@ -235,7 +235,7 @@ python PrepareBuild.py $(Platform) $(Configuration)</Command>
     </Link>
     <PostBuildEvent>
       <Command>cd $(SolutionDir)../../
-python testLang.py
+csi testLang.csx
 </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
