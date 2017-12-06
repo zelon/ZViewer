@@ -1,6 +1,8 @@
 # Visual C++ cache files
 *.aps
 *.sdf
+*.swp
+*.VC.db
 
 # eclipse setting files
 ZViewer/.project
@@ -8,6 +10,7 @@ ZViewer/.cproject
 ZViewer/.pydevproject
 
 ZViewer/obj
+ZViewer/build/VS20*/.vs/
 ZViewer/build/VS20*/*.vcxproj.user
 ZViewer/build/VS20*/dlldata.c
 ZViewer/build/VS20*/ZViewerAgent.h
@@ -18,6 +21,7 @@ ZViewer/build/VS20*/*.opensdf
 ZViewer/build/VS20*/ipch
 ZViewer/build/VS20*/x64/
 ZViewer/build/VS20*/Win32/
+ZViewer/output/.vs/
 ZViewer/output/*.ilk
 ZViewer/output/*.pdb
 ZViewer/output/FreeImage*.dll
