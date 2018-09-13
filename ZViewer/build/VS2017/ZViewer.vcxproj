@@ -128,6 +128,7 @@ csi testLang.csx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\commonSrc\Path.cpp" />
     <ClCompile Include="..\..\ZViewer\Main.cpp" />
     <ClCompile Include="..\..\ZViewer\src\CacheManager.cpp" />
     <ClCompile Include="..\..\ZViewer\src\CacheManagerDetail\CachedData.cpp" />
@@ -174,6 +175,7 @@ csi testLang.csx
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\commonSrc\ElapseTime.h" />
+    <ClInclude Include="..\..\commonSrc\Path.h" />
     <ClInclude Include="..\..\lib\freeimage\FreeImage.h" />
     <ClInclude Include="..\..\lib\vld\vld_def.h" />
     <ClInclude Include="..\..\ZViewer\res\resource.h" />

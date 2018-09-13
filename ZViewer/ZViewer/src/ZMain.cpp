@@ -5,6 +5,7 @@
 #include "../commonSrc/DesktopWallPaper.h"
 #include "../commonSrc/ElapseTime.h"
 #include "../commonSrc/ExtInfoManager.h"
+#include "../commonSrc/Path.h"
 #include "../commonSrc/SaveAs.h"
 #include "../commonSrc/ZOption.h"
 #include "MessageDefine.h"
@@ -1194,22 +1195,13 @@ void ZMain::SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyle style)
   }
 
   // 현재보고 있는 파일을 윈도우 폴더에 저장한다.
-  TCHAR szSystemFolder[_MAX_PATH] = { 0 };
+  std::wstring setting_directory = ZViewer::Path::GetZViewerSettingDirectory();
+  ZViewer::Path::CreateDirectory(setting_directory);
 
-  if ( E_FAIL == SHGetFolderPath(NULL, CSIDL_WINDOWS, NULL, SHGFP_TYPE_CURRENT, szSystemFolder) ) {
-    assert(false);
-    return;
-  }
+  tstring strSaveFileName = setting_directory;
+  strSaveFileName += TEXT("\\zviewer_background.bmp");
 
-  TCHAR szFileName[FILENAME_MAX] = { 0 };
-  SplitPath(filelist_[m_iCurretFileIndex].m_strFileName.c_str(), NULL,0, NULL,0, szFileName,FILENAME_MAX, NULL,0);
-
-  tstring strSaveFileName = szSystemFolder;
-  strSaveFileName += TEXT("\\zviewer_bg_");
-  strSaveFileName += szFileName;
-  strSaveFileName += TEXT(".bmp");
-
-  if ( FALSE == current_image_->SaveToFile(strSaveFileName, BMP_DEFAULT) ) {
+  if (current_image_->SaveToFile(strSaveFileName, BMP_DEFAULT) == false) {
     assert(false);
     return;
   }
