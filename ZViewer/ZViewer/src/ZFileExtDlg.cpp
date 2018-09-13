@@ -82,22 +82,22 @@ void ZFileExtDlg::LoadExtEnv(HWND hwnd)
 
 void ZFileExtDlg::SaveExtEnv()
 {
-	std::vector < ExtSetting >::iterator it, endit = ExtInfoManager::GetInstance().m_extConnect.end();
+	const auto& ext_settings = ExtInfoManager::GetInstance().ext_settings();
 
 	tstring strProgramFolder(GetProgramFolder());
 
 	tstring strIconDll = strProgramFolder;
 	strIconDll += TEXT("ZViewerIcons.dll");
 
-	for ( it = ExtInfoManager::GetInstance().m_extConnect.begin(); it != endit; ++it)
+	for (auto it = begin(ext_settings); it != end(ext_settings); ++it)
 	{
-		const ExtSetting & extset = *it;
+		const ExtSetting& ext_setting = *it;
 
-		if ( false == SetExtWithProgram(TEXT("ZViewer"), extset.m_strExt, 
-			TEXT(""),	/// 프로그램 Full Path. 비워두면 현재 프로그램이다.
-			strIconDll.c_str(),	/// 아이콘 프로그램
-			extset.m_numIconIndex	/// 아이콘 index
-		) )
+		if (SetExtWithProgram(TEXT("ZViewer"), ext_setting.m_strExt,
+							TEXT(""),	/// 프로그램 Full Path. 비워두면 현재 프로그램이다.
+							strIconDll.c_str(),	/// 아이콘 프로그램
+							ext_setting.m_numIconIndex	/// 아이콘 index
+							) == false) 
 		{
 			assert(false);
 		}

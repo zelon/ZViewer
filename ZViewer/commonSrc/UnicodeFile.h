@@ -1,21 +1,13 @@
-﻿
-#pragma once
+﻿#pragma once
 
-class CUnicodeFile
+class CUnicodeFile final
 {
 public:
-
 	enum eFileOpenMode
 	{
 		eFileOpenMode_NONE,
 		eFileOpenMode_READ,
 		eFileOpenMode_WRITE,
-	};
-
-	enum eBoomCode
-	{
-		eBoomCode_BIGENDIAN    = 0xfffe,
-		eBoomCode_LITTLEENDIAN = 0xfeff,
 	};
 
 	CUnicodeFile()
@@ -53,8 +45,7 @@ public:
 		write(TEXT("\r\n"));
 	}
 
-protected:
-
+private:
 	/// 엔디안을 변경한다. 빅엔디안 <-> 리틀엔디안
 	const wchar_t _changeEndian(const wchar_t src)
 	{

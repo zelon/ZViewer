@@ -1,17 +1,9 @@
-﻿/* ------------------------------------------------------------------------
- *
- * 2008. 8. 10 KIM JINWOOK
- *
- * ------------------------------------------------------------------------
- */
-
-#include "stdafx.h"
+﻿#include "stdafx.h"
 
 #include "ExtInfoManager.h"
 #include "CommonFunc.h"
 
-
-ExtInfoManager & ExtInfoManager::GetInstance()
+ExtInfoManager& ExtInfoManager::GetInstance()
 {
 	static ExtInfoManager inst;
 	return inst;
@@ -22,7 +14,7 @@ ExtInfoManager::ExtInfoManager()
 	ExtMapInit();
 }
 
-void ExtInfoManager::_AddExtSet(const int iIconIndex, const TCHAR * ext)
+void ExtInfoManager::AddExtSet(const int iIconIndex, const TCHAR * ext)
 {
 	ExtSetting extSet;
 
@@ -33,31 +25,31 @@ void ExtInfoManager::_AddExtSet(const int iIconIndex, const TCHAR * ext)
 
 void ExtInfoManager::ExtMapInit()
 {
-	_AddExtSet(1, TEXT("bmp"));
-	_AddExtSet(1, TEXT("wbmp"));
-	_AddExtSet(2, TEXT("jpg"));
-	_AddExtSet(2, TEXT("jpeg"));
-	_AddExtSet(2, TEXT("jpe"));
-	_AddExtSet(2, TEXT("jp2"));
-	_AddExtSet(2, TEXT("j2k"));
-	_AddExtSet(3, TEXT("png"));
-	_AddExtSet(4, TEXT("psd"));
-	_AddExtSet(5, TEXT("gif"));
-	_AddExtSet(0, TEXT("dds"));
-	_AddExtSet(0, TEXT("tga"));
-	_AddExtSet(0, TEXT("pcx"));
-	_AddExtSet(0, TEXT("xpm"));
-	_AddExtSet(0, TEXT("xbm"));
-	_AddExtSet(0, TEXT("tif"));
-	_AddExtSet(0, TEXT("tiff"));
-	_AddExtSet(0, TEXT("cut"));
-	_AddExtSet(6, TEXT("ico"));
-	_AddExtSet(0, TEXT("hdr"));
-	_AddExtSet(0, TEXT("jng"));
-	_AddExtSet(0, TEXT("koa"));
-	_AddExtSet(0, TEXT("mng"));
-	_AddExtSet(0, TEXT("pcd"));
-	_AddExtSet(0, TEXT("ras"));
+	AddExtSet(1, TEXT("bmp"));
+	AddExtSet(1, TEXT("wbmp"));
+	AddExtSet(2, TEXT("jpg"));
+	AddExtSet(2, TEXT("jpeg"));
+	AddExtSet(2, TEXT("jpe"));
+	AddExtSet(2, TEXT("jp2"));
+	AddExtSet(2, TEXT("j2k"));
+	AddExtSet(3, TEXT("png"));
+	AddExtSet(4, TEXT("psd"));
+	AddExtSet(5, TEXT("gif"));
+	AddExtSet(0, TEXT("dds"));
+	AddExtSet(0, TEXT("tga"));
+	AddExtSet(0, TEXT("pcx"));
+	AddExtSet(0, TEXT("xpm"));
+	AddExtSet(0, TEXT("xbm"));
+	AddExtSet(0, TEXT("tif"));
+	AddExtSet(0, TEXT("tiff"));
+	AddExtSet(0, TEXT("cut"));
+	AddExtSet(6, TEXT("ico"));
+	AddExtSet(0, TEXT("hdr"));
+	AddExtSet(0, TEXT("jng"));
+	AddExtSet(0, TEXT("koa"));
+	AddExtSet(0, TEXT("mng"));
+	AddExtSet(0, TEXT("pcd"));
+	AddExtSet(0, TEXT("ras"));
 }
 
 
@@ -138,4 +130,8 @@ const TCHAR * ExtInfoManager::GetFileDlgFilter()
 	m_strFileDlgFilter = result;
 
 	return m_strFileDlgFilter.c_str();
+}
+
+const std::vector<ExtSetting>& ExtInfoManager::ext_settings () const {
+	return m_extConnect;
 }

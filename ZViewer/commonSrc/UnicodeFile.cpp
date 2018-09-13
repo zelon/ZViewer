@@ -2,6 +2,12 @@
 #include "stdafx.h"
 #include "UnicodeFile.h"
 
+enum eBoomCode
+{
+	eBoomCode_BIGENDIAN = 0xfffe,
+	eBoomCode_LITTLEENDIAN = 0xfeff,
+};
+
 /// 파일을 연다.
 bool CUnicodeFile::open(const tstring & strFileName, eFileOpenMode openMode)
 {

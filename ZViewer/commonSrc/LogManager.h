@@ -19,7 +19,7 @@ public:
 	}
 
 private:
-  CLogManager(void);
+	CLogManager(void);
 
 	HANDLE m_hConsoleOutput;
 
