@@ -2,7 +2,6 @@
 #include "ZWindow.h"
 
 #include "../commonSrc/MessageManager.h"
-#include "../commonSrc/ZOption.h"
 #include "resource.h"
 #include "src/ShortCut.h"
 #include "src/ZMain.h"

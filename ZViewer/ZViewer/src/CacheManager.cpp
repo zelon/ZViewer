@@ -318,7 +318,7 @@ int CacheManager::GetCacheHitRate() const {
 
 
 void CacheManagerSpeedTest() {
-  class CachedCounter : public CacheEventListenerInterface {
+  class CachedCounter : public ZViewer::CacheEventListenerInterface {
   public:
     CachedCounter() {
       count_ = 0;

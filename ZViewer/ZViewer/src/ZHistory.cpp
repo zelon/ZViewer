@@ -1,14 +1,4 @@
-﻿/********************************************************************
-*
-* Created by zelon(Kim, Jinwook Korea)
-* 
-*   2005. 5. 7
-*	ZHistory.cpp
-*
-*                                       http://www.wimy.com
-*********************************************************************/
-
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "ZHistory.h"
 
 ZHistory::ZHistory()
@@ -27,7 +17,6 @@ void ZHistory::push_lastImageIndex(int iIndex)
 
 	// index 위치를 조정한다.
 	m_iCurrentIndex = m_indexVector.size();
-
 }
 
 int ZHistory::Undo()
@@ -49,7 +38,6 @@ int ZHistory::Redo()
 	assert(CanRedo());
 
 	// Undo 를 되돌린다.
-
 	++m_iCurrentIndex;
 
 	return m_indexVector[m_iCurrentIndex];

@@ -10,6 +10,7 @@
 #include "../commonSrc/MessageManager.h"
 #include "../commonSrc/ZOption.h"
 
+#include "src/CacheManager.h"
 #include "src/MessageDefine.h"
 #include "src/ShortCut.h"
 #include "src/ZMain.h"

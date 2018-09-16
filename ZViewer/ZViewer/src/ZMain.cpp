@@ -11,11 +11,14 @@
 #include "MessageDefine.h"
 #include "MessageManager.h"
 #include "resource.h"
+#include "src/CacheManager.h"
 #include "src/ExifDlg.h"
 #include "src/SelectToFolderDlg.h"
 #include "src/ZFileExtDlg.h"
 #include "src/ZResourceManager.h"
 #include "TaskBar.h"
+#include "ZHistory.h"
+#include "ZImage.h"
 
 using namespace std;
 using namespace std::chrono;
@@ -28,10 +31,11 @@ ZMain& ZMain::GetInstance() {
 }
 
 ZMain::ZMain(void)
-:	main_window_handle_(nullptr)
-,	m_sortOrder(eFileSortOrder_FILENAME)
-, m_hBufferDC(nullptr)
-,	m_alpha(255) {
+	: main_window_handle_(nullptr),
+		m_sortOrder(eFileSortOrder_FILENAME),
+		m_history(std::make_unique<ZHistory>()),
+		m_hBufferDC(nullptr),
+		m_alpha(255) {
   memset( &m_lastPosition, 0, sizeof( m_lastPosition ) );
   
   background_brush_ = CreateSolidBrush(RGB(128,128,128));
@@ -536,15 +540,27 @@ int ZMain::GetCalculatedMovedIndex(int iIndex) {
   return iIndex;
 }
 
+/// 다음 이미지 파일로 이동
+bool ZMain::NextImage() {
+	CacheManager::GetInstance().set_view_direction(ViewDirection::kForward);
+	return MoveRelateIndex(+1);
+}
+
+/// 이전 이미지 파일로 이동
+bool ZMain::PrevImage() {
+	CacheManager::GetInstance().set_view_direction(ViewDirection::kBackward);
+	return MoveRelateIndex(-1);
+}
+
 bool ZMain::FirstImage() {
   // 현재의 위치를 History 에 저장해놓는다.
-  m_history.push_lastImageIndex(m_iCurretFileIndex);
+  m_history->push_lastImageIndex(m_iCurretFileIndex);
   return MoveIndex(0);
 }
 
 bool ZMain::LastImage() {
   // 현재의 위치를 History 에 저장해놓는다.
-  m_history.push_lastImageIndex(m_iCurretFileIndex);
+  m_history->push_lastImageIndex(m_iCurretFileIndex);
   return MoveIndex((int)filelist_.size() - 1);
 }
 
@@ -967,8 +983,8 @@ void ZMain::OnFocusGet() {
 }
 
 void ZMain::Undo() {
-  if ( m_history.CanUndo() ) {
-    const int iLast = m_history.Undo();
+  if ( m_history->CanUndo() ) {
+    const int iLast = m_history->Undo();
 
     // 혹시나 범위를 벗어나면 안됨
     if ( iLast < 0 || iLast >= (int)filelist_.size() ) {
@@ -985,8 +1001,8 @@ void ZMain::Undo() {
 }
 
 void ZMain::Redo() {
-  if ( m_history.CanRedo() ) {
-    m_history.Redo();
+  if ( m_history->CanRedo() ) {
+    m_history->Redo();
   }
 }
 

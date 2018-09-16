@@ -4,7 +4,6 @@
 #include "ShortCut.h"
 
 #include "../commonSrc/CommonFunc.h"
-#include "../commonSrc/ZOption.h"
 #include "resource.h"
 #include "src/ZMain.h"
 

@@ -1,12 +1,3 @@
-/* ------------------------------------------------------------------------
- *
- * ExifDlh.cpp
- *
- * 2008.10.27 KIM JINWOOK
- *
- * ------------------------------------------------------------------------
- */
-
 #include "stdafx.h"
 
 #include "ExifDlg.h"
@@ -16,6 +7,7 @@
 #include "resource.h"
 
 #include "ZMain.h"
+#include "ZImage.h"
 
 int CALLBACK ExifDlgWndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam);
 

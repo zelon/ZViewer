@@ -1,17 +1,7 @@
-﻿/********************************************************************
-*
-* Created by zelon(Kim, Jinwook Korea)
-* 
-*   2005. 5. 7
-*	MoveToDlg.h
-*
-*                                       http://www.wimy.com
-*********************************************************************/
-
-#pragma once
+﻿#pragma once
 
 /// class for selecting a directory
-class CSelectToFolderDlg
+class CSelectToFolderDlg final
 {
 public:
 	CSelectToFolderDlg(const tstring & initaliDir = L"");
@@ -24,8 +14,7 @@ public:
 
 	static INT_PTR CALLBACK MoveToDlgPrc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam);
 
-protected:
-
+private:
 	HWND m_hWnd;
 	void SetFolder(const tstring & strFolder);
 	void OnBrowserButton() const;

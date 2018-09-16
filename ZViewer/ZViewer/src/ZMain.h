@@ -1,13 +1,13 @@
 ﻿#pragma once
 
-#include "src/ZHistory.h"
 #include "../commonSrc/DesktopWallPaper.h"
-#include "src/CacheManager.h"
+#include "src/CacheEventListenerInterface.h"
 
+class ZHistory;
 class ZImage;
 
 /// 대부분의 작업을 처리하는 메인 클래스
-class ZMain final : public CacheEventListenerInterface {
+class ZMain final : public ZViewer::CacheEventListenerInterface {
 public:
   static ZMain & GetInstance();
   ~ZMain();
@@ -78,16 +78,10 @@ public:
   }
 
   /// 다음 이미지 파일로 이동
-  bool NextImage() {
-    CacheManager::GetInstance().set_view_direction(ViewDirection::kForward);
-    return MoveRelateIndex(+1);
-  }
+  bool NextImage();
 
   /// 이전 이미지 파일로 이동
-  bool PrevImage() {
-    CacheManager::GetInstance().set_view_direction(ViewDirection::kBackward);
-    return MoveRelateIndex(-1);
-  }
+  bool PrevImage();
 
   /// 첫번째 이미지 파일로 이동
   bool FirstImage();
@@ -272,7 +266,7 @@ private:
   TCHAR szFile[MAX_PATH];       // buffer for file name
 
   // For Undo/Redo
-  ZHistory m_history;
+  std::unique_ptr<ZHistory> m_history;
 
   /// For Cache DC
   HDC m_hBufferDC;

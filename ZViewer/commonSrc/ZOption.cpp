@@ -111,4 +111,3 @@ void ZOption::SaveToFile() {
   }
   COptionFile::SaveToFile(m_strOptionFilename, data);
 }
-

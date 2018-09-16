@@ -3,6 +3,7 @@
 
 #include "../../commonSrc/CommonFunc.h"
 #include "AboutWindow.h"
+#include "src/CacheManager.h"
 #include "src/ZMain.h"
 #include "src/ZResourceManager.h"
 #include "ZImage.h"

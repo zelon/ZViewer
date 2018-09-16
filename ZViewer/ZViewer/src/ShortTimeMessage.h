@@ -1,15 +1,4 @@
-﻿/* ------------------------------------------------------------------------
- *
- * Copyright 2006 by zelon
- *
- * ShortTimeMessage.h
- *
- * 2006. 3. 13 Jinwook Kim
- *
- * ------------------------------------------------------------------------
- */
-
-#pragma once
+﻿#pragma once
 
 /// 잠시 보여주는 메시지를 위한 싱글턴 클래스
 class CShortTimeMessage
@@ -25,7 +14,7 @@ public:
 	/// 타이머가 호출되었을 때
 	void onTimer();
 
-protected:
+private:
 	/// 보여줄 메시지
 	std::string m_strMessage;
 	

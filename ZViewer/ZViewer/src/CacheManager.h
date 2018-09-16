@@ -1,5 +1,9 @@
 ﻿#pragma once
 
+namespace ZViewer {
+class CacheEventListenerInterface;
+} // namespace ZViewer
+
 class EventManager;
 class ZImage;
 class DecodeThread;
@@ -14,13 +18,6 @@ enum class ViewDirection {
   kBackward,	///< PageUp 등으로 이전 파일을 보았다.
 };
 
-class CacheEventListenerInterface {
-public:
-  virtual ~CacheEventListenerInterface() { /* do nothing */ }
-
-  virtual void OnFileCached() = 0;
-};
-
 /// 이미지를 캐쉬하여 관리하는 클래스
 class CacheManager final : NonCopyable {
 public:
@@ -28,7 +25,7 @@ public:
 
   ~CacheManager();
 
-  void set_listener(CacheEventListenerInterface* listener) { listener_ = listener; }
+  void set_listener(ZViewer::CacheEventListenerInterface* listener) { listener_ = listener; }
 
   void CleanUpCache();
   void CleanUpThread();
@@ -73,7 +70,7 @@ public:
 private:
   CacheManager();
 
-  CacheEventListenerInterface* listener_ = nullptr;
+  ZViewer::CacheEventListenerInterface* listener_ = nullptr;
 
   bool is_caching_;
 

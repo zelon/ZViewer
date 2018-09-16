@@ -1,14 +1,4 @@
-﻿/********************************************************************
-*
-* Created by zelon(Kim, Jinwook Korea)
-* 
-*   2005. 5. 7
-*	ZFileExtDlg.h
-*
-*                                       http://www.wimy.com
-*********************************************************************/
-
-#pragma once
+﻿#pragma once
 
 class ZFileExtDlg
 {

@@ -278,6 +278,9 @@
     <ClInclude Include="..\..\commonSrc\Path.h">
       <Filter>commonSrc</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\ZViewer\src\CacheEventListenerInterface.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\ZViewer\res\ZViewer.rc">

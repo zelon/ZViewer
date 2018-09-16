@@ -34,6 +34,6 @@ private:
 		const bool isModifierKeyMatched() const;
 	};
 
-	std::vector < ShortCutData > m_shortcutData;
+	std::vector<ShortCutData> m_shortcutData;
 };
 

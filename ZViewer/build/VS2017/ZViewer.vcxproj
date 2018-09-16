@@ -179,6 +179,7 @@ csi testLang.csx
     <ClInclude Include="..\..\lib\freeimage\FreeImage.h" />
     <ClInclude Include="..\..\lib\vld\vld_def.h" />
     <ClInclude Include="..\..\ZViewer\res\resource.h" />
+    <ClInclude Include="..\..\ZViewer\src\CacheEventListenerInterface.h" />
     <ClInclude Include="..\..\ZViewer\src\CacheManager.h" />
     <ClInclude Include="..\..\ZViewer\src\CacheManagerDetail\CachedData.h" />
     <ClInclude Include="..\..\ZViewer\src\CacheManagerDetail\EventManager.h" />

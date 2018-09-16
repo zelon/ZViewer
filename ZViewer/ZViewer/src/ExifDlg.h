@@ -1,17 +1,9 @@
-/* ------------------------------------------------------------------------
- *
- * ExifDlg.h
- *
- * 2008.10.27 KIM JINWOOK
- *
- * ------------------------------------------------------------------------
- */
-
 #include "../commonSrc/windowLib/ZWindow.h"
-#include "../commonSrc/ZImage.h"
 #include "../commonSrc/CommonDefine.h"
 
-class ExifDlg : public ZWindow
+class ZImage;
+
+class ExifDlg final : public ZWindow
 {
 public:
 	ExifDlg(){}
@@ -21,13 +13,12 @@ public:
 
 	void DoResource(HWND hParentHWND);
 
-
 	void MakeExifMap(ZImage & image);
 
 	void ShowExifMap();
 
-protected:
-	std::list < TagData > m_exifList;
+private:
+	std::list<TagData> m_exifList;
 
 	tstring convertExifKey(const tstring & strKey) const;
 	tstring convertExifValue(const tstring & strKey, tstring & strValue) const;
