@@ -17,12 +17,6 @@
       <UniqueIdentifier>{70fc4f39-2921-401f-a65d-b84ac837200c}</UniqueIdentifier>
       <SourceControlFiles>False</SourceControlFiles>
     </Filter>
-    <Filter Include="lib">
-      <UniqueIdentifier>{0487ff3b-80d6-41d6-a9bb-677779291c4e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="lib\freeimage">
-      <UniqueIdentifier>{167cab53-c359-4f34-8209-dbe3e1092afc}</UniqueIdentifier>
-    </Filter>
     <Filter Include="commonSrc">
       <UniqueIdentifier>{ca3b5610-cdae-4a2b-a86e-1442664aa8c2}</UniqueIdentifier>
     </Filter>
@@ -99,12 +93,6 @@
     </ClInclude>
     <ClInclude Include="..\..\ZViewerAgent\ZViewMenuExt.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\lib\freeimage\FreeImage.h">
-      <Filter>lib\freeimage</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\lib\freeimage\FreeImagePlus.h">
-      <Filter>lib\freeimage</Filter>
     </ClInclude>
     <ClInclude Include="..\..\commonSrc\CommonFunc.h">
       <Filter>commonSrc</Filter>

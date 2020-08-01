@@ -99,8 +99,10 @@
       <ImportLibrary>$(OutDir)ZViewerAgent.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
-      <Message>Registering ZViewerAgentD.dll</Message>
-      <Command>regsvr32 /s /c "$(TargetDir)ZViewerAgentD.dll"</Command>
+      <Message>
+      </Message>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -144,8 +146,10 @@
       <ImportLibrary>$(OutDir)ZViewerAgent.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
-      <Message>Registering ZViewerAgent.dll</Message>
-      <Command>regsvr32 /s /c "$(TargetPath)"</Command>
+      <Message>
+      </Message>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -185,8 +189,6 @@
     <ClInclude Include="..\..\ZViewerAgent\Resource.h" />
     <ClInclude Include="..\..\ZViewerAgent\stdafx.h" />
     <ClInclude Include="..\..\ZViewerAgent\ZViewMenuExt.h" />
-    <ClInclude Include="..\..\lib\freeimage\FreeImage.h" />
-    <ClInclude Include="..\..\lib\freeimage\FreeImagePlus.h" />
     <ClInclude Include="..\..\commonSrc\CommonFunc.h" />
     <ClInclude Include="..\..\commonSrc\DesktopWallPaper.h" />
     <ClInclude Include="..\..\commonSrc\ExtInfoManager.h" />

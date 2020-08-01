@@ -123,9 +123,8 @@
       </DataExecutionPrevention>
     </Link>
     <PostBuildEvent>
-      <Command>cd $(SolutionDir)../../
-csi testLang.csx
-</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
