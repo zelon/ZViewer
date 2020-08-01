@@ -1,7 +1,5 @@
 ﻿#pragma once
 
-#include <vector>
-
 #include "CommonDefine.h"
 
 const tstring GetOnlyFileNameWithoutExt(const tstring & strFullFileName);

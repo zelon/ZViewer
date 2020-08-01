@@ -1,12 +1,6 @@
 ﻿#pragma once
 
-#pragma warning(push)
-#pragma warning(disable:4819)
-#include <FreeImagePlus.h>
-#pragma warning(pop)
-
 #include "CommonFunc.h"
-#include "CommonDefine.h"
 
 /// FreeImagePlus 의 클래스인 fipWinImage 를 래핑하여 함수 등을 쓰기 쉽게 하는 클래스
 class ZImage final : NonCopyable {

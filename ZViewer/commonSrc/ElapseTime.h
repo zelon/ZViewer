@@ -1,7 +1,5 @@
 ﻿#pragma once
 
-#include <chrono>
-
 class ElapseTime final {
 public:
   ElapseTime() {

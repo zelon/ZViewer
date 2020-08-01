@@ -1,11 +1,8 @@
 #include "stdafx.h"
 #include "ZWindow.h"
 
-#include "../commonSrc/MessageManager.h"
 #include "resource.h"
 #include "src/ShortCut.h"
-#include "src/ZMain.h"
-#include "src/ZResourceManager.h"
 
 ZWindow::ZWindow() {
   m_wndProc = nullptr;

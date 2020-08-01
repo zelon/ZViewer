@@ -1,17 +1,6 @@
-﻿/* ------------------------------------------------------------------------
- *
- * Copyright 2006
- *
- * MessageManager.cpp
- *
- * 2006.9.23 Jinwook Kim
- *
- * ------------------------------------------------------------------------
- */
+﻿#include "stdafx.h"
 
-#include "stdafx.h"
 #include "MessageManager.h"
-#include "UnicodeFile.h"
 #include "CommonFunc.h"
 
 CMessageManager & CMessageManager::getInstance()

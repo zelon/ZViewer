@@ -6,7 +6,6 @@
 
 #include "resource.h"
 
-#include "ZMain.h"
 #include "ZImage.h"
 
 int CALLBACK ExifDlgWndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam);

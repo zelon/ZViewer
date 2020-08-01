@@ -40,31 +40,29 @@
 // ATL의 일반적이며 대개 안전하게 무시되는 일부 경고 메시지 숨김을 해제합니다.
 #define _ATL_ALL_WARNINGS
 
-
-#include <afxwin.h>
 #include <afxdisp.h>
 
 #include "resource.h"
-#include <atlbase.h>
 #include <atlcom.h>
 
-#include <comdef.h>
-#include <shlobj.h>
 #include <afxOle.h>
 #include <atlconv.h>  // for ATL string conversion macros
 
-#include <tchar.h>
 #include <strsafe.h>
 
+#include <algorithm>
 #include <cassert>
-#include <chrono>
 #include <fstream>
 #include <list>
 #include <map>
 #include <mutex>
 #include <sstream>
-#include <string>
 #include <vector>
+
+#pragma warning(push)
+#pragma warning(disable:4819)
+#include <FreeImagePlus.h>
+#pragma warning(pop)
 
 #include "../commonSrc/CommonDefine.h"
 

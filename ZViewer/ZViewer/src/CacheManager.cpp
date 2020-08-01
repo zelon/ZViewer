@@ -1,13 +1,10 @@
 ﻿#include "stdafx.h"
 #include "CacheManager.h"
 
-#include <atomic>
-
 #include "CacheManagerDetail/CachedData.h"
 #include "CacheManagerDetail/EventManager.h"
 #include "ZOption.h"
 #include "ZMain.h"
-#include "../../commonSrc/MessageManager.h"
 #include "../../commonSrc/ElapseTime.h"
 #include "ZImage.h"
 

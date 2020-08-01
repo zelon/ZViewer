@@ -1,7 +1,6 @@
 ﻿#include "stdafx.h"
 #include "EventManager.h"
 
-#include "../../commonSrc/CommonFunc.h"
 #include "../CacheManager.h"
 #include "ImageLoadJob.h"
 #include "ZImage.h"

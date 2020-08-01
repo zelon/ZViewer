@@ -3,29 +3,19 @@
 /// _WIN32_WINNT means NT 4.0. If you want for above Win2000, use 0x0500. Check http://a.tk.co.kr/75
 #define _WIN32_WINNT 0x0501
 
-#include <windows.h>
-#include <CommCtrl.h>
 #include <WindowsX.h>
 #include <shlobj.h>
 #include <tchar.h>
 #include <strsafe.h>
-#include <VersionHelpers.h>
 
-#include <fstream>
-
-// STL Headers
-#include <algorithm>
+#include <atomic>
 #include <cassert>
-#include <chrono>
-#include <deque>
-#include <list>
+#include <fstream>
 #include <map>
-#include <memory>
 #include <mutex>
+#include <queue>
 #include <string>
-#include <thread>
 #include <unordered_map>
-#include <vector>
 
 #pragma warning(push)
 #pragma warning(disable:4819)

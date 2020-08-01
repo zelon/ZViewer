@@ -1,18 +1,8 @@
-﻿/* ------------------------------------------------------------------------
- *
- * CachedData.cpp
- *
- * 2008.12.13 KIM JINWOOK
- *
- * ------------------------------------------------------------------------
- */
-
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "CachedData.h"
 
 #include "ZImage.h"
 #include "ZOption.h"
-#include "../commonSrc/ElapseTime.h"
 
 void CachedData::ClearCachedImageData() {
   CLockObjUtil lock(m_cacheLock);

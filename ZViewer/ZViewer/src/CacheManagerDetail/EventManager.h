@@ -1,8 +1,6 @@
 ﻿#pragma once
 
-#include "../../commonSrc/LockUtil.h"
 #include "JobExecutor.h"
-#include "JobInterface.h"
 
 class ZImage;
 

@@ -5,7 +5,6 @@
 
 #include "../commonSrc/CommonFunc.h"
 #include "resource.h"
-#include "src/ZMain.h"
 
 using namespace std;
 

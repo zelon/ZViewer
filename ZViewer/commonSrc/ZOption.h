@@ -1,7 +1,6 @@
 ﻿#pragma once
 
 #include "CommonFunc.h"
-#include "OptionFile.h"
 #include "StringToValue.h"
 
 class ZOption final {

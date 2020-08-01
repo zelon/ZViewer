@@ -1,7 +1,6 @@
 ﻿#include "stdafx.h"
 #include "ZImage.h"
 
-#include "CommonDefine.h"
 #include "ElapseTime.h"
 
 using namespace std;

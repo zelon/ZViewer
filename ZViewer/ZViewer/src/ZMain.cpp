@@ -1,8 +1,6 @@
 ﻿#include "stdafx.h"
 #include "ZMain.h"
 
-#include "../commonSrc/CommonFunc.h"
-#include "../commonSrc/DesktopWallPaper.h"
 #include "../commonSrc/ElapseTime.h"
 #include "../commonSrc/ExtInfoManager.h"
 #include "../commonSrc/Path.h"

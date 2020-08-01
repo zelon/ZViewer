@@ -1,7 +1,6 @@
 ﻿#include "stdafx.h"
 #include "ImageLoadJob.h"
 
-#include "../../commonSrc/CommonFunc.h"
 #include "../../commonSrc/ElapseTime.h"
 #include "EventManager.h"
 #include "../CacheManagerDetail/FileReader.h"

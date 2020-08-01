@@ -1,16 +1,6 @@
-﻿/********************************************************************
-*
-* Created by zelon(Kim, Jinwook Korea)
-* 
-*   2005. 5. 7
-*	OptionFile.cpp
-*
-*                                       http://www.wimy.com
-*********************************************************************/
+﻿#include "stdafx.h"
 
-#include "stdafx.h"
 #include "OptionFile.h"
-#include "CommonFunc.h"
 #include "UnicodeFile.h"
 
 using namespace std;

@@ -1,13 +1,9 @@
 ﻿#include "stdafx.h"
 #include "CommonFunc.h"
 
-#include <algorithm>
-
 #include "ExtInfoManager.h"
 #include "LogManager.h"
 
-
-#ifdef USE_CONSOLE
 void DebugPrintf( const TCHAR *fmt, ... ) {
 //	return;
 
@@ -29,10 +25,6 @@ void DebugPrintf( const TCHAR *fmt, ... ) {
 
   CLogManager::getInstance().Output(buf);
 }
-#else
-void DebugPrintf( const TCHAR * , ...){}
-#endif
-
 
 const tstring GetOnlyFileNameWithoutExt(const tstring & strFullFileName) {
   TCHAR szFile[FILENAME_MAX] = { 0 };

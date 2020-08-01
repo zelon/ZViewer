@@ -1,5 +1,4 @@
 #include "../commonSrc/windowLib/ZWindow.h"
-#include "../commonSrc/CommonDefine.h"
 
 class ZImage;
 
