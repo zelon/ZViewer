@@ -87,7 +87,7 @@
       <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>$(SolutionDir)/../../lib/freeimage/x64/Debug/FreeImaged.lib;$(SolutionDir)/../../lib/freeimage/x64/Debug/FreeImagePlusd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)ZViewerAgentD.dll</OutputFile>
       <ModuleDefinitionFile>../../ZViewerAgent/ZViewerAgent.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -130,7 +130,7 @@
       <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>$(SolutionDir)/../../lib/freeimage/x64/Release/FreeImage.lib;$(SolutionDir)/../../lib/freeimage/x64/Release/FreeImagePlus.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)ZViewerAgent.dll</OutputFile>
       <ModuleDefinitionFile>../../ZViewerAgent\ZViewerAgent.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>

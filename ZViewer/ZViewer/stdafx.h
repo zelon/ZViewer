@@ -27,7 +27,10 @@
 #include <unordered_map>
 #include <vector>
 
-#include "freeimage/FreeImagePlus.h"
+#pragma warning(push)
+#pragma warning(disable:4819)
+#include <FreeImagePlus.h>
+#pragma warning(pop)
 
 #if defined(_M_IX86)
 #ifdef _DEBUG

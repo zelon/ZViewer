@@ -12,7 +12,11 @@
   - Support Preview in explorer ( with right click )
   - Support various image format : bmp, jpg, jpeg2000, png, tif, psd, gif, dds, tga, pcx, xpm, xbm, cut, ico, hdr, jng, koa, mng, pcd, ras, wbmp
   - Auto Rotate
-  
+
+# Build Environment
+ * Use vcpkg for freeimage library
+   * .\vcpkg.exe install freeimage:x64-windows freeimage:x64-windows-static
+
 # How to run
 
 ## ZViewer

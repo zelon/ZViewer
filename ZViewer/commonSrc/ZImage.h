@@ -1,16 +1,10 @@
-﻿/********************************************************************
-*
-* Created by zelon(Kim, Jinwook Korea)
-*
-*   2005. 5. 7
-*	ZImage.h
-*
-*                                       http://www.wimy.com
-*********************************************************************/
+﻿#pragma once
 
-#pragma once
+#pragma warning(push)
+#pragma warning(disable:4819)
+#include <FreeImagePlus.h>
+#pragma warning(pop)
 
-#include "../lib/freeimage/FreeImagePlus.h"
 #include "CommonFunc.h"
 #include "CommonDefine.h"
 
@@ -41,7 +35,7 @@ public:
 
   unsigned int GetBPP() const { return m_image.getBitsPerPixel(); }
   BYTE * GetData() { return m_image.accessPixels(); }
-  BITMAPINFO * GetBitmapInfo() { return m_image.getInfo(); }
+  const BITMAPINFO * GetBitmapInfo() { return m_image.getInfo(); }
   bool IsValid() const {
     return (m_image.isValid() == TRUE);
   }
