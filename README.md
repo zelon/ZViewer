@@ -23,3 +23,4 @@
  * Build
  * "regsvr32 /s /c ZViewerAgent.dll" on cmd.exe as Administrator
  * Right click on some image files in explorer
+ * Deregister: "regsvr32 /u ZViewerAgent.dll" on cmd.exe as Administrator
