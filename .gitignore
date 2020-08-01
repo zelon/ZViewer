@@ -22,6 +22,7 @@ ZViewer/build/VS20*/ipch
 ZViewer/build/VS20*/x64/
 ZViewer/build/VS20*/Win32/
 ZViewer/output/.vs/
+ZViewer/output/*.dll
 ZViewer/output/*.ilk
 ZViewer/output/*.pdb
 ZViewer/output/FreeImage*.dll
