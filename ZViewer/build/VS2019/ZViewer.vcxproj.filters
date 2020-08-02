@@ -10,9 +10,6 @@
     <Filter Include="lib\vld">
       <UniqueIdentifier>{450fce6e-eeb7-443b-aa74-42de1215a7d7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="lib\freeimage">
-      <UniqueIdentifier>{0ebd7bc5-5957-451c-aa3f-f78144ea69bc}</UniqueIdentifier>
-    </Filter>
     <Filter Include="commonSrc">
       <UniqueIdentifier>{92479499-a57f-4425-bcc6-23e63784f970}</UniqueIdentifier>
     </Filter>
@@ -187,9 +184,6 @@
     <ClInclude Include="..\..\lib\vld\vld.h">
       <Filter>lib\vld</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\lib\freeimage\FreeImagePlus.h">
-      <Filter>lib\freeimage</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\commonSrc\CommonDefine.h">
       <Filter>commonSrc</Filter>
     </ClInclude>
@@ -240,9 +234,6 @@
     </ClInclude>
     <ClInclude Include="..\..\lib\vld\vld_def.h">
       <Filter>lib\vld</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\lib\freeimage\FreeImage.h">
-      <Filter>lib\freeimage</Filter>
     </ClInclude>
     <ClInclude Include="..\..\ZViewer\stdafx.h" />
     <ClInclude Include="..\..\ZViewer\src\CacheManagerDetail\FileMap.h">

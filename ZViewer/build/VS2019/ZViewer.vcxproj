@@ -176,7 +176,6 @@
   <ItemGroup>
     <ClInclude Include="..\..\commonSrc\ElapseTime.h" />
     <ClInclude Include="..\..\commonSrc\Path.h" />
-    <ClInclude Include="..\..\lib\freeimage\FreeImage.h" />
     <ClInclude Include="..\..\lib\vld\vld_def.h" />
     <ClInclude Include="..\..\ZViewer\res\resource.h" />
     <ClInclude Include="..\..\ZViewer\src\CacheEventListenerInterface.h" />
@@ -203,7 +202,6 @@
     <ClInclude Include="..\..\ZViewer\src\ZMain.h" />
     <ClInclude Include="..\..\ZViewer\src\ZResourceManager.h" />
     <ClInclude Include="..\..\lib\vld\vld.h" />
-    <ClInclude Include="..\..\lib\freeimage\FreeImagePlus.h" />
     <ClInclude Include="..\..\commonSrc\CommonDefine.h" />
     <ClInclude Include="..\..\commonSrc\CommonFunc.h" />
     <ClInclude Include="..\..\commonSrc\DesktopWallPaper.h" />
