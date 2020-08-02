@@ -73,9 +73,8 @@
       </DataExecutionPrevention>
     </Link>
     <PostBuildEvent>
-      <Command>cd $(SolutionDir)\../../output
-ZUnitTestD.exe
-</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
