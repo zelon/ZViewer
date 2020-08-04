@@ -5,21 +5,21 @@
 
 class JobExecutor final {
 public:
-  JobExecutor();
+	JobExecutor();
 
-  void StartThread(const size_t thread_count);
-  void StopThread();
+	void StartThread(const size_t thread_count);
+	void StopThread();
 
-  void Add(JobInterfacePtr job);
+	void Add(JobInterfacePtr job);
 
 private:
-  void Run();
+	void Run();
 
-  mutable Lock lock_;
-  mutable ConditionalVariable conditional_variable_;
+	mutable Lock lock_;
+	mutable ConditionalVariable conditional_variable_;
 
-  volatile bool go_on_ = false;
+	volatile bool go_on_ = false;
 
-  std::vector<std::thread*> thread_list_;
-  std::queue<JobInterfacePtr> job_queue_;
+	std::vector<std::thread*> thread_list_;
+	std::queue<JobInterfacePtr> job_queue_;
 };

@@ -2,9 +2,9 @@
 
 class JobInterface {
 public:
-  virtual ~JobInterface() {}
+	virtual ~JobInterface() {}
 
-  virtual void DoJob() = 0;
+	virtual void DoJob() = 0;
 };
 
 typedef std::shared_ptr<JobInterface> JobInterfacePtr;

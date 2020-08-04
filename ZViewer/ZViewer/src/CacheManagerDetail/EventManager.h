@@ -6,25 +6,25 @@ class ZImage;
 
 class EventManager final {
 public:
-  EventManager();
+	EventManager();
 
-  void StartThread();
-  void StopThread();
+	void StartThread();
+	void StopThread();
 
-  void AddJob(const tstring& filename);
-  bool IsInJob(const tstring& filename) const;
+	void AddJob(const tstring& filename);
+	bool IsInJob(const tstring& filename) const;
 
-  void DoDecodeJob(const tstring& filename);
-  void OnDecodeCompleted(const tstring& filename);
+	void DoDecodeJob(const tstring& filename);
+	void OnDecodeCompleted(const tstring& filename);
 
 private:
-  void InitErrorImage();
+	void InitErrorImage();
 
-  mutable Lock lock_;
-  std::unordered_map<tstring/*filename*/, std::shared_ptr<JobInterface>> jobs_;
+	mutable Lock lock_;
+	std::unordered_map<tstring/*filename*/, std::shared_ptr<JobInterface>> jobs_;
 
-  JobExecutor file_read_executor_;
-  JobExecutor decode_executor_;
+	JobExecutor file_read_executor_;
+	JobExecutor decode_executor_;
 
-  std::shared_ptr<ZImage> error_image_;
+	std::shared_ptr<ZImage> error_image_;
 };
