@@ -11,8 +11,6 @@ public:
   static ZMain & GetInstance();
   ~ZMain();
 
-  void OnFileCached();
-
   void SetImageAndShow(std::shared_ptr<ZImage> image);
 
   void StartSlideMode();

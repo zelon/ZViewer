@@ -11,6 +11,7 @@
 #include "resource.h"
 #include "src/Cache/CacheController.h"
 #include "src/Cache/Enums.h"
+#include "src/Defines.h"
 #include "src/ExifDlg.h"
 #include "src/SelectToFolderDlg.h"
 #include "src/ZFileExtDlg.h"
@@ -23,6 +24,9 @@ using namespace std;
 using namespace std::chrono;
 
 static const int kTimerId = 9153;
+static std::shared_ptr<ZImage> error_image;
+static int32_t empty_caching_and_cannot_get_current_image_count = 0;
+
 
 ZMain& ZMain::GetInstance() {
   static ZMain aInstance;
@@ -39,6 +43,11 @@ ZMain::ZMain(void)
   
   background_brush_ = CreateSolidBrush(RGB(128,128,128));
   m_hEraseRgb = CreateRectRgn(0,0,1,1);
+
+  error_image = std::make_shared<ZImage>();
+  if (error_image->LoadFromFile(GetProgramFolder() + L"\\LoadError.png") == false) {
+      assert(false);
+  }
 
   assert(background_brush_ != INVALID_HANDLE_VALUE);
 }
@@ -61,11 +70,8 @@ ZMain::~ZMain() {
   }
 }
 
-void ZMain::OnFileCached() {
-  PostMessage(main_window_handle_, WM_CHECK_CURRENT_IMAGE_IS_CACHED, 0, 0);
-}
-
 void ZMain::SetImageAndShow(std::shared_ptr<ZImage> image) {
+  empty_caching_and_cannot_get_current_image_count = 0;
   current_image_ = image;
   assert(current_image_);
   assert(current_image_->IsValid());
@@ -131,6 +137,16 @@ void ZMain::onTimer() {
       Draw();
       ZOption::GetInstance().m_LastSlidedTime = system_clock::now();
     }
+  }
+  if (current_image_ == nullptr) {
+      const int32_t caching_count = CacheController::GetInstance().GetCachingCount();
+      if (caching_count == 0) {
+          ++empty_caching_and_cannot_get_current_image_count;
+      }
+      if (empty_caching_and_cannot_get_current_image_count > 100) {
+          //current_image_ = error_ima
+      }
+      PostMessage(main_window_handle_, WM_CHECK_CURRENT_IMAGE_IS_CACHED, 0, 0);
   }
 
   ShowCacheStatus();
@@ -807,23 +823,19 @@ void ZMain::LoadCurrent() {
   assert(m_iCurretFileIndex < filelist_.size());
   assert(filelist_[m_iCurretFileIndex].m_strFileName == m_strCurrentFilename);
 
-  auto image_load_callback = [](const tstring& /*filename*/, const std::shared_ptr<ZImage>& /*image*/) {
-      ZMain::GetInstance().OnFileCached();
-  };
   // 현재 이미지 요청
-  CacheController::GetInstance().RequestLoadImage(m_strCurrentFilename, RequestType::kCurrent, m_iCurretFileIndex, image_load_callback);
+  CacheController::GetInstance().RequestLoadImage(m_strCurrentFilename, RequestType::kCurrent, m_iCurretFileIndex);
 
-  static constexpr int32_t kAheadCacheCount = 5;
   // 앞뒤로 몇 개 요청
-  for (int i = 1; i < kAheadCacheCount; ++i) {
+  for (int i = 1; i <= kMaxOnewayPreCacheCount; ++i) {
       int next_index = m_iCurretFileIndex + i;
       int previous_index = m_iCurretFileIndex - i;
 
       if (next_index < filelist_.size()) {
-          CacheController::GetInstance().RequestLoadImage(filelist_[next_index].m_strFileName, RequestType::kPreCache, next_index, image_load_callback);
+          CacheController::GetInstance().RequestLoadImage(filelist_[next_index].m_strFileName, RequestType::kPreCache, next_index);
       }
       if (previous_index >= 0) {
-          CacheController::GetInstance().RequestLoadImage(filelist_[previous_index].m_strFileName, RequestType::kPreCache, previous_index, image_load_callback);
+          CacheController::GetInstance().RequestLoadImage(filelist_[previous_index].m_strFileName, RequestType::kPreCache, previous_index);
       }
   }
   RefreshCurrentImage();
@@ -844,10 +856,11 @@ void ZMain::CheckCurrentImage() {
     //m_dwLoadingTime = duration_cast<milliseconds>(system_clock::now() - start).count();
     m_dwLoadingTime = 0;
 
-    if (image != nullptr) {
-      SetImageAndShow(image);
-    }
+    SetImageAndShow(image);
   } else {
+    if (empty_caching_and_cannot_get_current_image_count > 10) {
+        SetImageAndShow(error_image);
+    }
     Draw(); //< erase background
   }
 

@@ -13,7 +13,7 @@ public:
 
 	~CacheController ();
 
-	void RequestLoadImage (const tstring& filename, const RequestType request_type, const int32_t index, ImageLoadCallback callback);
+	void RequestLoadImage (const tstring& filename, const RequestType request_type, const int32_t index);
 	std::shared_ptr<ZImage> PickImage (const tstring& filename);
 
 	void EmptyOldestCache ();

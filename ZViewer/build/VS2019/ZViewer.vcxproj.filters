@@ -248,6 +248,9 @@
     <ClInclude Include="..\..\ZViewer\src\Cache\FileReader.h">
       <Filter>src\Cache</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\ZViewer\src\Defines.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\ZViewer\res\ZViewer.rc">

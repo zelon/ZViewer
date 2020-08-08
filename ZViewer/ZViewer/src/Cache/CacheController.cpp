@@ -21,14 +21,16 @@ CacheController::~CacheController() {
 
 }
 
-void CacheController::RequestLoadImage (const tstring& filename, const RequestType request_type, const int32_t index, ImageLoadCallback callback) {
+void CacheController::RequestLoadImage (const tstring& filename, const RequestType request_type, const int32_t index) {
+	if (request_type == RequestType::kCurrent) {
+		parallel_image_loader_->set_current_index(index);
+	}
 	const int64_t operation_id = operation_id_factory.fetch_add(1);
 	LockGuard lock_guard(lock_);
 	auto it = cached_images_.find(filename);
 	if (it != cached_images_.end()) {
 		// for cache holding
 		it->second.operation_id = operation_id;
-		callback(filename, it->second.image);
 
 		if (request_type == RequestType::kCurrent) {
 			++cache_hit_count_;
@@ -39,11 +41,16 @@ void CacheController::RequestLoadImage (const tstring& filename, const RequestTy
 		++cache_miss_count_;
 	}
 	++caching_count_;
-	parallel_image_loader_->Load(filename, request_type, index, [callback, operation_id](const tstring& filename, const std::shared_ptr<ZImage>& image) {
-		DebugPrintf(std::wstring(L"CacheController LoadCompleted:") + filename);
+	parallel_image_loader_->Load(filename, request_type, index, [operation_id](const tstring& filename, const std::shared_ptr<ZImage>& image) {
+		DebugPrintf(fmt::format(L"CacheController LoadCompleted,filename:{},completed:{}",
+			filename, image != nullptr));
 
 		auto& self = CacheController::GetInstance();
 		--(self.caching_count_);
+
+		if (image == nullptr) {
+			return;
+		}
 		LockGuard lock_guard(self.lock_);
 		auto it = self.cached_images_.find(filename);
 		if (it != self.cached_images_.end()) {
@@ -55,9 +62,7 @@ void CacheController::RequestLoadImage (const tstring& filename, const RequestTy
 			cache_image_info.operation_id = operation_id;
 			self.cached_images_.emplace(filename, cache_image_info);
 		}
-		callback(filename, image);
 	});
-
 }
 
 std::shared_ptr<ZImage> CacheController::PickImage (const tstring& filename) {

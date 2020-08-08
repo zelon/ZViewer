@@ -179,6 +179,7 @@
     <ClInclude Include="..\..\ZViewer\src\Cache\FileReader.h" />
     <ClInclude Include="..\..\ZViewer\src\Cache\ImageLoadCallback.h" />
     <ClInclude Include="..\..\ZViewer\src\Cache\ParallelImageLoader.h" />
+    <ClInclude Include="..\..\ZViewer\src\Defines.h" />
     <ClInclude Include="..\..\ZViewer\src\MessageDefine.h" />
     <ClInclude Include="..\..\ZViewer\src\ShortCut.h" />
     <ClInclude Include="..\..\ZViewer\stdafx.h" />
