@@ -25,6 +25,11 @@
 #include <FreeImagePlus.h>
 #pragma warning(pop)
 
+#pragma warning(push)
+#pragma warning(disable: 4566)
+#include <fmt/format.h>
+#pragma warning(pop)
+
 #if defined(_M_IX86)
 #ifdef _DEBUG
 #include "vld/vld.h"

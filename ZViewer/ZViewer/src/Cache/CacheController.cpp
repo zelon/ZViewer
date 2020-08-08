@@ -1,11 +1,6 @@
 ﻿#include "stdafx.h"
 #include "CacheController.h"
 
-#pragma warning(push)
-#pragma warning(disable: 4566)
-#include <fmt/format.h>
-#pragma warning(pop)
-
 #include "ParallelImageLoader.h"
 #include "../commonSrc/CommonFunc.h"
 #include "../commonSrc/ZImage.h"

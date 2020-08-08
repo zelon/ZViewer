@@ -620,19 +620,19 @@ void ZMain::StopTimer() {
 /// Cache status 를 상태 표시줄에 표시한다.
 void ZMain::ShowCacheStatus() {
     // 상태가 달라졌을 때만 다시 PostMessage하기 위한 변수
-    static bool last_caching_status = false;
+    static int32_t last_caching_count = 0;
 
-    const bool now_is_caching = CacheController::GetInstance().GetCachingCount() > 0;
-    if (now_is_caching == last_caching_status) {
+    const int32_t now_caching_count = CacheController::GetInstance().GetCachingCount();
+    if (now_caching_count == last_caching_count) {
         return;
     }
-    last_caching_status = now_is_caching;
+    last_caching_count = now_caching_count;
 
     static tstring strStatusMsg=TEXT("...");	///< PostMessage() 로 호출하므로, 메모리가 없어지지 않게 하기 위해 static
-    if ( filelist_.empty() ) {
+    if (filelist_.empty()) {
       strStatusMsg = TEXT("No file list");
-    } else if (now_is_caching) {
-        strStatusMsg = TEXT("Caching...");
+    } else if (now_caching_count > 0) {
+        strStatusMsg = fmt::format(L"Caching[{}]...", now_caching_count);
     } else {
         strStatusMsg = TEXT("Cached");
     }
