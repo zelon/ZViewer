@@ -9,7 +9,9 @@
 #if _MSC_VER == 1400
 #pragma warning(disable:6011)
 #endif
+#define NOMINMAX
 
+#include <algorithm>
 #include <cassert>
 #include <shlobj.h>
 #include <tchar.h>

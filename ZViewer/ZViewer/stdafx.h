@@ -2,6 +2,7 @@
 
 /// _WIN32_WINNT means NT 4.0. If you want for above Win2000, use 0x0500. Check http://a.tk.co.kr/75
 #define _WIN32_WINNT 0x0501
+#define NOMINMAX
 
 #include <WindowsX.h>
 #include <shlobj.h>
@@ -10,8 +11,10 @@
 
 #include <atomic>
 #include <cassert>
+#include <functional>
 #include <fstream>
 #include <map>
+#include <memory>
 #include <mutex>
 #include <queue>
 #include <string>

@@ -26,6 +26,9 @@
     <Filter Include="src\CacheManagerDetail">
       <UniqueIdentifier>{195e3a90-2b68-4379-b668-0f69b19a1f65}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Cache">
+      <UniqueIdentifier>{63296e84-095d-4b15-8161-70be56227068}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\ZViewer\src\AboutWindow.cpp">
@@ -128,6 +131,15 @@
     </ClCompile>
     <ClCompile Include="..\..\commonSrc\Path.cpp">
       <Filter>commonSrc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ZViewer\src\Cache\CacheModel.cpp">
+      <Filter>src\Cache</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ZViewer\src\Cache\ParallelImageLoader.cpp">
+      <Filter>src\Cache</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ZViewer\src\Cache\CacheController.cpp">
+      <Filter>src\Cache</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -271,6 +283,21 @@
     </ClInclude>
     <ClInclude Include="..\..\ZViewer\src\CacheEventListenerInterface.h">
       <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ZViewer\src\Cache\CacheModel.h">
+      <Filter>src\Cache</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ZViewer\src\Cache\Enums.h">
+      <Filter>src\Cache</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ZViewer\src\Cache\ParallelImageLoader.h">
+      <Filter>src\Cache</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ZViewer\src\Cache\CacheController.h">
+      <Filter>src\Cache</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ZViewer\src\Cache\ImageLoadCallback.h">
+      <Filter>src\Cache</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

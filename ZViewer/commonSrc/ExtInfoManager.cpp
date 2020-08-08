@@ -63,7 +63,8 @@ bool ExtInfoManager::IsValidImageFileExt(const TCHAR * szFilename)
 
 	TCHAR szLowerExt[MAX_PATH] = { 0, };
 
-	_tcsncpy_s(szLowerExt, szExt, min(_tcslen(szExt)+1, MAX_PATH));
+	_tcsncpy_s(szLowerExt, szExt,
+		std::min(_tcslen(szExt)+1, static_cast<size_t>(MAX_PATH)));
 
 	_tcslwr_s(szLowerExt);
 

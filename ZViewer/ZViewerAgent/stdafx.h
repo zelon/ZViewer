@@ -4,6 +4,7 @@
 
 #pragma once
 
+#define NOMINMAX
 /// if Visual Studio .NET 2005, disable 6011 warning because of STL warning
 #if _MSC_VER == 1400
 #pragma warning(disable:6011)

@@ -4,6 +4,10 @@
 #include "ExtInfoManager.h"
 #include "LogManager.h"
 
+void DebugPrintf(const std::wstring& msg) {
+    DebugPrintf(msg.c_str());
+}
+
 void DebugPrintf( const TCHAR *fmt, ... ) {
 //	return;
 

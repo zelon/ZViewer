@@ -9,7 +9,7 @@
 #include "MessageDefine.h"
 #include "MessageManager.h"
 #include "resource.h"
-#include "src/CacheManager.h"
+#include "src/Cache/CacheController.h"
 #include "src/ExifDlg.h"
 #include "src/SelectToFolderDlg.h"
 #include "src/ZFileExtDlg.h"
@@ -202,8 +202,6 @@ void ZMain::OnInit() {
   /// 불러온 최종 옵션을 점검하여 메뉴 중 체크표시할 것들을 표시한다.
   SetCheckMenus();
 
-  CacheManager::GetInstance().set_listener(this);
-
   if ( m_strInitArg.empty() ) {
     RescanFolder();
   } else {
@@ -339,9 +337,6 @@ void ZMain::RescanFolder() {
   ElapseTime folder_scan_time;
   GetSortedFileList(strToFindFolder, m_sortOrder, &filelist_);
   DebugPrintf(L"Folder scan time:%d", folder_scan_time.End());
-
-  // Cache Thread 에 전달한다.
-  CacheManager::GetInstance().SetFilelist(filelist_);
 
   if ( m_strCurrentFilename.empty() && !filelist_.empty())
   {
@@ -540,13 +535,11 @@ int ZMain::GetCalculatedMovedIndex(int iIndex) {
 
 /// 다음 이미지 파일로 이동
 bool ZMain::NextImage() {
-	CacheManager::GetInstance().set_view_direction(ViewDirection::kForward);
 	return MoveRelateIndex(+1);
 }
 
 /// 이전 이미지 파일로 이동
 bool ZMain::PrevImage() {
-	CacheManager::GetInstance().set_view_direction(ViewDirection::kBackward);
 	return MoveRelateIndex(-1);
 }
 
@@ -625,29 +618,24 @@ void ZMain::StopTimer() {
 
 /// Cache status 를 상태 표시줄에 표시한다.
 void ZMain::ShowCacheStatus() {
-  static bool bLastActionIsCache = false;
+    // 상태가 달라졌을 때만 다시 PostMessage하기 위한 변수
+    static bool last_caching_status = false;
 
-  const bool bNowActionIsCache = CacheManager::GetInstance().is_cacahing();
-
-  if (bNowActionIsCache != bLastActionIsCache) {
-    bLastActionIsCache = bNowActionIsCache;
+    const bool now_is_caching = CacheController::GetInstance().GetCachingCount() > 0;
+    if (now_is_caching == last_caching_status) {
+        return;
+    }
+    last_caching_status = now_is_caching;
 
     static tstring strStatusMsg=TEXT("...");	///< PostMessage() 로 호출하므로, 메모리가 없어지지 않게 하기 위해 static
-
     if ( filelist_.empty() ) {
-      strStatusMsg = TEXT("");
-    } else if ( false == bNowActionIsCache ) {///< 캐쉬가 끝났으면
-      strStatusMsg = TEXT("Cached");
-    } else {///< 아직 캐쉬 중이면
-      if ( CacheManager::GetInstance().IsNextFileCached() ) {///< 다음 파일의 캐쉬가 끝났으면
-        strStatusMsg = TEXT("Caching files");
-      } else {///< 아직 다음 파일도 캐쉬가 안 끝났으면,
-        strStatusMsg = TEXT("Caching next");
-      }
+      strStatusMsg = TEXT("No file list");
+    } else if (now_is_caching) {
+        strStatusMsg = TEXT("Caching...");
+    } else {
+        strStatusMsg = TEXT("Cached");
     }
-    PostMessage(m_hStatusBar, SB_SETTEXT,
-      static_cast<WPARAM>(StatusBarPosition::kCacheInfo), (LPARAM)strStatusMsg.c_str());
-  }
+    PostMessage(m_hStatusBar, SB_SETTEXT, static_cast<WPARAM>(StatusBarPosition::kCacheInfo), (LPARAM)strStatusMsg.c_str());
 }
 
 void ZMain::ToggleFullScreen() {
@@ -812,19 +800,31 @@ void ZMain::LoadCurrent() {
     return;
   }
 
-  static bool bFirst = true;
-
-  if ( bFirst ) {
-    bFirst = false;
-
-    CacheManager::GetInstance().SetFilelist(filelist_);
-    CacheManager::GetInstance().StartCacheThread();
-  }
-
   _releaseBufferDC();
 
-  CacheManager::GetInstance().SetCurrent(m_iCurretFileIndex, m_strCurrentFilename);
+  assert(m_iCurretFileIndex >= 0);
+  assert(m_iCurretFileIndex < filelist_.size());
+  assert(filelist_[m_iCurretFileIndex].m_strFileName == m_strCurrentFilename);
 
+  auto image_load_callback = [](const tstring& /*filename*/, const std::shared_ptr<ZImage>& /*image*/) {
+      ZMain::GetInstance().OnFileCached();
+  };
+  // 현재 이미지 요청
+  CacheController::GetInstance().RequestLoadImage(m_strCurrentFilename, image_load_callback);
+
+  static constexpr int32_t kAheadCacheCount = 5;
+  // 앞뒤로 몇 개 요청
+  for (int i = 1; i < kAheadCacheCount; ++i) {
+      int next_index = m_iCurretFileIndex + i;
+      int previous_index = m_iCurretFileIndex - i;
+
+      if (next_index < filelist_.size()) {
+          CacheController::GetInstance().RequestLoadImage(filelist_[next_index].m_strFileName, image_load_callback);
+      }
+      if (previous_index >= 0) {
+          CacheController::GetInstance().RequestLoadImage(filelist_[previous_index].m_strFileName, image_load_callback);
+      }
+  }
   RefreshCurrentImage();
 }
 
@@ -838,10 +838,8 @@ void ZMain::CheckCurrentImage() {
     return;
   }
 
-  shared_ptr<ZImage> image = CacheManager::GetInstance().GetCachedData(m_strCurrentFilename);
+  shared_ptr<ZImage> image = CacheController::GetInstance().PickImage(m_strCurrentFilename);
   if ( image != nullptr) {
-    CacheManager::GetInstance().IncreaseCacheHitCounter();
-
     //m_dwLoadingTime = duration_cast<milliseconds>(system_clock::now() - start).count();
     m_dwLoadingTime = 0;
 
@@ -849,8 +847,6 @@ void ZMain::CheckCurrentImage() {
       SetImageAndShow(image);
     }
   } else {
-    CacheManager::GetInstance().IncreaseCacheMissCounter();
-
     Draw(); //< erase background
   }
 
@@ -935,9 +931,6 @@ void ZMain::_ProcAfterRemoveThisFile() {
 
     filelist_.resize(0);
 
-    // Cache Thread 에 전달한다.
-    CacheManager::GetInstance().SetFilelist(filelist_);
-
     SetTitle();
     SetStatusBarText();
     Draw(NULL, true);
@@ -954,7 +947,6 @@ void ZMain::_ProcAfterRemoveThisFile() {
     }
     ZMain::GetInstance().OpenFile(strNextFilename);
   }
-  CacheManager::GetInstance().SetFilelist(filelist_);
 }
 
 void ZMain::OnFocusLose() {

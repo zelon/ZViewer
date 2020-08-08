@@ -54,6 +54,7 @@ public:
   }
 };
 
+void DebugPrintf(const std::wstring& msg);
 void DebugPrintf( const TCHAR *fmt, ... );
 
 bool IsPressedVirtualKey(int vk);

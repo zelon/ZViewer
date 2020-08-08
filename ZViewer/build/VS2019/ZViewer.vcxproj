@@ -137,6 +137,9 @@
     <ClCompile Include="..\..\ZViewer\src\CacheManagerDetail\FileReader.cpp" />
     <ClCompile Include="..\..\ZViewer\src\CacheManagerDetail\ImageLoadJob.cpp" />
     <ClCompile Include="..\..\ZViewer\src\CacheManagerDetail\JobExecutor.cpp" />
+    <ClCompile Include="..\..\ZViewer\src\Cache\CacheController.cpp" />
+    <ClCompile Include="..\..\ZViewer\src\Cache\CacheModel.cpp" />
+    <ClCompile Include="..\..\ZViewer\src\Cache\ParallelImageLoader.cpp" />
     <ClCompile Include="..\..\ZViewer\src\ShortCut.cpp" />
     <ClCompile Include="..\..\ZViewer\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -187,6 +190,11 @@
     <ClInclude Include="..\..\ZViewer\src\CacheManagerDetail\ImageLoadJob.h" />
     <ClInclude Include="..\..\ZViewer\src\CacheManagerDetail\JobExecutor.h" />
     <ClInclude Include="..\..\ZViewer\src\CacheManagerDetail\JobInterface.h" />
+    <ClInclude Include="..\..\ZViewer\src\Cache\CacheController.h" />
+    <ClInclude Include="..\..\ZViewer\src\Cache\CacheModel.h" />
+    <ClInclude Include="..\..\ZViewer\src\Cache\Enums.h" />
+    <ClInclude Include="..\..\ZViewer\src\Cache\ImageLoadCallback.h" />
+    <ClInclude Include="..\..\ZViewer\src\Cache\ParallelImageLoader.h" />
     <ClInclude Include="..\..\ZViewer\src\MessageDefine.h" />
     <ClInclude Include="..\..\ZViewer\src\ShortCut.h" />
     <ClInclude Include="..\..\ZViewer\stdafx.h" />
