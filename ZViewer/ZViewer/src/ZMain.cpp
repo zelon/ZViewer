@@ -147,6 +147,8 @@ void ZMain::onTimer() {
           //current_image_ = error_ima
       }
       PostMessage(main_window_handle_, WM_CHECK_CURRENT_IMAGE_IS_CACHED, 0, 0);
+  } else {
+      CacheController::GetInstance().EmptyFarthestCache();
   }
 
   ShowCacheStatus();

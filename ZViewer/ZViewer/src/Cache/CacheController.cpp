@@ -4,8 +4,7 @@
 #include "ParallelImageLoader.h"
 #include "../commonSrc/CommonFunc.h"
 #include "../commonSrc/ZImage.h"
-
-static std::atomic<int64_t> operation_id_factory = {};
+#include "../src/Defines.h"
 
 CacheController& CacheController::GetInstance () {
 	static CacheController cache_controller;
@@ -23,15 +22,12 @@ CacheController::~CacheController() {
 
 void CacheController::RequestLoadImage (const tstring& filename, const RequestType request_type, const int32_t index) {
 	if (request_type == RequestType::kCurrent) {
+		current_index_ = index;
 		parallel_image_loader_->set_current_index(index);
 	}
-	const int64_t operation_id = operation_id_factory.fetch_add(1);
 	LockGuard lock_guard(lock_);
 	auto it = cached_images_.find(filename);
 	if (it != cached_images_.end()) {
-		// for cache holding
-		it->second.operation_id = operation_id;
-
 		if (request_type == RequestType::kCurrent) {
 			++cache_hit_count_;
 		}
@@ -41,7 +37,7 @@ void CacheController::RequestLoadImage (const tstring& filename, const RequestTy
 		++cache_miss_count_;
 	}
 	++caching_count_;
-	parallel_image_loader_->Load(filename, request_type, index, [operation_id](const tstring& filename, const std::shared_ptr<ZImage>& image) {
+	parallel_image_loader_->Load(filename, request_type, index, [index](const tstring& filename, const std::shared_ptr<ZImage>& image) {
 		DebugPrintf(fmt::format(L"CacheController LoadCompleted,filename:{},completed:{}",
 			filename, image != nullptr));
 
@@ -54,14 +50,12 @@ void CacheController::RequestLoadImage (const tstring& filename, const RequestTy
 		LockGuard lock_guard(self.lock_);
 		auto it = self.cached_images_.find(filename);
 		if (it != self.cached_images_.end()) {
-			// for cache holding
-			it->second.operation_id = operation_id;
-		} else {
-			CachedImageInfo cache_image_info;
-			cache_image_info.image = image;
-			cache_image_info.operation_id = operation_id;
-			self.cached_images_.emplace(filename, cache_image_info);
+			self.cached_images_.erase(it);
 		}
+		CachedImageInfo cache_image_info;
+		cache_image_info.image = image;
+		cache_image_info.index = index;
+		self.cached_images_.emplace(filename, cache_image_info);
 	});
 }
 
@@ -71,28 +65,30 @@ std::shared_ptr<ZImage> CacheController::PickImage (const tstring& filename) {
 	if (it == cached_images_.end()) {
 		return nullptr;
 	}
-	// cache hitted
-	const int64_t operation_id = operation_id_factory.fetch_add(1);
-	it->second.operation_id = operation_id;
 	return it->second.image;
 }
 
-void CacheController::EmptyOldestCache () {
+void CacheController::EmptyFarthestCache () {
 	LockGuard lock_guard(lock_);
-	if (cached_images_.size() < 10) {
+	if (cached_images_.size() < kMaxOnewayPreCacheCount * 3) {
 		return;
 	}
-	int64_t oldest_operation_id = std::numeric_limits<int64_t>::max();
-	tstring oldest_filename;
+	int32_t farthest_distance = std::numeric_limits<int32_t>::min();
+	tstring to_be_deleted_filename;
 
 	for (const auto& [filename, cache_info] : cached_images_) {
-		if (cache_info.operation_id < oldest_operation_id) {
-			oldest_operation_id = cache_info.operation_id;
-			oldest_filename = filename;
+		const int32_t distance = std::abs(current_index_ - cache_info.index);
+
+		if (distance > farthest_distance) {
+			farthest_distance = distance;
+			to_be_deleted_filename = filename;
 		}
 	}
-	assert(oldest_filename.empty() == false);
-	cached_images_.erase(oldest_filename);
+	auto it = cached_images_.find(to_be_deleted_filename);
+	assert(it != cached_images_.end());
+	DebugPrintf(fmt::format(L"EmptyFarthestcache,filename:{},index:{}",
+		it->first, it->second.index));
+	cached_images_.erase(it);
 }
 
 int32_t CacheController::GetCachingCount () const {
@@ -130,9 +126,11 @@ std::vector<tstring> CacheController::ToString() const {
 	output.emplace_back(fmt::format(L"cache_miss_count: {}", cache_miss_count_));
 	output.emplace_back(fmt::format(L"cached_count: {}", cached_images_.size()));
 	output.emplace_back(fmt::format(L"cached_bytes: {}KB", GetCachedKBytes()));
+	output.emplace_back(fmt::format(L"current_index: {}", current_index_));
 	for (const auto& [filename, info] : cached_images_) {
-		output.emplace_back(fmt::format(L"cached_info:{{filename:{},bytes:{},index:{}}}",
-			filename, info.image->GetImageSize(), info.operation_id));
+		const int32_t distance = std::abs(current_index_ - info.index);
+		output.emplace_back(fmt::format(L"cached_info:{{filename:{},bytes:{},index:{},distance:{}}}",
+			filename, info.image->GetImageSize(), info.index, distance));
 	}
 
 	return output;

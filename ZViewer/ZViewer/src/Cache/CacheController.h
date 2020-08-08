@@ -16,7 +16,7 @@ public:
 	void RequestLoadImage (const tstring& filename, const RequestType request_type, const int32_t index);
 	std::shared_ptr<ZImage> PickImage (const tstring& filename);
 
-	void EmptyOldestCache ();
+	void EmptyFarthestCache ();
 
 	int32_t GetCachingCount () const;
 	int64_t cache_hit_count () const;
@@ -32,7 +32,7 @@ private:
 
 	struct CachedImageInfo {
 		std::shared_ptr<ZImage> image;
-		int64_t operation_id = 0;
+		int32_t index = 0;
 	};
 
 	mutable Lock lock_;
@@ -43,5 +43,7 @@ private:
 	std::atomic<int32_t> caching_count_ = {};
 	std::atomic<int64_t> cache_hit_count_ = {};
 	std::atomic<int64_t> cache_miss_count_ = {};
+
+	int32_t current_index_ = 0;
 };
 
