@@ -9,3 +9,8 @@ enum class ViewDirection {
 	kForward,	///< PageDown 등으로 다음 파일을 보았다
 	kBackward,	///< PageUp 등으로 이전 파일을 보았다.
 };
+
+enum class RequestType {
+	kCurrent,
+	kPreCache
+};

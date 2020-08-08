@@ -1,8 +1,14 @@
 ﻿#include "stdafx.h"
 #include "CacheController.h"
 
+#pragma warning(push)
+#pragma warning(disable: 4566)
+#include <fmt/format.h>
+#pragma warning(pop)
+
 #include "ParallelImageLoader.h"
 #include "../commonSrc/CommonFunc.h"
+#include "../commonSrc/ZImage.h"
 
 static std::atomic<int64_t> operation_id_factory = {};
 
@@ -20,7 +26,7 @@ CacheController::~CacheController() {
 
 }
 
-void CacheController::RequestLoadImage (const tstring& filename, ImageLoadCallback callback) {
+void CacheController::RequestLoadImage (const tstring& filename, const RequestType request_type, ImageLoadCallback callback) {
 	const int64_t operation_id = operation_id_factory.fetch_add(1);
 	LockGuard lock_guard(lock_);
 	auto it = cached_images_.find(filename);
@@ -28,14 +34,21 @@ void CacheController::RequestLoadImage (const tstring& filename, ImageLoadCallba
 		// for cache holding
 		it->second.operation_id = operation_id;
 		callback(filename, it->second.image);
+
+		if (request_type == RequestType::kCurrent) {
+			++cache_hit_count_;
+		}
 		return;
 	}
-	caching_count_.fetch_add(1);
+	if (request_type == RequestType::kCurrent) {
+		++cache_miss_count_;
+	}
+	++caching_count_;
 	parallel_image_loader_->Load(filename, [callback, operation_id](const tstring& filename, const std::shared_ptr<ZImage>& image) {
 		DebugPrintf(std::wstring(L"CacheController LoadCompleted:") + filename);
 
 		auto& self = CacheController::GetInstance();
-		self.caching_count_.fetch_sub(1);
+		--(self.caching_count_);
 		LockGuard lock_guard(self.lock_);
 		auto it = self.cached_images_.find(filename);
 		if (it != self.cached_images_.end()) {
@@ -84,4 +97,47 @@ void CacheController::EmptyOldestCache () {
 
 int32_t CacheController::GetCachingCount () const {
 	return caching_count_;
+}
+
+int64_t CacheController::cache_hit_count () const {
+	return cache_hit_count_;
+}
+
+int64_t CacheController::cache_miss_count () const {
+	return cache_miss_count_;
+}
+
+size_t CacheController::GetCachedCount () const {
+	LockGuard lock_guard(lock_);
+	return cached_images_.size();
+}
+
+int64_t CacheController::GetCachedKBytes () const {
+	LockGuard lock_guard(lock_);
+	int64_t bytes = 0;
+	for (const auto& [_, cached_image_info] : cached_images_) {
+		bytes += cached_image_info.image->GetImageSize();
+	}
+	return bytes / 1024;
+}
+
+std::vector<tstring> CacheController::ToString() const {
+	std::vector<tstring> output;
+	LockGuard lock_guard(lock_);
+
+	output.emplace_back(fmt::format(L"caching_count: {}", caching_count_));
+	output.emplace_back(fmt::format(L"cache_hit_count: {}", cache_hit_count_));
+	output.emplace_back(fmt::format(L"cache_miss_count: {}", cache_miss_count_));
+	output.emplace_back(fmt::format(L"cached_count: {}", cached_images_.size()));
+	output.emplace_back(fmt::format(L"cached_bytes: {}KB", GetCachedKBytes()));
+	for (const auto& [filename, info] : cached_images_) {
+		output.emplace_back(fmt::format(L"cached_info:{{filename:{},bytes:{},index:{}}}",
+			filename, info.image->GetImageSize(), info.operation_id));
+	}
+
+	return output;
+}
+
+void CacheController::Shutdown () {
+	parallel_image_loader_.reset();
 }

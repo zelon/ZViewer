@@ -23,9 +23,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx</Extensions>
     </Filter>
-    <Filter Include="src\CacheManagerDetail">
-      <UniqueIdentifier>{195e3a90-2b68-4379-b668-0f69b19a1f65}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\Cache">
       <UniqueIdentifier>{63296e84-095d-4b15-8161-70be56227068}</UniqueIdentifier>
     </Filter>
@@ -108,37 +105,16 @@
     </ClCompile>
     <ClCompile Include="..\..\ZViewer\stdafx.cpp" />
     <ClCompile Include="..\..\ZViewer\Main.cpp" />
-    <ClCompile Include="..\..\ZViewer\src\CacheManagerDetail\FileMap.cpp">
-      <Filter>src\CacheManagerDetail</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ZViewer\src\CacheManagerDetail\FileReader.cpp">
-      <Filter>src\CacheManagerDetail</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ZViewer\src\CacheManagerDetail\CachedData.cpp">
-      <Filter>src\CacheManagerDetail</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ZViewer\src\CacheManager.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ZViewer\src\CacheManagerDetail\EventManager.cpp">
-      <Filter>src\CacheManagerDetail</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ZViewer\src\CacheManagerDetail\JobExecutor.cpp">
-      <Filter>src\CacheManagerDetail</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ZViewer\src\CacheManagerDetail\ImageLoadJob.cpp">
-      <Filter>src\CacheManagerDetail</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\commonSrc\Path.cpp">
       <Filter>commonSrc</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ZViewer\src\Cache\CacheModel.cpp">
-      <Filter>src\Cache</Filter>
     </ClCompile>
     <ClCompile Include="..\..\ZViewer\src\Cache\ParallelImageLoader.cpp">
       <Filter>src\Cache</Filter>
     </ClCompile>
     <ClCompile Include="..\..\ZViewer\src\Cache\CacheController.cpp">
+      <Filter>src\Cache</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ZViewer\src\Cache\FileReader.cpp">
       <Filter>src\Cache</Filter>
     </ClCompile>
   </ItemGroup>
@@ -248,44 +224,14 @@
       <Filter>lib\vld</Filter>
     </ClInclude>
     <ClInclude Include="..\..\ZViewer\stdafx.h" />
-    <ClInclude Include="..\..\ZViewer\src\CacheManagerDetail\FileMap.h">
-      <Filter>src\CacheManagerDetail</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\ZViewer\src\CacheManagerDetail\FileReader.h">
-      <Filter>src\CacheManagerDetail</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\ZViewer\src\CacheManagerDetail\CachedData.h">
-      <Filter>src\CacheManagerDetail</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\ZViewer\src\CacheManager.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\commonSrc\ElapseTime.h">
       <Filter>commonSrc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\ZViewer\src\CacheManagerDetail\EventManager.h">
-      <Filter>src\CacheManagerDetail</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\ZViewer\src\CacheManagerDetail\JobExecutor.h">
-      <Filter>src\CacheManagerDetail</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\ZViewer\src\CacheManagerDetail\JobInterface.h">
-      <Filter>src\CacheManagerDetail</Filter>
     </ClInclude>
     <ClInclude Include="..\..\ZViewer\src\MessageDefine.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\ZViewer\src\CacheManagerDetail\ImageLoadJob.h">
-      <Filter>src\CacheManagerDetail</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\commonSrc\Path.h">
       <Filter>commonSrc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\ZViewer\src\CacheEventListenerInterface.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\ZViewer\src\Cache\CacheModel.h">
-      <Filter>src\Cache</Filter>
     </ClInclude>
     <ClInclude Include="..\..\ZViewer\src\Cache\Enums.h">
       <Filter>src\Cache</Filter>
@@ -297,6 +243,9 @@
       <Filter>src\Cache</Filter>
     </ClInclude>
     <ClInclude Include="..\..\ZViewer\src\Cache\ImageLoadCallback.h">
+      <Filter>src\Cache</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ZViewer\src\Cache\FileReader.h">
       <Filter>src\Cache</Filter>
     </ClInclude>
   </ItemGroup>

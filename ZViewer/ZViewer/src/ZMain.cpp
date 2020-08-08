@@ -10,6 +10,7 @@
 #include "MessageManager.h"
 #include "resource.h"
 #include "src/Cache/CacheController.h"
+#include "src/Cache/Enums.h"
 #include "src/ExifDlg.h"
 #include "src/SelectToFolderDlg.h"
 #include "src/ZFileExtDlg.h"
@@ -810,7 +811,7 @@ void ZMain::LoadCurrent() {
       ZMain::GetInstance().OnFileCached();
   };
   // 현재 이미지 요청
-  CacheController::GetInstance().RequestLoadImage(m_strCurrentFilename, image_load_callback);
+  CacheController::GetInstance().RequestLoadImage(m_strCurrentFilename, RequestType::kCurrent, image_load_callback);
 
   static constexpr int32_t kAheadCacheCount = 5;
   // 앞뒤로 몇 개 요청
@@ -819,10 +820,10 @@ void ZMain::LoadCurrent() {
       int previous_index = m_iCurretFileIndex - i;
 
       if (next_index < filelist_.size()) {
-          CacheController::GetInstance().RequestLoadImage(filelist_[next_index].m_strFileName, image_load_callback);
+          CacheController::GetInstance().RequestLoadImage(filelist_[next_index].m_strFileName, RequestType::kPreCache, image_load_callback);
       }
       if (previous_index >= 0) {
-          CacheController::GetInstance().RequestLoadImage(filelist_[previous_index].m_strFileName, image_load_callback);
+          CacheController::GetInstance().RequestLoadImage(filelist_[previous_index].m_strFileName, RequestType::kPreCache, image_load_callback);
       }
   }
   RefreshCurrentImage();

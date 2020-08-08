@@ -10,7 +10,7 @@
 #include "../commonSrc/MessageManager.h"
 #include "../commonSrc/ZOption.h"
 
-#include "src/CacheManager.h"
+#include "src/Cache/CacheController.h"
 #include "src/MessageDefine.h"
 #include "src/ShortCut.h"
 #include "src/ZMain.h"
@@ -193,14 +193,7 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam) {
 /// 디버그 모드에서만 작동하는 단축키들
 #ifdef _DEBUG
       case '`':
-        CacheManager::GetInstance().DebugShowCacheInfo();
-        break;
-
-      case '~': {
-          ElapseTime clear_time;
-          CacheManager::GetInstance().ClearCache();
-          DebugPrintf(L"clear time: %d", clear_time.End());
-        }
+        //CacheManager::GetInstance().DebugShowCacheInfo();
         break;
 
       case 'm': {
@@ -440,9 +433,13 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam) {
         ZMain::GetInstance().StartSlideMode();
         break;
 
-      case ID_SHOW_CACHED_FILENAME:
-        CacheManager::GetInstance().ShowCachedImageList();
-        break;
+      case ID_SHOW_CACHED_FILENAME: {
+          const std::vector<tstring> outputs = CacheController::GetInstance().ToString();
+          for (const tstring& line : outputs) {
+              DebugPrintf(line);
+          }
+          break;
+      }
 
       case ID_MAINMENU_FILE_EXIT:
         ZMain::GetInstance().CloseProgram();

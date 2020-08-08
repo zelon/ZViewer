@@ -2,7 +2,7 @@
 #include "ParallelImageLoader.h"
 
 #include "ZImage.h"
-#include "../CacheManagerDetail/FileReader.h"
+#include "FileReader.h"
 
 static void LoadPerThread(const tstring& filename, ImageLoadCallback callback) {
 	FileReader file(filename);

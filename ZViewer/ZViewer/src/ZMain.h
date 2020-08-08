@@ -1,18 +1,17 @@
 ﻿#pragma once
 
 #include "../commonSrc/DesktopWallPaper.h"
-#include "src/CacheEventListenerInterface.h"
 
 class ZHistory;
 class ZImage;
 
 /// 대부분의 작업을 처리하는 메인 클래스
-class ZMain final : public ZViewer::CacheEventListenerInterface {
+class ZMain final {
 public:
   static ZMain & GetInstance();
   ~ZMain();
 
-  void OnFileCached() override;
+  void OnFileCached();
 
   void SetImageAndShow(std::shared_ptr<ZImage> image);
 
@@ -229,7 +228,6 @@ private:
   tstring m_strCurrentFolder;		///< 현재 폴더
   tstring m_strCurrentFilename;	///< 현재 보여주고 있는 파일이름
 
-  /// TODO: 이 파일을 따로 클래스로 빼내어야 함. 왜냐하면 이 클래스 변동에 따라서 ZCacheImage 에 전달해줘야하기 때문임.
   std::vector<FileData> filelist_;			///< 현재 폴더의 파일들 목록
 
   eFileSortOrder m_sortOrder;

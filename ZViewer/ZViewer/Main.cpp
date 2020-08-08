@@ -1,54 +1,21 @@
-﻿/**
-  @mainpage ZViewer's Document
-
-  ZViewer 는 GPL 에 의해 배포되는 이미지 뷰어 프로그램입니다.
-
-  Created by zelon (Kim, Jinwook in Korea)
-
-  Project Homepage : http://zviewer.wimy.com
-
-  Creator Homepage : http://www.wimy.com
-
-
-  주요 기능은 다음과 같습니다.
-
-  - 다양한 확장자를 가진 이미지 파일을 볼 수 있습니다.
-
-  - 탐색기에서 오른쪽 버튼을 통한 미리보기가 가능합니다.
-
-  - 이미지 파일들을 캐시해두어 빠른 이미지 보기가 가능합니다.
-
-  - 실행 크기가 작아 빨리 로딩됩니다.
-
-  - 이미지 파일을 다른 형식으로 변환이 가능합니다.
-
-  - 화면 크기에 맞게 확대/축소하여 이미지를 볼 수 있습니다.
-
-*/
-
-#include "stdafx.h"
+﻿#include "stdafx.h"
 
 #include "../commonSrc/LogManager.h"
 #include "../commonSrc/MessageManager.h"
 #include "../commonSrc/minidump/MiniDumper.h"
 #include "../commonSrc/ZOption.h"
 
+#include "src/Cache/CacheController.h"
 #include "src/MainWindow.h"
-#include "src/CacheManager.h"
 #include "src/ZFileExtDlg.h"
 #include "src/ZMain.h"
 #include "src/ZResourceManager.h"
 #include "ZImage.h"
 
-
-#include "src/Cache/ParallelImageLoader.h"
-
-void FreeImageMsg(FREE_IMAGE_FORMAT fif, const char * szMsg)
+void FreeImageMsg(FREE_IMAGE_FORMAT /*fif*/, const char * szMsg)
 {
-  UNREFERENCED_PARAMETER(fif);
-
-  tstring strMsg = getWStringFromString(szMsg);
-  DebugPrintf(strMsg.c_str());
+    tstring strMsg = getWStringFromString(szMsg);
+    DebugPrintf(strMsg.c_str());
 }
 
 /// Entry point
@@ -140,7 +107,6 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
     strCmdString = GetProgramFolder();
     strCmdString += TEXT("..\\SampleImages\\GwangAn.jpg");
   }
-  //strInitArg = "C:\\A.bmp";
 #endif
 
   // ~1 형식으로 긴 파일명이 온다면, 원래 긴 패스를 얻는다.
@@ -150,8 +116,6 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
   strCmdString = szTemp;
 
   tstring strInitArg = strCmdString;
-
-  //MessageBox(HWND_DESKTOP, strInitArg.c_str(), "sf", MB_OK);
 
   ZImage::StartupLibrary();
 
@@ -180,8 +144,7 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
     }
   }
 
-  CacheManager::GetInstance().CleanUpCache();
-  CacheManager::GetInstance().CleanUpThread();
+  CacheController::GetInstance().Shutdown();
 
   CLogManager::getInstance().CleanUp();
   ZImage::CleanupLibrary();

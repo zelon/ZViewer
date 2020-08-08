@@ -3,9 +3,9 @@
 #include "../commonSrc/LockUtil.h"
 #include "ImageLoadCallback.h"
 
-class IImageLoadCallback;
 class ParallelImageLoader;
 class ZImage;
+enum class RequestType;
 
 class CacheController final {
 public:
@@ -13,12 +13,19 @@ public:
 
 	~CacheController ();
 
-	void RequestLoadImage (const tstring& filename, ImageLoadCallback callback);
+	void RequestLoadImage (const tstring& filename, const RequestType request_type, ImageLoadCallback callback);
 	std::shared_ptr<ZImage> PickImage (const tstring& filename);
 
 	void EmptyOldestCache ();
 
 	int32_t GetCachingCount () const;
+	int64_t cache_hit_count () const;
+	int64_t cache_miss_count () const;
+	size_t GetCachedCount () const;
+	int64_t GetCachedKBytes () const;
+	std::vector<tstring> ToString () const;
+
+	void Shutdown ();
 
 private:
 	CacheController();
@@ -28,11 +35,13 @@ private:
 		int64_t operation_id = 0;
 	};
 
-	Lock lock_;
+	mutable Lock lock_;
 	std::unordered_map<tstring, CachedImageInfo> cached_images_;
 
 	std::unique_ptr<ParallelImageLoader> parallel_image_loader_;
 
 	std::atomic<int32_t> caching_count_ = {};
+	std::atomic<int64_t> cache_hit_count_ = {};
+	std::atomic<int64_t> cache_miss_count_ = {};
 };
 
