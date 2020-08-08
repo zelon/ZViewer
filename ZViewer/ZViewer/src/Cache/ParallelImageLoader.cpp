@@ -1,10 +1,11 @@
 ﻿#include "stdafx.h"
 #include "ParallelImageLoader.h"
 
-#include "ZImage.h"
+#include "Enums.h"
 #include "FileReader.h"
+#include "ZImage.h"
 
-static void LoadPerThread(const tstring& filename, ImageLoadCallback callback) {
+static void LoadPerThread (const tstring& filename, ImageLoadCallback callback) {
 	FileReader file(filename);
 
 	if (file.IsOpened() == false) {
@@ -88,7 +89,21 @@ ParallelImageLoader::~ParallelImageLoader () {
 	}
 }
 
-void ParallelImageLoader::Load (const tstring& filename, ImageLoadCallback callback) {
+void ParallelImageLoader::Load (const tstring& filename,
+		const RequestType request_type,
+		const int32_t index,
+		ImageLoadCallback callback) {
 	LockGuard lock_guard(lock_);
-	requests_.emplace_back(filename, callback);
+	if (request_type == RequestType::kCurrent) {
+		current_index_ = index;
+		requests_.emplace_front(filename, callback);
+	} else if (request_type == RequestType::kPreCache) {
+		if (std::abs(index - current_index_) < 5) {
+			requests_.emplace_front(filename, callback);
+		} else {
+			requests_.emplace_back(filename, callback);
+		}
+	} else {
+		assert(false);
+	}
 }

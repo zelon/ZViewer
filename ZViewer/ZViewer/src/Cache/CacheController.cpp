@@ -21,7 +21,7 @@ CacheController::~CacheController() {
 
 }
 
-void CacheController::RequestLoadImage (const tstring& filename, const RequestType request_type, ImageLoadCallback callback) {
+void CacheController::RequestLoadImage (const tstring& filename, const RequestType request_type, const int32_t index, ImageLoadCallback callback) {
 	const int64_t operation_id = operation_id_factory.fetch_add(1);
 	LockGuard lock_guard(lock_);
 	auto it = cached_images_.find(filename);
@@ -39,7 +39,7 @@ void CacheController::RequestLoadImage (const tstring& filename, const RequestTy
 		++cache_miss_count_;
 	}
 	++caching_count_;
-	parallel_image_loader_->Load(filename, [callback, operation_id](const tstring& filename, const std::shared_ptr<ZImage>& image) {
+	parallel_image_loader_->Load(filename, request_type, index, [callback, operation_id](const tstring& filename, const std::shared_ptr<ZImage>& image) {
 		DebugPrintf(std::wstring(L"CacheController LoadCompleted:") + filename);
 
 		auto& self = CacheController::GetInstance();
