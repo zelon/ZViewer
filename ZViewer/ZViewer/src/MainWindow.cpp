@@ -5,6 +5,7 @@
 #include "AboutWindow.h"
 #include "TaskBar.h"
 
+#include "../commonSrc/DesktopWallPaper.h"
 #include "../commonSrc/ElapseTime.h"
 #include "../commonSrc/ExtInfoManager.h"
 #include "../commonSrc/MessageManager.h"
@@ -618,15 +619,15 @@ int CALLBACK WndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam) {
         break;
 
       case ID_SETDESKTOPWALLPAPER_CENTER:
-        ZMain::GetInstance().SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyle_CENTER);
+        ZMain::GetInstance().SetDesktopWallPaper(DesktopWallPaperStyle::kCenter);
         break;
 
       case ID_SETDESKTOPWALLPAPER_TILE:
-        ZMain::GetInstance().SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyle_TILE);
+        ZMain::GetInstance().SetDesktopWallPaper(DesktopWallPaperStyle::kTile);
         break;
 
       case ID_SETDESKTOPWALLPAPER_STRETCH:
-        ZMain::GetInstance().SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyle_STRETCH);
+        ZMain::GetInstance().SetDesktopWallPaper(DesktopWallPaperStyle::kStretch);
         break;
 
       case ID_SETDESKTOPWALLPAPER_CLEAR:

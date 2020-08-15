@@ -386,18 +386,15 @@ STDMETHODIMP CZViewMenuExt::InvokeCommand( LPCMINVOKECOMMANDINFO pInfo )
       break;
     case 2:
       // center
-      SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyle_CENTER);
+      SetDesktopWallPaper(DesktopWallPaperStyle::kCenter);
       break;
-
-
     case 3:
       // stretch
-      SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyle_STRETCH);
+      SetDesktopWallPaper(DesktopWallPaperStyle::kStretch);
       break;
-
     case 4:
       // tile
-      SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyle_TILE);
+      SetDesktopWallPaper(DesktopWallPaperStyle::kTile);
       break;
 
     case 5:
@@ -622,7 +619,7 @@ void CZViewMenuExt::ExecZViewer() {
   CreateProcess(NULL, command, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi);
 }
 
-void CZViewMenuExt::SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyle style) {
+void CZViewMenuExt::SetDesktopWallPaper(DesktopWallPaperStyle style) {
   // 현재보고 있는 파일을 윈도우 폴더에 저장한다.
   TCHAR szSystemFolder[_MAX_PATH] = { 0 };
 

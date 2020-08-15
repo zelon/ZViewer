@@ -78,7 +78,7 @@ protected:
 	void ExecZViewer();
 
 	/// 바탕화면 파일을 지정한다.
-	void SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyle style);
+	void SetDesktopWallPaper(const DesktopWallPaperStyle style);
 
 	/// 다른 이름으로 저장한다.
 	void _SaveAS();

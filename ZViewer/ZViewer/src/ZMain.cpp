@@ -1,6 +1,7 @@
 ﻿#include "stdafx.h"
 #include "ZMain.h"
 
+#include "../commonSrc/DesktopWallPaper.h"
 #include "../commonSrc/ElapseTime.h"
 #include "../commonSrc/ExtInfoManager.h"
 #include "../commonSrc/Path.h"
@@ -139,13 +140,6 @@ void ZMain::onTimer() {
     }
   }
   if (current_image_ == nullptr) {
-      const int32_t caching_count = CacheController::GetInstance().GetCachingCount();
-      if (caching_count == 0) {
-          ++empty_caching_and_cannot_get_current_image_count;
-      }
-      if (empty_caching_and_cannot_get_current_image_count > 100) {
-          //current_image_ = error_ima
-      }
       PostMessage(main_window_handle_, WM_CHECK_CURRENT_IMAGE_IS_CACHED, 0, 0);
   } else {
       CacheController::GetInstance().EmptyFarthestCache();
@@ -774,9 +768,8 @@ void ZMain::SetStatusBarText() {
     // Homepage URL
     SetStatusBarTextInternal(StatusBarPosition::kHomepageURL, TEXT("http://wimy.com"));
 
-    // 로딩시간
-    SPrintf(szTemp, COMMON_BUFFER_SIZE, TEXT("%.3fsec"), static_cast<float>(m_dwLoadingTime / 1000.0));
-    SetStatusBarTextInternal(StatusBarPosition::kLoadingTime, szTemp);
+    // Not used
+    SetStatusBarTextInternal(StatusBarPosition::kLoadingTime, TEXT(""));
 
     // CacheStatus
     ShowCacheStatus();
@@ -855,15 +848,17 @@ void ZMain::CheckCurrentImage() {
 
   shared_ptr<ZImage> image = CacheController::GetInstance().PickImage(m_strCurrentFilename);
   if ( image != nullptr) {
-    //m_dwLoadingTime = duration_cast<milliseconds>(system_clock::now() - start).count();
-    m_dwLoadingTime = 0;
-
     SetImageAndShow(image);
   } else {
-    if (empty_caching_and_cannot_get_current_image_count > 10) {
-        SetImageAndShow(error_image);
+    const int32_t caching_count = CacheController::GetInstance().GetCachingCount();
+    if (caching_count == 0) {
+      ++empty_caching_and_cannot_get_current_image_count;
+      if (empty_caching_and_cannot_get_current_image_count > 10) {
+          SetImageAndShow(error_image);
+      }
+    } else {
+      Draw(); //< erase background
     }
-    Draw(); //< erase background
   }
 
   SetTitle();
@@ -1210,7 +1205,7 @@ void ZMain::IncreaseOpacity() {
 }
 
 
-void ZMain::SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyle style) {
+void ZMain::SetDesktopWallPaper(const DesktopWallPaperStyle style) {
   if ( current_image_ == nullptr ) {
     assert(current_image_);
     return;

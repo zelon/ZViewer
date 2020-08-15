@@ -3,21 +3,21 @@
 #include "CommonFunc.h"
 
 /// 실제로 바탕화면을 바꾼다.
-void CDesktopWallPaper::SetDesktopWallPaper(const tstring & strBitmapFileName, eDesktopWallPaperStyle style)
+void CDesktopWallPaper::SetDesktopWallPaper(const tstring & strBitmapFileName, DesktopWallPaperStyle style)
 {
 	tstring strStyle = TEXT("0");
 
 	switch ( style )
 	{
-	case eDesktopWallPaperStyle_CENTER:
+	case DesktopWallPaperStyle::kCenter:
 		strStyle = TEXT("0");
 		break;
 
-	case eDesktopWallPaperStyle_TILE:
+	case DesktopWallPaperStyle::kTile:
 		strStyle = TEXT("1");
 		break;
 
-	case eDesktopWallPaperStyle_STRETCH:
+	case DesktopWallPaperStyle::kStretch:
 		strStyle = TEXT("2");
 		break;
 
@@ -46,5 +46,5 @@ void CDesktopWallPaper::SetDesktopWallPaper(const tstring & strBitmapFileName, e
 /// 바탕화면의 배경화면을 지운다.
 void CDesktopWallPaper::ClearDesktopWallPaper()
 {
-	CDesktopWallPaper::SetDesktopWallPaper(TEXT(""), eDesktopWallPaperStyle_CENTER);
+	CDesktopWallPaper::SetDesktopWallPaper(TEXT(""), DesktopWallPaperStyle::kCenter);
 }

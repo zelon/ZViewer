@@ -1,7 +1,6 @@
 ﻿#pragma once
 
-#include "../commonSrc/DesktopWallPaper.h"
-
+enum class DesktopWallPaperStyle;
 class ZHistory;
 class ZImage;
 
@@ -53,7 +52,7 @@ public:
   void SetMouseCursor(const int image_width, const int image_height, const RECT& screen_rect);
 
   /// 현재보고 있는 이미지를 윈도우 바탕화면의 배경으로 지정한다.
-  void SetDesktopWallPaper(CDesktopWallPaper::eDesktopWallPaperStyle style);
+  void SetDesktopWallPaper(const DesktopWallPaperStyle style);
 
   /// 현재 위치의 폴더 이웃 폴더 - 상위 폴더의 하위 폴더들 - 를 얻어온다.
   bool GetNeighborFolders(std::vector < tstring > & vFolders);
@@ -92,9 +91,9 @@ public:
   void DecreaseOpacity();
   void IncreaseOpacity();
 
-  HWND GetHWND() const { return main_window_handle_; }
+  HWND GetHWND() const noexcept { return main_window_handle_; }
   void SetHWND(const HWND hWnd);
-  void SetMainMenu(HMENU hMenu) {
+  void SetMainMenu(HMENU hMenu) noexcept {
     m_hMainMenu = hMenu;
   }
   void SetPopupMenu(HMENU hMenu) {
@@ -237,9 +236,6 @@ private:
 
   /// 현재 보여주고 있는 이미지
   std::shared_ptr<ZImage> current_image_;
-
-  ///< 현재 이미지를 로딩하는 데 걸린 시간
-  long long m_dwLoadingTime;
 
   /// 메인 윈도우에 대한 핸들
   HWND main_window_handle_;

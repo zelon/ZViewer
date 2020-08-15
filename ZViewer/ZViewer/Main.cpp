@@ -60,25 +60,24 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
     SPrintf(szDumpMsg, _MAX_PATH, TEXT("%s\r\n\r\nFile : %s\r\nHomepage : %s"), GetMessage(TEXT("CRASH_MSG")), strDumpFilename.c_str(), g_strHomepage.c_str());
 
     /// 아래의 객체는 프로그램이 끝날 때에 삭제되어야 한다. 그전에 삭제되면 크래시되었을 때 제대로 덤프를 만들지 못한다.
-    dumper_object_holder.reset(new MiniDumper(strDumpFilename.c_str(), szDumpMsg));
+    dumper_object_holder = std::make_unique<MiniDumper>(strDumpFilename.c_str(), szDumpMsg);
   }
 
   tstring strCmdString;
-
-  if ( NULL != lpszCmdParam )
+  if (lpszCmdParam != nullptr)
   {
     /// 파일 확장자를 연결하라는 거면
     if ( _tcscmp(lpszCmdParam, TEXT("/fileext")) == 0 )	
     {
-      int iRet = MessageBox(HWND_DESKTOP, GetMessage(TEXT("REG_FILE_TYPE")), TEXT("ZViewer"), MB_YESNO);
+      int message_box_result = MessageBox(HWND_DESKTOP, GetMessage(TEXT("REG_FILE_TYPE")), TEXT("ZViewer"), MB_YESNO);
 
-      if ( iRet == IDYES )
+      if (message_box_result == IDYES )
       {
         ZFileExtDlg::GetInstance().SaveExtEnv();
       }
       return 0;
     }
-    else if ( _tcscmp(lpszCmdParam, TEXT("/freezvieweragent")) == 0 )	// uninstall 할 때 ZViewerAgent 를 unload 한다.
+    if ( _tcscmp(lpszCmdParam, TEXT("/freezvieweragent")) == 0 )	// uninstall 할 때 ZViewerAgent 를 unload 한다.
     {
       CoFreeUnusedLibraries();
       return 0;
@@ -99,7 +98,6 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
       }
     }
   }
-
 
 #ifdef _DEBUG
   if ( strCmdString.empty() )
@@ -125,10 +123,6 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
   CMainWindow aWindow;
 #ifdef _DEBUG
   FreeImage_SetOutputMessage(FreeImageMsg);
-#endif
-
-#if 0
-  CacheManagerSpeedTest();
 #endif
 
   aWindow.Create(hInstance, HWND_DESKTOP, nCmdShow);
