@@ -13,11 +13,9 @@ CacheController& CacheController::GetInstance () {
 
 CacheController::CacheController ()
 		: parallel_image_loader_(std::make_unique<ParallelImageLoader>(/*thread_count:*/10)) {
-
 }
 
 CacheController::~CacheController() {
-
 }
 
 void CacheController::RequestLoadImage (const tstring& filename, const RequestType request_type, const int32_t index) {
@@ -38,7 +36,7 @@ void CacheController::RequestLoadImage (const tstring& filename, const RequestTy
 	}
 	++caching_count_;
 	parallel_image_loader_->Load(filename, request_type, index, [index](const tstring& filename, const std::shared_ptr<ZImage>& image) {
-		DebugPrintf(fmt::format(L"CacheController LoadCompleted,filename:{},completed:{}",
+		DebugPrintf(std::format(L"CacheController LoadCompleted,filename:{},completed:{}",
 			filename, image != nullptr));
 
 		auto& self = CacheController::GetInstance();
@@ -86,7 +84,7 @@ void CacheController::EmptyFarthestCache () {
 	}
 	auto it = cached_images_.find(to_be_deleted_filename);
 	assert(it != cached_images_.end());
-	DebugPrintf(fmt::format(L"EmptyFarthestcache,filename:{},index:{}",
+	DebugPrintf(std::format(L"EmptyFarthestcache,filename:{},index:{}",
 		it->first, it->second.index));
 	cached_images_.erase(it);
 }
@@ -117,19 +115,19 @@ int64_t CacheController::GetCachedKBytes () const {
 	return bytes / 1024;
 }
 
-std::vector<tstring> CacheController::ToString() const {
-	std::vector<tstring> output;
+std::vector<std::wstring> CacheController::ToString() const {
+	std::vector<std::wstring> output;
 	LockGuard lock_guard(lock_);
 
-	output.emplace_back(fmt::format(L"caching_count: {}", caching_count_));
-	output.emplace_back(fmt::format(L"cache_hit_count: {}", cache_hit_count_));
-	output.emplace_back(fmt::format(L"cache_miss_count: {}", cache_miss_count_));
-	output.emplace_back(fmt::format(L"cached_count: {}", cached_images_.size()));
-	output.emplace_back(fmt::format(L"cached_bytes: {}KB", GetCachedKBytes()));
-	output.emplace_back(fmt::format(L"current_index: {}", current_index_));
+	output.emplace_back(std::format(L"caching_count: {}", caching_count_.load()));
+	output.emplace_back(std::format(L"cache_hit_count: {}", cache_hit_count_.load()));
+	output.emplace_back(std::format(L"cache_miss_count: {}", cache_miss_count_.load()));
+	output.emplace_back(std::format(L"cached_count: {}", cached_images_.size()));
+	output.emplace_back(std::format(L"cached_bytes: {}KB", GetCachedKBytes()));
+	output.emplace_back(std::format(L"current_index: {}", current_index_));
 	for (const auto& [filename, info] : cached_images_) {
 		const int32_t distance = std::abs(current_index_ - info.index);
-		output.emplace_back(fmt::format(L"cached_info:{{filename:{},bytes:{},index:{},distance:{}}}",
+		output.emplace_back(std::format(L"cached_info:{{filename:{},bytes:{},index:{},distance:{}}}",
 			filename, info.image->GetImageSize(), info.index, distance));
 	}
 

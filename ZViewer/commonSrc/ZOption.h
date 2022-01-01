@@ -68,7 +68,7 @@ private:
   static tstring GetOptionFileFullPath();
 
   template < class T >
-  void _InsertSaveOptionSetting(TCHAR * str, T * value) {
+  void _InsertSaveOptionSetting(const TCHAR * str, T * value) {
     tstring val(str);
     m_saveOptions.push_back(StringToValue(val, value));
   }

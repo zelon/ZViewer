@@ -23,7 +23,7 @@ public:
 	int64_t cache_miss_count () const;
 	size_t GetCachedCount () const;
 	int64_t GetCachedKBytes () const;
-	std::vector<tstring> ToString () const;
+	std::vector<std::wstring> ToString () const;
 
 	void Shutdown ();
 

@@ -54,13 +54,9 @@ LRESULT CALLBACK AboutWndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lPara
       SPrintf(szTemp, MAX_PATH, TEXT("CacheHitRate : %zd%%"), cache_hit_rate);
       CreateLabel(hWnd, szTemp, y);
 
-      NUMBERFMT nFmt = { 0, 0, 3, TEXT("."), TEXT(","), 1 };
-
-      TCHAR szOUT[20];
       SPrintf(szTemp, MAX_PATH, TEXT("%zd"), CacheController::GetInstance().GetCachedKBytes());
-      ::GetNumberFormat((LCID)NULL, (DWORD)NULL, szTemp, &nFmt, szOUT, 20);
 
-      SPrintf(szTemp, MAX_PATH, TEXT("CachedMemory : %sKB, Num of Cached Image : %u"), szOUT, static_cast<unsigned int>(CacheController::GetInstance().GetCachedCount()));
+      SPrintf(szTemp, MAX_PATH, TEXT("CachedMemory : %sKB, Num of Cached Image : %u"), szTemp, static_cast<unsigned int>(CacheController::GetInstance().GetCachedCount()));
       CreateLabel(hWnd, szTemp, y);
 
       SPrintf(szTemp, MAX_PATH, TEXT("ProgramPath : %s"), GetProgramFolder().c_str());

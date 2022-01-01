@@ -644,7 +644,7 @@ void ZMain::ShowCacheStatus() {
     if (filelist_.empty()) {
       strStatusMsg = TEXT("No file list");
     } else if (now_caching_count > 0) {
-        strStatusMsg = fmt::format(L"Caching[{}]...", now_caching_count);
+        strStatusMsg = std::format(L"Caching[{}]...", now_caching_count);
     } else {
         strStatusMsg = TEXT("Cached");
     }
