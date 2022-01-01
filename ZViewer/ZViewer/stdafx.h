@@ -26,14 +26,4 @@
 #include <FreeImagePlus.h>
 #pragma warning(pop)
 
-#if defined(_M_IX86)
-#ifdef _DEBUG
-#include "vld/vld.h"
-#endif
-#elif defined(_M_X64)
-// don't use vld
-#else
-static_assert(false, "unknown architecture");
-#endif
-
 #include "CommonDefine.h"

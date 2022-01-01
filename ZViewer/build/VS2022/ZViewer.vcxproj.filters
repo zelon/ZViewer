@@ -4,12 +4,6 @@
     <Filter Include="src">
       <UniqueIdentifier>{4ebd47e9-11da-42b4-9d5c-9b960a5449c0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="lib">
-      <UniqueIdentifier>{fde1bb77-facc-42d5-ac24-2db103806923}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="lib\vld">
-      <UniqueIdentifier>{450fce6e-eeb7-443b-aa74-42de1215a7d7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="commonSrc">
       <UniqueIdentifier>{92479499-a57f-4425-bcc6-23e63784f970}</UniqueIdentifier>
     </Filter>
@@ -169,9 +163,6 @@
     <ClInclude Include="..\..\ZViewer\src\ZResourceManager.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\lib\vld\vld.h">
-      <Filter>lib\vld</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\commonSrc\CommonDefine.h">
       <Filter>commonSrc</Filter>
     </ClInclude>
@@ -219,9 +210,6 @@
     </ClInclude>
     <ClInclude Include="..\..\ZViewer\src\ShortCut.h">
       <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\lib\vld\vld_def.h">
-      <Filter>lib\vld</Filter>
     </ClInclude>
     <ClInclude Include="..\..\ZViewer\stdafx.h" />
     <ClInclude Include="..\..\commonSrc\ElapseTime.h">
