@@ -15,7 +15,7 @@
 
 # Build Environment
  * Use vcpkg for freeimage library
-   * .\vcpkg.exe install freeimage:x64-windows freeimage:x64-windows-static
+   * .\vcpkg.exe install freeimage:x64-windows freeimage:x64-windows-static gtest:x64-windows gtest:x64-windows-static
 
 # How to run
 
